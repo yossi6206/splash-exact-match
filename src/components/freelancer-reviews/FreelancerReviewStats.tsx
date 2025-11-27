@@ -41,15 +41,15 @@ const FreelancerReviewStats = ({ stats }: FreelancerReviewStatsProps) => {
         <div className="space-y-3">
           {[5, 4, 3, 2, 1].map((rating) => (
             <div key={rating} className="flex items-center gap-3">
-              <div className="flex items-center gap-1 w-16">
-                <span className="text-sm font-medium">{rating}</span>
+              <div className="flex items-center gap-1 w-16 justify-end">
                 <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                <span className="text-sm font-medium">{rating}</span>
               </div>
               <Progress 
                 value={getPercentage(ratingDistribution[rating as keyof typeof ratingDistribution])} 
                 className="flex-1 h-2"
               />
-              <span className="text-sm text-muted-foreground w-12 text-left">
+              <span className="text-sm text-muted-foreground w-12 text-right">
                 {ratingDistribution[rating as keyof typeof ratingDistribution]}
               </span>
             </div>
