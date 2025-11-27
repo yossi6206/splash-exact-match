@@ -76,23 +76,23 @@ const Categories = () => {
                 {/* Mega Menu */}
                 {category.megaMenu && hoveredCategory === category.name && (
                   <div 
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50"
+                    className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50"
                     onMouseEnter={() => setHoveredCategory(category.name)}
                     onMouseLeave={() => setHoveredCategory(null)}
                   >
-                    <div className="bg-background border border-border rounded-lg shadow-lg p-8 w-[800px] animate-fade-in">
-                      <div className="grid grid-cols-5 gap-8">
+                    <div className="bg-background border border-border rounded-lg shadow-xl p-8 w-[900px] animate-fade-in">
+                      <div className="grid grid-cols-5 gap-6">
                         {category.megaMenu.columns.map((column, index) => (
                           <div key={index}>
-                            <h3 className="text-base font-bold text-primary mb-4 pb-2 border-b-2 border-primary/20">
+                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
                               {column.title}
                             </h3>
-                            <ul className="space-y-2">
+                            <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
                                 <li key={itemIndex}>
                                   <a 
                                     href="#" 
-                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1"
+                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
                                   >
                                     {item}
                                   </a>
