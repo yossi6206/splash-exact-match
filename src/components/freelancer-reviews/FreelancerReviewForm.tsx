@@ -38,8 +38,8 @@ const FreelancerReviewForm = ({ freelancerId, onReviewSubmitted }: FreelancerRev
   }) => {
     return (
       <div className="space-y-2">
-        <Label className="text-sm">{label}</Label>
-        <div className="flex gap-1">
+        <Label className="text-sm text-right block">{label}</Label>
+        <div className="flex gap-1 justify-end flex-row-reverse">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
               key={star}
@@ -144,7 +144,7 @@ const FreelancerReviewForm = ({ freelancerId, onReviewSubmitted }: FreelancerRev
   return (
     <Card>
       <CardHeader>
-        <CardTitle>כתוב ביקורת</CardTitle>
+        <CardTitle className="text-right">כתוב ביקורת</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -157,19 +157,20 @@ const FreelancerReviewForm = ({ freelancerId, onReviewSubmitted }: FreelancerRev
 
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">כותרת הביקורת *</Label>
+            <Label htmlFor="title" className="text-right block">כותרת הביקורת *</Label>
             <Input
               id="title"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="למשל: עבודה מעולה ומקצועית"
               required
+              className="text-right"
             />
           </div>
 
           {/* Comment */}
           <div className="space-y-2">
-            <Label htmlFor="comment">הביקורת שלך *</Label>
+            <Label htmlFor="comment" className="text-right block">הביקורת שלך *</Label>
             <Textarea
               id="comment"
               value={formData.comment}
@@ -177,23 +178,25 @@ const FreelancerReviewForm = ({ freelancerId, onReviewSubmitted }: FreelancerRev
               placeholder="שתף את החוויה שלך מהעבודה עם הפרילנסר..."
               rows={5}
               required
+              className="text-right"
             />
           </div>
 
           {/* Project Type */}
           <div className="space-y-2">
-            <Label htmlFor="projectType">סוג הפרויקט</Label>
+            <Label htmlFor="projectType" className="text-right block">סוג הפרויקט</Label>
             <Input
               id="projectType"
               value={formData.projectType}
               onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
               placeholder="למשל: פיתוח אתר, עיצוב לוגו"
+              className="text-right"
             />
           </div>
 
           {/* Detailed Ratings */}
           <div className="space-y-4 p-4 bg-muted/30 rounded-lg">
-            <h4 className="font-semibold text-sm">דירוגים מפורטים (אופציונלי)</h4>
+            <h4 className="font-semibold text-sm text-right">דירוגים מפורטים (אופציונלי)</h4>
             
             <div className="grid sm:grid-cols-2 gap-4">
               <RatingInput

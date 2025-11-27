@@ -515,7 +515,7 @@ const FreelancerDetails = () => {
 
         {/* Reviews Section */}
         <section className="mt-12">
-          <h2 className="text-3xl font-bold mb-6">ביקורות ודירוגים</h2>
+          <h2 className="text-3xl font-bold mb-6 text-right">ביקורות ודירוגים</h2>
           
           <div className="grid lg:grid-cols-4 gap-6 mb-8">
             <div className="lg:col-span-1">
@@ -523,10 +523,10 @@ const FreelancerDetails = () => {
             </div>
             
             <div className="lg:col-span-3">
-              <Tabs defaultValue="reviews" className="w-full">
+              <Tabs defaultValue="reviews" className="w-full" dir="rtl">
                 <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="reviews">כל הביקורות</TabsTrigger>
                   <TabsTrigger value="write">כתוב ביקורת</TabsTrigger>
+                  <TabsTrigger value="reviews">כל הביקורות</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="reviews" className="mt-6">
