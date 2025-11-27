@@ -27,7 +27,7 @@ const HeroSection = () => {
       {/* Modern gradient background with multiple layers */}
       <div className="absolute inset-0 -z-10">
         {/* Primary gradient layer */}
-        <div className="absolute right-0 top-0 h-full w-4/5 bg-gradient-to-bl from-orange-500 via-amber-500 to-yellow-500 opacity-20">
+        <div className="absolute right-0 top-0 h-full w-4/5 bg-gradient-to-bl from-blue-500 via-indigo-500 to-purple-600 opacity-20">
           <div className="absolute inset-0 bg-gradient-to-tr from-primary/40 via-secondary/30 to-accent/40 mix-blend-multiply"></div>
         </div>
         
