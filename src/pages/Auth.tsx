@@ -100,11 +100,10 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-secondary/10 animate-pulse"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(var(--primary),0.1),transparent_50%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(var(--secondary),0.1),transparent_50%)]"></div>
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-primary/5 to-background flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
+      {/* Purple gradient background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(139,92,246,0.15),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(139,92,246,0.1),transparent_50%)]"></div>
       {/* Logo in top right corner */}
       <Link to="/" className="absolute top-6 right-6 z-10">
         <div className="flex h-12 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
