@@ -39,43 +39,43 @@ const CategoryShowcase = ({ title, items, categoryLink }: CategoryShowcaseProps)
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Large Item */}
           <Link
             to={`/secondhand/${mainItem.id}`}
             className="lg:col-span-1 group"
           >
-            <Card className="overflow-hidden h-full hover:shadow-xl transition-all duration-300">
-              <div className="relative aspect-[4/5] lg:aspect-[3/4] overflow-hidden">
+            <Card className="overflow-hidden hover:shadow-xl transition-all duration-300">
+              <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                 <img
                   src={mainItem.image}
                   alt={mainItem.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="absolute top-3 right-3 bg-background/80 hover:bg-background rounded-full"
+                  className="absolute top-3 right-3 bg-background/90 hover:bg-background rounded-full h-9 w-9"
                   onClick={(e) => e.preventDefault()}
                 >
-                  <Heart className="h-5 w-5" />
+                  <Heart className="h-4 w-4" />
                 </Button>
               </div>
-              <div className="p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl font-bold text-foreground">{mainItem.price}</span>
+              <div className="p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl font-bold text-foreground">{mainItem.price}</span>
                   {mainItem.originalPrice && (
                     <span className="text-sm text-muted-foreground line-through">
                       {mainItem.originalPrice}
                     </span>
                   )}
                 </div>
-                <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
+                <h3 className="font-semibold text-base mb-1 group-hover:text-primary transition-colors line-clamp-2">
                   {mainItem.title}
                 </h3>
                 <p className="text-sm text-muted-foreground">{mainItem.location}</p>
-                <div className="mt-2 flex gap-2">
-                  <span className="text-xs bg-accent/10 text-accent px-2 py-1 rounded-full">
+                <div className="flex gap-2 pt-1">
+                  <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">
                     {mainItem.category}
                   </span>
                 </div>
@@ -84,44 +84,44 @@ const CategoryShowcase = ({ title, items, categoryLink }: CategoryShowcaseProps)
           </Link>
 
           {/* Side Items Grid */}
-          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {sideItems.map((item) => (
               <Link
                 key={item.id}
                 to={`/secondhand/${item.id}`}
                 className="group"
               >
-                <Card className="overflow-hidden h-full hover:shadow-xl transition-all duration-300">
-                  <div className="relative aspect-square overflow-hidden">
+                <Card className="overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                     <img
                       src={item.image}
                       alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <Button
                       size="icon"
                       variant="ghost"
-                      className="absolute top-2 right-2 bg-background/80 hover:bg-background rounded-full"
+                      className="absolute top-3 right-3 bg-background/90 hover:bg-background rounded-full h-9 w-9"
                       onClick={(e) => e.preventDefault()}
                     >
                       <Heart className="h-4 w-4" />
                     </Button>
                   </div>
-                  <div className="p-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xl font-bold text-foreground">{item.price}</span>
+                  <div className="p-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg font-bold text-foreground">{item.price}</span>
                       {item.originalPrice && (
                         <span className="text-xs text-muted-foreground line-through">
                           {item.originalPrice}
                         </span>
                       )}
                     </div>
-                    <h3 className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors line-clamp-2">
+                    <h3 className="font-semibold text-sm group-hover:text-primary transition-colors line-clamp-2 min-h-[2.5rem]">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground">{item.location}</p>
-                    <div className="mt-2">
-                      <span className="text-xs bg-secondary/10 text-secondary px-2 py-1 rounded-full">
+                    <p className="text-sm text-muted-foreground">{item.location}</p>
+                    <div className="pt-1">
+                      <span className="text-xs bg-secondary/10 text-secondary px-3 py-1 rounded-full font-medium">
                         {item.category}
                       </span>
                     </div>
