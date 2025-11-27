@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 interface FeaturedPropertyCardProps {
@@ -21,45 +22,68 @@ interface FeaturedPropertyCardProps {
 
 const FeaturedPropertyCard = ({ property }: FeaturedPropertyCardProps) => {
   return (
-    <Link to={`/properties/${property.id}`}>
-      <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-card border-border group">
-        {/* Image */}
-        <div className="relative h-48 overflow-hidden">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-card border-border group relative">
+      <Link to={`/properties/${property.id}`}>
+        {/* Image with Navigation Arrows */}
+        <div className="relative h-64 overflow-hidden">
           <img 
             src={property.image} 
             alt={property.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover"
           />
-          <div className="absolute top-3 right-3 flex flex-col gap-2">
-            <Badge className="bg-background/90 text-foreground border-0">
-              דירת {property.rooms} חדרים
-            </Badge>
-            <Badge className="bg-background/90 text-foreground border-0">
-              {property.condition}
-            </Badge>
-          </div>
+          
+          {/* Favorite Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-3 right-3 bg-white hover:bg-white/90 rounded-full shadow-md"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <Heart className="h-5 w-5 text-foreground" />
+          </Button>
+
+          {/* Navigation Arrows */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-3 top-1/2 -translate-y-1/2 bg-white hover:bg-white/90 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <ChevronRight className="h-5 w-5 text-foreground" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute left-3 top-1/2 -translate-y-1/2 bg-white hover:bg-white/90 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <ChevronLeft className="h-5 w-5 text-foreground" />
+          </Button>
         </div>
 
         {/* Content */}
-        <div className="p-4">
-          <h3 className="text-lg font-bold text-foreground mb-1 line-clamp-1">
-            {property.title}
-          </h3>
-          <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
-            {property.subtitle}
-          </p>
-          
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-2xl font-bold text-foreground">
-                {property.price === "7,800" ? "₪7,800" : `₪${property.price}`}
-              </div>
-              <div className="text-xs text-muted-foreground">{property.location}</div>
-            </div>
+        <div className="p-4 text-center">
+          <div className="text-2xl font-bold text-foreground mb-2">
+            ₪{property.price}
+          </div>
+          <div className="text-sm text-muted-foreground mb-1">
+            {property.location}
+          </div>
+          <div className="text-sm text-muted-foreground">
+            {property.rooms} חדרים
           </div>
         </div>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   );
 };
 
