@@ -214,6 +214,116 @@ export type Database = {
         }
         Relationships: []
       }
+      review_helpful: {
+        Row: {
+          created_at: string
+          id: string
+          review_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          review_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          review_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_helpful_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          comment: string
+          created_at: string
+          helpful_count: number | null
+          id: string
+          item_id: string
+          item_type: string
+          rating: number
+          title: string
+          updated_at: string
+          user_id: string
+          verified_purchase: boolean | null
+        }
+        Insert: {
+          comment: string
+          created_at?: string
+          helpful_count?: number | null
+          id?: string
+          item_id: string
+          item_type: string
+          rating: number
+          title: string
+          updated_at?: string
+          user_id: string
+          verified_purchase?: boolean | null
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          helpful_count?: number | null
+          id?: string
+          item_id?: string
+          item_type?: string
+          rating?: number
+          title?: string
+          updated_at?: string
+          user_id?: string
+          verified_purchase?: boolean | null
+        }
+        Relationships: []
+      }
+      seller_reviews: {
+        Row: {
+          accuracy_rating: number | null
+          comment: string
+          communication_rating: number | null
+          created_at: string
+          id: string
+          rating: number
+          reviewer_id: string
+          seller_id: string
+          transaction_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          accuracy_rating?: number | null
+          comment: string
+          communication_rating?: number | null
+          created_at?: string
+          id?: string
+          rating: number
+          reviewer_id: string
+          seller_id: string
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accuracy_rating?: number | null
+          comment?: string
+          communication_rating?: number | null
+          created_at?: string
+          id?: string
+          rating?: number
+          reviewer_id?: string
+          seller_id?: string
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

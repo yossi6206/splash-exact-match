@@ -6,10 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, Share2, MapPin, Calendar, Shield, Package, Truck, Phone, Mail, MessageSquare } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import laptopImage from "@/assets/item-laptop.jpg";
+import { ReviewStats } from "@/components/reviews/ReviewStats";
+import { ReviewsList } from "@/components/reviews/ReviewsList";
+import { ReviewForm } from "@/components/reviews/ReviewForm";
 
 const LaptopDetails = () => {
   const { id } = useParams();
@@ -17,6 +21,85 @@ const LaptopDetails = () => {
   const { toast } = useToast();
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
+
+  // Mock reviews data
+  const mockReviews = [
+    {
+      id: "1",
+      userName: "דני לוי",
+      rating: 5,
+      title: "מחשב מעולה למפתחים",
+      comment: "קניתי את המחשב לפני חודשיים והוא פשוט מדהים. הביצועים מעולים, המסך חד ומדויק, והסוללה מחזיקה כל יום עבודה. ממליץ בחום!",
+      verifiedPurchase: true,
+      helpfulCount: 12,
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      id: "2",
+      userName: "שרה כהן",
+      rating: 4,
+      title: "מצוין אבל יקר",
+      comment: "המחשב באיכות מעולה ועובד מהר מאוד. המסך מדהים לעבודת עיצוב. המחיר קצת גבוה אבל שווה את זה.",
+      verifiedPurchase: true,
+      helpfulCount: 8,
+      createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      id: "3",
+      userName: "אבי ישראלי",
+      rating: 5,
+      title: "שווה כל שקל!",
+      comment: "עברתי מ-Windows ל-Mac והחוויה פשוט מדהימה. הכל זורם, הכל עובד. המוכר היה מקצועי ועזר לי בהעברה.",
+      verifiedPurchase: false,
+      helpfulCount: 15,
+      createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
+    }
+  ];
+
+  const reviewStats = {
+    totalReviews: mockReviews.length,
+    averageRating: 4.7,
+    ratingDistribution: {
+      5: 2,
+      4: 1,
+      3: 0,
+      2: 0,
+      1: 0
+    }
+  };
+
+  const handleSubmitReview = (review: { rating: number; title: string; comment: string }) => {
+    if (!user) {
+      toast({
+        title: "נדרשת התחברות",
+        description: "יש להתחבר כדי לכתוב ביקורת",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // TODO: Save review to database
+    toast({
+      title: "הביקורת נשלחה בהצלחה",
+      description: "תודה על השיתוף!"
+    });
+  };
+
+  const handleHelpful = (reviewId: string) => {
+    if (!user) {
+      toast({
+        title: "נדרשת התחברות",
+        description: "יש להתחבר כדי לדרג ביקורות",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    toast({
+      title: "תודה על המשוב!",
+      description: "דירגת ביקורת זו כמועילה"
+    });
+  };
 
   // Mock data
   const laptop = {
@@ -254,6 +337,35 @@ const LaptopDetails = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Reviews Section */}
+            <div className="space-y-6">
+              <Tabs defaultValue="reviews" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="reviews">ביקורות ({mockReviews.length})</TabsTrigger>
+                  <TabsTrigger value="write">כתוב ביקורת</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="reviews" className="space-y-6 mt-6">
+                  <ReviewStats
+                    totalReviews={reviewStats.totalReviews}
+                    averageRating={reviewStats.averageRating}
+                    ratingDistribution={reviewStats.ratingDistribution}
+                  />
+                  <ReviewsList
+                    reviews={mockReviews}
+                    onHelpful={handleHelpful}
+                    onNotHelpful={handleHelpful}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="write" className="mt-6">
+                  <ReviewForm
+                    onSubmit={handleSubmitReview}
+                  />
+                </TabsContent>
+              </Tabs>
+            </div>
           </div>
 
           {/* Right Column - Sidebar */}
