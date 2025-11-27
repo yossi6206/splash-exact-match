@@ -27,6 +27,10 @@ import {
   ChevronRight
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import FreelancerReviewStats from "@/components/freelancer-reviews/FreelancerReviewStats";
+import FreelancerReviewsList from "@/components/freelancer-reviews/FreelancerReviewsList";
+import FreelancerReviewForm from "@/components/freelancer-reviews/FreelancerReviewForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Freelancer = Tables<"freelancers">;
 
@@ -52,6 +56,12 @@ const FreelancerDetails = () => {
   const { toast } = useToast();
   const [freelancer, setFreelancer] = useState<Freelancer | null>(null);
   const [loading, setLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState<string | undefined>();
+  const [reviewStats, setReviewStats] = useState({
+    averageRating: 0,
+    totalReviews: 0,
+    ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+  });
   const [contactForm, setContactForm] = useState({
     name: "",
     email: "",
@@ -113,7 +123,47 @@ const FreelancerDetails = () => {
 
   useEffect(() => {
     fetchFreelancer();
+    fetchCurrentUser();
+    if (id) {
+      fetchReviewStats();
+    }
   }, [id]);
+
+  const fetchCurrentUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    setCurrentUserId(user?.id);
+  };
+
+  const fetchReviewStats = async () => {
+    if (!id) return;
+
+    try {
+      const { data: reviews, error } = await supabase
+        .from("freelancer_reviews")
+        .select("rating")
+        .eq("freelancer_id", id);
+
+      if (error) throw error;
+
+      if (reviews && reviews.length > 0) {
+        const totalReviews = reviews.length;
+        const averageRating = reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews;
+        
+        const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+        reviews.forEach(review => {
+          distribution[review.rating as keyof typeof distribution]++;
+        });
+
+        setReviewStats({
+          averageRating,
+          totalReviews,
+          ratingDistribution: distribution
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching review stats:", error);
+    }
+  };
 
   const fetchFreelancer = async () => {
     if (!id) return;
@@ -462,6 +512,46 @@ const FreelancerDetails = () => {
             </Card>
           </div>
         </div>
+
+        {/* Reviews Section */}
+        <section className="mt-12">
+          <h2 className="text-3xl font-bold mb-6">ביקורות ודירוגים</h2>
+          
+          <div className="grid lg:grid-cols-4 gap-6 mb-8">
+            <div className="lg:col-span-1">
+              <FreelancerReviewStats stats={reviewStats} />
+            </div>
+            
+            <div className="lg:col-span-3">
+              <Tabs defaultValue="reviews" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="reviews">כל הביקורות</TabsTrigger>
+                  <TabsTrigger value="write">כתוב ביקורת</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="reviews" className="mt-6">
+                  <FreelancerReviewsList 
+                    freelancerId={id!} 
+                    currentUserId={currentUserId}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="write" className="mt-6">
+                  <FreelancerReviewForm
+                    freelancerId={id!}
+                    onReviewSubmitted={() => {
+                      fetchReviewStats();
+                      // Switch back to reviews tab after submission
+                      document.querySelector('[value="reviews"]')?.dispatchEvent(
+                        new MouseEvent('click', { bubbles: true })
+                      );
+                    }}
+                  />
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
+        </section>
       </div>
 
       <Footer />
