@@ -14,6 +14,7 @@ import PropertyDetails from "./pages/PropertyDetails";
 import Laptops from "./pages/Laptops";
 import LaptopDetails from "./pages/LaptopDetails";
 import Auth from "./pages/Auth";
+import TipsGuidesPage from "./pages/TipsGuides";
 import NotFound from "./pages/NotFound";
 import MobileNav from "./components/MobileNav";
 
@@ -40,6 +41,7 @@ const AppContent = () => {
         <Route path="/properties/:id" element={<PropertyDetails />} />
         <Route path="/laptops" element={<Laptops />} />
         <Route path="/laptops/:id" element={<LaptopDetails />} />
+        <Route path="/tips" element={<TipsGuidesPage />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="*" element={<NotFound />} />
