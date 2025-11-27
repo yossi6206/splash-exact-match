@@ -237,75 +237,89 @@ const Freelancers = () => {
         </div>
 
         {/* Freelancers List */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-6 mb-8">
           {currentFreelancers.map((freelancer) => (
-            <Card key={freelancer.id} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex gap-6">
-                  {/* Avatar */}
-                  <img
-                    src={freelancer.avatar}
-                    alt={freelancer.name}
-                    className="w-24 h-24 rounded-lg object-cover flex-shrink-0"
-                  />
+            <Card key={freelancer.id} className="hover:shadow-xl transition-all duration-300 overflow-hidden">
+              <CardContent className="p-8">
+                <div className="flex flex-col md:flex-row gap-8 items-start">
+                  {/* Right Side - Avatar and Status */}
+                  <div className="flex flex-col items-center gap-4 md:order-2">
+                    <img
+                      src={freelancer.avatar}
+                      alt={freelancer.name}
+                      className="w-32 h-32 rounded-full object-cover ring-4 ring-primary/10"
+                    />
+                    <Button size="lg" className="w-full rounded-full font-semibold shadow-lg">
+                      {freelancer.level}
+                    </Button>
+                  </div>
 
-                  {/* Main Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-xl font-bold text-foreground">{freelancer.name}</h3>
-                          {freelancer.verified && (
-                            <BadgeCheck className="w-5 h-5 text-primary flex-shrink-0" />
-                          )}
-                          <Badge variant="secondary" className="text-xs">
-                            {freelancer.level}
-                          </Badge>
-                        </div>
-                        <p className="text-muted-foreground mb-2">{freelancer.title}</p>
+                  {/* Left Side - Main Content */}
+                  <div className="flex-1 md:order-1">
+                    {/* Name and Title */}
+                    <div className="mb-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="text-2xl font-bold text-foreground">{freelancer.name}</h3>
+                        {freelancer.verified && (
+                          <BadgeCheck className="w-6 h-6 text-primary flex-shrink-0" />
+                        )}
                       </div>
-                      <div className="text-left">
-                        <div className="text-sm text-muted-foreground mb-1">מחיר לשעה</div>
-                        <div className="text-xl font-bold text-primary whitespace-nowrap">
-                          ₪{freelancer.hourlyRate}
-                        </div>
-                      </div>
+                      <p className="text-lg text-muted-foreground">{freelancer.title}</p>
                     </div>
 
-                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                    {/* Description */}
+                    <p className="text-foreground mb-6 leading-relaxed">
                       {freelancer.description}
                     </p>
 
-                    {/* Stats */}
-                    <div className="flex flex-wrap items-center gap-4 mb-3 text-sm">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="font-semibold">{freelancer.rating}</span>
-                        <span className="text-muted-foreground">({freelancer.reviews} ביקורות)</span>
+                    {/* Stats Row */}
+                    <div className="flex flex-wrap items-center gap-6 mb-6 text-base">
+                      <div className="flex items-center gap-2">
+                        <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                        <span className="font-bold text-xl">{freelancer.rating}</span>
+                        <span className="text-muted-foreground">({freelancer.reviews})</span>
                       </div>
                       <div className="text-muted-foreground">
-                        {freelancer.completed} פרויקטים הושלמו
+                        {freelancer.completed} פרויקטים
                       </div>
-                      <div className="flex items-center gap-1 text-muted-foreground">
-                        <MapPin className="w-4 h-4" />
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="w-5 h-5" />
                         {freelancer.location}
                       </div>
-                      <div className="flex items-center gap-1 text-muted-foreground">
-                        <Clock className="w-4 h-4" />
-                        זמן תגובה: {freelancer.responseTime}
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Clock className="w-5 h-5" />
+                        תוך {freelancer.responseTime.replace('תוך ', '')}
                       </div>
                     </div>
 
                     {/* Skills */}
-                    <div className="flex items-center justify-between">
+                    <div className="mb-6">
                       <div className="flex flex-wrap gap-2">
                         {freelancer.skills.map((skill) => (
-                          <Badge key={skill} variant="outline" className="text-xs">
+                          <Badge 
+                            key={skill} 
+                            variant="secondary" 
+                            className="px-4 py-2 text-sm font-medium rounded-full"
+                          >
                             {skill}
                           </Badge>
                         ))}
                       </div>
-                      <Button asChild>
+                    </div>
+
+                    {/* Bottom Section - Price and CTA */}
+                    <div className="flex items-center justify-between pt-6 border-t">
+                      <div>
+                        <div className="text-sm text-muted-foreground mb-1">מחיר לשעה</div>
+                        <div className="text-3xl font-bold text-primary">
+                          ₪{freelancer.hourlyRate}
+                        </div>
+                      </div>
+                      <Button 
+                        asChild 
+                        size="lg" 
+                        className="px-8 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all"
+                      >
                         <Link to={`/freelancers/${freelancer.id}`}>צור קשר</Link>
                       </Button>
                     </div>
