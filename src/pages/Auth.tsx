@@ -100,16 +100,17 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8 relative">
+      {/* Logo in top right corner */}
+      <Link to="/" className="absolute top-6 right-6 z-10">
+        <div className="flex h-12 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
+          <span className="text-xl font-extrabold text-primary-foreground">yad2</span>
+        </div>
+      </Link>
+
       <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
         {/* Left Side - Marketing Content */}
         <div className="hidden lg:flex flex-col gap-10 text-right">
-          <Link to="/" className="flex items-center justify-end mb-4">
-            <div className="flex h-12 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
-              <span className="text-xl font-extrabold text-primary-foreground">yad2</span>
-            </div>
-          </Link>
-          
           <div className="space-y-3">
             <h1 className="text-4xl font-bold text-foreground leading-tight">
               לקבנות מהר, למכור מהר.
@@ -145,12 +146,6 @@ const Auth = () => {
         {/* Right Side - Auth Form */}
         <div className="w-full max-w-md mx-auto lg:mx-0">
           <div className="bg-card border border-border rounded-2xl shadow-lg p-8 md:p-10">
-            <Link to="/" className="flex lg:hidden items-center justify-center mb-6">
-              <div className="flex h-12 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
-                <span className="text-xl font-extrabold text-primary-foreground">yad2</span>
-              </div>
-            </Link>
-
             <h2 className="text-2xl font-bold text-center text-foreground mb-6">
               היי, טוב לראות אותך
             </h2>
