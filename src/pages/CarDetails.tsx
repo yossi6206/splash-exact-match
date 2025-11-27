@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Share2, Phone, MessageSquare, MapPin, Calendar, Gauge, Hand } from "lucide-react";
+import { Heart, Share2, Phone, MessageSquare, MapPin, Calendar, Gauge, Hand, Sparkles } from "lucide-react";
 import carImage1 from "@/assets/item-car.jpg";
 
 const CarDetails = () => {
@@ -172,7 +172,7 @@ const CarDetails = () => {
             </Card>
 
             {/* Seller Info */}
-            <Card className="border-border">
+            <Card className="border-border mb-6">
               <CardContent className="p-6">
                 <h3 className="font-bold text-foreground mb-4">על המוכר</h3>
                 <div className="flex items-center gap-3 mb-4">
@@ -186,6 +186,28 @@ const CarDetails = () => {
                 </div>
                 <Button variant="outline" className="w-full">
                   צפה במודעות נוספות
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* AI Report */}
+            <Card className="border-border bg-gradient-to-br from-blue-50/50 to-purple-50/50">
+              <CardContent className="p-6 text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Sparkles className="h-8 w-8 text-primary" />
+                  </div>
+                </div>
+                <h3 className="font-bold text-foreground mb-3 flex items-center justify-center gap-2">
+                  דוח AI מקצועי
+                  <Sparkles className="h-5 w-5 text-primary" />
+                </h3>
+                <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                  קבל ניתוח מקצועי מבוסס AI על מצב הרכב, המחיר והמלצות לרכישה
+                </p>
+                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
+                  <Sparkles className="h-5 w-5" />
+                  צור דוח AI
                 </Button>
               </CardContent>
             </Card>
