@@ -89,7 +89,7 @@ const FreelancerReviewCard = ({ review, currentUserId, onHelpfulClick }: Freelan
   const renderStars = (rating: number, size: "sm" | "md" = "sm") => {
     const starSize = size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4";
     return (
-      <div className="flex gap-0.5">
+      <div className="flex gap-0.5 flex-row-reverse">
         {[...Array(5)].map((_, i) => (
           <Star
             key={i}
@@ -106,48 +106,48 @@ const FreelancerReviewCard = ({ review, currentUserId, onHelpfulClick }: Freelan
     <Card>
       <CardContent className="p-5">
         {/* Header */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-start gap-3">
+        <div className="flex items-start justify-between mb-4 flex-row-reverse">
+          {review.project_type && (
+            <Badge variant="outline" className="text-xs">
+              {review.project_type}
+            </Badge>
+          )}
+          
+          <div className="flex items-start gap-3 flex-row-reverse flex-1">
             <Avatar className="w-10 h-10">
               <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
                 {getInitials(review.reviewer_name)}
               </AvatarFallback>
             </Avatar>
             
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="font-semibold">{review.reviewer_name}</span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1 flex-row-reverse justify-end">
                 {review.verified_client && (
                   <Badge variant="secondary" className="text-xs h-5 px-1.5">
                     <CheckCircle2 className="w-3 h-3 ml-0.5" />
                     לקוח מאומת
                   </Badge>
                 )}
+                <span className="font-semibold">{review.reviewer_name}</span>
               </div>
-              <div className="flex items-center gap-2">
-                {renderStars(review.rating, "md")}
+              <div className="flex items-center gap-2 flex-row-reverse justify-end">
                 <span className="text-sm text-muted-foreground">
                   {formatDistanceToNow(new Date(review.created_at), { 
                     addSuffix: true, 
                     locale: he 
                   })}
                 </span>
+                {renderStars(review.rating, "md")}
               </div>
             </div>
           </div>
-
-          {review.project_type && (
-            <Badge variant="outline" className="text-xs">
-              {review.project_type}
-            </Badge>
-          )}
         </div>
 
         {/* Title */}
-        <h3 className="font-semibold text-lg mb-2">{review.title}</h3>
+        <h3 className="font-semibold text-lg mb-2 text-right">{review.title}</h3>
 
         {/* Comment */}
-        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+        <p className="text-sm text-muted-foreground leading-relaxed mb-4 text-right">
           {review.comment}
         </p>
 
@@ -156,45 +156,53 @@ const FreelancerReviewCard = ({ review, currentUserId, onHelpfulClick }: Freelan
           review.professionalism_rating || review.deadline_rating) && (
           <div className="grid grid-cols-2 gap-3 mb-4 p-3 bg-muted/30 rounded-lg">
             {review.work_quality_rating && (
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center justify-between gap-2 flex-row-reverse">
+                <div className="flex items-center gap-1">
+                  {renderStars(review.work_quality_rating)}
+                </div>
                 <span className="text-xs text-muted-foreground">איכות עבודה:</span>
-                <div className="mr-auto">{renderStars(review.work_quality_rating)}</div>
               </div>
             )}
             {review.communication_rating && (
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center justify-between gap-2 flex-row-reverse">
+                <div className="flex items-center gap-1">
+                  {renderStars(review.communication_rating)}
+                </div>
                 <span className="text-xs text-muted-foreground">תקשורת:</span>
-                <div className="mr-auto">{renderStars(review.communication_rating)}</div>
               </div>
             )}
             {review.professionalism_rating && (
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center justify-between gap-2 flex-row-reverse">
+                <div className="flex items-center gap-1">
+                  {renderStars(review.professionalism_rating)}
+                </div>
                 <span className="text-xs text-muted-foreground">מקצועיות:</span>
-                <div className="mr-auto">{renderStars(review.professionalism_rating)}</div>
               </div>
             )}
             {review.deadline_rating && (
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center justify-between gap-2 flex-row-reverse">
+                <div className="flex items-center gap-1">
+                  {renderStars(review.deadline_rating)}
+                </div>
                 <span className="text-xs text-muted-foreground">עמידה בזמנים:</span>
-                <div className="mr-auto">{renderStars(review.deadline_rating)}</div>
               </div>
             )}
           </div>
         )}
 
         {/* Helpful Button */}
-        <div className="flex items-center gap-2 pt-3 border-t">
+        <div className="flex items-center gap-2 pt-3 border-t justify-end">
           <Button
             variant={isHelpful ? "default" : "outline"}
             size="sm"
             onClick={handleHelpfulClick}
-            className="gap-1.5"
+            className="gap-1.5 flex-row-reverse"
           >
-            <ThumbsUp className={`w-3.5 h-3.5 ${isHelpful ? "fill-current" : ""}`} />
-            <span>{isHelpful ? "מועיל" : "מועיל?"}</span>
             {helpfulCount > 0 && (
               <span className="font-semibold">({helpfulCount})</span>
             )}
+            <span>{isHelpful ? "מועיל" : "מועיל?"}</span>
+            <ThumbsUp className={`w-3.5 h-3.5 ${isHelpful ? "fill-current" : ""}`} />
           </Button>
         </div>
       </CardContent>
