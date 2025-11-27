@@ -1,6 +1,6 @@
 import { MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import PropertyCard from "./PropertyCard";
+import FeaturedPropertyCard from "./FeaturedPropertyCard";
 import property1 from "@/assets/property-1.jpg";
 import property2 from "@/assets/property-2.jpg";
 import property3 from "@/assets/property-3.jpg";
@@ -130,7 +130,7 @@ const FeaturedListings = () => {
           {/* Properties */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {properties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
+              <FeaturedPropertyCard key={property.id} property={property} />
             ))}
           </div>
         </div>
