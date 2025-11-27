@@ -8,14 +8,15 @@ import categoryRealestate from "@/assets/category-realestate.png";
 import categoryApartments from "@/assets/category-apartments.png";
 
 const categories = [
-  { name: "עסקים למכירה", image: categoryBusiness },
-  { name: "בגלי מקצוע", image: categoryTools },
-  { name: "דרושים", image: categoryJobs },
-  { name: "יד שניה", image: categorySecondhand },
-  { name: "רכב", image: categoryCars },
+  { name: "עסקים למכירה", image: categoryBusiness, items: "2,345" },
+  { name: "בגלי מקצוע", image: categoryTools, items: "8,932" },
+  { name: "דרושים", image: categoryJobs, items: "5,678" },
+  { name: "יד שניה", image: categorySecondhand, items: "12,456" },
+  { name: "רכב", image: categoryCars, items: "9,234" },
   { 
     name: "נדל״ן", 
     image: categoryRealestate,
+    items: "7,891",
     megaMenu: {
       columns: [
         {
@@ -41,7 +42,7 @@ const categories = [
       ]
     }
   },
-  { name: "דירות חדשות", image: categoryApartments },
+  { name: "דירות חדשות", image: categoryApartments, items: "3,567" },
 ];
 
 const Categories = () => {
@@ -62,12 +63,19 @@ const Categories = () => {
                 <button
                   className="flex flex-col items-center gap-3 md:gap-4 group cursor-pointer transition-all duration-300"
                 >
-                  <div className="w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:scale-105 overflow-hidden">
+                  <div className="w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:scale-105 overflow-hidden relative">
                     <img 
                       src={category.image} 
                       alt={category.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
+                    {/* Hover overlay with item count */}
+                    <div className="absolute inset-0 bg-primary/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
+                      <div className="text-center text-white">
+                        <div className="text-lg md:text-2xl lg:text-3xl font-bold">{category.items}</div>
+                        <div className="text-[10px] md:text-xs lg:text-sm font-medium mt-1">פריטים</div>
+                      </div>
+                    </div>
                   </div>
                   <span className="text-xs md:text-sm lg:text-base font-semibold text-foreground text-center max-w-[100px] md:max-w-none group-hover:text-primary transition-colors duration-300">
                     {category.name}
