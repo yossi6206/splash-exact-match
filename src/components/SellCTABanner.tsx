@@ -1,39 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
 import secondhandBanner from "@/assets/furniture-banner.jpg";
 
 const SellCTABanner = () => {
-  const [offsetY, setOffsetY] = useState(0);
-  const bannerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (bannerRef.current) {
-        const rect = bannerRef.current.getBoundingClientRect();
-        const scrollPercent = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-        setOffsetY(scrollPercent * 50); // Adjust 50 for parallax intensity
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <section className="py-8" ref={bannerRef}>
+    <section className="py-8">
       <div className="container mx-auto px-4">
-        <div className="relative overflow-hidden rounded-2xl shadow-xl bg-gradient-to-l from-primary via-secondary to-accent">
+        <div className="relative overflow-hidden rounded-2xl shadow-xl bg-gradient-to-l from-primary via-secondary to-accent transition-all duration-500 hover:shadow-2xl">
           <div className="grid md:grid-cols-2 items-center min-h-[200px]">
             {/* Image Side */}
             <div className="hidden md:block relative h-full overflow-hidden">
               <img
                 src={secondhandBanner}
                 alt="מכירת פריטים"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-100"
-                style={{ transform: `translateY(${offsetY}px)` }}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
               />
               <div className="absolute top-4 left-4 z-10">
                 <span className="bg-accent text-white px-4 py-2 rounded-full font-bold text-sm">
@@ -52,7 +32,7 @@ const SellCTABanner = () => {
               </p>
               <Button
                 size="lg"
-                className="bg-white text-primary hover:bg-white/90 rounded-full px-8 font-bold shadow-lg hover:scale-105 transition-transform"
+                className="bg-white text-primary hover:bg-white/90 rounded-full px-8 font-bold shadow-lg hover:scale-105 transition-all duration-300"
                 asChild
               >
                 <Link to="/cars">
