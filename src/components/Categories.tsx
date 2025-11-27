@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import categoryBusiness from "@/assets/category-business.png";
 import categoryTools from "@/assets/category-tools.png";
 import categoryJobs from "@/assets/category-jobs.png";
@@ -7,13 +8,13 @@ import categoryRealestate from "@/assets/category-realestate.png";
 import categoryApartments from "@/assets/category-apartments.png";
 
 const categories = [
-  { name: "עסקים למכירה", image: categoryBusiness, items: "2,345" },
-  { name: "בגלי מקצוע", image: categoryTools, items: "8,932" },
-  { name: "דרושים", image: categoryJobs, items: "5,678" },
-  { name: "יד שניה", image: categorySecondhand, items: "12,456" },
-  { name: "רכב", image: categoryCars, items: "9,234" },
-  { name: "נדל״ן", image: categoryRealestate, items: "7,891" },
-  { name: "דירות חדשות", image: categoryApartments, items: "3,567" },
+  { name: "עסקים למכירה", image: categoryBusiness, items: "2,345", link: "/secondhand?category=business" },
+  { name: "בגלי מקצוע", image: categoryTools, items: "8,932", link: "/secondhand?category=tools" },
+  { name: "דרושים", image: categoryJobs, items: "5,678", link: "/secondhand?category=jobs" },
+  { name: "יד שניה", image: categorySecondhand, items: "12,456", link: "/secondhand" },
+  { name: "רכב", image: categoryCars, items: "9,234", link: "/cars" },
+  { name: "נדל״ן", image: categoryRealestate, items: "7,891", link: "/properties" },
+  { name: "דירות חדשות", image: categoryApartments, items: "3,567", link: "/properties?type=new" },
 ];
 
 const Categories = () => {
@@ -34,9 +35,9 @@ const Categories = () => {
         </div>
         <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
           {categories.map((category) => (
-            <a
+            <Link
               key={category.name}
-              href="#"
+              to={category.link}
               className="flex flex-col items-center gap-3 md:gap-4 group cursor-pointer transition-all duration-300"
             >
               <div className="w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:scale-105 overflow-hidden relative">
@@ -56,7 +57,7 @@ const Categories = () => {
               <span className="text-xs md:text-sm lg:text-base font-semibold text-foreground text-center max-w-[100px] md:max-w-none group-hover:text-primary transition-colors duration-300">
                 {category.name}
               </span>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
