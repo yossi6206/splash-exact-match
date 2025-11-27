@@ -310,11 +310,7 @@ const Header = () => {
               </div>
 
               <Button variant="ghost" className="text-sm font-medium" asChild>
-                <Link to="/jobs">דרושים</Link>
-              </Button>
-
-              <Button variant="ghost" className="text-sm font-medium" asChild>
-                <Link to="/freelancers">פרילנסרים</Link>
+                <Link to="/jobs">דרושים IL</Link>
               </Button>
             </nav>
           </div>
