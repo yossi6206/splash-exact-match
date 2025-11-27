@@ -20,6 +20,7 @@ import Auth from "./pages/Auth";
 import TipsGuidesPage from "./pages/TipsGuides";
 import TipDetails from "./pages/TipDetails";
 import Freelancers from "./pages/Freelancers";
+import FreelancerDetails from "./pages/FreelancerDetails";
 import NotFound from "./pages/NotFound";
 import MobileNav from "./components/MobileNav";
 
@@ -50,6 +51,7 @@ const AppContent = () => {
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/jobs/:id" element={<JobDetails />} />
         <Route path="/freelancers" element={<Freelancers />} />
+        <Route path="/freelancers/:id" element={<FreelancerDetails />} />
         <Route path="/tips" element={<TipsGuidesPage />} />
         <Route path="/tips/:id" element={<TipDetails />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
