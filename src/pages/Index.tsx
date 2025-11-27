@@ -7,6 +7,7 @@ import FeaturedSearches from "@/components/FeaturedSearches";
 import RecommendedItems from "@/components/RecommendedItems";
 import TipsGuides from "@/components/TipsGuides";
 import FurnitureBanner from "@/components/FurnitureBanner";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -22,6 +23,7 @@ const Index = () => {
         <FurnitureBanner />
         <TipsGuides />
       </main>
+      <Footer />
     </div>
   );
 };
