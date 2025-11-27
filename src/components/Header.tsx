@@ -276,8 +276,8 @@ const Header = () => {
                 onMouseEnter={() => setHoveredMenu("יד שניה")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <Button variant="ghost" className="text-sm font-medium">
-                  יד שניה
+                <Button variant="ghost" className="text-sm font-medium" asChild>
+                  <Link to="/secondhand">יד שניה</Link>
                 </Button>
                 
                 {hoveredMenu === "יד שניה" && megaMenuData["יד שניה"] && (
@@ -309,8 +309,8 @@ const Header = () => {
                 )}
               </div>
 
-              <Button variant="ghost" className="text-sm font-medium">
-                דרושים IL
+              <Button variant="ghost" className="text-sm font-medium" asChild>
+                <Link to="/jobs">דרושים IL</Link>
               </Button>
             </nav>
           </div>

@@ -10,7 +10,7 @@ import categoryApartments from "@/assets/category-apartments.png";
 const categories = [
   { name: "עסקים למכירה", image: categoryBusiness, items: "2,345", link: "/secondhand?category=business" },
   { name: "בגלי מקצוע", image: categoryTools, items: "8,932", link: "/secondhand?category=tools" },
-  { name: "דרושים", image: categoryJobs, items: "5,678", link: "/secondhand?category=jobs" },
+  { name: "דרושים", image: categoryJobs, items: "5,678", link: "/jobs" },
   { name: "יד שניה", image: categorySecondhand, items: "12,456", link: "/secondhand" },
   { name: "רכב", image: categoryCars, items: "9,234", link: "/cars" },
   { name: "נדל״ן", image: categoryRealestate, items: "7,891", link: "/properties" },
