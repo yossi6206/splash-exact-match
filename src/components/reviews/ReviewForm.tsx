@@ -67,42 +67,42 @@ export const ReviewForm = ({ onSubmit, isSubmitting = false }: ReviewFormProps) 
         <CardTitle className="text-xl">כתוב ביקורת</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" dir="rtl">
           {/* Rating */}
           <div className="space-y-2">
-            <Label>דירוג כולל *</Label>
-            <div>
+            <Label className="text-right block">דירוג כולל *</Label>
+            <div className="flex justify-end">
               <RatingStars
                 rating={rating}
                 interactive
                 size="lg"
                 onRatingChange={setRating}
               />
-              {errors.rating && (
-                <p className="text-sm text-destructive mt-1">{errors.rating}</p>
-              )}
             </div>
+            {errors.rating && (
+              <p className="text-sm text-destructive mt-1 text-right">{errors.rating}</p>
+            )}
           </div>
 
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">כותרת הביקורת *</Label>
+            <Label htmlFor="title" className="text-right block">כותרת הביקורת *</Label>
             <Input
               id="title"
               placeholder="סכם את הביקורת שלך במשפט אחד"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               maxLength={100}
-              className={errors.title ? "border-destructive" : ""}
+              className={errors.title ? "border-destructive text-right" : "text-right"}
             />
             {errors.title && (
-              <p className="text-sm text-destructive">{errors.title}</p>
+              <p className="text-sm text-destructive text-right">{errors.title}</p>
             )}
           </div>
 
           {/* Comment */}
           <div className="space-y-2">
-            <Label htmlFor="comment">הביקורת שלך *</Label>
+            <Label htmlFor="comment" className="text-right block">הביקורת שלך *</Label>
             <Textarea
               id="comment"
               placeholder="ספר לנו על החוויה שלך עם המוצר..."
@@ -110,17 +110,17 @@ export const ReviewForm = ({ onSubmit, isSubmitting = false }: ReviewFormProps) 
               onChange={(e) => setComment(e.target.value)}
               rows={5}
               maxLength={1000}
-              className={errors.comment ? "border-destructive" : ""}
+              className={errors.comment ? "border-destructive text-right" : "text-right"}
             />
             <div className="flex justify-between items-center">
-              {errors.comment ? (
-                <p className="text-sm text-destructive">{errors.comment}</p>
-              ) : (
-                <div />
-              )}
               <span className="text-sm text-muted-foreground">
                 {comment.length}/1000
               </span>
+              {errors.comment ? (
+                <p className="text-sm text-destructive text-right">{errors.comment}</p>
+              ) : (
+                <div />
+              )}
             </div>
           </div>
 
