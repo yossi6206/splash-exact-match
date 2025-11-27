@@ -144,7 +144,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background hidden md:block">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-gray-200 bg-white dark:bg-background shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1)] hidden md:block">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -323,7 +323,7 @@ const Header = () => {
                   variant="outline"
                   role="combobox"
                   aria-expanded={searchOpen}
-                  className="w-full justify-between bg-background hover:bg-accent/50 border-border/60 h-11 px-4 shadow-sm hover:shadow-md transition-all duration-300"
+                  className="w-full justify-between bg-white dark:bg-background hover:bg-gray-50 dark:hover:bg-accent/50 border-2 border-gray-200 dark:border-border/60 h-11 px-4 shadow-md hover:shadow-lg transition-all duration-300"
                 >
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Search className="h-4 w-4" />
@@ -331,7 +331,7 @@ const Header = () => {
                   </div>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[600px] p-0 shadow-xl border-2" align="start">
+              <PopoverContent className="w-[600px] p-0 shadow-2xl border-2 border-gray-200 bg-white dark:bg-background" align="start">
                 <Command>
                   <CommandInput 
                     placeholder="הקלד לחיפוש..." 
