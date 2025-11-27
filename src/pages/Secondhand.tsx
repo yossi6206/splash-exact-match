@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import RecommendedCard from "@/components/RecommendedCard";
 import CategoryShowcase from "@/components/CategoryShowcase";
 import SellCTABanner from "@/components/SellCTABanner";
+import FurnitureCTABanner from "@/components/FurnitureCTABanner";
 
 // Import images
 import secondhandHero from "@/assets/secondhand-hero.jpg";
@@ -375,6 +376,9 @@ const Secondhand = () => {
         items={furnitureShowcase}
         categoryLink="/secondhand?category=furniture"
       />
+
+      {/* Furniture CTA Banner */}
+      <FurnitureCTABanner />
 
       {/* Electronics Showcase */}
       <section className="bg-muted/30">
