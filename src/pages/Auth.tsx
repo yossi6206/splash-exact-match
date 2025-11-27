@@ -145,7 +145,7 @@ const Auth = () => {
 
         {/* Right Side - Auth Form */}
         <div className="w-full max-w-md mx-auto lg:mx-0">
-          <div className="bg-card border border-border rounded-2xl shadow-lg p-8 md:p-10">
+          <div className="bg-white dark:bg-card border-2 border-border/80 dark:border-border rounded-2xl shadow-2xl p-8 md:p-10">
             <h2 className="text-2xl font-bold text-center text-foreground mb-6">
               היי, טוב לראות אותך
             </h2>
@@ -184,7 +184,7 @@ const Auth = () => {
                 <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-3 bg-card text-muted-foreground">או התחבר ידנית</span>
+                <span className="px-3 bg-white dark:bg-card text-muted-foreground">או התחבר ידנית</span>
               </div>
             </div>
 
@@ -199,7 +199,7 @@ const Auth = () => {
                     placeholder="yourmail@email.co.il"
                     value={loginData.email}
                     onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                    className="h-11 text-right bg-background"
+                    className="h-11 text-right bg-white dark:bg-background border-border/60"
                     required
                   />
                   {errors.loginEmail && (
@@ -216,7 +216,7 @@ const Auth = () => {
                       placeholder="הקלד/י סיסמה"
                       value={loginData.password}
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                      className="h-11 text-right pr-10 bg-background"
+                      className="h-11 text-right pr-10 bg-white dark:bg-background border-border/60"
                       required
                     />
                     <button
@@ -275,7 +275,7 @@ const Auth = () => {
                     placeholder="ישראל ישראלי"
                     value={signupData.fullName}
                     onChange={(e) => setSignupData({ ...signupData, fullName: e.target.value })}
-                    className="h-11 text-right bg-background"
+                    className="h-11 text-right bg-white dark:bg-background border-border/60"
                     required
                   />
                   {errors.signupName && (
@@ -291,7 +291,7 @@ const Auth = () => {
                     placeholder="yourmail@email.co.il"
                     value={signupData.email}
                     onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
-                    className="h-11 text-right bg-background"
+                    className="h-11 text-right bg-white dark:bg-background border-border/60"
                     required
                   />
                   {errors.signupEmail && (
@@ -308,7 +308,7 @@ const Auth = () => {
                       placeholder="הקלד/י סיסמה"
                       value={signupData.password}
                       onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                      className="h-11 text-right pr-10 bg-background"
+                      className="h-11 text-right pr-10 bg-white dark:bg-background border-border/60"
                       required
                     />
                     <button
