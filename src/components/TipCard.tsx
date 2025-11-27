@@ -1,13 +1,15 @@
 import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface TipCardProps {
   image: string;
   title: string;
   description: string;
+  slug?: string;
 }
 
-const TipCard = ({ image, title, description }: TipCardProps) => {
-  return (
+const TipCard = ({ image, title, description, slug }: TipCardProps) => {
+  const content = (
     <div className="group cursor-pointer">
       <div className="relative overflow-hidden rounded-lg mb-3 aspect-[4/3]">
         <img
@@ -26,6 +28,12 @@ const TipCard = ({ image, title, description }: TipCardProps) => {
       <p className="text-sm text-muted-foreground">{description}</p>
     </div>
   );
+
+  if (slug) {
+    return <Link to={`/tips/${slug}`}>{content}</Link>;
+  }
+
+  return content;
 };
 
 export default TipCard;

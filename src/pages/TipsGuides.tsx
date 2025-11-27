@@ -21,73 +21,85 @@ const allTips = [
     image: tipSelling,
     title: "איך למכור בהצלחה",
     description: "טיפים חשובים למכירה מהירה ויעילה של הפריט שלך",
-    category: "מכירה"
+    category: "מכירה",
+    slug: "sell-success"
   },
   {
     image: tipBuying,
     title: "מדריך לקונה החכם",
     description: "כל מה שצריך לדעת לפני רכישת מוצר יד שנייה",
-    category: "קנייה"
+    category: "קנייה",
+    slug: "smart-buyer"
   },
   {
     image: tipSafety,
     title: "בטיחות ואבטחה",
     description: "הגן על עצמך ועל המידע האישי שלך בעסקאות",
-    category: "אבטחה"
+    category: "אבטחה",
+    slug: "safety-security"
   },
   {
     image: tipWriting,
     title: "כתיבת מודעה מושלמת",
     description: "כך תכתוב מודעה שתמשך קונים ותביא למכירה מהירה",
-    category: "מודעות"
+    category: "מודעות",
+    slug: "perfect-ad"
   },
   {
     image: tipPricing,
     title: "תמחור נכון - המפתח למכירה",
     description: "איך לקבוע מחיר הוגן ואטרקטיבי לפריט שלך",
-    category: "מכירה"
+    category: "מכירה",
+    slug: "pricing-tips"
   },
   {
     image: tipInspection,
     title: "בדיקת מצב הפריט",
     description: "מדריך מקיף לבדיקת מצב מוצרים לפני קנייה",
-    category: "קנייה"
+    category: "קנייה",
+    slug: "product-inspection"
   },
   {
     image: tipMeeting,
     title: "נקודות מפגש בטוחות",
     description: "איפה ומתי להיפגש עם קונים ומוכרים",
-    category: "אבטחה"
+    category: "אבטחה",
+    slug: "safe-meeting"
   },
   {
     image: tipPhotography,
     title: "צילום מושלם למודעה",
     description: "טיפים לצילום פריטים שימכרו אותם בעצמם",
-    category: "מודעות"
+    category: "מודעות",
+    slug: "photography-tips"
   },
   {
     image: tipCommunication,
     title: "תקשורת יעילה עם קונים",
     description: "כיצד לנהל שיחות שמובילות לעסקאות מוצלחות",
-    category: "מכירה"
+    category: "מכירה",
+    slug: "communication-tips"
   },
   {
     image: tipNegotiation,
     title: "משא ומתן חכם",
     description: "אסטרטגיות למשא ומתן שיביאו לך את המחיר הטוב ביותר",
-    category: "קנייה"
+    category: "קנייה",
+    slug: "negotiation-tips"
   },
   {
     image: tipFraud,
     title: "זיהוי הונאות נפוצות",
     description: "איך להימנע מנוכלים ולזהות מודעות מפוקפקות",
-    category: "אבטחה"
+    category: "אבטחה",
+    slug: "fraud-detection"
   },
   {
     image: tipPromotion,
     title: "קידום המודעה שלך",
     description: "דרכים להגביר את החשיפה של המודעה שלך",
-    category: "מודעות"
+    category: "מודעות",
+    slug: "ad-promotion"
   },
 ];
 
@@ -157,6 +169,7 @@ const TipsGuidesPage = () => {
                   image={tip.image}
                   title={tip.title}
                   description={tip.description}
+                  slug={tip.slug}
                 />
               ))}
             </div>
