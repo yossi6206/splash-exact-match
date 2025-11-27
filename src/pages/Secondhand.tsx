@@ -10,6 +10,7 @@ import RecommendedCard from "@/components/RecommendedCard";
 import CategoryShowcase from "@/components/CategoryShowcase";
 import SellCTABanner from "@/components/SellCTABanner";
 import FurnitureCTABanner from "@/components/FurnitureCTABanner";
+import RealEstateCTABanner from "@/components/RealEstateCTABanner";
 
 // Import images
 import secondhandHero from "@/assets/secondhand-hero.jpg";
@@ -395,6 +396,9 @@ const Secondhand = () => {
         items={realEstateShowcase}
         categoryLink="/properties"
       />
+
+      {/* Real Estate CTA Banner */}
+      <RealEstateCTABanner />
 
       {/* Vehicles Showcase */}
       <section className="bg-muted/30">
