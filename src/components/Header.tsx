@@ -84,6 +84,30 @@ const megaMenuData = {
         items: ["מערכות הפעלה", "תוכנות משרד", "תוכנות עיצוב", "אנטי וירוס"]
       }
     ]
+  },
+  "יד שניה": {
+    columns: [
+      {
+        title: "ריהוט",
+        items: ["ספות וכורסאות", "שולחנות", "כיסאות", "ארונות", "מיטות"]
+      },
+      {
+        title: "מוצרי חשמל",
+        items: ["מקררים", "מכונות כביסה", "תנורים", "מיקרוגלים", "מזגנים"]
+      },
+      {
+        title: "ספורט ופנאי",
+        items: ["אופניים", "ציוד כושר", "משחקים", "ספרים", "כלי נגינה"]
+      },
+      {
+        title: "אופנה",
+        items: ["בגדים", "נעליים", "תיקים", "אביזרים", "תכשיטים"]
+      },
+      {
+        title: "תינוקות וילדים",
+        items: ["עגלות", "כיסאות אוכל", "מיטות", "צעצועים", "בגדי ילדים"]
+      }
+    ]
   }
 };
 
@@ -224,9 +248,44 @@ const Header = () => {
                 )}
               </div>
 
-              <Button variant="ghost" className="text-sm font-medium">
-                יד שניה
-              </Button>
+              <div 
+                className="relative"
+                onMouseEnter={() => setHoveredMenu("יד שניה")}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <Button variant="ghost" className="text-sm font-medium">
+                  יד שניה
+                </Button>
+                
+                {hoveredMenu === "יד שניה" && megaMenuData["יד שניה"] && (
+                  <div className="absolute top-full right-0 pt-2 z-50">
+                    <div className="bg-background border border-border rounded-lg shadow-xl p-8 w-[900px] animate-fade-in">
+                      <div className="grid grid-cols-5 gap-6">
+                        {megaMenuData["יד שניה"].columns.map((column, index) => (
+                          <div key={index}>
+                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              {column.title}
+                            </h3>
+                            <ul className="space-y-1.5">
+                              {column.items.map((item, itemIndex) => (
+                                <li key={itemIndex}>
+                                  <a 
+                                    href="#" 
+                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
+                                  >
+                                    {item}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <Button variant="ghost" className="text-sm font-medium">
                 דרושים IL
               </Button>
