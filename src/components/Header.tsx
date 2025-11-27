@@ -1,9 +1,22 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MessageSquare, Heart, Plus, LogOut, LayoutDashboard, Settings } from "lucide-react";
+import { MessageSquare, Heart, Plus, LogOut, LayoutDashboard, Settings, Search } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -115,6 +128,16 @@ const Header = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
+  // Search suggestions based on mega menu data
+  const searchSuggestions = [
+    { category: "נדל\"ן", items: ["דירות למכירה", "דירות להשכרה", "בתים פרטיים", "דירות גן", "פנטהאוז"] },
+    { category: "רכב", items: ["רכב יד שנייה", "אופנועים", "משאיות", "אביזרי רכב", "מערכות שמע"] },
+    { category: "מחשבים", items: ["מחשבים ניידים", "מחשבי גיימינג", "כרטיסי מסך", "מסכים", "מקלדות"] },
+    { category: "יד שניה", items: ["ריהוט", "מוצרי חשמל", "אופניים", "בגדים", "צעצועים"] },
+  ];
 
   const getInitials = (email: string) => {
     return email.substring(0, 2).toUpperCase();
@@ -290,6 +313,61 @@ const Header = () => {
                 דרושים IL
               </Button>
             </nav>
+          </div>
+
+          {/* Search Bar */}
+          <div className="flex-1 max-w-2xl mx-8">
+            <Popover open={searchOpen} onOpenChange={setSearchOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={searchOpen}
+                  className="w-full justify-between bg-background hover:bg-accent/50 border-border/60 h-11 px-4 shadow-sm hover:shadow-md transition-all duration-300"
+                >
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Search className="h-4 w-4" />
+                    <span className="text-sm">חיפוש מוצרים, נדל"ן, רכב ועוד...</span>
+                  </div>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[600px] p-0 shadow-xl border-2" align="start">
+                <Command>
+                  <CommandInput 
+                    placeholder="הקלד לחיפוש..." 
+                    value={searchValue}
+                    onValueChange={setSearchValue}
+                    className="border-none focus:ring-0"
+                  />
+                  <CommandList>
+                    <CommandEmpty>לא נמצאו תוצאות</CommandEmpty>
+                    {searchSuggestions.map((group) => (
+                      <CommandGroup key={group.category} heading={group.category}>
+                        {group.items
+                          .filter((item) => 
+                            searchValue === "" || 
+                            item.toLowerCase().includes(searchValue.toLowerCase())
+                          )
+                          .map((item) => (
+                            <CommandItem
+                              key={item}
+                              value={item}
+                              onSelect={(value) => {
+                                setSearchValue(value);
+                                setSearchOpen(false);
+                              }}
+                              className="cursor-pointer"
+                            >
+                              <Search className="ml-2 h-4 w-4 opacity-50" />
+                              {item}
+                            </CommandItem>
+                          ))}
+                      </CommandGroup>
+                    ))}
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* Actions */}
