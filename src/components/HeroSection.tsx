@@ -1,5 +1,9 @@
 import { Button } from "@/components/ui/button";
-import heroFurniture from "@/assets/hero-furniture.png";
+import heroPhone from "@/assets/hero-phone.jpg";
+import heroLaptop from "@/assets/hero-laptop.jpg";
+import heroCar from "@/assets/hero-car.jpg";
+import heroApartment from "@/assets/hero-apartment.jpg";
+import heroWatch from "@/assets/hero-watch.jpg";
 
 const HeroSection = () => {
   return (
@@ -42,27 +46,77 @@ const HeroSection = () => {
             </Button>
           </div>
 
-          {/* Image with price tags */}
-          <div className="order-1 md:order-2 relative flex justify-center items-center">
-            <div className="relative w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]">
-              <img
-                src={heroFurniture}
-                alt="רהיטים למכירה"
-                className="w-full h-full object-cover rounded-full shadow-2xl relative z-10 border-8 border-white/20"
-              />
-              
-              {/* Price tags */}
-              <div className="absolute top-[10%] left-[5%] bg-accent text-accent-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
-                ₪ 700
+          {/* Gallery of product images */}
+          <div className="order-1 md:order-2 relative">
+            <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-lg mx-auto">
+              {/* Phone */}
+              <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20">
+                  <img
+                    src={heroPhone}
+                    alt="טלפון למכירה"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg">
+                  ₪ 2,500
+                </div>
               </div>
-              <div className="absolute top-[20%] right-[10%] bg-accent text-accent-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-                ₪ 450
+
+              {/* Laptop */}
+              <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
+                <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20">
+                  <img
+                    src={heroLaptop}
+                    alt="מחשב נייד למכירה"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg">
+                  ₪ 3,800
+                </div>
               </div>
-              <div className="absolute bottom-[30%] left-[8%] bg-accent text-accent-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-                ₪ 150
+
+              {/* Car */}
+              <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20">
+                  <img
+                    src={heroCar}
+                    alt="רכב למכירה"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg">
+                  ₪ 150,000
+                </div>
               </div>
-              <div className="absolute bottom-[18%] right-[15%] bg-accent text-accent-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
-                ₪ 200
+
+              {/* Watch */}
+              <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
+                <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20">
+                  <img
+                    src={heroWatch}
+                    alt="שעון למכירה"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg">
+                  ₪ 8,500
+                </div>
+              </div>
+            </div>
+
+            {/* Center apartment image */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 animate-in fade-in scale-in duration-700 delay-700">
+              <div className="w-40 h-40 md:w-52 md:h-52 lg:w-64 lg:h-64 rounded-full overflow-hidden shadow-2xl border-8 border-white/30 bg-white">
+                <img
+                  src={heroApartment}
+                  alt="דירה למכירה"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-xl">
+                ₪ 1,850,000
               </div>
             </div>
           </div>
