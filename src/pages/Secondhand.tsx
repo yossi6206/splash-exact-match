@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Mic } from "lucide-react";
 import { Link } from "react-router-dom";
+import RecommendedCard from "@/components/RecommendedCard";
 
 // Import images
 import secondhandHero from "@/assets/secondhand-hero.jpg";
@@ -15,6 +16,10 @@ import phoneImg from "@/assets/hero-phone.jpg";
 import carImg from "@/assets/hero-car.jpg";
 import apartmentImg from "@/assets/hero-apartment.jpg";
 import watchImg from "@/assets/hero-watch.jpg";
+import itemCar from "@/assets/item-car.jpg";
+import itemPhone from "@/assets/item-phone.jpg";
+import itemLaptop from "@/assets/item-laptop.jpg";
+import itemJob from "@/assets/item-job.jpg";
 
 const categories = [
   { id: 1, name: "ריהוט", image: furnitureImg, link: "/secondhand?category=furniture" },
@@ -25,6 +30,45 @@ const categories = [
   { id: 6, name: "אביזרים לבית", image: apartmentImg, link: "/secondhand?category=home" },
   { id: 7, name: "בגדים והנעלה", image: furnitureImg, link: "/secondhand?category=clothing" },
   { id: 8, name: "תחביבים וספורט", image: carImg, link: "/secondhand?category=hobbies" },
+];
+
+const mostViewedItems = [
+  {
+    id: 1,
+    image: itemPhone,
+    title: "iPhone 14 Pro מצוין",
+    price: "₪2,800",
+    location: "תל אביב יפו",
+    category: "חבל לפספס",
+    timeAgo: "לפני שעתיים"
+  },
+  {
+    id: 2,
+    image: furnitureImg,
+    title: "ספה פינתית עור",
+    price: "₪700",
+    location: "נשר",
+    category: "במצב מושלם",
+    timeAgo: "לפני 3 שעות"
+  },
+  {
+    id: 3,
+    image: carImg,
+    title: "אופני הרים מירוד GT agressor L",
+    price: "₪1,850",
+    location: "שדמות דבורה",
+    category: "בהזדמנות",
+    timeAgo: "לפני יום"
+  },
+  {
+    id: 4,
+    image: laptopImg,
+    title: "מסטונגו פולד 256 בן חצי שנה",
+    price: "₪5,000",
+    location: "חוררה",
+    category: "כמו חדש",
+    timeAgo: "לפני יומיים"
+  },
 ];
 
 const Secondhand = () => {
@@ -125,6 +169,35 @@ const Secondhand = () => {
                   {category.name}
                 </span>
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Most Viewed Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">הכי נצפים</h2>
+            <Link
+              to="/secondhand?filter=most-viewed"
+              className="text-primary hover:text-primary/80 font-medium flex items-center gap-2 transition-colors"
+            >
+              <span>כל המומרים</span>
+              <span>←</span>
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {mostViewedItems.map((item) => (
+              <RecommendedCard
+                key={item.id}
+                image={item.image}
+                title={item.title}
+                price={item.price}
+                location={item.location}
+                category={item.category}
+                timeAgo={item.timeAgo}
+              />
             ))}
           </div>
         </div>
