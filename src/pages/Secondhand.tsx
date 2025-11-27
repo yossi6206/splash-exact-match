@@ -337,9 +337,6 @@ const Secondhand = () => {
         </div>
       </section>
 
-      {/* Sell CTA Banner */}
-      <SellCTABanner />
-
       {/* Most Viewed Section */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
@@ -368,6 +365,9 @@ const Secondhand = () => {
           </div>
         </div>
       </section>
+
+      {/* Sell CTA Banner */}
+      <SellCTABanner />
 
       {/* Furniture Showcase */}
       <CategoryShowcase
