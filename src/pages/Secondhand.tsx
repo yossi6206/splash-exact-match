@@ -21,6 +21,10 @@ import itemCar from "@/assets/item-car.jpg";
 import itemPhone from "@/assets/item-phone.jpg";
 import itemLaptop from "@/assets/item-laptop.jpg";
 import itemJob from "@/assets/item-job.jpg";
+import property1 from "@/assets/property-1.jpg";
+import property2 from "@/assets/property-2.jpg";
+import property3 from "@/assets/property-3.jpg";
+import property4 from "@/assets/property-4.jpg";
 
 const categories = [
   { id: 1, name: "ריהוט", image: furnitureImg, link: "/secondhand?category=furniture" },
@@ -144,6 +148,42 @@ const electronicsShowcase = [
     price: "₪2,800",
     location: "רעננה",
     category: "בהזדמנות"
+  }
+];
+
+const realEstateShowcase = [
+  {
+    id: 301,
+    image: property1,
+    title: "דירת 4 חדרים מרווחת במרכז",
+    price: "₪1,850,000",
+    location: "תל אביב",
+    category: "למכירה"
+  },
+  {
+    id: 302,
+    image: property2,
+    title: "דירת גן 5 חדרים",
+    price: "₪2,200,000",
+    location: "רמת גן",
+    category: "חדש"
+  },
+  {
+    id: 303,
+    image: property3,
+    title: "פנטהאוז יוקרתי",
+    price: "₪3,500,000",
+    originalPrice: "₪3,800,000",
+    location: "הרצליה",
+    category: "בהזדמנות"
+  },
+  {
+    id: 304,
+    image: property4,
+    title: "דירה 3 חדרים משופצת",
+    price: "₪1,450,000",
+    location: "גבעתיים",
+    category: "מומלץ"
   }
 ];
 
@@ -294,6 +334,13 @@ const Secondhand = () => {
           categoryLink="/secondhand?category=electronics"
         />
       </section>
+
+      {/* Real Estate Showcase */}
+      <CategoryShowcase
+        title='נדל"ן'
+        items={realEstateShowcase}
+        categoryLink="/properties"
+      />
 
       <Footer />
     </div>
