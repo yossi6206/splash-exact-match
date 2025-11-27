@@ -46,7 +46,7 @@ export const ReviewsList = ({ reviews, onHelpful, onNotHelpful }: ReviewsListPro
     });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <h2 className="text-2xl font-bold text-foreground">

@@ -25,7 +25,7 @@ export const ReviewCard = ({ review, onHelpful, onNotHelpful }: ReviewCardProps)
   return (
     <Card>
       <CardContent className="pt-6">
-        <div className="space-y-4">
+        <div className="space-y-4" dir="rtl">
           {/* Header */}
           <div className="flex items-start justify-between">
             <div className="flex-1">
@@ -53,17 +53,17 @@ export const ReviewCard = ({ review, onHelpful, onNotHelpful }: ReviewCardProps)
 
           {/* Rating */}
           <div className="flex items-center gap-2">
-            <RatingStars rating={review.rating} size="md" />
             <span className="font-semibold text-foreground">{review.title}</span>
+            <RatingStars rating={review.rating} size="md" />
           </div>
 
           {/* Comment */}
-          <p className="text-foreground/80 leading-relaxed">
+          <p className="text-foreground/80 leading-relaxed text-right">
             {review.comment}
           </p>
 
           {/* Actions */}
-          <div className="flex items-center gap-4 pt-2 border-t">
+          <div className="flex items-center gap-4 pt-2 border-t flex-wrap">
             <span className="text-sm text-muted-foreground">
               האם הביקורת הזו עזרה לך?
             </span>
@@ -74,8 +74,8 @@ export const ReviewCard = ({ review, onHelpful, onNotHelpful }: ReviewCardProps)
                 onClick={() => onHelpful?.(review.id)}
                 className="gap-1"
               >
-                <ThumbsUp className="h-3 w-3" />
                 כן ({review.helpfulCount})
+                <ThumbsUp className="h-3 w-3" />
               </Button>
               <Button
                 variant="outline"
@@ -83,8 +83,8 @@ export const ReviewCard = ({ review, onHelpful, onNotHelpful }: ReviewCardProps)
                 onClick={() => onNotHelpful?.(review.id)}
                 className="gap-1"
               >
-                <ThumbsDown className="h-3 w-3" />
                 לא
+                <ThumbsDown className="h-3 w-3" />
               </Button>
             </div>
           </div>

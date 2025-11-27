@@ -31,7 +31,7 @@ export const RatingStars = ({
   };
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1" dir="ltr">
       <div className="flex items-center gap-0.5">
         {Array.from({ length: maxRating }, (_, i) => {
           const starValue = i + 1;
