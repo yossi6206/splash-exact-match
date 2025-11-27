@@ -15,6 +15,7 @@ import { ReviewStats } from "@/components/reviews/ReviewStats";
 import { ReviewsList } from "@/components/reviews/ReviewsList";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import AIReport from "@/components/AIReport";
+import MobileHeader from "@/components/MobileHeader";
 
 const LaptopDetails = () => {
   const { id } = useParams();
@@ -161,7 +162,8 @@ const LaptopDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
+      <MobileHeader />
       <Header />
 
       <main className="container mx-auto px-4 py-6">

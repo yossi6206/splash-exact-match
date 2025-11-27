@@ -9,6 +9,7 @@ import property1 from "@/assets/property-1.jpg";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
+import MobileHeader from "@/components/MobileHeader";
 
 const PropertyDetails = () => {
   const { id } = useParams();

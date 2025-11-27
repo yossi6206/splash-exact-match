@@ -76,31 +76,32 @@ const FeaturedListings = () => {
   const [activeCategory, setActiveCategory] = useState("realestate");
 
   return (
-    <section className="py-8 bg-background">
+    <section className="py-6 md:py-8 bg-background">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 md:mb-6 gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground">
               חדש סביבך
             </h2>
             <div className="flex items-center gap-1 text-primary">
-              <MapPin className="h-5 w-5" />
-              <span className="text-sm font-medium">ירושלים</span>
+              <MapPin className="h-4 w-4 md:h-5 md:w-5" />
+              <span className="text-xs md:text-sm font-medium">ירושלים</span>
             </div>
           </div>
 
           {/* Category Filters */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
             {categories.map((category) => (
               <Button
                 key={category.id}
                 variant={activeCategory === category.id ? "default" : "outline"}
                 onClick={() => setActiveCategory(category.id)}
+                size="sm"
                 className={
                   activeCategory === category.id
-                    ? "bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full"
-                    : "bg-background border-2 hover:bg-muted text-foreground font-medium rounded-full"
+                    ? "bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full text-xs md:text-sm whitespace-nowrap"
+                    : "bg-background border-2 hover:bg-muted text-foreground font-medium rounded-full text-xs md:text-sm whitespace-nowrap"
                 }
               >
                 {category.label}
@@ -111,7 +112,7 @@ const FeaturedListings = () => {
 
         {/* Properties Grid */}
         <div className="relative">
-          {/* Navigation Arrows */}
+          {/* Navigation Arrows - Desktop only */}
           <Button
             variant="ghost"
             size="icon"
@@ -128,7 +129,7 @@ const FeaturedListings = () => {
           </Button>
 
           {/* Properties */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
             {properties.map((property) => (
               <FeaturedPropertyCard key={property.id} property={property} />
             ))}

@@ -31,31 +31,31 @@ const RecommendedCard = ({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-3 left-3 bg-background/90 hover:bg-background rounded-full shadow-md"
+          className="absolute top-2 left-2 md:top-3 md:left-3 bg-background/90 hover:bg-background rounded-full shadow-md h-8 w-8 md:h-10 md:w-10"
         >
-          <Heart className="h-5 w-5" />
+          <Heart className="h-4 w-4 md:h-5 md:w-5" />
         </Button>
         {timeAgo && (
-          <Badge className="absolute bottom-3 right-3 bg-background/95 text-foreground hover:bg-background">
+          <Badge className="absolute bottom-2 right-2 md:bottom-3 md:right-3 bg-background/95 text-foreground hover:bg-background text-xs">
             {timeAgo}
           </Badge>
         )}
       </div>
-      <div className="p-4 bg-background">
-        <div className="flex items-start justify-between mb-2">
-          <Badge variant="secondary" className="text-xs font-medium">
+      <div className="p-3 md:p-4 bg-background">
+        <div className="flex items-start justify-between mb-1.5 md:mb-2">
+          <Badge variant="secondary" className="text-[10px] md:text-xs font-medium">
             {category}
           </Badge>
         </div>
-        <h3 className="text-base font-semibold text-foreground mb-2 line-clamp-2 text-right">
+        <h3 className="text-sm md:text-base font-semibold text-foreground mb-1.5 md:mb-2 line-clamp-2 text-right">
           {title}
         </h3>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1 text-muted-foreground">
-            <MapPin className="h-4 w-4" />
-            <span className="text-sm">{location}</span>
+            <MapPin className="h-3 w-3 md:h-4 md:w-4" />
+            <span className="text-xs md:text-sm">{location}</span>
           </div>
-          <div className="text-xl font-bold text-foreground">{price} ₪</div>
+          <div className="text-base md:text-xl font-bold text-foreground">{price} ₪</div>
         </div>
       </div>
     </Card>
