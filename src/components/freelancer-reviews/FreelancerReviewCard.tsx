@@ -119,7 +119,7 @@ const FreelancerReviewCard = ({ review, currentUserId, onHelpfulClick }: Freelan
                 <span className="font-semibold">{review.reviewer_name}</span>
                 {review.verified_client && (
                   <Badge variant="secondary" className="text-xs h-5 px-1.5">
-                    <CheckCircle2 className="w-3 h-3 mr-0.5" />
+                    <CheckCircle2 className="w-3 h-3 ml-0.5" />
                     לקוח מאומת
                   </Badge>
                 )}
@@ -156,27 +156,27 @@ const FreelancerReviewCard = ({ review, currentUserId, onHelpfulClick }: Freelan
           review.professionalism_rating || review.deadline_rating) && (
           <div className="grid grid-cols-2 gap-3 mb-4 p-3 bg-muted/30 rounded-lg">
             {review.work_quality_rating && (
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-xs text-muted-foreground">איכות עבודה:</span>
-                {renderStars(review.work_quality_rating)}
+                <div className="mr-auto">{renderStars(review.work_quality_rating)}</div>
               </div>
             )}
             {review.communication_rating && (
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-xs text-muted-foreground">תקשורת:</span>
-                {renderStars(review.communication_rating)}
+                <div className="mr-auto">{renderStars(review.communication_rating)}</div>
               </div>
             )}
             {review.professionalism_rating && (
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-xs text-muted-foreground">מקצועיות:</span>
-                {renderStars(review.professionalism_rating)}
+                <div className="mr-auto">{renderStars(review.professionalism_rating)}</div>
               </div>
             )}
             {review.deadline_rating && (
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-xs text-muted-foreground">עמידה בזמנים:</span>
-                {renderStars(review.deadline_rating)}
+                <div className="mr-auto">{renderStars(review.deadline_rating)}</div>
               </div>
             )}
           </div>
