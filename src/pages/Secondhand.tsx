@@ -112,6 +112,15 @@ const furnitureShowcase = [
     originalPrice: "₪1,000",
     location: "אור עקיבה",
     category: "כמו חדש"
+  },
+  {
+    id: 105,
+    image: property1,
+    title: "סלון מעוצב מודרני",
+    price: "₪3,200",
+    originalPrice: "₪3,800",
+    location: "תל אביב",
+    category: "מומלץ"
   }
 ];
 
