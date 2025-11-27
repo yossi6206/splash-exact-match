@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import Categories from "@/components/Categories";
 import FeaturedListings from "@/components/FeaturedListings";
+import PromoBanner from "@/components/PromoBanner";
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
         <HeroSection />
         <Categories />
         <FeaturedListings />
+        <PromoBanner />
       </main>
     </div>
   );
