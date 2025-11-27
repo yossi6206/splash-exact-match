@@ -8,6 +8,7 @@ import { Search, Mic } from "lucide-react";
 import { Link } from "react-router-dom";
 import RecommendedCard from "@/components/RecommendedCard";
 import CategoryShowcase from "@/components/CategoryShowcase";
+import CategoryShowcaseReverse from "@/components/CategoryShowcaseReverse";
 
 // Import images
 import secondhandHero from "@/assets/secondhand-hero.jpg";
@@ -387,6 +388,13 @@ const Secondhand = () => {
           categoryLink="/cars"
         />
       </section>
+
+      {/* Furniture Showcase Reverse Layout */}
+      <CategoryShowcaseReverse
+        title="ריהוט ועיצוב הבית"
+        items={furnitureShowcase}
+        categoryLink="/secondhand?category=home-design"
+      />
 
       <Footer />
     </div>
