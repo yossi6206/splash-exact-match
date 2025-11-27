@@ -134,6 +134,39 @@ const HeroSection = () => {
             </div>
           </div>
         </div>
+
+        {/* Statistics Section */}
+        <div className="mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          {/* Active Ads */}
+          <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20">
+            <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary mb-2">
+              350,000+
+            </div>
+            <div className="text-base md:text-lg text-foreground/80 font-medium">
+              מודעות פעילות
+            </div>
+          </div>
+
+          {/* Registered Users */}
+          <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20">
+            <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-secondary mb-2">
+              1.2M+
+            </div>
+            <div className="text-base md:text-lg text-foreground/80 font-medium">
+              משתמשים רשומים
+            </div>
+          </div>
+
+          {/* Completed Deals */}
+          <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20">
+            <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-accent mb-2">
+              500K+
+            </div>
+            <div className="text-base md:text-lg text-foreground/80 font-medium">
+              עסקאות שהושלמו
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
