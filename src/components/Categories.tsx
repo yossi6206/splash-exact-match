@@ -76,8 +76,10 @@ const Categories = () => {
                 {/* Mega Menu */}
                 {category.megaMenu && hoveredCategory === category.name && (
                   <div 
-                    className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 z-50"
+                    className="absolute top-full left-1/2 -translate-x-1/2 pt-4 z-50"
                   >
+                    {/* Invisible bridge to prevent menu from closing */}
+                    <div className="absolute top-0 left-0 right-0 h-4" />
                     <div className="bg-background border border-border rounded-lg shadow-xl p-8 w-[900px] animate-fade-in">
                       <div className="grid grid-cols-5 gap-6">
                         {category.megaMenu.columns.map((column, index) => (
