@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MessageSquare, Heart, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -23,8 +24,8 @@ const Header = () => {
               <Button variant="ghost" className="text-sm font-medium">
                 דירות חדשות
               </Button>
-              <Button variant="ghost" className="text-sm font-medium">
-                רכב
+              <Button variant="ghost" className="text-sm font-medium" asChild>
+                <Link to="/cars">רכב</Link>
               </Button>
               <Button variant="ghost" className="text-sm font-medium">
                 יד שניה
