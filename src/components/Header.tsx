@@ -36,6 +36,54 @@ const megaMenuData = {
         items: ["דירות לטווח ארוך", "דירות לטווח קצר", "חדרים בשותפות", "מחסנים"]
       }
     ]
+  },
+  "רכב": {
+    columns: [
+      {
+        title: "רכב פרטי",
+        items: ["יד ראשונה", "יד שנייה", "רכב חדש", "רכב משומש", "קבוצת קנייה"]
+      },
+      {
+        title: "רכב מסחרי",
+        items: ["משאיות", "מסחריות", "טרקטורים", "אוטובוסים"]
+      },
+      {
+        title: "אופנועים",
+        items: ["אופנועים חדשים", "אופנועים משומשים", "קטנועים", "אופני שטח"]
+      },
+      {
+        title: "אביזרים",
+        items: ["גלגלים וחישוקים", "מערכות שמע", "אביזרי קישוט", "ציוד בטיחות"]
+      },
+      {
+        title: "שירותים",
+        items: ["מוסכים", "מכוני שירות", "גרירה", "ביטוח רכב"]
+      }
+    ]
+  },
+  "מחשבים": {
+    columns: [
+      {
+        title: "מחשבים ניידים",
+        items: ["מחשבי גיימינג", "מחשבים לעבודה", "מקבוק", "אולטרה בוק", "טאבלטים"]
+      },
+      {
+        title: "מחשבים נייחים",
+        items: ["מחשבי גיימינג", "תחנות עבודה", "מחשבי all-in-one", "מחשבים מורכבים"]
+      },
+      {
+        title: "רכיבי מחשב",
+        items: ["כרטיסי מסך", "מעבדים", "זיכרון RAM", "כוננים", "לוחות אם"]
+      },
+      {
+        title: "אביזרים",
+        items: ["מסכים", "מקלדות", "עכברים", "אוזניות", "מצלמות"]
+      },
+      {
+        title: "תוכנות",
+        items: ["מערכות הפעלה", "תוכנות משרד", "תוכנות עיצוב", "אנטי וירוס"]
+      }
+    ]
   }
 };
 
@@ -100,12 +148,82 @@ const Header = () => {
                 )}
               </div>
 
-              <Button variant="ghost" className="text-sm font-medium" asChild>
-                <Link to="/cars">רכב</Link>
-              </Button>
-              <Button variant="ghost" className="text-sm font-medium" asChild>
-                <Link to="/laptops">מחשבים</Link>
-              </Button>
+              <div 
+                className="relative"
+                onMouseEnter={() => setHoveredMenu("רכב")}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <Button variant="ghost" className="text-sm font-medium" asChild>
+                  <Link to="/cars">רכב</Link>
+                </Button>
+                
+                {hoveredMenu === "רכב" && megaMenuData["רכב"] && (
+                  <div className="absolute top-full right-0 pt-2 z-50">
+                    <div className="bg-background border border-border rounded-lg shadow-xl p-8 w-[900px] animate-fade-in">
+                      <div className="grid grid-cols-5 gap-6">
+                        {megaMenuData["רכב"].columns.map((column, index) => (
+                          <div key={index}>
+                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              {column.title}
+                            </h3>
+                            <ul className="space-y-1.5">
+                              {column.items.map((item, itemIndex) => (
+                                <li key={itemIndex}>
+                                  <a 
+                                    href="#" 
+                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
+                                  >
+                                    {item}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div 
+                className="relative"
+                onMouseEnter={() => setHoveredMenu("מחשבים")}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <Button variant="ghost" className="text-sm font-medium" asChild>
+                  <Link to="/laptops">מחשבים</Link>
+                </Button>
+                
+                {hoveredMenu === "מחשבים" && megaMenuData["מחשבים"] && (
+                  <div className="absolute top-full right-0 pt-2 z-50">
+                    <div className="bg-background border border-border rounded-lg shadow-xl p-8 w-[900px] animate-fade-in">
+                      <div className="grid grid-cols-5 gap-6">
+                        {megaMenuData["מחשבים"].columns.map((column, index) => (
+                          <div key={index}>
+                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              {column.title}
+                            </h3>
+                            <ul className="space-y-1.5">
+                              {column.items.map((item, itemIndex) => (
+                                <li key={itemIndex}>
+                                  <a 
+                                    href="#" 
+                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
+                                  >
+                                    {item}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <Button variant="ghost" className="text-sm font-medium">
                 יד שניה
               </Button>
