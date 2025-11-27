@@ -314,23 +314,42 @@ const Secondhand = () => {
       </section>
 
       {/* Categories Section */}
-      <section className="py-16">
+      <section className="py-12 md:py-16 bg-white dark:bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6 max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-8 md:mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">קטגוריות פופולריות</h2>
+            <Link 
+              to="/secondhand/all" 
+              className="text-sm md:text-base font-semibold text-primary hover:text-primary/80 transition-colors duration-200 flex items-center gap-2"
+            >
+              צפה בכל
+              <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </Link>
+          </div>
+          <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
             {categories.map((category) => (
               <Link
                 key={category.id}
                 to={category.link}
-                className="group flex flex-col items-center gap-3 transition-all duration-300 hover:scale-105"
+                className="flex flex-col items-center gap-3 md:gap-4 group cursor-pointer transition-all duration-300"
               >
-                <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden shadow-lg border-4 border-border group-hover:border-primary group-hover:shadow-xl transition-all duration-300">
-                  <img
-                    src={category.image}
+                <div className="w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:scale-105 overflow-hidden relative">
+                  <img 
+                    src={category.image} 
                     alt={category.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-primary/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
+                    <div className="text-center text-white">
+                      <div className="text-lg md:text-2xl lg:text-3xl font-bold">✨</div>
+                      <div className="text-[10px] md:text-xs lg:text-sm font-medium mt-1">לחץ לצפייה</div>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-sm md:text-base font-medium text-foreground text-center group-hover:text-primary transition-colors duration-300">
+                <span className="text-xs md:text-sm lg:text-base font-semibold text-foreground text-center max-w-[100px] md:max-w-none group-hover:text-primary transition-colors duration-300">
                   {category.name}
                 </span>
               </Link>
