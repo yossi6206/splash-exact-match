@@ -51,6 +51,15 @@ const RecommendedItems = () => {
           <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground">
             מומלצים עבורך
           </h2>
+          <a 
+            href="#" 
+            className="text-sm md:text-base font-semibold text-primary hover:text-primary/80 transition-colors duration-200 flex items-center gap-2"
+          >
+            צפה בכל
+            <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </a>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
           {items.map((item) => (
