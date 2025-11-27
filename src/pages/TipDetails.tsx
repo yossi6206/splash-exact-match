@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
+import TipComments from "@/components/comments/TipComments";
 import { ArrowRight, Calendar, User, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { he } from "date-fns/locale";
@@ -248,7 +249,7 @@ const TipDetails = () => {
           </div>
 
           {/* Related Tips */}
-          <div className="bg-muted/30 rounded-2xl p-6 md:p-8">
+          <div className="bg-muted/30 rounded-2xl p-6 md:p-8 mb-8">
             <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6">
               מאמרים נוספים שעשויים לעניין אותך
             </h2>
@@ -275,6 +276,9 @@ const TipDetails = () => {
               </Link>
             </div>
           </div>
+
+          {/* Comments Section */}
+          <TipComments tipId={id || ""} />
         </article>
       </main>
 

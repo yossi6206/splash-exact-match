@@ -324,6 +324,36 @@ export type Database = {
         }
         Relationships: []
       }
+      tip_comments: {
+        Row: {
+          comment: string
+          created_at: string
+          helpful_count: number | null
+          id: string
+          tip_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comment: string
+          created_at?: string
+          helpful_count?: number | null
+          id?: string
+          tip_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          helpful_count?: number | null
+          id?: string
+          tip_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
