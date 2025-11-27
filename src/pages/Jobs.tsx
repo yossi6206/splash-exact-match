@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
@@ -9,92 +9,89 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Briefcase } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-const mockJobs = [
-  {
-    id: 1,
-    company: "טכנולוגיות עתיד בע״מ",
-    title: "מפתח.ת Full Stack",
-    location: "תל אביב",
-    type: "משרה מלאה",
-    scope: "היברידי",
-    salary: "₪20,000-30,000",
-    experience: "3-5 שנות ניסיון",
-    postedDate: "לפני יומיים",
-    requirements: ["React", "Node.js", "TypeScript", "MongoDB", "AWS"],
-  },
-  {
-    id: 2,
-    company: "חברת השקעות גלובל",
-    title: "מנהל.ת שיווק דיגיטלי",
-    location: "חיפה",
-    type: "משרה מלאה",
-    scope: "במשרד",
-    salary: "₪18,000-25,000",
-    experience: "2-4 שנות ניסיון",
-    postedDate: "לפני 3 ימים",
-    requirements: ["Google Ads", "Facebook Ads", "SEO", "Analytics", "קופירייטינג"],
-  },
-  {
-    id: 3,
-    company: "סטארט-אפ איי-קומרס",
-    title: "מעצב.ת UX/UI",
-    location: "ירושלים",
-    type: "משרה חלקית",
-    scope: "עבודה מרחוק",
-    salary: "₪15,000-22,000",
-    experience: "1-3 שנות ניסיון",
-    postedDate: "לפני שבוע",
-    requirements: ["Figma", "Adobe XD", "Sketch", "Prototyping", "User Research"],
-  },
-  {
-    id: 4,
-    company: "קבוצת טק אינטרנשיונל",
-    title: "מהנדס.ת DevOps",
-    location: "תל אביב",
-    type: "משרה מלאה",
-    scope: "היברידי",
-    salary: "₪25,000-35,000",
-    experience: "4-6 שנות ניסיון",
-    postedDate: "לפני יום",
-    requirements: ["Docker", "Kubernetes", "CI/CD", "AWS", "Jenkins"],
-  },
-  {
-    id: 5,
-    company: "חברת ייעוץ עסקי",
-    title: "יועץ.ת עסקי בכיר.ה",
-    location: "רמת גן",
-    type: "משרה מלאה",
-    scope: "במשרד",
-    salary: "₪22,000-32,000",
-    experience: "5+ שנות ניסיון",
-    postedDate: "לפני 4 ימים",
-    requirements: ["ניהול פרויקטים", "ניתוח נתונים", "Excel", "PowerPoint", "אנגלית"],
-  },
-  {
-    id: 6,
-    company: "אפליקציות מובייל בע״מ",
-    title: "מפתח.ת React Native",
-    location: "הרצליה",
-    type: "פרילנס",
-    scope: "עבודה מרחוק",
-    salary: "₪18,000-28,000",
-    experience: "2-4 שנות ניסיון",
-    postedDate: "לפני 5 ימים",
-    requirements: ["React Native", "JavaScript", "Redux", "API", "Git"],
-  },
-];
 
 const Jobs = () => {
   const [sortBy, setSortBy] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    fetchJobs();
+  }, [currentPage, sortBy]);
+
+  const fetchJobs = async () => {
+    try {
+      setLoading(true);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      
+      let query = supabase
+        .from("jobs")
+        .select("*", { count: "exact" })
+        .eq("status", "active")
+        .range(startIndex, startIndex + itemsPerPage - 1);
+
+      // Apply sorting
+      if (sortBy === "date") {
+        query = query.order("created_at", { ascending: false });
+      } else if (sortBy === "salary-high") {
+        query = query.order("salary_max", { ascending: false, nullsFirst: false });
+      } else if (sortBy === "salary-low") {
+        query = query.order("salary_min", { ascending: true, nullsFirst: false });
+      }
+
+      const { data, error, count } = await query;
+
+      if (error) throw error;
+
+      // Transform data to match JobCard expectations
+      const transformedJobs = (data || []).map((job) => ({
+        id: job.id,
+        company: job.company_name,
+        title: job.title,
+        location: job.location,
+        type: job.job_type,
+        scope: job.scope,
+        salary: job.salary_min && job.salary_max 
+          ? `₪${job.salary_min.toLocaleString()}-${job.salary_max.toLocaleString()}`
+          : null,
+        experience: job.experience_min && job.experience_max
+          ? `${job.experience_min}-${job.experience_max} שנות ניסיון`
+          : "לא צוין",
+        postedDate: getTimeAgo(job.created_at),
+        requirements: job.requirements || [],
+      }));
+
+      setJobs(transformedJobs);
+      setTotalCount(count || 0);
+    } catch (error: any) {
+      console.error("Error fetching jobs:", error);
+      toast.error("שגיאה בטעינת המשרות");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return "היום";
+    if (diffDays === 1) return "אתמול";
+    if (diffDays < 7) return `לפני ${diffDays} ימים`;
+    if (diffDays < 30) return `לפני ${Math.floor(diffDays / 7)} שבועות`;
+    return `לפני ${Math.floor(diffDays / 30)} חודשים`;
+  };
   
-  const totalPages = Math.ceil(mockJobs.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentJobs = mockJobs.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
 
   return (
     <div className="min-h-screen bg-background">
@@ -138,7 +135,7 @@ const Jobs = () => {
             {/* Quick Stats */}
             <div className="flex items-center justify-center gap-8 pt-4">
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">12,456+</div>
+                <div className="text-3xl font-bold text-white">{totalCount}+</div>
                 <div className="text-sm text-white/80">משרות פעילות</div>
               </div>
               <div className="w-px h-12 bg-white/30" />
@@ -189,7 +186,7 @@ const Jobs = () => {
               <Briefcase className="w-6 h-6 text-primary" />
               משרות פתוחות
             </h2>
-            <p className="text-muted-foreground">{mockJobs.length} תוצאות</p>
+            <p className="text-muted-foreground">{totalCount} תוצאות</p>
           </div>
           
           <div className="flex items-center gap-4">
@@ -211,42 +208,67 @@ const Jobs = () => {
         </div>
 
         {/* Job Cards */}
-        <div className="space-y-4 mb-8">
-          {currentJobs.map((job) => (
-            <JobCard key={job.id} {...job} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="text-muted-foreground">טוען משרות...</div>
+          </div>
+        ) : jobs.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-64">
+            <Briefcase className="w-16 h-16 text-muted-foreground mb-4" />
+            <p className="text-lg text-muted-foreground">לא נמצאו משרות</p>
+          </div>
+        ) : (
+          <div className="space-y-4 mb-8">
+            {jobs.map((job) => (
+              <JobCard key={job.id} {...job} />
+            ))}
+          </div>
+        )}
 
         {/* Pagination */}
-        <div className="flex justify-center">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious 
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                />
-              </PaginationItem>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <PaginationItem key={page}>
-                  <PaginationLink
-                    onClick={() => setCurrentPage(page)}
-                    isActive={currentPage === page}
-                    className="cursor-pointer"
-                  >
-                    {page}
-                  </PaginationLink>
+        {totalPages > 1 && (
+          <div className="flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
                 </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
+                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                  let page;
+                  if (totalPages <= 5) {
+                    page = i + 1;
+                  } else if (currentPage <= 3) {
+                    page = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    page = totalPages - 4 + i;
+                  } else {
+                    page = currentPage - 2 + i;
+                  }
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </main>
 
       <Footer />
