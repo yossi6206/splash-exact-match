@@ -23,7 +23,7 @@ const CategoryShowcaseReverse = ({ title, items, categoryLink }: CategoryShowcas
   if (items.length < 4) return null;
 
   const mainItem = items[0];
-  const sideItems = items.slice(1, 4);
+  const sideItems = items.slice(1);
 
   return (
     <section className="py-12">
