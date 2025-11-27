@@ -15,6 +15,7 @@ import Laptops from "./pages/Laptops";
 import LaptopDetails from "./pages/LaptopDetails";
 import Auth from "./pages/Auth";
 import TipsGuidesPage from "./pages/TipsGuides";
+import TipDetails from "./pages/TipDetails";
 import NotFound from "./pages/NotFound";
 import MobileNav from "./components/MobileNav";
 
@@ -42,6 +43,7 @@ const AppContent = () => {
         <Route path="/laptops" element={<Laptops />} />
         <Route path="/laptops/:id" element={<LaptopDetails />} />
         <Route path="/tips" element={<TipsGuidesPage />} />
+        <Route path="/tips/:id" element={<TipDetails />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="*" element={<NotFound />} />
