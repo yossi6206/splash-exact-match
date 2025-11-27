@@ -1,13 +1,42 @@
 import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
+import FreelancerCard from "@/components/FreelancerCard";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
+
+type Freelancer = Tables<"freelancers">;
 
 const Freelancers = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [freelancers, setFreelancers] = useState<Freelancer[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFreelancers();
+  }, []);
+
+  const fetchFreelancers = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("freelancers")
+        .select("*")
+        .eq("availability", "available")
+        .order("rating", { ascending: false });
+
+      if (error) throw error;
+      setFreelancers(data || []);
+    } catch (error) {
+      console.error("Error fetching freelancers:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSearch = () => {
     console.log("Searching for:", searchQuery);
@@ -87,12 +116,48 @@ const Freelancers = () => {
         </div>
       </section>
 
-      {/* Placeholder for more content */}
+      {/* Freelancers Grid */}
       <section className="container mx-auto px-4 py-16">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold mb-8">פרילנסרים מובילים</h2>
-          <p className="text-muted-foreground">תוכן נוסף יתוסף בקרוב...</p>
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold mb-2">פרילנסרים מובילים</h2>
+          <p className="text-muted-foreground">מצא את המומחה המושלם לפרויקט שלך</p>
         </div>
+
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-96 bg-muted animate-pulse rounded-lg" />
+            ))}
+          </div>
+        ) : freelancers.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground text-lg mb-4">
+              אין פרילנסרים זמינים כרגע
+            </p>
+            <Button asChild>
+              <a href="/dashboard">הצטרף כפרילנסר</a>
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {freelancers.map((freelancer) => (
+              <FreelancerCard
+                key={freelancer.id}
+                id={freelancer.id}
+                full_name={freelancer.full_name}
+                avatar_url={freelancer.avatar_url || undefined}
+                title={freelancer.title}
+                bio={freelancer.bio || undefined}
+                skills={freelancer.skills}
+                hourly_rate={freelancer.hourly_rate}
+                rating={Number(freelancer.rating)}
+                total_reviews={freelancer.total_reviews || 0}
+                location={freelancer.location || undefined}
+                category={freelancer.category}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
       <Footer />

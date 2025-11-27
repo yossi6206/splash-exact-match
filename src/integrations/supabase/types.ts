@@ -115,6 +115,69 @@ export type Database = {
         }
         Relationships: []
       }
+      freelancers: {
+        Row: {
+          availability: string | null
+          avatar_url: string | null
+          bio: string | null
+          category: string
+          created_at: string
+          experience_years: number | null
+          full_name: string
+          hourly_rate: number
+          id: string
+          languages: string[] | null
+          location: string | null
+          portfolio_url: string | null
+          rating: number | null
+          skills: string[]
+          title: string
+          total_reviews: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          availability?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          category: string
+          created_at?: string
+          experience_years?: number | null
+          full_name: string
+          hourly_rate: number
+          id?: string
+          languages?: string[] | null
+          location?: string | null
+          portfolio_url?: string | null
+          rating?: number | null
+          skills: string[]
+          title: string
+          total_reviews?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          availability?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          category?: string
+          created_at?: string
+          experience_years?: number | null
+          full_name?: string
+          hourly_rate?: number
+          id?: string
+          languages?: string[] | null
+          location?: string | null
+          portfolio_url?: string | null
+          rating?: number | null
+          skills?: string[]
+          title?: string
+          total_reviews?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       job_applications: {
         Row: {
           applicant_id: string
