@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import carImage1 from "@/assets/item-car.jpg";
 import AIReport from "@/components/AIReport";
+import MobileHeader from "@/components/MobileHeader";
 
 const CarDetails = () => {
   const [mainImage, setMainImage] = useState(carImage1);
