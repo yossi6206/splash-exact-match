@@ -1,23 +1,21 @@
 import { useState } from "react";
-import { 
-  Store, 
-  Wrench, 
-  Briefcase, 
-  Sofa, 
-  Car, 
-  Home, 
-  Building2 
-} from "lucide-react";
+import categoryBusiness from "@/assets/category-business.png";
+import categoryTools from "@/assets/category-tools.png";
+import categoryJobs from "@/assets/category-jobs.png";
+import categorySecondhand from "@/assets/category-secondhand.png";
+import categoryCars from "@/assets/category-cars.png";
+import categoryRealestate from "@/assets/category-realestate.png";
+import categoryApartments from "@/assets/category-apartments.png";
 
 const categories = [
-  { name: "עסקים למכירה", icon: Store },
-  { name: "בגלי מקצוע", icon: Wrench },
-  { name: "דרושים", icon: Briefcase },
-  { name: "יד שניה", icon: Sofa },
-  { name: "רכב", icon: Car },
+  { name: "עסקים למכירה", image: categoryBusiness },
+  { name: "בגלי מקצוע", image: categoryTools },
+  { name: "דרושים", image: categoryJobs },
+  { name: "יד שניה", image: categorySecondhand },
+  { name: "רכב", image: categoryCars },
   { 
     name: "נדל״ן", 
-    icon: Home,
+    image: categoryRealestate,
     megaMenu: {
       columns: [
         {
@@ -43,7 +41,7 @@ const categories = [
       ]
     }
   },
-  { name: "דירות חדשות", icon: Building2 },
+  { name: "דירות חדשות", image: categoryApartments },
 ];
 
 const Categories = () => {
@@ -54,7 +52,6 @@ const Categories = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
           {categories.map((category) => {
-            const Icon = category.icon;
             return (
               <div 
                 key={category.name}
@@ -65,8 +62,12 @@ const Categories = () => {
                 <button
                   className="flex flex-col items-center gap-3 md:gap-4 group cursor-pointer transition-all duration-300"
                 >
-                  <div className="w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full bg-gray-100 dark:bg-category-bg flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:scale-105 border-2 border-gray-200 dark:border-transparent">
-                    <Icon className="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 text-foreground/80 group-hover:text-primary transition-colors duration-300" />
+                  <div className="w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full bg-gray-100 dark:bg-category-bg flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:scale-105 border-2 border-gray-200 dark:border-transparent overflow-hidden p-3 md:p-4">
+                    <img 
+                      src={category.image} 
+                      alt={category.name}
+                      className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                    />
                   </div>
                   <span className="text-xs md:text-sm lg:text-base font-semibold text-foreground text-center max-w-[100px] md:max-w-none group-hover:text-primary transition-colors duration-300">
                     {category.name}
