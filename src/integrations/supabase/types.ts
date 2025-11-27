@@ -94,6 +94,27 @@ export type Database = {
           },
         ]
       }
+      favorite_properties: {
+        Row: {
+          created_at: string
+          id: string
+          property_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          property_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          property_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -118,6 +139,78 @@ export type Database = {
           id?: string
           phone?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      properties: {
+        Row: {
+          accessible: boolean | null
+          balcony: boolean | null
+          condition: string | null
+          created_at: string
+          description: string | null
+          elevator: boolean | null
+          features: string[] | null
+          floor: number | null
+          id: string
+          images: string[] | null
+          location: string
+          parking: boolean | null
+          price: number
+          property_type: string
+          rooms: number
+          size: number | null
+          status: string
+          title: string
+          total_floors: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accessible?: boolean | null
+          balcony?: boolean | null
+          condition?: string | null
+          created_at?: string
+          description?: string | null
+          elevator?: boolean | null
+          features?: string[] | null
+          floor?: number | null
+          id?: string
+          images?: string[] | null
+          location: string
+          parking?: boolean | null
+          price: number
+          property_type: string
+          rooms: number
+          size?: number | null
+          status?: string
+          title: string
+          total_floors?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accessible?: boolean | null
+          balcony?: boolean | null
+          condition?: string | null
+          created_at?: string
+          description?: string | null
+          elevator?: boolean | null
+          features?: string[] | null
+          floor?: number | null
+          id?: string
+          images?: string[] | null
+          location?: string
+          parking?: boolean | null
+          price?: number
+          property_type?: string
+          rooms?: number
+          size?: number | null
+          status?: string
+          title?: string
+          total_floors?: number | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

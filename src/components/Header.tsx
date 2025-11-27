@@ -33,11 +33,8 @@ const Header = () => {
 
             {/* Navigation */}
             <nav className="hidden md:flex items-center gap-6">
-              <Button variant="ghost" className="text-sm font-medium">
-                דלקין
-              </Button>
-              <Button variant="ghost" className="text-sm font-medium">
-                דירות חדשות
+              <Button variant="ghost" className="text-sm font-medium" asChild>
+                <Link to="/properties">נדל"ן</Link>
               </Button>
               <Button variant="ghost" className="text-sm font-medium" asChild>
                 <Link to="/cars">רכב</Link>
@@ -50,12 +47,6 @@ const Header = () => {
               </Button>
               <Button variant="ghost" className="text-sm font-medium">
                 עסקים למכירה
-              </Button>
-              <Button variant="ghost" className="text-sm font-medium">
-                חיות מחמד
-              </Button>
-              <Button variant="ghost" className="text-sm font-medium">
-                בגלי מקצוע
               </Button>
             </nav>
           </div>
