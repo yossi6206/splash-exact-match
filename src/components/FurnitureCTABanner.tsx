@@ -1,31 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
 import furnitureBanner from "@/assets/furniture-banner.jpg";
 
 const FurnitureCTABanner = () => {
-  const [offsetY, setOffsetY] = useState(0);
-  const bannerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (bannerRef.current) {
-        const rect = bannerRef.current.getBoundingClientRect();
-        const scrollPercent = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-        setOffsetY(scrollPercent * 50);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <section className="py-8" ref={bannerRef}>
+    <section className="py-8">
       <div className="container mx-auto px-4">
-        <div className="relative overflow-hidden rounded-2xl shadow-xl bg-gradient-to-r from-accent via-primary to-secondary">
+        <div className="relative overflow-hidden rounded-2xl shadow-xl bg-gradient-to-r from-accent via-primary to-secondary transition-all duration-500 hover:shadow-2xl">
           <div className="grid md:grid-cols-2 items-center min-h-[200px]">
             {/* Content Side - Right */}
             <div className="p-8 md:p-12 text-right order-2 md:order-1">
@@ -40,7 +21,7 @@ const FurnitureCTABanner = () => {
               </p>
               <Button
                 size="lg"
-                className="bg-white text-primary hover:bg-white/90 rounded-full px-8 font-bold shadow-lg hover:scale-105 transition-transform"
+                className="bg-white text-primary hover:bg-white/90 rounded-full px-8 font-bold shadow-lg hover:scale-105 transition-all duration-300"
                 asChild
               >
                 <Link to="/secondhand?category=furniture">
@@ -54,8 +35,7 @@ const FurnitureCTABanner = () => {
               <img
                 src={furnitureBanner}
                 alt="ריהוט יד שניה"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-100"
-                style={{ transform: `translateY(${offsetY}px)` }}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent"></div>
             </div>
