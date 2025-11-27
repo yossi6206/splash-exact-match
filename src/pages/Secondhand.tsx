@@ -8,6 +8,7 @@ import { Search, Mic } from "lucide-react";
 import { Link } from "react-router-dom";
 import RecommendedCard from "@/components/RecommendedCard";
 import CategoryShowcase from "@/components/CategoryShowcase";
+import SellCTABanner from "@/components/SellCTABanner";
 
 // Import images
 import secondhandHero from "@/assets/secondhand-hero.jpg";
@@ -335,6 +336,9 @@ const Secondhand = () => {
           </div>
         </div>
       </section>
+
+      {/* Sell CTA Banner */}
+      <SellCTABanner />
 
       {/* Most Viewed Section */}
       <section className="py-16 bg-muted/30">
