@@ -14,30 +14,58 @@ const mockProperties = [
   {
     id: 1,
     image: property1,
+    title: "דירת 4 חדרים בנווה צדק",
+    subtitle: "דירה מרווחת ומוארת במיקום מעולה",
+    propertyType: "דירה",
+    condition: "משופץ",
     price: "2,450,000",
     location: "תל אביב, נווה צדק",
     rooms: 4,
+    size: 120,
+    floor: 3,
+    features: ["מעלית", "חניה", "מרפסת"],
   },
   {
     id: 2,
     image: property2,
+    title: "דירת 3 חדרים בבורסה",
+    subtitle: "קרוב לתחבורה ציבורית ושירותים",
+    propertyType: "דירה",
+    condition: "במצב טוב",
     price: "1,890,000",
     location: "רמת גן, בורסה",
     rooms: 3,
+    size: 95,
+    floor: 5,
+    features: ["מעלית", "מחסן", "ממ״ד"],
   },
   {
     id: 3,
     image: property3,
+    title: "דירת 5 חדרים בפלורנטין",
+    subtitle: "דירת גג עם מרפסת גדולה",
+    propertyType: "פנטהאוז",
+    condition: "חדש מקבלן",
     price: "3,200,000",
     location: "תל אביב, פלורנטין",
     rooms: 5,
+    size: 140,
+    floor: 6,
+    features: ["מעלית", "חניה", "מרפסת שמש"],
   },
   {
     id: 4,
     image: property4,
+    title: "דירת 3 חדרים בקריית אליעזר",
+    subtitle: "דירה שקטה ומוארת",
+    propertyType: "דירה",
+    condition: "משופץ",
     price: "1,650,000",
     location: "חולון, קריית אליעזר",
     rooms: 3,
+    size: 85,
+    floor: 2,
+    features: ["מרפסת", "מחסן"],
   },
 ];
 
@@ -98,10 +126,10 @@ const Properties = () => {
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6">
-          {/* Properties Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Properties List */}
+          <div className="space-y-4">
             {mockProperties.map((property) => (
-              <PropertyCard key={property.id} {...property} />
+              <PropertyCard key={property.id} property={property} />
             ))}
           </div>
 
