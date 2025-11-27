@@ -4,13 +4,70 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Share2, Phone, MessageSquare, MapPin, Calendar, Gauge, Hand, Sparkles } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Heart, Share2, Phone, MessageSquare, MapPin, Calendar, Gauge, Hand, Sparkles, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import carImage1 from "@/assets/item-car.jpg";
 
 const CarDetails = () => {
   const [mainImage, setMainImage] = useState(carImage1);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showAnalysis, setShowAnalysis] = useState(false);
+  const [analysis, setAnalysis] = useState("");
+  const { toast } = useToast();
   
   const images = [carImage1, carImage1, carImage1];
+
+  const carDetails = {
+    model: "ב מ וו סדרה 7",
+    description: "Luxury 740Le פלאג-אין אוט' 5 דל 2.0 (258 כ\"ס)",
+    year: 2019,
+    km: 48000,
+    hand: 2,
+    location: "כפר קאסם",
+    price: "לא ציין מחיר",
+    features: [
+      "סטט בתקופה",
+      "גלגל מגנזיום",
+      "בקרת שיוט מרחק",
+      "מצלמות היקפיות",
+      "חיישני חניה",
+      "תיבת הילוכים אוטומטית"
+    ]
+  };
+
+  const handleAnalyze = async () => {
+    setIsAnalyzing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-car', {
+        body: { carDetails }
+      });
+
+      if (error) throw error;
+
+      if (data.error) {
+        toast({
+          title: "שגיאה",
+          description: data.error,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      setAnalysis(data.analysis);
+      setShowAnalysis(true);
+    } catch (error) {
+      console.error('Error analyzing car:', error);
+      toast({
+        title: "שגיאה",
+        description: "אירעה שגיאה בעת יצירת הדוח. אנא נסה שוב.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -205,9 +262,22 @@ const CarDetails = () => {
                 <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                   קבל ניתוח מקצועי מבוסס AI על מצב הרכב, המחיר והמלצות לרכישה
                 </p>
-                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
-                  <Sparkles className="h-5 w-5" />
-                  צור דוח AI
+                <Button 
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+                  onClick={handleAnalyze}
+                  disabled={isAnalyzing}
+                >
+                  {isAnalyzing ? (
+                    <>
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                      מייצר דוח...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-5 w-5" />
+                      צור דוח AI
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -216,6 +286,23 @@ const CarDetails = () => {
       </main>
 
       <Footer />
+
+      {/* AI Analysis Dialog */}
+      <Dialog open={showAnalysis} onOpenChange={setShowAnalysis}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-2xl">
+              <Sparkles className="h-6 w-6 text-primary" />
+              דוח AI מקצועי
+            </DialogTitle>
+          </DialogHeader>
+          <div className="prose prose-sm max-w-none">
+            <div className="whitespace-pre-wrap text-foreground leading-relaxed">
+              {analysis}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
