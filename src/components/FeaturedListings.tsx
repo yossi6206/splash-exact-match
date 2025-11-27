@@ -90,23 +90,36 @@ const FeaturedListings = () => {
             </div>
           </div>
 
-          {/* Category Filters */}
-          <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-            {categories.map((category) => (
-              <Button
-                key={category.id}
-                variant={activeCategory === category.id ? "default" : "outline"}
-                onClick={() => setActiveCategory(category.id)}
-                size="sm"
-                className={
-                  activeCategory === category.id
-                    ? "bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full text-xs md:text-sm whitespace-nowrap"
-                    : "bg-background border-2 hover:bg-muted text-foreground font-medium rounded-full text-xs md:text-sm whitespace-nowrap"
-                }
-              >
-                {category.label}
-              </Button>
-            ))}
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            {/* Category Filters */}
+            <div className="flex gap-2 flex-1 md:flex-initial overflow-x-auto pb-2 md:pb-0">
+              {categories.map((category) => (
+                <Button
+                  key={category.id}
+                  variant={activeCategory === category.id ? "default" : "outline"}
+                  onClick={() => setActiveCategory(category.id)}
+                  size="sm"
+                  className={
+                    activeCategory === category.id
+                      ? "bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full text-xs md:text-sm whitespace-nowrap"
+                      : "bg-background border-2 hover:bg-muted text-foreground font-medium rounded-full text-xs md:text-sm whitespace-nowrap"
+                  }
+                >
+                  {category.label}
+                </Button>
+              ))}
+            </div>
+            
+            {/* View All Link */}
+            <a 
+              href="/properties" 
+              className="text-sm md:text-base font-semibold text-primary hover:text-primary/80 transition-colors duration-200 flex items-center gap-2 whitespace-nowrap"
+            >
+              צפה בכל
+              <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </a>
           </div>
         </div>
 
