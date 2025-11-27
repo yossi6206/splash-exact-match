@@ -115,6 +115,100 @@ export type Database = {
         }
         Relationships: []
       }
+      freelancer_review_helpful: {
+        Row: {
+          created_at: string
+          id: string
+          review_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          review_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          review_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "freelancer_review_helpful_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "freelancer_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      freelancer_reviews: {
+        Row: {
+          comment: string
+          communication_rating: number | null
+          created_at: string
+          deadline_rating: number | null
+          freelancer_id: string
+          helpful_count: number | null
+          id: string
+          professionalism_rating: number | null
+          project_type: string | null
+          rating: number
+          reviewer_id: string
+          reviewer_name: string
+          title: string
+          updated_at: string
+          verified_client: boolean | null
+          work_quality_rating: number | null
+        }
+        Insert: {
+          comment: string
+          communication_rating?: number | null
+          created_at?: string
+          deadline_rating?: number | null
+          freelancer_id: string
+          helpful_count?: number | null
+          id?: string
+          professionalism_rating?: number | null
+          project_type?: string | null
+          rating: number
+          reviewer_id: string
+          reviewer_name: string
+          title: string
+          updated_at?: string
+          verified_client?: boolean | null
+          work_quality_rating?: number | null
+        }
+        Update: {
+          comment?: string
+          communication_rating?: number | null
+          created_at?: string
+          deadline_rating?: number | null
+          freelancer_id?: string
+          helpful_count?: number | null
+          id?: string
+          professionalism_rating?: number | null
+          project_type?: string | null
+          rating?: number
+          reviewer_id?: string
+          reviewer_name?: string
+          title?: string
+          updated_at?: string
+          verified_client?: boolean | null
+          work_quality_rating?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "freelancer_reviews_freelancer_id_fkey"
+            columns: ["freelancer_id"]
+            isOneToOne: false
+            referencedRelation: "freelancers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       freelancers: {
         Row: {
           availability: string | null
