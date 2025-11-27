@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import MobileHeader from "@/components/MobileHeader";
 import HeroSection from "@/components/HeroSection";
 import Categories from "@/components/Categories";
 import FeaturedListings from "@/components/FeaturedListings";
@@ -12,6 +13,7 @@ import Footer from "@/components/Footer";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      <MobileHeader />
       <Header />
       <main>
         <HeroSection />
