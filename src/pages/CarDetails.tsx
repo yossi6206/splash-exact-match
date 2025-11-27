@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Heart, Share2, Phone, MessageSquare, MapPin, Calendar, Gauge, Hand, Sparkles, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import carImage1 from "@/assets/item-car.jpg";
 
 const CarDetails = () => {
@@ -16,6 +17,7 @@ const CarDetails = () => {
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [analysis, setAnalysis] = useState("");
   const { toast } = useToast();
+  const { user } = useAuth();
   
   const images = [carImage1, carImage1, carImage1];
 
@@ -86,12 +88,24 @@ const CarDetails = () => {
                   className="w-full h-[500px] object-cover"
                 />
                 <div className="absolute top-4 left-4 flex gap-2">
-                  <Button 
-                    size="icon" 
-                    className="bg-white/90 hover:bg-white text-foreground rounded-full"
-                  >
-                    <Heart className="h-5 w-5" />
-                  </Button>
+                <Button 
+                  variant="outline"
+                  size="icon" 
+                  className="rounded-full border-2"
+                  onClick={async () => {
+                    if (!user) {
+                      toast({
+                        title: "נדרשת התחברות",
+                        description: "יש להתחבר כדי לסמן רכבים כמועדפים",
+                        variant: "destructive"
+                      });
+                      return;
+                    }
+                    // TODO: Implement favorite toggle
+                  }}
+                >
+                  <Heart className="h-5 w-5" />
+                </Button>
                   <Button 
                     size="icon" 
                     className="bg-white/90 hover:bg-white text-foreground rounded-full"
