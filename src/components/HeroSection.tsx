@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useCountUp } from "@/hooks/useCountUp";
+import { FileText, Users, CheckCircle } from "lucide-react";
 import heroPhone from "@/assets/hero-phone.jpg";
 import heroLaptop from "@/assets/hero-laptop.jpg";
 import heroCar from "@/assets/hero-car.jpg";
@@ -157,6 +158,11 @@ const HeroSection = () => {
             ref={activeAds.elementRef}
             className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
           >
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary/20 flex items-center justify-center">
+                <FileText className="w-8 h-8 md:w-10 md:h-10 text-primary" />
+              </div>
+            </div>
             <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary mb-2">
               {formatNumber(activeAds.count)}+
             </div>
@@ -170,6 +176,11 @@ const HeroSection = () => {
             ref={registeredUsers.elementRef}
             className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
           >
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-secondary/20 flex items-center justify-center">
+                <Users className="w-8 h-8 md:w-10 md:h-10 text-secondary" />
+              </div>
+            </div>
             <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-secondary mb-2">
               {formatNumber(registeredUsers.count)}+
             </div>
@@ -183,6 +194,11 @@ const HeroSection = () => {
             ref={completedDeals.elementRef}
             className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
           >
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-accent/20 flex items-center justify-center">
+                <CheckCircle className="w-8 h-8 md:w-10 md:h-10 text-accent" />
+              </div>
+            </div>
             <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-accent mb-2">
               {formatNumber(completedDeals.count)}+
             </div>
