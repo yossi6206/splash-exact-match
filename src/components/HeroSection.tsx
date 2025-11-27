@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useCountUp } from "@/hooks/useCountUp";
 import heroPhone from "@/assets/hero-phone.jpg";
 import heroLaptop from "@/assets/hero-laptop.jpg";
 import heroCar from "@/assets/hero-car.jpg";
@@ -6,6 +7,20 @@ import heroApartment from "@/assets/hero-apartment.jpg";
 import heroWatch from "@/assets/hero-watch.jpg";
 
 const HeroSection = () => {
+  const activeAds = useCountUp({ end: 350000, duration: 2500 });
+  const registeredUsers = useCountUp({ end: 1200000, duration: 2500 });
+  const completedDeals = useCountUp({ end: 500000, duration: 2500 });
+
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + "M";
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(0) + "K";
+    }
+    return num.toString();
+  };
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted min-h-[700px] md:min-h-[800px] lg:min-h-[900px]">
       {/* Modern gradient background with multiple layers */}
@@ -138,9 +153,12 @@ const HeroSection = () => {
         {/* Statistics Section */}
         <div className="mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Active Ads */}
-          <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20">
+          <div 
+            ref={activeAds.elementRef}
+            className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
+          >
             <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary mb-2">
-              350,000+
+              {formatNumber(activeAds.count)}+
             </div>
             <div className="text-base md:text-lg text-foreground/80 font-medium">
               מודעות פעילות
@@ -148,9 +166,12 @@ const HeroSection = () => {
           </div>
 
           {/* Registered Users */}
-          <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20">
+          <div 
+            ref={registeredUsers.elementRef}
+            className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
+          >
             <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-secondary mb-2">
-              1.2M+
+              {formatNumber(registeredUsers.count)}+
             </div>
             <div className="text-base md:text-lg text-foreground/80 font-medium">
               משתמשים רשומים
@@ -158,9 +179,12 @@ const HeroSection = () => {
           </div>
 
           {/* Completed Deals */}
-          <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20">
+          <div 
+            ref={completedDeals.elementRef}
+            className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
+          >
             <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-accent mb-2">
-              500K+
+              {formatNumber(completedDeals.count)}+
             </div>
             <div className="text-base md:text-lg text-foreground/80 font-medium">
               עסקאות שהושלמו
