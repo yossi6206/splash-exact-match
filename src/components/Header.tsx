@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MessageSquare, Heart, Plus, LogOut, LayoutDashboard, Settings } from "lucide-react";
@@ -11,9 +12,37 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const megaMenuData = {
+  "נדל\"ן": {
+    columns: [
+      {
+        title: "דירות למכירה",
+        items: ["דירות גן", "פנטהאוז", "דירות סטודיו", "דירות דופלקס", "דירות רגילות"]
+      },
+      {
+        title: "בתים ונכסים מיוחדים",
+        items: ["בתים פרטיים", "קוטג'ים", "וילות", "משקים וחוות", "מגרשים"]
+      },
+      {
+        title: "לפי אזור",
+        items: ["מרכז", "צפון", "דרום", "ירושלים והסביבה", "השרון", "השפלה"]
+      },
+      {
+        title: "נכסים מסחריים",
+        items: ["נכסים להשקעה", "חניות", "נכסי נופש"]
+      },
+      {
+        title: "דירות להשכרה",
+        items: ["דירות לטווח ארוך", "דירות לטווח קצר", "חדרים בשותפות", "מחסנים"]
+      }
+    ]
+  }
+};
+
 const Header = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
 
   const getInitials = (email: string) => {
     return email.substring(0, 2).toUpperCase();
@@ -32,10 +61,45 @@ const Header = () => {
             </Link>
 
             {/* Navigation */}
-            <nav className="hidden md:flex items-center gap-6">
-              <Button variant="ghost" className="text-sm font-medium" asChild>
-                <Link to="/properties">נדל"ן</Link>
-              </Button>
+            <nav className="hidden md:flex items-center gap-6 relative">
+              <div 
+                className="relative"
+                onMouseEnter={() => setHoveredMenu("נדל\"ן")}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <Button variant="ghost" className="text-sm font-medium" asChild>
+                  <Link to="/properties">נדל"ן</Link>
+                </Button>
+                
+                {hoveredMenu === "נדל\"ן" && megaMenuData["נדל\"ן"] && (
+                  <div className="absolute top-full right-0 pt-2 z-50">
+                    <div className="bg-background border border-border rounded-lg shadow-xl p-8 w-[900px] animate-fade-in">
+                      <div className="grid grid-cols-5 gap-6">
+                        {megaMenuData["נדל\"ן"].columns.map((column, index) => (
+                          <div key={index}>
+                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              {column.title}
+                            </h3>
+                            <ul className="space-y-1.5">
+                              {column.items.map((item, itemIndex) => (
+                                <li key={itemIndex}>
+                                  <a 
+                                    href="#" 
+                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
+                                  >
+                                    {item}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <Button variant="ghost" className="text-sm font-medium" asChild>
                 <Link to="/cars">רכב</Link>
               </Button>
