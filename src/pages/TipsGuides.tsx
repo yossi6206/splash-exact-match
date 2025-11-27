@@ -6,6 +6,7 @@ import tipSelling from "@/assets/tip-selling.jpg";
 import tipBuying from "@/assets/tip-buying.jpg";
 import tipSafety from "@/assets/tip-safety.jpg";
 import tipWriting from "@/assets/tip-writing.jpg";
+import tipsHeroBanner from "@/assets/tips-hero-banner.jpg";
 
 const allTips = [
   {
@@ -98,8 +99,19 @@ const TipsGuidesPage = () => {
       
       <main>
         {/* Hero Section */}
-        <section className="py-12 md:py-16 bg-white dark:bg-background border-b-2 border-gray-200 dark:border-border">
-          <div className="container mx-auto px-4">
+        <section className="relative py-16 md:py-24 bg-white dark:bg-background border-b-2 border-gray-200 dark:border-border overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <img 
+              src={tipsHeroBanner} 
+              alt="טיפים ומדריכים"
+              className="w-full h-full object-cover opacity-20 dark:opacity-10"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white dark:to-background"></div>
+          </div>
+          
+          {/* Content */}
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 טיפים ומדריכים
