@@ -100,50 +100,50 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 flex items-center justify-center p-4 md:p-8">
-      <div className="w-full max-w-7xl grid lg:grid-cols-2 gap-8 items-center">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
+      <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
         {/* Left Side - Marketing Content */}
-        <div className="hidden lg:flex flex-col gap-8 text-right pr-12">
+        <div className="hidden lg:flex flex-col gap-10 text-right">
           <Link to="/" className="flex items-center justify-end mb-4">
-            <div className="flex h-14 w-20 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary shadow-lg">
-              <span className="text-2xl font-extrabold text-primary-foreground">yad2</span>
+            <div className="flex h-12 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
+              <span className="text-xl font-extrabold text-primary-foreground">yad2</span>
             </div>
           </Link>
           
-          <div className="space-y-4">
-            <h1 className="text-5xl font-bold text-foreground leading-tight">
+          <div className="space-y-3">
+            <h1 className="text-4xl font-bold text-foreground leading-tight">
               לקבנות מהר, למכור מהר.
             </h1>
-            <p className="text-2xl font-bold text-foreground">
+            <p className="text-xl text-muted-foreground">
               ויש לנו אתכלה כלים לזה.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-6 mt-8">
-            <div className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-white/50 backdrop-blur-sm">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <User className="w-8 h-8 text-primary" />
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <User className="w-6 h-6 text-primary" />
               </div>
               <span className="text-sm font-medium text-foreground">איזור אישי</span>
             </div>
             
-            <div className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-white/50 backdrop-blur-sm">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <Rocket className="w-8 h-8 text-primary" />
+            <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <Rocket className="w-6 h-6 text-primary" />
               </div>
               <span className="text-sm font-medium text-foreground">פרסום מודעה</span>
             </div>
             
-            <div className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-white/50 backdrop-blur-sm">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <MessageCircle className="w-8 h-8 text-primary" />
+            <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <MessageCircle className="w-6 h-6 text-primary" />
               </div>
               <span className="text-sm font-medium text-foreground">צ'אט</span>
             </div>
             
-            <div className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-white/50 backdrop-blur-sm">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <Bell className="w-8 h-8 text-primary" />
+            <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <Bell className="w-6 h-6 text-primary" />
               </div>
               <span className="text-sm font-medium text-foreground">התראות</span>
             </div>
@@ -152,21 +152,26 @@ const Auth = () => {
 
         {/* Right Side - Auth Form */}
         <div className="w-full max-w-md mx-auto lg:mx-0">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10">
-            <h2 className="text-3xl font-bold text-center text-foreground mb-8">
+          <div className="bg-card border border-border rounded-2xl shadow-lg p-8 md:p-10">
+            <Link to="/" className="flex lg:hidden items-center justify-center mb-6">
+              <div className="flex h-12 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
+                <span className="text-xl font-extrabold text-primary-foreground">yad2</span>
+              </div>
+            </Link>
+
+            <h2 className="text-2xl font-bold text-center text-foreground mb-6">
               היי, טוב לראות אותך
             </h2>
 
             {/* Social Login Buttons */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-2 gap-3 mb-6">
               <Button
                 type="button"
                 variant="outline"
-                className="h-12 border-2 hover:bg-muted"
+                className="h-11 border border-border hover:bg-muted"
                 onClick={handleGoogleSignIn}
               >
-                גוגל
-                <svg className="mr-2 w-5 h-5" viewBox="0 0 24 24">
+                <svg className="ml-2 w-5 h-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -177,12 +182,12 @@ const Auth = () => {
               <Button
                 type="button"
                 variant="outline"
-                className="h-12 border-2 hover:bg-muted"
+                className="h-11 border border-border hover:bg-muted"
               >
-                אפל
-                <svg className="mr-2 w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <svg className="ml-2 w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
                 </svg>
+                אפל
               </Button>
             </div>
 
@@ -191,22 +196,22 @@ const Auth = () => {
                 <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-muted-foreground">או התחבר ידנית</span>
+                <span className="px-3 bg-card text-muted-foreground">או התחבר ידנית</span>
               </div>
             </div>
 
             {/* Login Form */}
             {mode === "login" ? (
-              <form onSubmit={handleLogin} className="space-y-5">
+              <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-right block text-sm font-medium">מייל</Label>
+                  <Label htmlFor="email" className="text-right block">מייל</Label>
                   <Input
                     id="email"
                     type="email"
                     placeholder="yourmail@email.co.il"
                     value={loginData.email}
                     onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                    className="h-12 text-right"
+                    className="h-11 text-right bg-background"
                     required
                   />
                   {errors.loginEmail && (
@@ -215,7 +220,7 @@ const Auth = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-right block text-sm font-medium">סיסמה</Label>
+                  <Label htmlFor="password" className="text-right block">סיסמה</Label>
                   <div className="relative">
                     <Input
                       id="password"
@@ -223,15 +228,15 @@ const Auth = () => {
                       placeholder="הקלד/י סיסמה"
                       value={loginData.password}
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                      className="h-12 text-right pr-10"
+                      className="h-11 text-right pr-10 bg-background"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                   {errors.loginPassword && (
@@ -240,19 +245,19 @@ const Auth = () => {
                 </div>
 
                 <div className="text-right">
-                  <button type="button" className="text-sm text-primary hover:underline font-medium">
+                  <button type="button" className="text-sm text-primary hover:underline">
                     שכחתי סיסמה
                   </button>
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-primary hover:bg-primary/90 text-lg font-bold"
+                  className="w-full h-11 text-base font-semibold"
                   disabled={isLoading}
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="ml-2 h-5 w-5 animate-spin" />
+                      <Loader2 className="ml-2 h-4 w-4 animate-spin" />
                       מתחבר...
                     </>
                   ) : (
@@ -260,7 +265,7 @@ const Auth = () => {
                   )}
                 </Button>
 
-                <p className="text-center text-sm text-muted-foreground">
+                <p className="text-center text-sm text-muted-foreground pt-2">
                   אין לך חשבון?{" "}
                   <button
                     type="button"
@@ -273,16 +278,16 @@ const Auth = () => {
               </form>
             ) : (
               /* Signup Form */
-              <form onSubmit={handleSignup} className="space-y-5">
+              <form onSubmit={handleSignup} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name" className="text-right block text-sm font-medium">שם מלא</Label>
+                  <Label htmlFor="signup-name" className="text-right block">שם מלא</Label>
                   <Input
                     id="signup-name"
                     type="text"
                     placeholder="ישראל ישראלי"
                     value={signupData.fullName}
                     onChange={(e) => setSignupData({ ...signupData, fullName: e.target.value })}
-                    className="h-12 text-right"
+                    className="h-11 text-right bg-background"
                     required
                   />
                   {errors.signupName && (
@@ -291,14 +296,14 @@ const Auth = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="text-right block text-sm font-medium">מייל</Label>
+                  <Label htmlFor="signup-email" className="text-right block">מייל</Label>
                   <Input
                     id="signup-email"
                     type="email"
                     placeholder="yourmail@email.co.il"
                     value={signupData.email}
                     onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
-                    className="h-12 text-right"
+                    className="h-11 text-right bg-background"
                     required
                   />
                   {errors.signupEmail && (
@@ -307,7 +312,7 @@ const Auth = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="text-right block text-sm font-medium">סיסמה</Label>
+                  <Label htmlFor="signup-password" className="text-right block">סיסמה</Label>
                   <div className="relative">
                     <Input
                       id="signup-password"
@@ -315,15 +320,15 @@ const Auth = () => {
                       placeholder="הקלד/י סיסמה"
                       value={signupData.password}
                       onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                      className="h-12 text-right pr-10"
+                      className="h-11 text-right pr-10 bg-background"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                   {errors.signupPassword && (
@@ -333,12 +338,12 @@ const Auth = () => {
 
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-primary hover:bg-primary/90 text-lg font-bold"
+                  className="w-full h-11 text-base font-semibold"
                   disabled={isLoading}
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="ml-2 h-5 w-5 animate-spin" />
+                      <Loader2 className="ml-2 h-4 w-4 animate-spin" />
                       נרשם...
                     </>
                   ) : (
@@ -346,7 +351,7 @@ const Auth = () => {
                   )}
                 </Button>
 
-                <p className="text-center text-sm text-muted-foreground">
+                <p className="text-center text-sm text-muted-foreground pt-2">
                   כבר יש לך חשבון?{" "}
                   <button
                     type="button"
