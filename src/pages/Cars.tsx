@@ -5,6 +5,7 @@ import { CarFilters } from "@/components/CarFilters";
 import { CarCard } from "@/components/CarCard";
 import { CarSidebar } from "@/components/CarSidebar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
 import carImage1 from "@/assets/item-car.jpg";
 
 const mockCars = [
@@ -42,6 +43,13 @@ const mockCars = [
 
 const Cars = () => {
   const [sortBy, setSortBy] = useState("date");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  
+  const totalPages = Math.ceil(mockCars.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentCars = mockCars.slice(startIndex, endIndex);
 
   return (
     <div className="min-h-screen bg-background">
@@ -102,9 +110,40 @@ const Cars = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6">
           {/* Cars List */}
           <div className="space-y-4">
-            {mockCars.map((car) => (
+            {currentCars.map((car) => (
               <CarCard key={car.id} car={car} />
             ))}
+            
+            {/* Pagination */}
+            <Pagination className="mt-8">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+                
+                {[...Array(totalPages)].map((_, i) => (
+                  <PaginationItem key={i + 1}>
+                    <PaginationLink
+                      onClick={() => setCurrentPage(i + 1)}
+                      isActive={currentPage === i + 1}
+                      className="cursor-pointer"
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                
+                <PaginationItem>
+                  <PaginationNext 
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
 
           {/* Sidebar */}
