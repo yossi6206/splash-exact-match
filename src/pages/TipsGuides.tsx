@@ -6,6 +6,14 @@ import tipSelling from "@/assets/tip-selling.jpg";
 import tipBuying from "@/assets/tip-buying.jpg";
 import tipSafety from "@/assets/tip-safety.jpg";
 import tipWriting from "@/assets/tip-writing.jpg";
+import tipPricing from "@/assets/tip-pricing.jpg";
+import tipInspection from "@/assets/tip-inspection.jpg";
+import tipMeeting from "@/assets/tip-meeting.jpg";
+import tipPhotography from "@/assets/tip-photography.jpg";
+import tipCommunication from "@/assets/tip-communication.jpg";
+import tipNegotiation from "@/assets/tip-negotiation.jpg";
+import tipFraud from "@/assets/tip-fraud.jpg";
+import tipPromotion from "@/assets/tip-promotion.jpg";
 import tipsHeroBanner from "@/assets/tips-hero-banner.jpg";
 
 const allTips = [
@@ -34,49 +42,49 @@ const allTips = [
     category: "מודעות"
   },
   {
-    image: tipSelling,
+    image: tipPricing,
     title: "תמחור נכון - המפתח למכירה",
     description: "איך לקבוע מחיר הוגן ואטרקטיבי לפריט שלך",
     category: "מכירה"
   },
   {
-    image: tipBuying,
+    image: tipInspection,
     title: "בדיקת מצב הפריט",
     description: "מדריך מקיף לבדיקת מצב מוצרים לפני קנייה",
     category: "קנייה"
   },
   {
-    image: tipSafety,
+    image: tipMeeting,
     title: "נקודות מפגש בטוחות",
     description: "איפה ומתי להיפגש עם קונים ומוכרים",
     category: "אבטחה"
   },
   {
-    image: tipWriting,
+    image: tipPhotography,
     title: "צילום מושלם למודעה",
     description: "טיפים לצילום פריטים שימכרו אותם בעצמם",
     category: "מודעות"
   },
   {
-    image: tipSelling,
+    image: tipCommunication,
     title: "תקשורת יעילה עם קונים",
     description: "כיצד לנהל שיחות שמובילות לעסקאות מוצלחות",
     category: "מכירה"
   },
   {
-    image: tipBuying,
+    image: tipNegotiation,
     title: "משא ומתן חכם",
     description: "אסטרטגיות למשא ומתן שיביאו לך את המחיר הטוב ביותר",
     category: "קנייה"
   },
   {
-    image: tipSafety,
+    image: tipFraud,
     title: "זיהוי הונאות נפוצות",
     description: "איך להימנע מנוכלים ולזהות מודעות מפוקפקות",
     category: "אבטחה"
   },
   {
-    image: tipWriting,
+    image: tipPromotion,
     title: "קידום המודעה שלך",
     description: "דרכים להגביר את החשיפה של המודעה שלך",
     category: "מודעות"
