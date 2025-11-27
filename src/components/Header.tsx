@@ -39,14 +39,14 @@ const Header = () => {
               <Button variant="ghost" className="text-sm font-medium" asChild>
                 <Link to="/cars">רכב</Link>
               </Button>
+              <Button variant="ghost" className="text-sm font-medium" asChild>
+                <Link to="/laptops">מחשבים</Link>
+              </Button>
               <Button variant="ghost" className="text-sm font-medium">
                 יד שניה
               </Button>
               <Button variant="ghost" className="text-sm font-medium">
                 דרושים IL
-              </Button>
-              <Button variant="ghost" className="text-sm font-medium">
-                עסקים למכירה
               </Button>
             </nav>
           </div>
