@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
 import FreelancerCard from "@/components/FreelancerCard";
+import { FreelancerFilters } from "@/components/FreelancerFilters";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -116,48 +117,58 @@ const Freelancers = () => {
         </div>
       </section>
 
-      {/* Freelancers Grid */}
+      {/* Freelancers Grid with Filters */}
       <section className="container mx-auto px-4 py-16">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2">פרילנסרים מובילים</h2>
-          <p className="text-muted-foreground">מצא את המומחה המושלם לפרויקט שלך</p>
+          <h2 className="text-3xl font-bold mb-2 text-right">פרילנסרים מובילים</h2>
+          <p className="text-muted-foreground text-right">מצא את המומחה המושלם לפרויקט שלך</p>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-96 bg-muted animate-pulse rounded-lg" />
-            ))}
+        <div className="flex gap-8">
+          {/* Filters Sidebar */}
+          <aside className="hidden lg:block w-80 flex-shrink-0">
+            <FreelancerFilters />
+          </aside>
+
+          {/* Main Content */}
+          <div className="flex-1">
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-96 bg-muted animate-pulse rounded-lg" />
+                ))}
+              </div>
+            ) : freelancers.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="text-muted-foreground text-lg mb-4">
+                  אין פרילנסרים זמינים כרגע
+                </p>
+                <Button asChild>
+                  <a href="/dashboard">הצטרף כפרילנסר</a>
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {freelancers.map((freelancer) => (
+                  <FreelancerCard
+                    key={freelancer.id}
+                    id={freelancer.id}
+                    full_name={freelancer.full_name}
+                    avatar_url={freelancer.avatar_url || undefined}
+                    title={freelancer.title}
+                    bio={freelancer.bio || undefined}
+                    skills={freelancer.skills}
+                    hourly_rate={freelancer.hourly_rate}
+                    rating={Number(freelancer.rating)}
+                    total_reviews={freelancer.total_reviews || 0}
+                    location={freelancer.location || undefined}
+                    category={freelancer.category}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-        ) : freelancers.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground text-lg mb-4">
-              אין פרילנסרים זמינים כרגע
-            </p>
-            <Button asChild>
-              <a href="/dashboard">הצטרף כפרילנסר</a>
-            </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {freelancers.map((freelancer) => (
-              <FreelancerCard
-                key={freelancer.id}
-                id={freelancer.id}
-                full_name={freelancer.full_name}
-                avatar_url={freelancer.avatar_url || undefined}
-                title={freelancer.title}
-                bio={freelancer.bio || undefined}
-                skills={freelancer.skills}
-                hourly_rate={freelancer.hourly_rate}
-                rating={Number(freelancer.rating)}
-                total_reviews={freelancer.total_reviews || 0}
-                location={freelancer.location || undefined}
-                category={freelancer.category}
-              />
-            ))}
-          </div>
-        )}
+        </div>
       </section>
 
       <Footer />
