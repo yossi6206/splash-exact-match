@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Search, Mic } from "lucide-react";
 import { Link } from "react-router-dom";
 import RecommendedCard from "@/components/RecommendedCard";
+import CategoryShowcase from "@/components/CategoryShowcase";
 
 // Import images
 import secondhandHero from "@/assets/secondhand-hero.jpg";
@@ -69,6 +70,81 @@ const mostViewedItems = [
     category: "כמו חדש",
     timeAgo: "לפני יומיים"
   },
+];
+
+const furnitureShowcase = [
+  {
+    id: 101,
+    image: furnitureImg,
+    title: "ספה איכותית מעוצבת",
+    price: "₪900",
+    originalPrice: "₪1,000",
+    location: "גבע ביק",
+    category: "יוחדי"
+  },
+  {
+    id: 102,
+    image: apartmentImg,
+    title: "כורסא American Comfort",
+    price: "₪2,500",
+    location: "גבע תקווה",
+    category: "במצב מושלם"
+  },
+  {
+    id: 103,
+    image: furnitureImg,
+    title: "מיטה זוגית",
+    price: "₪1,100",
+    originalPrice: "₪1,200",
+    location: "גבע ביק",
+    category: "בהזדמנות"
+  },
+  {
+    id: 104,
+    image: apartmentImg,
+    title: "ספה איכותית מעוצבת",
+    price: "₪900",
+    originalPrice: "₪1,000",
+    location: "אור עקיבה",
+    category: "כמו חדש"
+  }
+];
+
+const electronicsShowcase = [
+  {
+    id: 201,
+    image: laptopImg,
+    title: "MacBook Pro 16 אינץ'",
+    price: "₪4,500",
+    originalPrice: "₪5,200",
+    location: "תל אביב",
+    category: "חבל לפספס"
+  },
+  {
+    id: 202,
+    image: phoneImg,
+    title: "iPhone 14 Pro Max",
+    price: "₪3,200",
+    location: "חיפה",
+    category: "כמו חדש"
+  },
+  {
+    id: 203,
+    image: watchImg,
+    title: "Apple Watch Ultra",
+    price: "₪2,100",
+    originalPrice: "₪2,500",
+    location: "ירושלים",
+    category: "במצב מעולה"
+  },
+  {
+    id: 204,
+    image: laptopImg,
+    title: "iPad Pro 12.9",
+    price: "₪2,800",
+    location: "רעננה",
+    category: "בהזדמנות"
+  }
 ];
 
 const Secondhand = () => {
@@ -201,6 +277,22 @@ const Secondhand = () => {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Furniture Showcase */}
+      <CategoryShowcase
+        title="סלון וסביבת אירוח"
+        items={furnitureShowcase}
+        categoryLink="/secondhand?category=furniture"
+      />
+
+      {/* Electronics Showcase */}
+      <section className="bg-muted/30">
+        <CategoryShowcase
+          title="אלקטרוניקה וטכנולוגיה"
+          items={electronicsShowcase}
+          categoryLink="/secondhand?category=electronics"
+        />
       </section>
 
       <Footer />

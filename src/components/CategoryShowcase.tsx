@@ -1,0 +1,139 @@
+import { Heart } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+
+interface ShowcaseItem {
+  id: number;
+  image: string;
+  title: string;
+  price: string;
+  originalPrice?: string;
+  location: string;
+  category: string;
+}
+
+interface CategoryShowcaseProps {
+  title: string;
+  items: ShowcaseItem[];
+  categoryLink: string;
+}
+
+const CategoryShowcase = ({ title, items, categoryLink }: CategoryShowcaseProps) => {
+  if (items.length < 4) return null;
+
+  const mainItem = items[0];
+  const sideItems = items.slice(1, 4);
+
+  return (
+    <section className="py-12">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground">{title}</h2>
+          <Link
+            to={categoryLink}
+            className="text-primary hover:text-primary/80 font-medium flex items-center gap-2 transition-colors"
+          >
+            <span>לכל המוצרים</span>
+            <span>←</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Main Large Item */}
+          <Link
+            to={`/secondhand/${mainItem.id}`}
+            className="lg:col-span-1 group"
+          >
+            <Card className="overflow-hidden h-full hover:shadow-xl transition-all duration-300">
+              <div className="relative aspect-[4/5] lg:aspect-[3/4] overflow-hidden">
+                <img
+                  src={mainItem.image}
+                  alt={mainItem.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="absolute top-3 right-3 bg-background/80 hover:bg-background rounded-full"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <Heart className="h-5 w-5" />
+                </Button>
+              </div>
+              <div className="p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl font-bold text-foreground">{mainItem.price}</span>
+                  {mainItem.originalPrice && (
+                    <span className="text-sm text-muted-foreground line-through">
+                      {mainItem.originalPrice}
+                    </span>
+                  )}
+                </div>
+                <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
+                  {mainItem.title}
+                </h3>
+                <p className="text-sm text-muted-foreground">{mainItem.location}</p>
+                <div className="mt-2 flex gap-2">
+                  <span className="text-xs bg-accent/10 text-accent px-2 py-1 rounded-full">
+                    {mainItem.category}
+                  </span>
+                </div>
+              </div>
+            </Card>
+          </Link>
+
+          {/* Side Items Grid */}
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {sideItems.map((item) => (
+              <Link
+                key={item.id}
+                to={`/secondhand/${item.id}`}
+                className="group"
+              >
+                <Card className="overflow-hidden h-full hover:shadow-xl transition-all duration-300">
+                  <div className="relative aspect-square overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="absolute top-2 right-2 bg-background/80 hover:bg-background rounded-full"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <Heart className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <div className="p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xl font-bold text-foreground">{item.price}</span>
+                      {item.originalPrice && (
+                        <span className="text-xs text-muted-foreground line-through">
+                          {item.originalPrice}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors line-clamp-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">{item.location}</p>
+                    <div className="mt-2">
+                      <span className="text-xs bg-secondary/10 text-secondary px-2 py-1 rounded-full">
+                        {item.category}
+                      </span>
+                    </div>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default CategoryShowcase;
