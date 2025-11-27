@@ -13,6 +13,7 @@ import Properties from "./pages/Properties";
 import PropertyDetails from "./pages/PropertyDetails";
 import Laptops from "./pages/Laptops";
 import LaptopDetails from "./pages/LaptopDetails";
+import Secondhand from "./pages/Secondhand";
 import Auth from "./pages/Auth";
 import TipsGuidesPage from "./pages/TipsGuides";
 import TipDetails from "./pages/TipDetails";
@@ -42,6 +43,7 @@ const AppContent = () => {
         <Route path="/properties/:id" element={<PropertyDetails />} />
         <Route path="/laptops" element={<Laptops />} />
         <Route path="/laptops/:id" element={<LaptopDetails />} />
+        <Route path="/secondhand" element={<Secondhand />} />
         <Route path="/tips" element={<TipsGuidesPage />} />
         <Route path="/tips/:id" element={<TipDetails />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
