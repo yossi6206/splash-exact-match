@@ -50,9 +50,9 @@ const Categories = () => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   return (
-    <section className="py-8 md:py-12 bg-background relative">
+    <section className="py-12 md:py-16 bg-white dark:bg-background relative">
       <div className="container mx-auto px-4">
-        <div className="flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-12">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
           {categories.map((category) => {
             const Icon = category.icon;
             return (
@@ -63,12 +63,12 @@ const Categories = () => {
                 onMouseLeave={() => setHoveredCategory(null)}
               >
                 <button
-                  className="flex flex-col items-center gap-2 md:gap-3 group cursor-pointer transition-transform hover:scale-105"
+                  className="flex flex-col items-center gap-3 md:gap-4 group cursor-pointer transition-all duration-300"
                 >
-                  <div className="w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 rounded-full bg-category-bg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
-                    <Icon className="w-7 h-7 md:w-10 md:h-10 lg:w-12 lg:h-12 text-foreground/70" />
+                  <div className="w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full bg-gray-100 dark:bg-category-bg flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:scale-105 border-2 border-gray-200 dark:border-transparent">
+                    <Icon className="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 text-foreground/80 group-hover:text-primary transition-colors duration-300" />
                   </div>
-                  <span className="text-xs md:text-sm lg:text-base font-medium text-foreground text-center max-w-[80px] md:max-w-none">
+                  <span className="text-xs md:text-sm lg:text-base font-semibold text-foreground text-center max-w-[100px] md:max-w-none group-hover:text-primary transition-colors duration-300">
                     {category.name}
                   </span>
                 </button>
@@ -76,23 +76,23 @@ const Categories = () => {
                 {/* Mega Menu - Hidden on mobile */}
                 {category.megaMenu && hoveredCategory === category.name && (
                   <div 
-                    className="hidden md:block absolute top-full left-1/2 -translate-x-1/2 pt-4 z-50"
+                    className="hidden md:block absolute top-full left-1/2 -translate-x-1/2 pt-6 z-50"
                   >
                     {/* Invisible bridge to prevent menu from closing */}
-                    <div className="absolute top-0 left-0 right-0 h-4" />
-                    <div className="bg-background border border-border rounded-lg shadow-xl p-8 w-[900px] animate-fade-in">
+                    <div className="absolute top-0 left-0 right-0 h-6" />
+                    <div className="bg-white dark:bg-background border-2 border-gray-200 dark:border-border rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] p-8 w-[900px] animate-fade-in">
                       <div className="grid grid-cols-5 gap-6">
                         {category.megaMenu.columns.map((column, index) => (
                           <div key={index}>
-                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/30">
                               {column.title}
                             </h3>
-                            <ul className="space-y-1.5">
+                            <ul className="space-y-2">
                               {column.items.map((item, itemIndex) => (
                                 <li key={itemIndex}>
                                   <a 
                                     href="#" 
-                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
+                                    className="text-sm text-foreground hover:text-primary transition-colors duration-200 block py-1.5 hover:underline hover:translate-x-1 transition-transform"
                                   >
                                     {item}
                                   </a>
