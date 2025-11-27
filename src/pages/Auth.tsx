@@ -119,7 +119,7 @@ const Auth = () => {
             </p>
           </div>
 
-          <div className="flex items-center justify-end gap-8 mt-4">
+          <div className="flex items-center justify-start gap-8 mt-4 mr-0">
             <div className="flex flex-col items-center gap-2">
               <User className="w-8 h-8 text-muted-foreground" strokeWidth={1.5} />
               <span className="text-xs text-muted-foreground">איזור אישי</span>
