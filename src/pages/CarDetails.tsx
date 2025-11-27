@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import carImage1 from "@/assets/item-car.jpg";
+import AIReport from "@/components/AIReport";
 
 const CarDetails = () => {
   const [mainImage, setMainImage] = useState(carImage1);
@@ -262,39 +263,7 @@ const CarDetails = () => {
             </Card>
 
             {/* AI Report */}
-            <Card className="border-border bg-gradient-to-br from-blue-50/50 to-purple-50/50">
-              <CardContent className="p-6 text-center">
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Sparkles className="h-8 w-8 text-primary" />
-                  </div>
-                </div>
-                <h3 className="font-bold text-foreground mb-3 flex items-center justify-center gap-2">
-                  דוח AI מקצועי
-                  <Sparkles className="h-5 w-5 text-primary" />
-                </h3>
-                <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                  קבל ניתוח מקצועי מבוסס AI על מצב הרכב, המחיר והמלצות לרכישה
-                </p>
-                <Button 
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
-                  onClick={handleAnalyze}
-                  disabled={isAnalyzing}
-                >
-                  {isAnalyzing ? (
-                    <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                      מייצר דוח...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="h-5 w-5" />
-                      צור דוח AI
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
+            <AIReport itemType="car" itemData={carDetails} />
           </div>
         </div>
       </main>

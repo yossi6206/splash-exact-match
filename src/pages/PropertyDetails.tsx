@@ -8,6 +8,7 @@ import { Heart, Share2, Home, MapPin, Bed, Square, Calendar, Shield } from "luci
 import property1 from "@/assets/property-1.jpg";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import AIReport from "@/components/AIReport";
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -196,6 +197,8 @@ const PropertyDetails = () => {
                 </div>
               </div>
             </Card>
+
+            <AIReport itemType="property" itemData={property} />
           </div>
         </div>
       </main>

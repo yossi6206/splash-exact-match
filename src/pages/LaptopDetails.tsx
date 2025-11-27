@@ -14,6 +14,7 @@ import laptopImage from "@/assets/item-laptop.jpg";
 import { ReviewStats } from "@/components/reviews/ReviewStats";
 import { ReviewsList } from "@/components/reviews/ReviewsList";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
+import AIReport from "@/components/AIReport";
 
 const LaptopDetails = () => {
   const { id } = useParams();
@@ -487,6 +488,8 @@ const LaptopDetails = () => {
                 </ul>
               </CardContent>
             </Card>
+
+            <AIReport itemType="laptop" itemData={laptop} />
           </div>
         </div>
       </main>
