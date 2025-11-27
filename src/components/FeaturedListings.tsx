@@ -11,30 +11,58 @@ const properties = [
   {
     id: 1,
     image: property1,
+    title: "דירת 3 חדרים בירושלים",
+    subtitle: "דירה מרווחת ומוארת",
+    propertyType: "דירה",
+    condition: "משופץ",
     price: "3,950,000",
     location: "הבנאים 44, ירושלים",
     rooms: 3,
+    size: 100,
+    floor: 2,
+    features: ["מעלית", "חניה"],
   },
   {
     id: 2,
     image: property2,
+    title: "דירת 2 חדרים בירושלים",
+    subtitle: "קרוב לתחבורה ציבורית",
+    propertyType: "דירה",
+    condition: "במצב טוב",
     price: "2,690,000",
     location: "שאול אדרי 1, ירושלים",
     rooms: 2,
+    size: 75,
+    floor: 4,
+    features: ["מעלית", "מרפסת"],
   },
   {
     id: 3,
     image: property3,
+    title: "דירת 2 חדרים בירושלים",
+    subtitle: "דירה שקטה ומוארת",
+    propertyType: "דירה",
+    condition: "משופץ",
     price: "2,780,000",
     location: "ירושלים",
     rooms: 2,
+    size: 80,
+    floor: 1,
+    features: ["מחסן"],
   },
   {
     id: 4,
     image: property4,
+    title: "דירת 2 חדרים בירושלים",
+    subtitle: "במיקום מעולה",
+    propertyType: "דירה",
+    condition: "במצב טוב",
     price: "7,800",
     location: "ירושלים",
     rooms: 2,
+    size: 70,
+    floor: 3,
+    features: ["מעלית"],
   },
 ];
 
@@ -102,7 +130,7 @@ const FeaturedListings = () => {
           {/* Properties */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {properties.map((property) => (
-              <PropertyCard key={property.id} {...property} />
+              <PropertyCard key={property.id} property={property} />
             ))}
           </div>
         </div>
