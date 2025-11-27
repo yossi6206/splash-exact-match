@@ -7,28 +7,41 @@ import heroWatch from "@/assets/hero-watch.jpg";
 
 const HeroSection = () => {
   return (
-    <section className="relative overflow-hidden bg-background min-h-[700px] md:min-h-[800px] lg:min-h-[900px]">
-      {/* Organic gradient background */}
+    <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted min-h-[700px] md:min-h-[800px] lg:min-h-[900px]">
+      {/* Modern gradient background with multiple layers */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute right-0 top-0 h-full w-3/4 bg-gradient-to-bl from-secondary via-primary to-primary opacity-90">
-          <svg
-            className="absolute inset-0 h-full w-full"
-            viewBox="0 0 1200 600"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0,300 Q300,150 600,300 T1200,300 L1200,0 L0,0 Z"
-              fill="white"
-              opacity="0.3"
-            />
-            <path
-              d="M0,400 Q400,250 800,400 T1200,400 L1200,600 L0,600 Z"
-              fill="white"
-              opacity="0.2"
-            />
-          </svg>
+        {/* Primary gradient layer */}
+        <div className="absolute right-0 top-0 h-full w-4/5 bg-gradient-to-bl from-orange-500 via-amber-500 to-yellow-500 opacity-20">
+          <div className="absolute inset-0 bg-gradient-to-tr from-primary/40 via-secondary/30 to-accent/40 mix-blend-multiply"></div>
         </div>
+        
+        {/* Animated gradient orbs */}
+        <div className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-primary/30 to-secondary/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-32 right-64 w-80 h-80 bg-gradient-to-br from-accent/30 to-primary/20 rounded-full blur-3xl animate-pulse delay-700"></div>
+        
+        {/* Organic SVG shapes */}
+        <svg
+          className="absolute inset-0 h-full w-full opacity-10"
+          viewBox="0 0 1200 600"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style={{ stopColor: 'hsl(var(--primary))', stopOpacity: 0.6 }} />
+              <stop offset="100%" style={{ stopColor: 'hsl(var(--secondary))', stopOpacity: 0.4 }} />
+            </linearGradient>
+          </defs>
+          <path
+            d="M0,200 Q300,100 600,200 T1200,200 L1200,0 L0,0 Z"
+            fill="url(#grad1)"
+          />
+          <path
+            d="M0,450 Q400,300 800,450 T1200,450 L1200,600 L0,600 Z"
+            fill="white"
+            opacity="0.15"
+          />
+        </svg>
       </div>
 
       <div className="container mx-auto px-4 py-16 md:py-32 lg:py-40">
