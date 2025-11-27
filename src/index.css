@@ -17,19 +17,19 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 15%;
 
-    /* yad2 orange brand color */
-    --primary: 22 100% 50%;
+    /* Modern blue-purple brand color */
+    --primary: 250 70% 55%;
     --primary-foreground: 0 0% 100%;
 
-    /* Yellow accent */
-    --secondary: 45 100% 51%;
-    --secondary-foreground: 0 0% 15%;
+    /* Light blue accent */
+    --secondary: 220 80% 60%;
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
-    /* Green for price tags */
-    --accent: 165 82% 51%;
+    /* Turquoise for price tags */
+    --accent: 185 75% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -37,13 +37,13 @@ All colors MUST be HSL.
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 22 100% 50%;
+    --ring: 250 70% 55%;
 
     --radius: 0.75rem;
 
     /* Custom gradient for hero */
-    --gradient-hero-start: 45 100% 51%;
-    --gradient-hero-end: 22 100% 50%;
+    --gradient-hero-start: 220 80% 60%;
+    --gradient-hero-end: 250 70% 55%;
 
     /* Category circle background */
     --category-bg: 0 0% 95%;
