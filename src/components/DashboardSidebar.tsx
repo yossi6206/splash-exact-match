@@ -25,7 +25,7 @@ const menuItems = [
 
 export const DashboardSidebar = () => {
   return (
-    <aside className="w-80 bg-white border-l border-border flex flex-col shadow-sm">
+    <aside className="hidden md:flex w-80 bg-white border-l border-border flex-col shadow-sm">
       {/* User Profile Section */}
       <div className="p-8 text-center border-b border-border">
         <Avatar className="w-24 h-24 mx-auto mb-4 ring-4 ring-primary/10">

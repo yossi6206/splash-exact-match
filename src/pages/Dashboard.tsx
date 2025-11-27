@@ -1,6 +1,7 @@
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3, Heart, Eye, Clock } from "lucide-react";
+import MobileHeader from "@/components/MobileHeader";
 
 const Dashboard = () => {
   const stats = [
@@ -11,15 +12,17 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen flex w-full bg-slate-50">
-      <DashboardSidebar />
-      
-      <main className="flex-1 p-8">
+    <>
+      <MobileHeader />
+      <div className="min-h-screen flex w-full bg-slate-50">
+        <DashboardSidebar />
+        
+        <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-foreground mb-8">סקירה כללית</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4 md:mb-8">סקירה כללית</h1>
           
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
             {stats.map((stat) => (
               <Card key={stat.title} className="bg-white border-border hover:shadow-md transition-all">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -59,6 +62,7 @@ const Dashboard = () => {
         </div>
       </main>
     </div>
+    </>
   );
 };
 
