@@ -5,7 +5,6 @@ import FeaturedListings from "@/components/FeaturedListings";
 import PromoBanner from "@/components/PromoBanner";
 import FeaturedSearches from "@/components/FeaturedSearches";
 import RecommendedItems from "@/components/RecommendedItems";
-import GuidesSection from "@/components/GuidesSection";
 
 const Index = () => {
   return (
@@ -18,7 +17,6 @@ const Index = () => {
         <PromoBanner />
         <FeaturedSearches />
         <RecommendedItems />
-        <GuidesSection />
       </main>
     </div>
   );
