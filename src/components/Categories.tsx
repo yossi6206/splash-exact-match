@@ -76,9 +76,7 @@ const Categories = () => {
                 {/* Mega Menu */}
                 {category.megaMenu && hoveredCategory === category.name && (
                   <div 
-                    className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50"
-                    onMouseEnter={() => setHoveredCategory(category.name)}
-                    onMouseLeave={() => setHoveredCategory(null)}
+                    className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 z-50"
                   >
                     <div className="bg-background border border-border rounded-lg shadow-xl p-8 w-[900px] animate-fade-in">
                       <div className="grid grid-cols-5 gap-6">
