@@ -19,6 +19,7 @@ import JobDetails from "./pages/JobDetails";
 import Auth from "./pages/Auth";
 import TipsGuidesPage from "./pages/TipsGuides";
 import TipDetails from "./pages/TipDetails";
+import Freelancers from "./pages/Freelancers";
 import NotFound from "./pages/NotFound";
 import MobileNav from "./components/MobileNav";
 
@@ -48,6 +49,7 @@ const AppContent = () => {
         <Route path="/secondhand" element={<Secondhand />} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/jobs/:id" element={<JobDetails />} />
+        <Route path="/freelancers" element={<Freelancers />} />
         <Route path="/tips" element={<TipsGuidesPage />} />
         <Route path="/tips/:id" element={<TipDetails />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
