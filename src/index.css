@@ -107,4 +107,27 @@ All colors MUST be HSL.
     font-family: 'Heebo', sans-serif;
     direction: rtl;
   }
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    body {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    /* Ensure content doesn't go under mobile nav */
+    body.mobile {
+      padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+    }
+    
+    /* Touch-friendly sizes */
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Smooth transitions */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+  }
 }

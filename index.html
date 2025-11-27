@@ -2,22 +2,62 @@
 <html lang="he" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#5B63D3" />
+    
     <title>yad2 - פורטל המודעות המוביל בישראל</title>
     <meta name="description" content="אתר המודעות המוביל בישראל - נדל״ן, רכב, דרושים, יד שניה ועוד" />
     <meta name="author" content="yad2" />
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <meta property="og:title" content="673046c8-0a78-495f-affb-631f3a6dbfaf" />
-    <meta property="og:description" content="Lovable Generated Project" />
+    <meta property="og:title" content="yad2 - פורטל המודעות המוביל" />
+    <meta property="og:description" content="אתר המודעות המוביל בישראל" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@Lovable" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    
+    <style>
+      /* Prevent text size adjust on iOS */
+      html {
+        -webkit-text-size-adjust: 100%;
+        -moz-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+      
+      /* Safe area support */
+      body {
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+      
+      .safe-area-top {
+        padding-top: env(safe-area-inset-top);
+      }
+      
+      .safe-area-bottom {
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+      
+      /* Smooth scroll on mobile */
+      html {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      /* Prevent bounce effect */
+      body {
+        overscroll-behavior-y: none;
+      }
+    </style>
   </head>
 
   <body>
