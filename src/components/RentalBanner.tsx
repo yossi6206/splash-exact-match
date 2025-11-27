@@ -3,8 +3,7 @@ import rentalBanner from "@/assets/rental-banner.jpg";
 
 const RentalBanner = () => {
   return (
-    <section className="py-8 px-4 md:px-6 max-w-7xl mx-auto">
-      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-l from-green-500 to-green-600 min-h-[280px] flex items-center">
+    <div className="relative rounded-2xl overflow-hidden bg-gradient-to-l from-green-500 to-green-600 min-h-[280px] flex items-center">
         <div className="absolute inset-0">
           <img
             src={rentalBanner}
@@ -31,7 +30,6 @@ const RentalBanner = () => {
           </Button>
         </div>
       </div>
-    </section>
   );
 };
 
