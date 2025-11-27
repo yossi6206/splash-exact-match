@@ -1,11 +1,13 @@
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone } from "lucide-react";
+import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavLink } from "@/components/NavLink";
-import { Link } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import PostJob from "./dashboard/PostJob";
+import MyJobs from "./dashboard/MyJobs";
 
 const Dashboard = () => {
   const stats = [
@@ -17,6 +19,8 @@ const Dashboard = () => {
 
   const menuItems = [
     { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
+    { title: "המשרות שלי", icon: Briefcase, path: "/dashboard/my-jobs" },
+    { title: "פרסם משרה", icon: Plus, path: "/dashboard/post-job" },
     { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile" },
     { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats" },
     { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved" },
@@ -101,50 +105,56 @@ const Dashboard = () => {
         <DashboardSidebar />
         
         <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4 md:mb-8">סקירה כללית</h1>
-          
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
-            {stats.map((stat) => (
-              <Card key={stat.title} className="bg-white border-border hover:shadow-md transition-all">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {stat.title}
-                  </CardTitle>
-                  <stat.icon className={`h-5 w-5 ${stat.color} opacity-70`} />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-foreground">{stat.value}</div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Routes>
+            <Route path="/" element={
+              <div className="max-w-7xl mx-auto">
+                <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4 md:mb-8">סקירה כללית</h1>
+                
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+                  {stats.map((stat) => (
+                    <Card key={stat.title} className="bg-white border-border hover:shadow-md transition-all">
+                      <CardHeader className="flex flex-row items-center justify-between pb-2">
+                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                          {stat.title}
+                        </CardTitle>
+                        <stat.icon className={`h-5 w-5 ${stat.color} opacity-70`} />
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-3xl font-bold text-foreground">{stat.value}</div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
 
-          {/* Recent Activity */}
-          <Card className="bg-white border-border">
-            <CardHeader>
-              <CardTitle className="text-foreground">פעילות אחרונה</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[1, 2, 3].map((item) => (
-                  <div key={item} className="flex items-center gap-4 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                      <BarChart3 className="h-6 w-6 text-primary" />
+                {/* Recent Activity */}
+                <Card className="bg-white border-border">
+                  <CardHeader>
+                    <CardTitle className="text-foreground">פעילות אחרונה</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {[1, 2, 3].map((item) => (
+                        <div key={item} className="flex items-center gap-4 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                          <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                            <BarChart3 className="h-6 w-6 text-primary" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-medium text-foreground">מודעה חדשה פורסמה</h3>
+                            <p className="text-sm text-muted-foreground">לפני {item} שעות</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium text-foreground">מודעה חדשה פורסמה</h3>
-                      <p className="text-sm text-muted-foreground">לפני {item} שעות</p>
-                    </div>
-                  </div>
-                ))}
+                  </CardContent>
+                </Card>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
-    </div>
+            } />
+            <Route path="/post-job" element={<PostJob />} />
+            <Route path="/my-jobs" element={<MyJobs />} />
+          </Routes>
+        </main>
+      </div>
     </>
   );
 };

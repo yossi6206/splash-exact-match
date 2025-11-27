@@ -115,6 +115,140 @@ export type Database = {
         }
         Relationships: []
       }
+      job_applications: {
+        Row: {
+          applicant_id: string
+          cover_letter: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          job_id: string
+          linkedin_url: string | null
+          phone: string
+          portfolio_url: string | null
+          resume_url: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          applicant_id: string
+          cover_letter: string
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          job_id: string
+          linkedin_url?: string | null
+          phone: string
+          portfolio_url?: string | null
+          resume_url?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          applicant_id?: string
+          cover_letter?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          job_id?: string
+          linkedin_url?: string | null
+          phone?: string
+          portfolio_url?: string | null
+          resume_url?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          applicants_count: number | null
+          application_process: string[] | null
+          benefits: string[] | null
+          company_name: string
+          company_size: string | null
+          created_at: string
+          description: string
+          experience_max: number | null
+          experience_min: number | null
+          id: string
+          industry: string | null
+          job_type: string
+          location: string
+          nice_to_have: string[] | null
+          requirements: string[]
+          salary_max: number | null
+          salary_min: number | null
+          scope: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+          views_count: number | null
+        }
+        Insert: {
+          applicants_count?: number | null
+          application_process?: string[] | null
+          benefits?: string[] | null
+          company_name: string
+          company_size?: string | null
+          created_at?: string
+          description: string
+          experience_max?: number | null
+          experience_min?: number | null
+          id?: string
+          industry?: string | null
+          job_type: string
+          location: string
+          nice_to_have?: string[] | null
+          requirements: string[]
+          salary_max?: number | null
+          salary_min?: number | null
+          scope: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+          views_count?: number | null
+        }
+        Update: {
+          applicants_count?: number | null
+          application_process?: string[] | null
+          benefits?: string[] | null
+          company_name?: string
+          company_size?: string | null
+          created_at?: string
+          description?: string
+          experience_max?: number | null
+          experience_min?: number | null
+          id?: string
+          industry?: string | null
+          job_type?: string
+          location?: string
+          nice_to_have?: string[] | null
+          requirements?: string[]
+          salary_max?: number | null
+          salary_min?: number | null
+          scope?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
