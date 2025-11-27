@@ -10,6 +10,7 @@ import Cars from "./pages/Cars";
 import CarDetails from "./pages/CarDetails";
 import Properties from "./pages/Properties";
 import PropertyDetails from "./pages/PropertyDetails";
+import Laptops from "./pages/Laptops";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/cars/:id" element={<CarDetails />} />
             <Route path="/properties" element={<Properties />} />
             <Route path="/properties/:id" element={<PropertyDetails />} />
+            <Route path="/laptops" element={<Laptops />} />
             <Route path="/dashboard/*" element={<Dashboard />} />
             <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
