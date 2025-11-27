@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Heart, Share2, Home, MapPin, Bed, Square, Calendar, Shield } from "lucide-react";
 import property1 from "@/assets/property-1.jpg";
+import property2 from "@/assets/property-2.jpg";
+import property3 from "@/assets/property-3.jpg";
+import property4 from "@/assets/property-4.jpg";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
@@ -27,7 +30,7 @@ const PropertyDetails = () => {
     totalFloors: 5,
     propertyType: "דירה",
     condition: "משופץ",
-    images: [property1],
+    images: [property1, property2, property3, property4],
     description: "דירה מרווחת ומוארת בלב נווה צדק, משופצת ברמה גבוהה. הדירה כוללת סלון גדול, מטבח מעוצב, 3 חדרי שינה, 2 חדרי רחצה ומרפסת שמש.",
     features: [
       "מעלית",
@@ -71,11 +74,11 @@ const PropertyDetails = () => {
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            {[1, 2, 3, 4].map((i) => (
+            {property.images.slice(1, 4).map((image, i) => (
               <div key={i} className="aspect-video relative overflow-hidden rounded-lg bg-muted">
                 <img 
-                  src={property.images[0]} 
-                  alt={`תמונה ${i}`}
+                  src={image} 
+                  alt={`תמונה ${i + 2}`}
                   className="w-full h-full object-cover"
                 />
               </div>
