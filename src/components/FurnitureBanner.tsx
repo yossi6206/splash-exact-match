@@ -3,7 +3,8 @@ import furnitureBanner from "@/assets/furniture-banner.jpg";
 
 const FurnitureBanner = () => {
   return (
-    <div className="relative rounded-2xl overflow-hidden bg-gradient-to-l from-blue-500 to-blue-600 min-h-[280px] flex items-center">
+    <section className="py-8 px-4 md:px-6 max-w-7xl mx-auto">
+      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-l from-blue-500 to-blue-600 min-h-[280px] flex items-center">
         <div className="absolute inset-0">
           <img
             src={furnitureBanner}
@@ -30,6 +31,7 @@ const FurnitureBanner = () => {
           </Button>
         </div>
       </div>
+    </section>
   );
 };
 
