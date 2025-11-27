@@ -187,6 +187,43 @@ const realEstateShowcase = [
   }
 ];
 
+const vehiclesShowcase = [
+  {
+    id: 401,
+    image: carImg,
+    title: "טויוטה קורולה 2020",
+    price: "₪85,000",
+    originalPrice: "₪92,000",
+    location: "תל אביב",
+    category: "בהזדמנות"
+  },
+  {
+    id: 402,
+    image: itemCar,
+    title: "הונדה סיוויק 2019",
+    price: "₪75,000",
+    location: "חיפה",
+    category: "יד ראשונה"
+  },
+  {
+    id: 403,
+    image: carImg,
+    title: "מאזדה 3 2021",
+    price: "₪95,000",
+    location: "ירושלים",
+    category: "כמו חדש"
+  },
+  {
+    id: 404,
+    image: itemCar,
+    title: "סקודה אוקטביה 2018",
+    price: "₪68,000",
+    originalPrice: "₪72,000",
+    location: "באר שבע",
+    category: "מומלץ"
+  }
+];
+
 const Secondhand = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -341,6 +378,15 @@ const Secondhand = () => {
         items={realEstateShowcase}
         categoryLink="/properties"
       />
+
+      {/* Vehicles Showcase */}
+      <section className="bg-muted/30">
+        <CategoryShowcase
+          title="רכב ואופנועים"
+          items={vehiclesShowcase}
+          categoryLink="/cars"
+        />
+      </section>
 
       <Footer />
     </div>
