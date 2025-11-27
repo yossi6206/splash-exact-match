@@ -119,33 +119,25 @@ const Auth = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <User className="w-6 h-6 text-primary" />
-              </div>
-              <span className="text-sm font-medium text-foreground">איזור אישי</span>
+          <div className="flex items-center justify-end gap-8 mt-4">
+            <div className="flex flex-col items-center gap-2">
+              <User className="w-8 h-8 text-muted-foreground" strokeWidth={1.5} />
+              <span className="text-xs text-muted-foreground">איזור אישי</span>
             </div>
             
-            <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Rocket className="w-6 h-6 text-primary" />
-              </div>
-              <span className="text-sm font-medium text-foreground">פרסום מודעה</span>
+            <div className="flex flex-col items-center gap-2">
+              <Rocket className="w-8 h-8 text-muted-foreground" strokeWidth={1.5} />
+              <span className="text-xs text-muted-foreground">פרסום מודעה</span>
             </div>
             
-            <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <MessageCircle className="w-6 h-6 text-primary" />
-              </div>
-              <span className="text-sm font-medium text-foreground">צ'אט</span>
+            <div className="flex flex-col items-center gap-2">
+              <MessageCircle className="w-8 h-8 text-muted-foreground" strokeWidth={1.5} />
+              <span className="text-xs text-muted-foreground">צ'אט</span>
             </div>
             
-            <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Bell className="w-6 h-6 text-primary" />
-              </div>
-              <span className="text-sm font-medium text-foreground">התראות</span>
+            <div className="flex flex-col items-center gap-2">
+              <Bell className="w-8 h-8 text-muted-foreground" strokeWidth={1.5} />
+              <span className="text-xs text-muted-foreground">התראות</span>
             </div>
           </div>
         </div>
