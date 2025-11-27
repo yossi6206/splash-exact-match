@@ -43,25 +43,27 @@ const HeroSection = () => {
           </div>
 
           {/* Image with price tags */}
-          <div className="order-1 md:order-2 relative">
-            <img
-              src={heroFurniture}
-              alt="רהיטים למכירה"
-              className="w-full h-auto relative z-10"
-            />
-            
-            {/* Price tags */}
-            <div className="absolute top-[15%] left-[10%] bg-accent text-accent-foreground px-6 py-3 rounded-lg font-bold text-xl md:text-2xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
-              ₪ 700
-            </div>
-            <div className="absolute top-[25%] right-[20%] bg-accent text-accent-foreground px-6 py-3 rounded-lg font-bold text-xl md:text-2xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-              ₪ 450
-            </div>
-            <div className="absolute bottom-[35%] left-[15%] bg-accent text-accent-foreground px-6 py-3 rounded-lg font-bold text-xl md:text-2xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-              ₪ 150
-            </div>
-            <div className="absolute bottom-[25%] right-[25%] bg-accent text-accent-foreground px-6 py-3 rounded-lg font-bold text-xl md:text-2xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
-              ₪ 200
+          <div className="order-1 md:order-2 relative flex justify-center items-center">
+            <div className="relative w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]">
+              <img
+                src={heroFurniture}
+                alt="רהיטים למכירה"
+                className="w-full h-full object-cover rounded-full shadow-2xl relative z-10 border-8 border-white/20"
+              />
+              
+              {/* Price tags */}
+              <div className="absolute top-[10%] left-[5%] bg-accent text-accent-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
+                ₪ 700
+              </div>
+              <div className="absolute top-[20%] right-[10%] bg-accent text-accent-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
+                ₪ 450
+              </div>
+              <div className="absolute bottom-[30%] left-[8%] bg-accent text-accent-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                ₪ 150
+              </div>
+              <div className="absolute bottom-[18%] right-[15%] bg-accent text-accent-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
+                ₪ 200
+              </div>
             </div>
           </div>
         </div>
