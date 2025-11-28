@@ -138,19 +138,19 @@ export const PropertySidebarFilter = ({ onFilterChange }: PropertySidebarFilterP
   return (
     <div className="hidden lg:block sticky top-20">
       <Card className="overflow-hidden">
-        <div className="bg-card border-b border-border p-4 flex items-center justify-between">
+        <div className="bg-card border-b border-border p-4 flex items-center justify-center relative">
           {activeFiltersCount > 0 && (
             <Button 
               variant="ghost" 
               size="sm"
               onClick={resetFilters}
-              className="h-8 gap-1"
+              className="h-8 gap-1 absolute left-4"
             >
               <X className="h-3 w-3" />
               נקה
             </Button>
           )}
-          <div className="flex items-center gap-2 mr-auto">
+          <div className="flex items-center gap-2">
             {activeFiltersCount > 0 && (
               <Badge variant="secondary" className="h-5">
                 {activeFiltersCount}
