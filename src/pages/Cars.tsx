@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CarFilters, FilterState } from "@/components/CarFilters";
 import { CarCard } from "@/components/CarCard";
-import { CarSidebar } from "@/components/CarSidebar";
+import { CarSidebar, SidebarFilters } from "@/components/CarSidebar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
 import carImage1 from "@/assets/item-car.jpg";
@@ -75,7 +75,7 @@ const mockCars = generateCars();
 const Cars = () => {
   const [sortBy, setSortBy] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
-  const [filters, setFilters] = useState<FilterState>({
+  const [topFilters, setTopFilters] = useState<FilterState>({
     manufacturer: "",
     yearFrom: "",
     yearTo: "",
@@ -84,37 +84,87 @@ const Cars = () => {
     fuelType: "",
     transmission: "",
   });
+  const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>({
+    manufacturers: [],
+    yearFrom: "",
+    yearTo: "",
+    priceMin: 0,
+    priceMax: 300000,
+    fuelTypes: [],
+    transmissions: [],
+    hands: [],
+    kmMin: 0,
+    kmMax: 300000,
+    features: [],
+  });
   const itemsPerPage = 10;
   
-  // Filter and sort cars
+  // Combine filters from top bar and sidebar
   const filteredCars = useMemo(() => {
     let filtered = mockCars.filter((car) => {
-      // Filter by manufacturer
-      if (filters.manufacturer && filters.manufacturer !== "all" && !car.title.includes(filters.manufacturer)) {
+      // Top bar manufacturer filter
+      if (topFilters.manufacturer && topFilters.manufacturer !== "all" && !car.title.includes(topFilters.manufacturer)) {
         return false;
       }
       
-      // Filter by year
-      if (filters.yearFrom && car.year < parseInt(filters.yearFrom)) {
-        return false;
-      }
-      if (filters.yearTo && car.year > parseInt(filters.yearTo)) {
+      // Sidebar manufacturers filter
+      if (sidebarFilters.manufacturers.length > 0 && !sidebarFilters.manufacturers.some(m => car.title.includes(m))) {
         return false;
       }
       
-      // Filter by price
-      if (car.price < filters.priceMin || car.price > filters.priceMax) {
+      // Year filters (use sidebar if set, otherwise top bar)
+      const yearFrom = sidebarFilters.yearFrom || topFilters.yearFrom;
+      const yearTo = sidebarFilters.yearTo || topFilters.yearTo;
+      if (yearFrom && car.year < parseInt(yearFrom)) {
+        return false;
+      }
+      if (yearTo && car.year > parseInt(yearTo)) {
         return false;
       }
       
-      // Filter by fuel type
-      if (filters.fuelType && filters.fuelType !== "all" && !car.subtitle.includes(filters.fuelType)) {
+      // Price filters (use sidebar values)
+      if (car.price < sidebarFilters.priceMin || car.price > sidebarFilters.priceMax) {
         return false;
       }
       
-      // Filter by transmission
-      if (filters.transmission && filters.transmission !== "all" && !car.subtitle.includes(filters.transmission)) {
+      // Top bar fuel type filter
+      if (topFilters.fuelType && topFilters.fuelType !== "all" && !car.subtitle.includes(topFilters.fuelType)) {
         return false;
+      }
+      
+      // Sidebar fuel types filter
+      if (sidebarFilters.fuelTypes.length > 0 && !sidebarFilters.fuelTypes.some(f => car.subtitle.includes(f))) {
+        return false;
+      }
+      
+      // Top bar transmission filter
+      if (topFilters.transmission && topFilters.transmission !== "all" && !car.subtitle.includes(topFilters.transmission)) {
+        return false;
+      }
+      
+      // Sidebar transmissions filter
+      if (sidebarFilters.transmissions.length > 0 && !sidebarFilters.transmissions.some(t => car.subtitle.includes(t))) {
+        return false;
+      }
+      
+      // Hand filter (sidebar only)
+      if (sidebarFilters.hands.length > 0) {
+        const handMatches = sidebarFilters.hands.some(h => {
+          if (h === "יד ראשונה") return car.hand === "יד 1";
+          if (h === "יד שנייה") return car.hand === "יד 2";
+          if (h === "יד שלישית") return car.hand === "יד 3";
+          if (h === "יד 4+") return parseInt(car.hand.replace("יד ", "")) >= 4;
+          return false;
+        });
+        if (!handMatches) return false;
+      }
+      
+      // Features filter (sidebar only)
+      if (sidebarFilters.features.length > 0) {
+        const hasFeature = sidebarFilters.features.some(f => 
+          car.features.some(cf => cf.includes(f) || f.includes(cf))
+        );
+        if (!hasFeature) return false;
       }
       
       return true;
@@ -136,16 +186,21 @@ const Cars = () => {
     }
     
     return filtered;
-  }, [filters, sortBy]);
+  }, [topFilters, sidebarFilters, sortBy]);
   
   const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentCars = filteredCars.slice(startIndex, endIndex);
   
-  const handleFilterChange = (newFilters: FilterState) => {
-    setFilters(newFilters);
-    setCurrentPage(1); // Reset to first page when filters change
+  const handleTopFilterChange = (newFilters: FilterState) => {
+    setTopFilters(newFilters);
+    setCurrentPage(1);
+  };
+  
+  const handleSidebarFilterChange = (newFilters: SidebarFilters) => {
+    setSidebarFilters(newFilters);
+    setCurrentPage(1);
   };
 
   return (
@@ -176,7 +231,7 @@ const Cars = () => {
         </div>
 
         {/* Filters */}
-        <CarFilters onFilterChange={handleFilterChange} />
+        <CarFilters onFilterChange={handleTopFilterChange} />
 
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6 mt-8">
@@ -244,7 +299,7 @@ const Cars = () => {
           </div>
 
           {/* Sidebar */}
-          <CarSidebar />
+          <CarSidebar onFilterChange={handleSidebarFilterChange} />
         </div>
       </main>
 
