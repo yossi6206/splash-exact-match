@@ -195,103 +195,59 @@ const Cars = () => {
       <Header />
       
       {/* Hero Section with Search */}
-      <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/90 via-primary/80 to-primary/70">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-30"
-          style={{ backgroundImage: `url(${carsHeroBanner})` }}
-        />
-        
-        <div className="container mx-auto px-4 py-20 relative z-10">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-accent py-16 md:py-20">
+        <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             {/* Main Heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
-              מצא את הרכב המושלם שלך
-            </h1>
+            <div className="space-y-4">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
+                מצא את הרכב המושלם שלך
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+                אלפי רכבים למכירה ממוכרים פרטיים וסוחרים מובילים
+              </p>
+            </div>
             
-            {/* Subheading */}
-            <p className="text-xl md:text-2xl text-white/90 mb-8">
-              אלפי רכבים למכירה ממוכרים פרטיים וסוחרים מובילים
-            </p>
-
             {/* Search Bar */}
-            <div className="bg-white rounded-full shadow-2xl p-2 flex items-center gap-2 max-w-3xl mx-auto">
-              <div className="flex-1 flex items-center gap-2 px-4">
-                <Search className="w-5 h-5 text-muted-foreground" />
+            <div className="relative max-w-2xl mx-auto">
+              <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
+                <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
                 <Input
                   type="text"
                   placeholder="חפש לפי יצרן, דגם או תיאור..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg"
+                  className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
-              </div>
-              <Button 
-                size="lg" 
-                onClick={handleSearch}
-                className="rounded-full px-8 bg-primary hover:bg-primary/90"
-              >
-                חפש
-              </Button>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-3xl mx-auto">
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
-                  110+
-                </div>
-                <div className="text-white/80 text-lg">
-                  רכבים זמינים
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
-                  15+
-                </div>
-                <div className="text-white/80 text-lg">
-                  יצרנים שונים
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
-                  100%
-                </div>
-                <div className="text-white/80 text-lg">
-                  בדוקים ומאומתים
-                </div>
+                <Button
+                  className="ml-2 rounded-full px-8 h-10 font-bold"
+                  size="lg"
+                  onClick={handleSearch}
+                >
+                  חפש
+                </Button>
               </div>
             </div>
 
-            {/* Quick Filter Tags */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
-              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
-                אופנועים
-              </button>
-              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
-                קטנועים
-              </button>
-              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
-                משאיות
-              </button>
-              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
-                כלי שיט
-              </button>
-              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
-                מיוחדים
-              </button>
-              <button className="px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-medium transition-colors shadow-lg">
-                פריטים ומסחרים
-              </button>
+            {/* Quick Stats */}
+            <div className="flex items-center justify-center gap-8 pt-4">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">110+</div>
+                <div className="text-sm text-white/80">רכבים זמינים</div>
+              </div>
+              <div className="w-px h-12 bg-white/30" />
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">15+</div>
+                <div className="text-sm text-white/80">יצרנים</div>
+              </div>
+              <div className="w-px h-12 bg-white/30" />
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">100%</div>
+                <div className="text-sm text-white/80">מאומתים</div>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Decorative Elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
         </div>
       </section>
 
