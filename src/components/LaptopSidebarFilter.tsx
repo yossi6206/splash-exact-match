@@ -48,13 +48,13 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
 
   const [expandedSections, setExpandedSections] = useState({
     brands: true,
-    processors: false,
-    ram: false,
-    storage: false,
-    screenSize: false,
+    processors: true,
+    ram: true,
+    storage: true,
+    screenSize: true,
     price: true,
-    condition: false,
-    city: false,
+    condition: true,
+    city: true,
   });
 
   const toggleSection = (section: keyof typeof expandedSections) => {
@@ -162,7 +162,7 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
           {/* Brands */}
           <FilterSection title="יצרן" section="brands">
             <div className="space-y-3">
-              {brands.map((brand) => (
+              {brands.slice(0, 7).map((brand) => (
                 <div key={brand} className="flex items-center justify-between gap-2">
                   <label
                     htmlFor={`brand-${brand}`}
@@ -183,7 +183,7 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
           {/* Processors */}
           <FilterSection title="מעבד" section="processors">
             <div className="space-y-3">
-              {processors.map((processor) => (
+              {processors.slice(0, 7).map((processor) => (
                 <div key={processor} className="flex items-center justify-between gap-2">
                   <label
                     htmlFor={`processor-${processor}`}
@@ -204,7 +204,7 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
           {/* RAM */}
           <FilterSection title="זיכרון RAM" section="ram">
             <div className="space-y-3">
-              {ramOptions.map((ram) => (
+              {ramOptions.slice(0, 7).map((ram) => (
                 <div key={ram} className="flex items-center justify-between gap-2">
                   <label
                     htmlFor={`ram-${ram}`}
@@ -225,7 +225,7 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
           {/* Storage */}
           <FilterSection title="נפח אחסון" section="storage">
             <div className="space-y-3">
-              {storageOptions.map((storage) => (
+              {storageOptions.slice(0, 7).map((storage) => (
                 <div key={storage} className="flex items-center justify-between gap-2">
                   <label
                     htmlFor={`storage-${storage}`}
@@ -246,7 +246,7 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
           {/* Screen Size */}
           <FilterSection title="גודל מסך" section="screenSize">
             <div className="space-y-3">
-              {screenSizes.map((size) => (
+              {screenSizes.slice(0, 7).map((size) => (
                 <div key={size} className="flex items-center justify-between gap-2">
                   <label
                     htmlFor={`size-${size}`}
@@ -293,7 +293,7 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
           {/* Condition */}
           <FilterSection title="מצב המוצר" section="condition">
             <div className="space-y-3">
-              {conditions.map((condition) => (
+              {conditions.slice(0, 7).map((condition) => (
                 <div key={condition} className="flex items-center justify-between gap-2">
                   <label
                     htmlFor={`condition-${condition}`}
@@ -314,7 +314,7 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
           {/* City */}
           <FilterSection title="עיר" section="city">
             <div className="space-y-3">
-              {cities.map((city) => (
+              {cities.slice(0, 7).map((city) => (
                 <div key={city} className="flex items-center justify-between gap-2">
                   <label
                     htmlFor={`city-${city}`}
