@@ -84,20 +84,28 @@ const Freelancers = () => {
       
       {/* Hero Section */}
       <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(250,70%,55%)] via-[hsl(240,65%,50%)] to-[hsl(200,70%,50%)]">
+        {/* Animated gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(250,70%,60%)] via-[hsl(240,65%,55%)] to-[hsl(200,70%,55%)] opacity-50"
+             style={{
+               backgroundSize: '200% 200%',
+               animation: 'gradient 8s ease infinite'
+             }}
+        />
+        
         <div className="container mx-auto px-4 py-20 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             {/* Main Heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 animate-fade-in">
               מצא את העבודה החלומית שלך
             </h1>
             
             {/* Subheading */}
-            <p className="text-xl md:text-2xl text-white/90 mb-8">
+            <p className="text-xl md:text-2xl text-white/90 mb-8 animate-fade-in animation-delay-200">
               אלפי משרות מובילות ממיטב החברות בישראל
             </p>
 
             {/* Search Bar */}
-            <div className="bg-white rounded-full shadow-2xl p-2 flex items-center gap-2 max-w-3xl mx-auto">
+            <div className="bg-white rounded-full shadow-2xl p-2 flex items-center gap-2 max-w-3xl mx-auto animate-fade-in animation-delay-400 hover-scale">
               <div className="flex-1 flex items-center gap-2 px-4">
                 <Search className="w-5 h-5 text-muted-foreground" />
                 <Input
@@ -112,15 +120,15 @@ const Freelancers = () => {
               <Button 
                 size="lg" 
                 onClick={handleSearch}
-                className="rounded-full px-8 bg-[hsl(250,70%,55%)] hover:bg-[hsl(250,70%,50%)]"
+                className="rounded-full px-8 bg-[hsl(250,70%,55%)] hover:bg-[hsl(250,70%,50%)] transition-all duration-300 hover:scale-105"
               >
                 חפש
               </Button>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-3xl mx-auto">
-              <div className="text-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-3xl mx-auto animate-fade-in animation-delay-600">
+              <div className="text-center hover-scale cursor-default transition-all duration-300">
                 <div className="text-4xl md:text-5xl font-bold text-white mb-2">
                   89%
                 </div>
@@ -129,7 +137,7 @@ const Freelancers = () => {
                 </div>
               </div>
               
-              <div className="text-center">
+              <div className="text-center hover-scale cursor-default transition-all duration-300">
                 <div className="text-4xl md:text-5xl font-bold text-white mb-2">
                   +3,200
                 </div>
@@ -138,7 +146,7 @@ const Freelancers = () => {
                 </div>
               </div>
               
-              <div className="text-center">
+              <div className="text-center hover-scale cursor-default transition-all duration-300">
                 <div className="text-4xl md:text-5xl font-bold text-white mb-2">
                   +10
                 </div>
@@ -149,6 +157,10 @@ const Freelancers = () => {
             </div>
           </div>
         </div>
+        
+        {/* Animated decorative elements */}
+        <div className="absolute top-1/4 left-10 w-32 h-32 bg-white/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl animate-pulse animation-delay-1000" />
       </section>
 
       {/* Freelancers Grid with Filters */}
