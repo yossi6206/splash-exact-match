@@ -26,17 +26,17 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           
-          {/* Brand & Social - Right Side */}
-          <div className="lg:col-span-1 text-right space-y-6">
+          {/* Brand & Social - Center */}
+          <div className="lg:col-span-1 text-center space-y-6">
             <div>
               <h3 className="text-2xl md:text-3xl font-bold text-primary mb-3">שוק יד שנייה</h3>
-              <p className="text-foreground/70 text-sm leading-relaxed max-w-xs mr-auto">
+              <p className="text-foreground/70 text-sm leading-relaxed max-w-xs mx-auto">
                 הפלטפורמה המובילה למכירה וקנייה בישראל. מחברים בין אלפי משתמשים מדי יום.
               </p>
             </div>
             
             {/* Social Media Icons */}
-            <div className="flex gap-3 justify-end flex-wrap">
+            <div className="flex gap-3 justify-center flex-wrap">
               <a 
                 href="#" 
                 className="w-11 h-11 rounded-full bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm"
