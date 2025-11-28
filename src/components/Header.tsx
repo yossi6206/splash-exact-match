@@ -491,7 +491,7 @@ const Header = () => {
                 </Button>
                 
                 {hoveredMenu === "פרילנסרים" && megaMenuData["פרילנסרים"] && (
-                  <div className="absolute top-full left-10 pt-2 z-50">
+                  <div className="absolute top-full right-0 pt-2 z-50">
                     <div className="bg-background border border-border rounded-lg shadow-xl p-6 w-[800px] animate-fade-in">
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["פרילנסרים"].columns.map((column, index) => (
