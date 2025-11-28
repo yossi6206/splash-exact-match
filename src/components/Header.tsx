@@ -297,7 +297,7 @@ const Header = () => {
                 
                 {hoveredMenu === "נדל\"ן" && megaMenuData["נדל\"ן"] && (
                   <div className="absolute top-full right-0 pt-2 z-50">
-                    <div className="bg-background border border-border rounded-lg shadow-xl p-6 w-[800px] animate-fade-in">
+                    <div className="bg-background border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)', background: 'linear-gradient(to bottom, hsl(var(--background)), hsl(var(--muted) / 0.3))' }}>
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["נדל\"ן"].columns.map((column, index) => (
                           <div key={index}>
@@ -336,7 +336,7 @@ const Header = () => {
                 
                 {hoveredMenu === "רכב" && megaMenuData["רכב"] && (
                   <div className="absolute top-full right-0 pt-2 z-50">
-                    <div className="bg-background border border-border rounded-lg shadow-xl p-6 w-[800px] animate-fade-in">
+                    <div className="bg-background border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)', background: 'linear-gradient(to bottom, hsl(var(--background)), hsl(var(--muted) / 0.3))' }}>
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["רכב"].columns.map((column, index) => (
                           <div key={index}>
@@ -375,7 +375,7 @@ const Header = () => {
                 
                 {hoveredMenu === "מחשבים" && megaMenuData["מחשבים"] && (
                   <div className="absolute top-full right-0 pt-2 z-50">
-                    <div className="bg-background border border-border rounded-lg shadow-xl p-6 w-[800px] animate-fade-in">
+                    <div className="bg-background border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)', background: 'linear-gradient(to bottom, hsl(var(--background)), hsl(var(--muted) / 0.3))' }}>
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["מחשבים"].columns.map((column, index) => (
                           <div key={index}>
@@ -414,7 +414,7 @@ const Header = () => {
                 
                 {hoveredMenu === "יד שניה" && megaMenuData["יד שניה"] && (
                   <div className="absolute top-full right-0 pt-2 z-50">
-                    <div className="bg-background border border-border rounded-lg shadow-xl p-6 w-[800px] animate-fade-in">
+                    <div className="bg-background border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)', background: 'linear-gradient(to bottom, hsl(var(--background)), hsl(var(--muted) / 0.3))' }}>
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["יד שניה"].columns.map((column, index) => (
                           <div key={index}>
@@ -453,7 +453,7 @@ const Header = () => {
                 
                 {hoveredMenu === "דרושים IL" && megaMenuData["דרושים IL"] && (
                   <div className="absolute top-full right-0 pt-2 z-50">
-                    <div className="bg-background border border-border rounded-lg shadow-xl p-6 w-[800px] animate-fade-in">
+                    <div className="bg-background border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)', background: 'linear-gradient(to bottom, hsl(var(--background)), hsl(var(--muted) / 0.3))' }}>
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["דרושים IL"].columns.map((column, index) => (
                           <div key={index}>
@@ -492,7 +492,7 @@ const Header = () => {
                 
                 {hoveredMenu === "פרילנסרים" && megaMenuData["פרילנסרים"] && (
                   <div className="absolute top-full right-0 pt-2 z-50">
-                    <div className="bg-background border border-border rounded-lg shadow-xl p-6 w-[800px] animate-fade-in">
+                    <div className="bg-background border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)', background: 'linear-gradient(to bottom, hsl(var(--background)), hsl(var(--muted) / 0.3))' }}>
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["פרילנסרים"].columns.map((column, index) => (
                           <div key={index}>
