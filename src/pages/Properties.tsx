@@ -11,64 +11,62 @@ import property2 from "@/assets/property-2.jpg";
 import property3 from "@/assets/property-3.jpg";
 import property4 from "@/assets/property-4.jpg";
 
-const mockProperties = [
-  {
-    id: 1,
-    image: property1,
-    title: "דירת 4 חדרים בנווה צדק",
-    subtitle: "דירה מרווחת ומוארת במיקום מעולה",
-    propertyType: "דירה",
-    condition: "משופץ",
-    price: "2,450,000",
-    location: "תל אביב, נווה צדק",
-    rooms: 4,
-    size: 120,
-    floor: 3,
-    features: ["מעלית", "חניה", "מרפסת"],
-  },
-  {
-    id: 2,
-    image: property2,
-    title: "דירת 3 חדרים בבורסה",
-    subtitle: "קרוב לתחבורה ציבורית ושירותים",
-    propertyType: "דירה",
-    condition: "במצב טוב",
-    price: "1,890,000",
-    location: "רמת גן, בורסה",
-    rooms: 3,
-    size: 95,
-    floor: 5,
-    features: ["מעלית", "מחסן", "ממ״ד"],
-  },
-  {
-    id: 3,
-    image: property3,
-    title: "דירת 5 חדרים בפלורנטין",
-    subtitle: "דירת גג עם מרפסת גדולה",
-    propertyType: "פנטהאוז",
-    condition: "חדש מקבלן",
-    price: "3,200,000",
-    location: "תל אביב, פלורנטין",
-    rooms: 5,
-    size: 140,
-    floor: 6,
-    features: ["מעלית", "חניה", "מרפסת שמש"],
-  },
-  {
-    id: 4,
-    image: property4,
-    title: "דירת 3 חדרים בקריית אליעזר",
-    subtitle: "דירה שקטה ומוארת",
-    propertyType: "דירה",
-    condition: "משופץ",
-    price: "1,650,000",
-    location: "חולון, קריית אליעזר",
-    rooms: 3,
-    size: 85,
-    floor: 2,
-    features: ["מרפסת", "מחסן"],
-  },
-];
+const propertyTypes = ["דירה", "פנטהאוז", "דירת גן", "דירת גג", "בית פרטי", "דופלקס"];
+const conditions = ["חדש מקבלן", "משופץ", "במצב טוב", "דורש שיפוץ", "במצב מצוין"];
+const cities = ["תל אביב", "ירושלים", "חיפה", "באר שבע", "נתניה", "פתח תקווה", "ראשון לציון", "אשדוד", "רחובות", "בני ברק", "הרצליה", "כפר סבא", "רעננה", "מודיעין", "רמת גן", "גבעתיים", "חולון"];
+const neighborhoods = ["נווה צדק", "פלורנטין", "בורסה", "קריית אליעזר", "רמת אביב", "צהלה", "רמת חן", "שכון ג׳", "גבעת שאול", "הדר", "נווה שאנן", "רמת גן", "קריית מנחם", "נאות אפקה", "רמת פולג"];
+const images = [property1, property2, property3, property4];
+
+const generateProperties = () => {
+  const properties = [];
+  for (let i = 1; i <= 110; i++) {
+    const propertyType = propertyTypes[Math.floor(Math.random() * propertyTypes.length)];
+    const condition = conditions[Math.floor(Math.random() * conditions.length)];
+    const city = cities[Math.floor(Math.random() * cities.length)];
+    const neighborhood = neighborhoods[Math.floor(Math.random() * neighborhoods.length)];
+    const image = images[Math.floor(Math.random() * images.length)];
+    const rooms = Math.floor(Math.random() * 5) + 2; // 2-6 חדרים
+    const size = Math.floor(Math.random() * 100) + 60; // 60-160 מ״ר
+    const floor = Math.floor(Math.random() * 10) + 1; // קומה 1-10
+    const basePrice = Math.floor(Math.random() * 3000000) + 800000; // 800k-3.8M
+    const formattedPrice = basePrice.toLocaleString('he-IL');
+    
+    const allFeatures = ["מעלית", "חניה", "מרפסת", "מחסן", "ממ״ד", "מרפסת שמש", "נגיש לנכים", "משופץ", "אויר מרכזי"];
+    const numFeatures = Math.floor(Math.random() * 4) + 2;
+    const features = [...allFeatures].sort(() => 0.5 - Math.random()).slice(0, numFeatures);
+    
+    const subtitles = [
+      "דירה מרווחת ומוארת במיקום מעולה",
+      "קרוב לתחבורה ציבורית ושירותים",
+      "דירה שקטה במיקום מעולה",
+      "במיקום מרכזי וחיוני",
+      "דירה מושקעת ומעוצבת",
+      "נוף פתוח ללא מפגעים",
+      "בלב השכונה המבוקשת",
+      "קרוב לבתי ספר וגני ילדים",
+      "דירה יוקרתית במיקום מעולה",
+      "דירה מתוחזקת היטב"
+    ];
+    
+    properties.push({
+      id: i,
+      image: image,
+      title: `${propertyType} ${rooms} חדרים ב${neighborhood}`,
+      subtitle: subtitles[Math.floor(Math.random() * subtitles.length)],
+      propertyType: propertyType,
+      condition: condition,
+      price: formattedPrice,
+      location: `${city}, ${neighborhood}`,
+      rooms: rooms,
+      size: size,
+      floor: floor,
+      features: features,
+    });
+  }
+  return properties;
+};
+
+const mockProperties = generateProperties();
 
 const Properties = () => {
   const [sortBy, setSortBy] = useState("date");
