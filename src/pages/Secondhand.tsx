@@ -11,6 +11,7 @@ import CategoryShowcase from "@/components/CategoryShowcase";
 import SellCTABanner from "@/components/SellCTABanner";
 import FurnitureCTABanner from "@/components/FurnitureCTABanner";
 import RealEstateCTABanner from "@/components/RealEstateCTABanner";
+import { SecondhandFilters } from "@/components/SecondhandFilters";
 
 // Import images
 import secondhandHero from "@/assets/secondhand-hero.jpg";
@@ -238,6 +239,7 @@ const vehiclesShowcase = [
 
 const Secondhand = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   return (
     <div className="min-h-screen bg-background">
@@ -318,6 +320,77 @@ const Secondhand = () => {
         </div>
       </section>
 
+      {/* Category Tabs */}
+      <section className="bg-background border-b border-border sticky top-16 z-40 backdrop-blur-sm">
+        <div className="container mx-auto px-4">
+          <div className="flex gap-2 overflow-x-auto py-4 scrollbar-hide">
+            <Button
+              onClick={() => setSelectedCategory("all")}
+              variant={selectedCategory === "all" ? "default" : "outline"}
+              className="whitespace-nowrap rounded-full"
+            >
+              הכל
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("furniture")}
+              variant={selectedCategory === "furniture" ? "default" : "outline"}
+              className="whitespace-nowrap rounded-full"
+            >
+              ריהוט
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("laptops")}
+              variant={selectedCategory === "laptops" ? "default" : "outline"}
+              className="whitespace-nowrap rounded-full"
+            >
+              מחשבים ניידים
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("phones")}
+              variant={selectedCategory === "phones" ? "default" : "outline"}
+              className="whitespace-nowrap rounded-full"
+            >
+              סלולר וטאבלט
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("cars")}
+              variant={selectedCategory === "cars" ? "default" : "outline"}
+              className="whitespace-nowrap rounded-full"
+            >
+              כלי רכב
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("electronics")}
+              variant={selectedCategory === "electronics" ? "default" : "outline"}
+              className="whitespace-nowrap rounded-full"
+            >
+              מוצרי חשמל
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("home")}
+              variant={selectedCategory === "home" ? "default" : "outline"}
+              className="whitespace-nowrap rounded-full"
+            >
+              אביזרים לבית
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("clothing")}
+              variant={selectedCategory === "clothing" ? "default" : "outline"}
+              className="whitespace-nowrap rounded-full"
+            >
+              בגדים והנעלה
+            </Button>
+            <Button
+              onClick={() => setSelectedCategory("hobbies")}
+              variant={selectedCategory === "hobbies" ? "default" : "outline"}
+              className="whitespace-nowrap rounded-full"
+            >
+              תחביבים וספורט
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Categories Section */}
       <section className="py-12 md:py-16 bg-white dark:bg-background">
         <div className="container mx-auto px-4">
@@ -363,31 +436,45 @@ const Secondhand = () => {
         </div>
       </section>
 
-      {/* Most Viewed Section */}
+      {/* Most Viewed Section with Filters */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">הכי נצפים</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+              {selectedCategory === "all" ? "הכי נצפים" : `${categories.find(c => c.link.includes(selectedCategory))?.name || "הכי נצפים"}`}
+            </h2>
             <Link
               to="/secondhand?filter=most-viewed"
               className="text-primary hover:text-primary/80 font-medium flex items-center gap-2 transition-colors"
             >
-              <span>כל המומרים</span>
+              <span>כל המוצרים</span>
               <span>←</span>
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {mostViewedItems.map((item) => (
-              <RecommendedCard
-                key={item.id}
-                image={item.image}
-                title={item.title}
-                price={item.price}
-                location={item.location}
-                category={item.category}
-                timeAgo={item.timeAgo}
-              />
-            ))}
+          
+          {/* Grid with Sidebar */}
+          <div className="flex gap-8">
+            {/* Filters Sidebar */}
+            <aside className="hidden lg:block w-80 flex-shrink-0">
+              <SecondhandFilters />
+            </aside>
+
+            {/* Items Grid */}
+            <div className="flex-1">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {mostViewedItems.map((item) => (
+                  <RecommendedCard
+                    key={item.id}
+                    image={item.image}
+                    title={item.title}
+                    price={item.price}
+                    location={item.location}
+                    category={item.category}
+                    timeAgo={item.timeAgo}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
