@@ -84,7 +84,7 @@ const Freelancers = () => {
       
       {/* Hero Section */}
       <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(250,70%,55%)] via-[hsl(240,65%,50%)] to-[hsl(200,70%,50%)]">
-        <div className="container mx-auto px-4 py-20 relative z-10">
+        <div className="container mx-auto px-4 py-12 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             {/* Main Heading */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
