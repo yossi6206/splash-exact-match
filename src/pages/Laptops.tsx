@@ -9,39 +9,62 @@ import { SlidersHorizontal, X } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
 import laptopImage from "@/assets/item-laptop.jpg";
+import phoneImage from "@/assets/item-phone.jpg";
+import heroLaptopImage from "@/assets/hero-laptop.jpg";
+import heroPhoneImage from "@/assets/hero-phone.jpg";
 
-const mockLaptops = [
-  {
-    id: 1,
-    image: laptopImage,
-    title: "MacBook Pro 14",
-    subtitle: 'מעבד M3 Pro, 18GB RAM, 512GB SSD, מסך 14.2"',
-    price: 9200,
-    condition: "כמו חדש",
-    location: "תל אביב",
-    features: ["במצב מושלם", "חבילה מלאה", "אחריות יבואן"],
-  },
-  {
-    id: 2,
-    image: laptopImage,
-    title: "Lenovo ThinkPad X1",
-    subtitle: 'Intel i7, 16GB RAM, 512GB SSD, מסך 14"',
-    price: 4500,
-    condition: "משומש",
-    location: "חיפה",
-    features: ["במצב טוב", "תיק כלול", "מטען מקורי"],
-  },
-  {
-    id: 3,
-    image: laptopImage,
-    title: "HP Pavilion 15",
-    subtitle: 'Intel i5, 8GB RAM, 256GB SSD, מסך 15.6"',
-    price: 2800,
-    condition: "משומש",
-    location: "ירושלים",
-    features: ["במצב טוב", "מתאים לסטודנטים"],
-  },
-];
+const laptopBrands = ["MacBook Pro", "MacBook Air", "Dell XPS", "HP Pavilion", "Lenovo ThinkPad", "ASUS VivoBook", "Acer Aspire", "MSI Gaming", "Razer Blade", "Surface Laptop"];
+const processors = ["M3 Pro", "M2", "M1", "Intel i9", "Intel i7", "Intel i5", "AMD Ryzen 9", "AMD Ryzen 7", "AMD Ryzen 5"];
+const ramOptions = ["8GB", "16GB", "18GB", "32GB", "64GB"];
+const storageOptions = ["256GB", "512GB", "1TB", "2TB"];
+const screenSizes = ['13"', '13.3"', '14"', '14.2"', '15"', '15.6"', '16"', '17"'];
+const conditions = ["כמו חדש", "משומש", "חדש באריזה", "משומש במצב טוב"];
+const cities = ["תל אביב", "חיפה", "ירושלים", "באר שבע", "נתניה", "פתח תקווה", "ראשון לציון", "אשדוד", "רחובות", "בני ברק", "הרצליה", "כפר סבא", "רעננה", "מודיעין"];
+const images = [laptopImage, phoneImage, heroLaptopImage, heroPhoneImage];
+
+const generateLaptops = () => {
+  const laptops = [];
+  for (let i = 1; i <= 120; i++) {
+    const brand = laptopBrands[Math.floor(Math.random() * laptopBrands.length)];
+    const processor = processors[Math.floor(Math.random() * processors.length)];
+    const ram = ramOptions[Math.floor(Math.random() * ramOptions.length)];
+    const storage = storageOptions[Math.floor(Math.random() * storageOptions.length)];
+    const screen = screenSizes[Math.floor(Math.random() * screenSizes.length)];
+    const condition = conditions[Math.floor(Math.random() * conditions.length)];
+    const location = cities[Math.floor(Math.random() * cities.length)];
+    const image = images[Math.floor(Math.random() * images.length)];
+    const basePrice = Math.floor(Math.random() * 8000) + 2000;
+    
+    const featuresList = [
+      ["במצב מושלם", "חבילה מלאה", "אחריות יבואן"],
+      ["במצב טוב", "תיק כלול", "מטען מקורי"],
+      ["מתאים לסטודנטים", "במצב מצוין"],
+      ["שדרוג אחרון", "מעט שימוש", "כמו חדש"],
+      ["אחריות עד שנה", "שירות מלא"],
+      ["מושלם לעיצוב גרפי", "מסך רטינה"],
+      ["גיימינג מתקדם", "כרטיס מסך חזק"],
+      ["קל למשיאים", "נייד במיוחד"],
+      ["מושלם לעבודה מהבית"],
+      ["סוללה חדשה", "מקלדת מוארת"]
+    ];
+    
+    const features = featuresList[Math.floor(Math.random() * featuresList.length)];
+    
+    laptops.push({
+      id: i,
+      image: image,
+      title: `${brand} ${Math.floor(Math.random() * 20) + 10}`,
+      subtitle: `מעבד ${processor}, ${ram} RAM, ${storage} SSD, מסך ${screen}`,
+      price: basePrice,
+      condition: condition,
+      location: location,
+      features: features,
+    });
+  }
+  return laptops;
+};
+
+const mockLaptops = generateLaptops();
 
 const Laptops = () => {
   const [sortBy, setSortBy] = useState("date");
