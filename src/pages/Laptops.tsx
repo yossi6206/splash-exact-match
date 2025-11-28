@@ -84,7 +84,7 @@ const Laptops = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
   
   const totalLaptops = useCountUp({ end: mockLaptops.length, duration: 2000, startOnView: false });
   const activeListings = useCountUp({ end: Math.floor(mockLaptops.length * 0.85), duration: 2000, startOnView: false });
