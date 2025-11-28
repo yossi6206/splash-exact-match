@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator";
 export const FreelancerFilters = () => {
   return (
     <div>
-      <Card className="p-6 sticky top-20 max-h-[calc(100vh-96px)] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent" dir="rtl">
+      <Card className="p-6 sticky top-20 max-h-[calc(100vh-96px)] overflow-y-auto shadow-lg hover:shadow-xl transition-shadow duration-300 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent" dir="rtl">
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold">סינון פרילנסרים</h3>
