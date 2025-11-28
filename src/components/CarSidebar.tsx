@@ -192,7 +192,7 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           <FilterSection title="יצרן" section="manufacturer">
             <div className="space-y-3">
               {manufacturers.slice(0, 8).map((brand) => (
-                <div key={brand} className="flex items-center space-x-2 space-x-reverse">
+                <div key={brand} className="flex items-center gap-2">
                   <Checkbox
                     id={`brand-${brand}`}
                     checked={filters.manufacturers.includes(brand)}
@@ -282,7 +282,7 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           <FilterSection title="סוג דלק" section="fuel">
             <div className="space-y-3">
               {fuelTypes.map((fuel) => (
-                <div key={fuel} className="flex items-center space-x-2 space-x-reverse">
+                <div key={fuel} className="flex items-center gap-2">
                   <Checkbox
                     id={`fuel-${fuel}`}
                     checked={filters.fuelTypes.includes(fuel)}
@@ -303,7 +303,7 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           <FilterSection title="תיבת הילוכים" section="transmission">
             <div className="space-y-3">
               {transmissionTypes.map((trans) => (
-                <div key={trans} className="flex items-center space-x-2 space-x-reverse">
+                <div key={trans} className="flex items-center gap-2">
                   <Checkbox
                     id={`trans-${trans}`}
                     checked={filters.transmissions.includes(trans)}
@@ -324,7 +324,7 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           <FilterSection title="יד" section="hand">
             <div className="space-y-3">
               {handOptions.map((hand) => (
-                <div key={hand} className="flex items-center space-x-2 space-x-reverse">
+                <div key={hand} className="flex items-center gap-2">
                   <Checkbox
                     id={`hand-${hand}`}
                     checked={filters.hands.includes(hand)}
@@ -371,7 +371,7 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           <FilterSection title="תכונות נוספות" section="features">
             <div className="space-y-3">
               {popularFeatures.slice(0, 10).map((feature) => (
-                <div key={feature} className="flex items-center space-x-2 space-x-reverse">
+                <div key={feature} className="flex items-center gap-2">
                   <Checkbox
                     id={`feature-${feature}`}
                     checked={filters.features.includes(feature)}

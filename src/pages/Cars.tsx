@@ -259,7 +259,10 @@ const Cars = () => {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
+          {/* Sidebar - Right side for RTL */}
+          <CarSidebar onFilterChange={handleSidebarFilterChange} />
+          
           {/* Cars List */}
           <div className="space-y-4">
             {currentCars.map((car) => (
@@ -297,9 +300,6 @@ const Cars = () => {
               </PaginationContent>
             </Pagination>
           </div>
-
-          {/* Sidebar */}
-          <CarSidebar onFilterChange={handleSidebarFilterChange} />
         </div>
       </main>
 
