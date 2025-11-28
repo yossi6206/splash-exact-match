@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CarCard } from "@/components/CarCard";
@@ -6,7 +6,7 @@ import { CarSidebar, SidebarFilters } from "@/components/CarSidebar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, TrendingUp } from "lucide-react";
 import carImage1 from "@/assets/item-car.jpg";
 import heroCar from "@/assets/hero-car.jpg";
 import carsBanner from "@/assets/cars-banner.jpg";
@@ -81,6 +81,10 @@ const Cars = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
   const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>({
     manufacturers: [],
     yearFrom: "",
@@ -96,19 +100,104 @@ const Cars = () => {
   });
   const itemsPerPage = 10;
   
+  // Generate popular suggestions from existing cars
+  const popularSuggestions = useMemo(() => {
+    const brandCounts = new Map<string, number>();
+    const modelCounts = new Map<string, number>();
+    
+    mockCars.forEach(car => {
+      const brand = car.title.split(' ')[0];
+      brandCounts.set(brand, (brandCounts.get(brand) || 0) + 1);
+      modelCounts.set(car.title, (modelCounts.get(car.title) || 0) + 1);
+    });
+    
+    const topBrands = Array.from(brandCounts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([brand]) => brand);
+    
+    const topModels = Array.from(modelCounts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 12)
+      .map(([model]) => model);
+    
+    return [...topBrands, ...topModels];
+  }, []);
+
+  // Filter suggestions based on search query
+  const filteredSuggestions = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    
+    const query = searchQuery.toLowerCase();
+    return popularSuggestions
+      .filter(suggestion => suggestion.toLowerCase().includes(query))
+      .slice(0, 8);
+  }, [searchQuery, popularSuggestions]);
+
   // Debounce search query for auto-filtering
   useEffect(() => {
     setIsSearching(true);
     const handler = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
       setIsSearching(false);
-      setCurrentPage(1); // Reset to first page on search
+      setCurrentPage(1);
     }, 300);
 
     return () => {
       clearTimeout(handler);
     };
   }, [searchQuery]);
+
+  // Handle click outside to close suggestions
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node) &&
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Handle keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showSuggestions || filteredSuggestions.length === 0) return;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => 
+          prev < filteredSuggestions.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => prev > 0 ? prev - 1 : -1);
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (selectedSuggestionIndex >= 0) {
+          handleSuggestionClick(filteredSuggestions[selectedSuggestionIndex]);
+        }
+        break;
+      case "Escape":
+        setShowSuggestions(false);
+        setSelectedSuggestionIndex(-1);
+        break;
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchQuery(suggestion);
+    setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+  };
   
   // Filter and sort cars
   const filteredCars = useMemo(() => {
@@ -219,7 +308,7 @@ const Cars = () => {
               </p>
             </div>
             
-            {/* Search Bar */}
+            {/* Search Bar with Autocomplete */}
             <div className="relative max-w-2xl mx-auto">
               <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
                 <div className="absolute right-4 h-5 w-5 text-muted-foreground">
@@ -230,13 +319,42 @@ const Cars = () => {
                   )}
                 </div>
                 <Input
+                  ref={searchInputRef}
                   type="text"
                   placeholder="חפש לפי יצרן, דגם או תיאור..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setShowSuggestions(true);
+                    setSelectedSuggestionIndex(-1);
+                  }}
+                  onFocus={() => searchQuery && setShowSuggestions(true)}
+                  onKeyDown={handleKeyDown}
                   className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
                 />
               </div>
+
+              {/* Autocomplete Suggestions */}
+              {showSuggestions && filteredSuggestions.length > 0 && (
+                <div
+                  ref={suggestionsRef}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-border overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+                >
+                  {filteredSuggestions.map((suggestion, index) => (
+                    <button
+                      key={suggestion}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className={`w-full px-6 py-3 text-right hover:bg-accent/50 transition-colors flex items-center gap-3 ${
+                        index === selectedSuggestionIndex ? 'bg-accent/50' : ''
+                      }`}
+                    >
+                      <TrendingUp className="h-4 w-4 text-primary" />
+                      <span className="text-foreground font-medium">{suggestion}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {searchQuery && (
                 <p className="text-center text-sm text-white/80 mt-2">
                   חיפוש אוטומטי מופעל - התוצאות מתעדכנות בזמן אמת
