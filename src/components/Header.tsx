@@ -301,9 +301,9 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["נדל\"ן"].columns.map((column, index) => (
                           <div key={index}>
-                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              <column.icon className="h-4 w-4" />
-                              <h3>{column.title}</h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20 group">
+                              <column.icon className="h-4 w-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
+                              <h3 className="transition-colors group-hover:text-primary/80">{column.title}</h3>
                             </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
@@ -340,9 +340,9 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["רכב"].columns.map((column, index) => (
                           <div key={index}>
-                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              <column.icon className="h-4 w-4" />
-                              <h3>{column.title}</h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20 group">
+                              <column.icon className="h-4 w-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
+                              <h3 className="transition-colors group-hover:text-primary/80">{column.title}</h3>
                             </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
@@ -379,9 +379,9 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["מחשבים"].columns.map((column, index) => (
                           <div key={index}>
-                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              <column.icon className="h-4 w-4" />
-                              <h3>{column.title}</h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20 group">
+                              <column.icon className="h-4 w-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
+                              <h3 className="transition-colors group-hover:text-primary/80">{column.title}</h3>
                             </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
@@ -418,9 +418,9 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["יד שניה"].columns.map((column, index) => (
                           <div key={index}>
-                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              <column.icon className="h-4 w-4" />
-                              <h3>{column.title}</h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20 group">
+                              <column.icon className="h-4 w-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
+                              <h3 className="transition-colors group-hover:text-primary/80">{column.title}</h3>
                             </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
@@ -457,9 +457,9 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["דרושים IL"].columns.map((column, index) => (
                           <div key={index}>
-                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              <column.icon className="h-4 w-4" />
-                              <h3>{column.title}</h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20 group">
+                              <column.icon className="h-4 w-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
+                              <h3 className="transition-colors group-hover:text-primary/80">{column.title}</h3>
                             </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
@@ -496,9 +496,9 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["פרילנסרים"].columns.map((column, index) => (
                           <div key={index}>
-                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              <column.icon className="h-4 w-4" />
-                              <h3>{column.title}</h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20 group">
+                              <column.icon className="h-4 w-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
+                              <h3 className="transition-colors group-hover:text-primary/80">{column.title}</h3>
                             </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
