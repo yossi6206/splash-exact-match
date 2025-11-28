@@ -1,7 +1,7 @@
 project_id = "bsvwkjxqvcdomsrtbwre"
 
 [functions.analyze-car]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-ai-report]
-verify_jwt = false
+verify_jwt = true
