@@ -163,8 +163,9 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
   );
 
   return (
-    <div className="hidden lg:block sticky top-20">
-      <Card className="overflow-hidden">
+    <div className="hidden lg:block">
+      <div className="sticky top-20 max-h-[calc(100vh-96px)]">
+        <Card className="overflow-hidden">
         <div className="bg-card border-b border-border p-4 flex items-center justify-between">
           {activeFiltersCount > 0 && (
             <Button 
@@ -187,7 +188,7 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           </div>
         </div>
 
-        <ScrollArea className="h-[calc(100vh-200px)]">
+        <div className="max-h-[calc(100vh-280px)] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent">
           {/* Manufacturer */}
           <FilterSection title="יצרן" section="manufacturer">
             <div className="space-y-3">
@@ -392,8 +393,9 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
               )}
             </div>
           </FilterSection>
-        </ScrollArea>
+        </div>
       </Card>
+      </div>
     </div>
   );
 };
