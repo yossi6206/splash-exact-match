@@ -192,18 +192,18 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           <FilterSection title="יצרן" section="manufacturer">
             <div className="space-y-3">
               {manufacturers.slice(0, 8).map((brand) => (
-                <div key={brand} className="flex items-center gap-2">
+                <div key={brand} className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor={`brand-${brand}`}
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    {brand}
+                  </label>
                   <Checkbox
                     id={`brand-${brand}`}
                     checked={filters.manufacturers.includes(brand)}
                     onCheckedChange={() => handleArrayFilterChange('manufacturers', brand)}
                   />
-                  <label
-                    htmlFor={`brand-${brand}`}
-                    className="text-sm text-foreground cursor-pointer flex-1"
-                  >
-                    {brand}
-                  </label>
                 </div>
               ))}
               {manufacturers.length > 8 && (
@@ -282,18 +282,18 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           <FilterSection title="סוג דלק" section="fuel">
             <div className="space-y-3">
               {fuelTypes.map((fuel) => (
-                <div key={fuel} className="flex items-center gap-2">
+                <div key={fuel} className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor={`fuel-${fuel}`}
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    {fuel}
+                  </label>
                   <Checkbox
                     id={`fuel-${fuel}`}
                     checked={filters.fuelTypes.includes(fuel)}
                     onCheckedChange={() => handleArrayFilterChange('fuelTypes', fuel)}
                   />
-                  <label
-                    htmlFor={`fuel-${fuel}`}
-                    className="text-sm text-foreground cursor-pointer flex-1"
-                  >
-                    {fuel}
-                  </label>
                 </div>
               ))}
             </div>
@@ -303,18 +303,18 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           <FilterSection title="תיבת הילוכים" section="transmission">
             <div className="space-y-3">
               {transmissionTypes.map((trans) => (
-                <div key={trans} className="flex items-center gap-2">
+                <div key={trans} className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor={`trans-${trans}`}
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    {trans}
+                  </label>
                   <Checkbox
                     id={`trans-${trans}`}
                     checked={filters.transmissions.includes(trans)}
                     onCheckedChange={() => handleArrayFilterChange('transmissions', trans)}
                   />
-                  <label
-                    htmlFor={`trans-${trans}`}
-                    className="text-sm text-foreground cursor-pointer flex-1"
-                  >
-                    {trans}
-                  </label>
                 </div>
               ))}
             </div>
@@ -324,18 +324,18 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           <FilterSection title="יד" section="hand">
             <div className="space-y-3">
               {handOptions.map((hand) => (
-                <div key={hand} className="flex items-center gap-2">
+                <div key={hand} className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor={`hand-${hand}`}
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    {hand}
+                  </label>
                   <Checkbox
                     id={`hand-${hand}`}
                     checked={filters.hands.includes(hand)}
                     onCheckedChange={() => handleArrayFilterChange('hands', hand)}
                   />
-                  <label
-                    htmlFor={`hand-${hand}`}
-                    className="text-sm text-foreground cursor-pointer flex-1"
-                  >
-                    {hand}
-                  </label>
                 </div>
               ))}
             </div>
@@ -371,18 +371,18 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
           <FilterSection title="תכונות נוספות" section="features">
             <div className="space-y-3">
               {popularFeatures.slice(0, 10).map((feature) => (
-                <div key={feature} className="flex items-center gap-2">
+                <div key={feature} className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor={`feature-${feature}`}
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    {feature}
+                  </label>
                   <Checkbox
                     id={`feature-${feature}`}
                     checked={filters.features.includes(feature)}
                     onCheckedChange={() => handleArrayFilterChange('features', feature)}
                   />
-                  <label
-                    htmlFor={`feature-${feature}`}
-                    className="text-sm text-foreground cursor-pointer flex-1"
-                  >
-                    {feature}
-                  </label>
                 </div>
               ))}
               {popularFeatures.length > 10 && (
