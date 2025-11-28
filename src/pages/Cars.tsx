@@ -7,39 +7,70 @@ import { CarSidebar } from "@/components/CarSidebar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
 import carImage1 from "@/assets/item-car.jpg";
+import heroCar from "@/assets/hero-car.jpg";
+import carsBanner from "@/assets/cars-banner.jpg";
 
-const mockCars = [
-  {
-    id: 1,
-    image: carImage1,
-    title: "יונדאי i10",
-    subtitle: "Open Sky אוט' 1.2 (87 כ\"ס)",
-    year: 2019,
-    hand: "יד 1",
-    price: 61500,
-    features: ["סטט בתקופה", "גלגל מגנזיום", "בקרת שיוט מרחק"],
-  },
-  {
-    id: 2,
-    image: carImage1,
-    title: "הונדה סיוויק",
-    subtitle: "Comfort אוט' היבריד 5 דל' 1.8 (142 כ\"ס)",
-    year: 2012,
-    hand: "יד 3",
-    price: 23800,
-    features: ["סטט בתקופה", "גלגל מגנזיום", "בקרת שיוט מרחק"],
-  },
-  {
-    id: 3,
-    image: carImage1,
-    title: "ב מ וו סדרה 7",
-    subtitle: "730d M Sport אוט' 3.0 (265 כ\"ס)",
-    year: 2016,
-    hand: "יד 2",
-    price: 189000,
-    features: ["סטט בתקופה", "גלגל מגנזיום", "בקרת שיוט מרחק"],
-  },
+const carBrands = [
+  { name: "טויוטה", models: ["קורולה", "קמרי", "יאריס", "RAV4", "אורליס"] },
+  { name: "מזדה", models: ["3", "6", "CX-5", "CX-3", "2"] },
+  { name: "יונדאי", models: ["i10", "i20", "i30", "טוסון", "סנטה פה", "אקסנט"] },
+  { name: "קיה", models: ["ספורטאז'", "סורנטו", "סטוניק", "פיקנטו", "סיד"] },
+  { name: "הונדה", models: ["סיוויק", "אקורד", "CR-V", "ג'אז", "HR-V"] },
+  { name: "ניסאן", models: ["ג'וק", "קשקאי", "מיקרה", "אקס-טרייל", "ליף"] },
+  { name: "פולקסווגן", models: ["גולף", "פולו", "טיגואן", "פאסאט", "ג'טה"] },
+  { name: "שקודה", models: ["אוקטביה", "פאביה", "סופרב", "קודיאק", "קאמיק"] },
+  { name: "סיאט", models: ["לאון", "איביזה", "ארונה", "אטקה", "טרקו"] },
+  { name: "ב מ וו", models: ["סדרה 1", "סדרה 3", "סדרה 5", "סדרה 7", "X1", "X3", "X5"] },
+  { name: "מרצדס", models: ["A-Class", "C-Class", "E-Class", "GLA", "GLC", "GLE"] },
+  { name: "אאודי", models: ["A3", "A4", "A6", "Q3", "Q5", "Q7"] },
+  { name: "רנו", models: ["קליאו", "מגאן", "קפצ'ור", "סניק", "טליסמן"] },
+  { name: "פיג'ו", models: ["208", "308", "2008", "3008", "508"] },
+  { name: "סיטרואן", models: ["C3", "C4", "C5", "C3 Aircross", "Berlingo"] }
 ];
+
+const transmissions = ["אוט'", "ידני", "רובוטרון"];
+const fuelTypes = ["היבריד", "בנזין", "דיזל", "חשמלי"];
+const allFeatures = [
+  "סטט בתקופה", "גלגל מגנזיום", "בקרת שיוט מרחק", "חיישני רוורס",
+  "מצלמת רוורס", "מושב מחומם", "הגה מחומם", "פתיחה ללא מפתח",
+  "מערכת ניווט", "מערכת בידור", "גג פנורמי", "עור מלא",
+  "מושבים חשמליים", "מושב נהג חשמלי", "מערכת שמע פרימיום"
+];
+const images = [carImage1, heroCar, carsBanner];
+
+const generateCars = () => {
+  const cars = [];
+  for (let i = 1; i <= 110; i++) {
+    const brand = carBrands[Math.floor(Math.random() * carBrands.length)];
+    const model = brand.models[Math.floor(Math.random() * brand.models.length)];
+    const transmission = transmissions[Math.floor(Math.random() * transmissions.length)];
+    const fuelType = fuelTypes[Math.floor(Math.random() * fuelTypes.length)];
+    const image = images[Math.floor(Math.random() * images.length)];
+    const year = Math.floor(Math.random() * 14) + 2010; // 2010-2023
+    const handNum = Math.floor(Math.random() * 4) + 1; // 1-4
+    const hand = `יד ${handNum}`;
+    const engineSize = (Math.random() * 2 + 1).toFixed(1); // 1.0-3.0
+    const horsePower = Math.floor(Math.random() * 200) + 80; // 80-280
+    const basePrice = Math.floor(Math.random() * 250000) + 20000; // 20k-270k
+    
+    const numFeatures = Math.floor(Math.random() * 5) + 3;
+    const features = [...allFeatures].sort(() => 0.5 - Math.random()).slice(0, numFeatures);
+    
+    cars.push({
+      id: i,
+      image: image,
+      title: `${brand.name} ${model}`,
+      subtitle: `${transmission} ${fuelType} ${engineSize} (${horsePower} כ"ס)`,
+      year: year,
+      hand: hand,
+      price: basePrice,
+      features: features,
+    });
+  }
+  return cars;
+};
+
+const mockCars = generateCars();
 
 const Cars = () => {
   const [sortBy, setSortBy] = useState("date");
