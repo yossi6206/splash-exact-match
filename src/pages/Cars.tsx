@@ -1,13 +1,12 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CarCard } from "@/components/CarCard";
 import { CarSidebar, SidebarFilters } from "@/components/CarSidebar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import carImage1 from "@/assets/item-car.jpg";
 import heroCar from "@/assets/hero-car.jpg";
 import carsBanner from "@/assets/cars-banner.jpg";
@@ -80,6 +79,8 @@ const Cars = () => {
   const [sortBy, setSortBy] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>({
     manufacturers: [],
     yearFrom: "",
@@ -95,12 +96,26 @@ const Cars = () => {
   });
   const itemsPerPage = 10;
   
+  // Debounce search query for auto-filtering
+  useEffect(() => {
+    setIsSearching(true);
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setIsSearching(false);
+      setCurrentPage(1); // Reset to first page on search
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+  
   // Filter and sort cars
   const filteredCars = useMemo(() => {
     let filtered = mockCars.filter((car) => {
       // Search query filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
+      if (debouncedSearchQuery) {
+        const query = debouncedSearchQuery.toLowerCase();
         const matchesSearch = 
           car.title.toLowerCase().includes(query) ||
           car.subtitle.toLowerCase().includes(query);
@@ -174,7 +189,7 @@ const Cars = () => {
     }
     
     return filtered;
-  }, [searchQuery, sidebarFilters, sortBy]);
+  }, [debouncedSearchQuery, sidebarFilters, sortBy]);
   
   const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -183,10 +198,6 @@ const Cars = () => {
   
   const handleSidebarFilterChange = (newFilters: SidebarFilters) => {
     setSidebarFilters(newFilters);
-    setCurrentPage(1);
-  };
-  
-  const handleSearch = () => {
     setCurrentPage(1);
   };
 
@@ -211,23 +222,26 @@ const Cars = () => {
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto">
               <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
-                <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
+                <div className="absolute right-4 h-5 w-5 text-muted-foreground">
+                  {isSearching ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <Search className="h-5 w-5" />
+                  )}
+                </div>
                 <Input
                   type="text"
                   placeholder="חפש לפי יצרן, דגם או תיאור..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
-                <Button
-                  className="ml-2 rounded-full px-8 h-10 font-bold"
-                  size="lg"
-                  onClick={handleSearch}
-                >
-                  חפש
-                </Button>
               </div>
+              {searchQuery && (
+                <p className="text-center text-sm text-white/80 mt-2">
+                  חיפוש אוטומטי מופעל - התוצאות מתעדכנות בזמן אמת
+                </p>
+              )}
             </div>
 
             {/* Quick Stats */}
