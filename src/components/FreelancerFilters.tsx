@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 
 export const FreelancerFilters = () => {
   return (
-    <Card className="p-6 sticky top-4" dir="rtl">
+    <Card className="p-6 sticky top-20" dir="rtl">
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold">סינון פרילנסרים</h3>
