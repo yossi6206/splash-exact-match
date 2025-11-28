@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 import { Badge } from "@/components/ui/badge";
 import { X, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
@@ -160,7 +160,7 @@ export const PropertySidebarFilter = ({ onFilterChange }: PropertySidebarFilterP
           </div>
         </div>
 
-        <ScrollArea className="h-[calc(100vh-200px)]">
+        <div className="h-[calc(100vh-200px)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {/* Property Type */}
           <FilterSection title="סוג נכס" section="propertyType">
             <div className="space-y-3">
@@ -306,7 +306,7 @@ export const PropertySidebarFilter = ({ onFilterChange }: PropertySidebarFilterP
               )}
             </div>
           </FilterSection>
-        </ScrollArea>
+        </div>
       </Card>
     </div>
   );
