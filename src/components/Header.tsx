@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MessageSquare, Heart, Plus, LogOut, LayoutDashboard, Settings, Search } from "lucide-react";
+import { MessageSquare, Heart, Plus, LogOut, LayoutDashboard, Settings, Search, Store } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -149,9 +149,16 @@ const Header = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-12 w-28 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary px-3">
-                <span className="text-base font-extrabold text-primary-foreground whitespace-nowrap">שוק יד שנייה</span>
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-secondary shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <div className="relative">
+                  <Store className="w-6 h-6 text-primary-foreground" strokeWidth={2.5} />
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+                </div>
+                <div className="flex flex-col leading-none">
+                  <span className="text-xs font-bold text-primary-foreground/90 tracking-wider">שוק</span>
+                  <span className="text-lg font-black text-primary-foreground tracking-tight">יד שנייה</span>
+                </div>
               </div>
             </Link>
 
