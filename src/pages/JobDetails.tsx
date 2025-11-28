@@ -29,7 +29,17 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { z } from "zod";
 
+
+const applicationSchema = z.object({
+  fullName: z.string().trim().min(2, "שם מלא חייב להכיל לפחות 2 תווים").max(100, "שם מלא ארוך מדי"),
+  email: z.string().trim().email("כתובת אימייל לא תקינה").max(255, "כתובת אימייל ארוכה מדי"),
+  phone: z.string().trim().regex(/^[0-9\-+() ]{7,20}$/, "מספר טלפון לא תקין"),
+  linkedIn: z.string().trim().url("כתובת LinkedIn לא תקינה").optional().or(z.literal("")),
+  portfolio: z.string().trim().url("כתובת אתר פורטפוליו לא תקינה").optional().or(z.literal("")),
+  coverLetter: z.string().trim().min(10, "מכתב נלווה חייב להכיל לפחות 10 תווים").max(5000, "מכתב נלווה ארוך מדי"),
+});
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -155,6 +165,23 @@ const JobDetails = () => {
     }
 
     if (!jobData) return;
+
+    // Validate form data
+    try {
+      applicationSchema.parse({
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        linkedIn: formData.linkedIn,
+        portfolio: formData.portfolio,
+        coverLetter: formData.coverLetter,
+      });
+    } catch (validationError) {
+      if (validationError instanceof z.ZodError) {
+        toast.error(validationError.errors[0].message);
+        return;
+      }
+    }
 
     try {
       const { error } = await supabase.from("job_applications").insert({

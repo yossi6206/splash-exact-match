@@ -12,6 +12,25 @@ import { X, Plus, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { z } from "zod";
+
+const jobSchema = z.object({
+  company_name: z.string().trim().min(2, "שם חברה חייב להכיל לפחות 2 תווים").max(200, "שם חברה ארוך מדי"),
+  title: z.string().trim().min(3, "כותרת משרה חייבת להכיל לפחות 3 תווים").max(200, "כותרת משרה ארוכה מדי"),
+  location: z.string().trim().min(2, "מיקום חייב להכיל לפחות 2 תווים").max(200, "מיקום ארוך מדי"),
+  description: z.string().trim().min(20, "תיאור המשרה חייב להכיל לפחות 20 תווים").max(10000, "תיאור המשרה ארוך מדי"),
+  salary_min: z.number().int().min(0, "משכורת לא יכולה להיות שלילית").max(1000000, "משכורת גבוהה מדי").optional(),
+  salary_max: z.number().int().min(0, "משכורת לא יכולה להיות שלילית").max(1000000, "משכורת גבוהה מדי").optional(),
+  experience_min: z.number().int().min(0, "ניסיון לא יכול להיות שלילי").max(50, "ניסיון גבוה מדי").optional(),
+  experience_max: z.number().int().min(0, "ניסיון לא יכול להיות שלילי").max(50, "ניסיון גבוה מדי").optional(),
+  requirements: z.array(z.string().trim().min(1).max(500)).min(1, "חובה להוסיף לפחות דרישה אחת").max(20, "יותר מדי דרישות"),
+}).refine((data) => !data.salary_min || !data.salary_max || data.salary_min <= data.salary_max, {
+  message: "משכורת מינימלית חייבת להיות נמוכה או שווה למשכורת מקסימלית",
+  path: ["salary_max"],
+}).refine((data) => !data.experience_min || !data.experience_max || data.experience_min <= data.experience_max, {
+  message: "ניסיון מינימלי חייב להיות נמוך או שווה לניסיון מקסימלי",
+  path: ["experience_max"],
+});
 
 const PostJob = () => {
   const navigate = useNavigate();
@@ -82,6 +101,30 @@ const PostJob = () => {
       return;
     }
 
+    // Validate form data
+    const filteredRequirements = requirements.filter((r) => r.trim() !== "");
+    const filteredNiceToHave = niceToHave.filter((n) => n.trim() !== "");
+    const filteredBenefits = benefits.filter((b) => b.trim() !== "");
+
+    try {
+      jobSchema.parse({
+        company_name: formData.company_name,
+        title: formData.title,
+        location: formData.location,
+        description: formData.description,
+        salary_min: formData.salary_min ? parseInt(formData.salary_min) : undefined,
+        salary_max: formData.salary_max ? parseInt(formData.salary_max) : undefined,
+        experience_min: formData.experience_min ? parseInt(formData.experience_min) : undefined,
+        experience_max: formData.experience_max ? parseInt(formData.experience_max) : undefined,
+        requirements: filteredRequirements,
+      });
+    } catch (validationError) {
+      if (validationError instanceof z.ZodError) {
+        toast.error(validationError.errors[0].message);
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
@@ -99,9 +142,9 @@ const PostJob = () => {
         experience_min: formData.experience_min ? parseInt(formData.experience_min) : null,
         experience_max: formData.experience_max ? parseInt(formData.experience_max) : null,
         description: formData.description,
-        requirements: requirements.filter((r) => r.trim() !== ""),
-        nice_to_have: niceToHave.filter((n) => n.trim() !== ""),
-        benefits: benefits.filter((b) => b.trim() !== ""),
+        requirements: filteredRequirements,
+        nice_to_have: filteredNiceToHave,
+        benefits: filteredBenefits,
         status: "active",
       }).select();
 
