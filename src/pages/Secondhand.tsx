@@ -4,7 +4,7 @@ import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Mic } from "lucide-react";
+import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import RecommendedCard from "@/components/RecommendedCard";
 import CategoryShowcase from "@/components/CategoryShowcase";
@@ -245,50 +245,55 @@ const Secondhand = () => {
       <Header />
       
       {/* Hero Section with Search */}
-      <section className="relative overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img 
-            src={secondhandHero} 
-            alt="יד שניה"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-secondary/70 to-accent/60" />
-        </div>
-        
-        {/* Content */}
-        <div className="relative container mx-auto px-4 py-16 md:py-24">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-accent py-16 md:py-20">
+        <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             {/* Main Heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
-              קל יותר למכור, לקנות ולשמור על הסביבה
-            </h1>
+            <div className="space-y-4">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
+                קל יותר למכור, לקנות ולשמור על הסביבה
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+                אלפי מוצרי יד שנייה איכוותיים במחירים הכי טובים
+              </p>
+            </div>
             
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto">
-              <div className="relative flex items-center bg-background rounded-full shadow-2xl border-2 border-white/30 overflow-hidden backdrop-blur-sm">
+              <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
                 <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
                 <Input
                   type="text"
                   placeholder="מה תרצו לחפש?"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="border-0 pr-12 pl-20 h-14 text-lg rounded-full focus-visible:ring-0"
+                  className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
                 />
                 <Button
-                  size="icon"
-                  variant="ghost"
-                  className="absolute left-2 rounded-full"
+                  className="ml-2 rounded-full px-8 h-10 font-bold"
+                  size="lg"
                 >
-                  <Mic className="h-5 w-5" />
+                  חפש
                 </Button>
               </div>
-              <Button
-                className="mt-4 rounded-full px-8 bg-white text-primary hover:bg-white/90 font-bold shadow-lg"
-                size="lg"
-              >
-                כל הקטגוריות
-              </Button>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="flex items-center justify-center gap-8 pt-4">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">50,000+</div>
+                <div className="text-sm text-white/80">מוצרים פעילים</div>
+              </div>
+              <div className="w-px h-12 bg-white/30" />
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">15,000+</div>
+                <div className="text-sm text-white/80">מוכרים פעילים</div>
+              </div>
+              <div className="w-px h-12 bg-white/30" />
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">95%</div>
+                <div className="text-sm text-white/80">שביעות רצון</div>
+              </div>
             </div>
           </div>
         </div>
