@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
-import { JobFilters } from "@/components/JobFilters";
+import { JobSidebar } from "@/components/JobSidebar";
 import { JobCard } from "@/components/JobCard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -176,9 +176,6 @@ const Jobs = () => {
           </button>
         </div>
 
-        {/* Filters */}
-        <JobFilters />
-
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6 mt-8">
           <div>
@@ -207,68 +204,76 @@ const Jobs = () => {
           </div>
         </div>
 
-        {/* Job Cards */}
-        {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="text-muted-foreground">טוען משרות...</div>
-          </div>
-        ) : jobs.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-64">
-            <Briefcase className="w-16 h-16 text-muted-foreground mb-4" />
-            <p className="text-lg text-muted-foreground">לא נמצאו משרות</p>
-          </div>
-        ) : (
-          <div className="space-y-4 mb-8">
-            {jobs.map((job) => (
-              <JobCard key={job.id} {...job} />
-            ))}
-          </div>
-        )}
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
+          {/* Sidebar - Right side for RTL */}
+          <JobSidebar />
+          
+          {/* Jobs List */}
+          <div className="space-y-4">
+            {loading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="text-muted-foreground">טוען משרות...</div>
+              </div>
+            ) : jobs.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-64">
+                <Briefcase className="w-16 h-16 text-muted-foreground mb-4" />
+                <p className="text-lg text-muted-foreground">לא נמצאו משרות</p>
+              </div>
+            ) : (
+              <div className="space-y-4 mb-8">
+                {jobs.map((job) => (
+                  <JobCard key={job.id} {...job} />
+                ))}
+              </div>
+            )}
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex justify-center">
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious 
-                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                  />
-                </PaginationItem>
-                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                  let page;
-                  if (totalPages <= 5) {
-                    page = i + 1;
-                  } else if (currentPage <= 3) {
-                    page = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    page = totalPages - 4 + i;
-                  } else {
-                    page = currentPage - 2 + i;
-                  }
-                  return (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        onClick={() => setCurrentPage(page)}
-                        isActive={currentPage === page}
-                        className="cursor-pointer"
-                      >
-                        {page}
-                      </PaginationLink>
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-center">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      />
                     </PaginationItem>
-                  );
-                })}
-                <PaginationItem>
-                  <PaginationNext
-                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
+                    {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                      let page;
+                      if (totalPages <= 5) {
+                        page = i + 1;
+                      } else if (currentPage <= 3) {
+                        page = i + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        page = totalPages - 4 + i;
+                      } else {
+                        page = currentPage - 2 + i;
+                      }
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            onClick={() => setCurrentPage(page)}
+                            isActive={currentPage === page}
+                            className="cursor-pointer"
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    })}
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </main>
 
       <Footer />
