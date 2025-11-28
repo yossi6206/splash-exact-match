@@ -1,17 +1,21 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { LaptopFilters } from "@/components/LaptopFilters";
+import { LaptopSidebarFilter } from "@/components/LaptopSidebarFilter";
 import { LaptopCard } from "@/components/LaptopCard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { SlidersHorizontal, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { SlidersHorizontal, Search, TrendingUp, Eye, Package } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { useCountUp } from "@/hooks/useCountUp";
 import laptopImage from "@/assets/item-laptop.jpg";
 import phoneImage from "@/assets/item-phone.jpg";
 import heroLaptopImage from "@/assets/hero-laptop.jpg";
 import heroPhoneImage from "@/assets/hero-phone.jpg";
+import laptopsHeroBanner from "@/assets/laptops-hero-banner.jpg";
 
 const laptopBrands = ["MacBook Pro", "MacBook Air", "Dell XPS", "HP Pavilion", "Lenovo ThinkPad", "ASUS VivoBook", "Acer Aspire", "MSI Gaming", "Razer Blade", "Surface Laptop"];
 const processors = ["M3 Pro", "M2", "M1", "Intel i9", "Intel i7", "Intel i5", "AMD Ryzen 9", "AMD Ryzen 7", "AMD Ryzen 5"];
@@ -66,11 +70,25 @@ const generateLaptops = () => {
 
 const mockLaptops = generateLaptops();
 
+const quickFilters = [
+  "Apple MacBook",
+  "Gaming Laptops",
+  "עסקי ונייד",
+  "למעצבים",
+  "תחת ₪3,000",
+  "חדש באריזה"
+];
+
 const Laptops = () => {
   const [sortBy, setSortBy] = useState("date");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 10;
+  
+  const totalLaptops = useCountUp({ end: mockLaptops.length, duration: 2000, startOnView: false });
+  const activeListings = useCountUp({ end: Math.floor(mockLaptops.length * 0.85), duration: 2000, startOnView: false });
+  const avgViews = useCountUp({ end: 245, duration: 1500, startOnView: false });
   
   const totalPages = Math.ceil(mockLaptops.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -81,13 +99,77 @@ const Laptops = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container mx-auto px-4 py-6">
-        {/* Page Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground mb-2">מחשבים ניידים - לפטופים ומחשבים</h1>
-          <p className="text-muted-foreground">1,598 תוצאות</p>
-        </div>
+      {/* Hero Banner Section */}
+      <section className="relative bg-gradient-to-b from-primary/5 to-background">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-30"
+          style={{ backgroundImage: `url(${laptopsHeroBanner})` }}
+        />
+        <div className="relative container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto text-center space-y-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+              מחשבים ניידים - לפטופים ומחשבים
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              מגוון רחב של מחשבים ניידים חדשים ומשומשים למכירה
+            </p>
+            
+            {/* Search Bar */}
+            <div className="flex gap-2 max-w-2xl mx-auto">
+              <Button size="lg" className="px-8">
+                <Search className="h-5 w-5" />
+              </Button>
+              <Input
+                type="text"
+                placeholder="חפש מחשב נייד..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-12 text-lg bg-card"
+              />
+            </div>
 
+            {/* Quick Filter Tags */}
+            <div className="flex flex-wrap gap-2 justify-center pt-4" dir="rtl">
+              {quickFilters.map((filter) => (
+                <Badge
+                  key={filter}
+                  variant="secondary"
+                  className="px-4 py-2 text-sm cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                >
+                  {filter}
+                </Badge>
+              ))}
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-6 pt-8 max-w-2xl mx-auto">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Package className="h-5 w-5 text-primary" />
+                  <div className="text-3xl font-bold text-foreground">{totalLaptops.count.toLocaleString()}</div>
+                </div>
+                <div className="text-sm text-muted-foreground">סך הכל מודעות</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  <div className="text-3xl font-bold text-foreground">{activeListings.count.toLocaleString()}</div>
+                </div>
+                <div className="text-sm text-muted-foreground">מודעות פעילות</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Eye className="h-5 w-5 text-primary" />
+                  <div className="text-3xl font-bold text-foreground">{avgViews.count.toLocaleString()}</div>
+                </div>
+                <div className="text-sm text-muted-foreground">ממוצע צפיות</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <main className="container mx-auto px-4 py-6">
         {/* Mobile Filters Button */}
         <div className="lg:hidden mb-4">
           <Sheet open={showMobileFilters} onOpenChange={setShowMobileFilters}>
@@ -102,7 +184,7 @@ const Laptops = () => {
                 <SheetTitle>סינון תוצאות</SheetTitle>
               </SheetHeader>
               <div className="mt-6">
-                <LaptopFilters />
+                <LaptopSidebarFilter />
               </div>
             </SheetContent>
           </Sheet>
@@ -124,16 +206,13 @@ const Laptops = () => {
               </SelectContent>
             </Select>
           </div>
+          <p className="text-muted-foreground">{mockLaptops.length.toLocaleString()} תוצאות</p>
         </div>
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
           {/* Sidebar Filters - Desktop */}
-          <aside className="hidden lg:block">
-            <div className="sticky top-20">
-              <LaptopFilters />
-            </div>
-          </aside>
+          <LaptopSidebarFilter />
 
           {/* Laptops Grid */}
           <div>
@@ -153,7 +232,7 @@ const Laptops = () => {
                   />
                 </PaginationItem>
                 
-                {[...Array(totalPages)].map((_, i) => (
+                {[...Array(Math.min(totalPages, 5))].map((_, i) => (
                   <PaginationItem key={i + 1}>
                     <PaginationLink
                       onClick={() => setCurrentPage(i + 1)}
