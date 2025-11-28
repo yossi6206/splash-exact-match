@@ -1,255 +1,377 @@
-import { Search, X } from "lucide-react";
+import { X, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
-export const FreelancerFilters = () => {
+interface FreelancerFiltersProps {
+  onFilterChange?: (filters: FreelancerFilters) => void;
+}
+
+export interface FreelancerFilters {
+  categories: string[];
+  hourlyRateMin: number;
+  hourlyRateMax: number;
+  rating: string;
+  locations: string[];
+  experience: string;
+  languages: string[];
+  certifications: string[];
+}
+
+export const FreelancerFilters = ({ onFilterChange }: FreelancerFiltersProps) => {
+  const [filters, setFilters] = useState<FreelancerFilters>({
+    categories: [],
+    hourlyRateMin: 0,
+    hourlyRateMax: 500,
+    rating: "all",
+    locations: [],
+    experience: "all",
+    languages: [],
+    certifications: [],
+  });
+
+  const [expandedSections, setExpandedSections] = useState({
+    category: true,
+    hourlyRate: true,
+    rating: false,
+    location: false,
+    experience: false,
+    languages: false,
+    certifications: false,
+  });
+
+  const toggleSection = (section: keyof typeof expandedSections) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
+  const resetFilters = () => {
+    const resetFilters: FreelancerFilters = {
+      categories: [],
+      hourlyRateMin: 0,
+      hourlyRateMax: 500,
+      rating: "all",
+      locations: [],
+      experience: "all",
+      languages: [],
+      certifications: [],
+    };
+    setFilters(resetFilters);
+    onFilterChange?.(resetFilters);
+  };
+
+  const activeFiltersCount = 
+    filters.categories.length +
+    filters.locations.length +
+    filters.languages.length +
+    filters.certifications.length +
+    (filters.hourlyRateMin > 0 || filters.hourlyRateMax < 500 ? 1 : 0) +
+    (filters.rating !== "all" ? 1 : 0) +
+    (filters.experience !== "all" ? 1 : 0);
+
+  const FilterSection = ({ 
+    title, 
+    section, 
+    children 
+  }: { 
+    title: string; 
+    section: keyof typeof expandedSections; 
+    children: React.ReactNode;
+  }) => (
+    <div className="border-b border-border last:border-b-0">
+      <button
+        onClick={() => toggleSection(section)}
+        className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors text-right"
+      >
+        {expandedSections[section] ? (
+          <ChevronUp className="h-4 w-4 text-muted-foreground" />
+        ) : (
+          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+        )}
+        <span className="font-semibold text-foreground flex-1 text-right">{title}</span>
+      </button>
+      {expandedSections[section] && (
+        <div className="px-4 pb-4">{children}</div>
+      )}
+    </div>
+  );
+
+  const categories = ["עיצוב גרפי", "פיתוח ווב ואפליקציות", "כתיבה ותוכן", "שיווק דיגיטלי", "עריכת וידאו ואנימציה", "צילום ועריכת תמונות", "ייעוץ עסקי", "תרגום", "הפקת אודיו"];
+  const locations = ["תל אביב-יפו", "ירושלים", "חיפה", "באר שבע", "מרכז", "דרום", "צפון", "עבודה מרחוק"];
+  const languages = ["עברית", "אנגלית", "ערבית", "רוסית", "צרפתית", "ספרדית"];
+
   return (
-    <div>
-      <Card className="p-6 sticky top-20 max-h-[calc(100vh-96px)] overflow-y-auto shadow-lg hover:shadow-xl transition-shadow duration-300 backdrop-blur-md bg-background/95 border-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent" dir="rtl">
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold">סינון פרילנסרים</h3>
-          <Button variant="ghost" size="sm" className="h-8 px-2">
-            <X className="h-4 w-4 ml-1" />
-            נקה הכל
-          </Button>
-        </div>
-
-        <Separator />
-
-        {/* Category */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">קטגוריה</Label>
-          <Select defaultValue="all">
-            <SelectTrigger className="bg-background" dir="rtl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">כל הקטגוריות</SelectItem>
-              <SelectItem value="design">עיצוב גרפי</SelectItem>
-              <SelectItem value="development">פיתוח ווב ואפליקציות</SelectItem>
-              <SelectItem value="writing">כתיבה ותוכן</SelectItem>
-              <SelectItem value="marketing">שיווק דיגיטלי</SelectItem>
-              <SelectItem value="video">עריכת וידאו ואנימציה</SelectItem>
-              <SelectItem value="photography">צילום ועריכת תמונות</SelectItem>
-              <SelectItem value="consulting">ייעוץ עסקי</SelectItem>
-              <SelectItem value="translation">תרגום</SelectItem>
-              <SelectItem value="audio">הפקת אודיו</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Separator />
-
-        {/* Hourly Rate */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">תעריף לשעה (₪)</Label>
-          <div className="grid grid-cols-2 gap-2">
-            <Input type="number" placeholder="מקסימום" className="bg-background text-center" dir="rtl" />
-            <Input type="number" placeholder="מינימום" className="bg-background text-center" dir="rtl" />
-          </div>
-        </div>
-
-        <Separator />
-
-        {/* Rating */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">דירוג מינימלי</Label>
-          <Select defaultValue="all">
-            <SelectTrigger className="bg-background" dir="rtl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">כל הדירוגים</SelectItem>
-              <SelectItem value="5">⭐ 5.0</SelectItem>
-              <SelectItem value="4.5">⭐ 4.5+</SelectItem>
-              <SelectItem value="4">⭐ 4.0+</SelectItem>
-              <SelectItem value="3">⭐ 3.0+</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Separator />
-
-        {/* Location */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">מיקום</Label>
-          <Select defaultValue="all">
-            <SelectTrigger className="bg-background" dir="rtl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">כל המיקומים</SelectItem>
-              <SelectItem value="tel-aviv">תל אביב-יפו</SelectItem>
-              <SelectItem value="jerusalem">ירושלים</SelectItem>
-              <SelectItem value="haifa">חיפה</SelectItem>
-              <SelectItem value="beer-sheva">באר שבע</SelectItem>
-              <SelectItem value="center">מרכז</SelectItem>
-              <SelectItem value="south">דרום</SelectItem>
-              <SelectItem value="north">צפון</SelectItem>
-              <SelectItem value="remote">עבודה מרחוק</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Separator />
-
-        {/* Experience */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">שנות ניסיון</Label>
-          <Select defaultValue="all">
-            <SelectTrigger className="bg-background" dir="rtl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">הכל</SelectItem>
-              <SelectItem value="0-1">פחות משנה</SelectItem>
-              <SelectItem value="1-3">1-3 שנים</SelectItem>
-              <SelectItem value="3-5">3-5 שנים</SelectItem>
-              <SelectItem value="5-10">5-10 שנים</SelectItem>
-              <SelectItem value="10+">מעל 10 שנים</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Separator />
-
-        {/* Languages */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">שפות</Label>
-          <Select defaultValue="all">
-            <SelectTrigger className="bg-background" dir="rtl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">כל השפות</SelectItem>
-              <SelectItem value="hebrew">עברית</SelectItem>
-              <SelectItem value="english">אנגלית</SelectItem>
-              <SelectItem value="arabic">ערבית</SelectItem>
-              <SelectItem value="russian">רוסית</SelectItem>
-              <SelectItem value="french">צרפתית</SelectItem>
-              <SelectItem value="spanish">ספרדית</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Separator />
-
-        {/* Project Completion Rate */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">אחוז השלמת פרויקטים</Label>
-          <Select defaultValue="all">
-            <SelectTrigger className="bg-background" dir="rtl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">הכל</SelectItem>
-              <SelectItem value="100">100%</SelectItem>
-              <SelectItem value="95">95%+</SelectItem>
-              <SelectItem value="90">90%+</SelectItem>
-              <SelectItem value="80">80%+</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Separator />
-
-        {/* Response Time */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">זמן תגובה</Label>
-          <Select defaultValue="all">
-            <SelectTrigger className="bg-background" dir="rtl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">הכל</SelectItem>
-              <SelectItem value="1">תוך שעה</SelectItem>
-              <SelectItem value="3">תוך 3 שעות</SelectItem>
-              <SelectItem value="24">תוך 24 שעות</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Separator />
-
-        {/* Availability */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">זמינות</Label>
-          <Select defaultValue="all">
-            <SelectTrigger className="bg-background" dir="rtl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">הכל</SelectItem>
-              <SelectItem value="available">זמין מיידית</SelectItem>
-              <SelectItem value="week">זמין תוך שבוע</SelectItem>
-              <SelectItem value="month">זמין תוך חודש</SelectItem>
-              <SelectItem value="busy">לא זמין</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Separator />
-
-        {/* Certifications */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">תעודות והסמכות</Label>
-          <div className="space-y-2">
+    <div className="hidden lg:block">
+      <div className="sticky top-20 max-h-[calc(100vh-96px)]">
+        <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 backdrop-blur-md bg-background/95 border-2">
+          <div className="bg-card border-b border-border p-4 flex items-center justify-center relative">
+            {activeFiltersCount > 0 && (
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={resetFilters}
+                className="h-8 gap-1 absolute left-4"
+              >
+                <X className="h-3 w-3" />
+                נקה
+              </Button>
+            )}
             <div className="flex items-center gap-2">
-              <Checkbox id="verified" />
-              <label htmlFor="verified" className="text-sm cursor-pointer">
-                פרילנסר מאומת
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox id="certified" />
-              <label htmlFor="certified" className="text-sm cursor-pointer">
-                בעל הסמכות מקצועיות
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox id="portfolio" />
-              <label htmlFor="portfolio" className="text-sm cursor-pointer">
-                עם תיק עבודות
-              </label>
+              {activeFiltersCount > 0 && (
+                <Badge variant="secondary" className="h-5">
+                  {activeFiltersCount}
+                </Badge>
+              )}
+              <h3 className="font-bold text-foreground">סינון תוצאות</h3>
             </div>
           </div>
-        </div>
 
-        <Separator />
+          <div className="max-h-[calc(100vh-280px)] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent">{" "}
 
-        {/* Project Budget */}
-        <div className="space-y-3">
-          <Label className="text-sm font-semibold">תקציב פרויקט מינימלי</Label>
-          <Select defaultValue="all">
-            <SelectTrigger className="bg-background" dir="rtl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">הכל</SelectItem>
-              <SelectItem value="500">₪500+</SelectItem>
-              <SelectItem value="1000">₪1,000+</SelectItem>
-              <SelectItem value="2500">₪2,500+</SelectItem>
-              <SelectItem value="5000">₪5,000+</SelectItem>
-              <SelectItem value="10000">₪10,000+</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+            {/* Category */}
+            <FilterSection title="קטגוריה" section="category">
+              <div className="space-y-3">
+                {categories.map((category) => (
+                  <div key={category} className="flex items-center justify-between gap-2">
+                    <label
+                      htmlFor={`category-${category}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {category}
+                    </label>
+                    <Checkbox
+                      id={`category-${category}`}
+                      checked={filters.categories.includes(category)}
+                      onCheckedChange={() => {
+                        const newCategories = filters.categories.includes(category)
+                          ? filters.categories.filter(c => c !== category)
+                          : [...filters.categories, category];
+                        const newFilters = { ...filters, categories: newCategories };
+                        setFilters(newFilters);
+                        onFilterChange?.(newFilters);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </FilterSection>
 
-        {/* Action Button */}
-        <div className="pt-4">
-          <Button className="w-full h-12 text-base font-semibold" size="lg">
-            <Search className="ml-2 h-5 w-5" />
-            חפש פרילנסרים
-          </Button>
-        </div>
+            {/* Hourly Rate */}
+            <FilterSection title="תעריף לשעה (₪)" section="hourlyRate">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Input
+                    type="number"
+                    value={filters.hourlyRateMin}
+                    onChange={(e) => {
+                      const newFilters = { ...filters, hourlyRateMin: Number(e.target.value) };
+                      setFilters(newFilters);
+                      onFilterChange?.(newFilters);
+                    }}
+                    placeholder="מינימום"
+                    className="text-center"
+                    min={0}
+                    max={500}
+                  />
+                  <span className="text-muted-foreground">-</span>
+                  <Input
+                    type="number"
+                    value={filters.hourlyRateMax}
+                    onChange={(e) => {
+                      const newFilters = { ...filters, hourlyRateMax: Number(e.target.value) };
+                      setFilters(newFilters);
+                      onFilterChange?.(newFilters);
+                    }}
+                    placeholder="מקסימום"
+                    className="text-center"
+                    min={0}
+                    max={500}
+                  />
+                </div>
+                <div className="text-xs text-muted-foreground text-center">
+                  ₪{filters.hourlyRateMin} - ₪{filters.hourlyRateMax}
+                </div>
+              </div>
+            </FilterSection>
+
+            {/* Rating */}
+            <FilterSection title="דירוג מינימלי" section="rating">
+              <Select 
+                value={filters.rating} 
+                onValueChange={(value) => {
+                  const newFilters = { ...filters, rating: value };
+                  setFilters(newFilters);
+                  onFilterChange?.(newFilters);
+                }}
+              >
+                <SelectTrigger className="bg-background" dir="rtl">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">כל הדירוגים</SelectItem>
+                  <SelectItem value="5">⭐ 5.0</SelectItem>
+                  <SelectItem value="4.5">⭐ 4.5+</SelectItem>
+                  <SelectItem value="4">⭐ 4.0+</SelectItem>
+                  <SelectItem value="3">⭐ 3.0+</SelectItem>
+                </SelectContent>
+              </Select>
+            </FilterSection>
+
+            {/* Location */}
+            <FilterSection title="מיקום" section="location">
+              <div className="space-y-3">
+                {locations.map((location) => (
+                  <div key={location} className="flex items-center justify-between gap-2">
+                    <label
+                      htmlFor={`location-${location}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {location}
+                    </label>
+                    <Checkbox
+                      id={`location-${location}`}
+                      checked={filters.locations.includes(location)}
+                      onCheckedChange={() => {
+                        const newLocations = filters.locations.includes(location)
+                          ? filters.locations.filter(l => l !== location)
+                          : [...filters.locations, location];
+                        const newFilters = { ...filters, locations: newLocations };
+                        setFilters(newFilters);
+                        onFilterChange?.(newFilters);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </FilterSection>
+
+            {/* Experience */}
+            <FilterSection title="שנות ניסיון" section="experience">
+              <Select 
+                value={filters.experience} 
+                onValueChange={(value) => {
+                  const newFilters = { ...filters, experience: value };
+                  setFilters(newFilters);
+                  onFilterChange?.(newFilters);
+                }}
+              >
+                <SelectTrigger className="bg-background" dir="rtl">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">הכל</SelectItem>
+                  <SelectItem value="0-1">פחות משנה</SelectItem>
+                  <SelectItem value="1-3">1-3 שנים</SelectItem>
+                  <SelectItem value="3-5">3-5 שנים</SelectItem>
+                  <SelectItem value="5-10">5-10 שנים</SelectItem>
+                  <SelectItem value="10+">מעל 10 שנים</SelectItem>
+                </SelectContent>
+              </Select>
+            </FilterSection>
+
+            {/* Languages */}
+            <FilterSection title="שפות" section="languages">
+              <div className="space-y-3">
+                {languages.map((language) => (
+                  <div key={language} className="flex items-center justify-between gap-2">
+                    <label
+                      htmlFor={`language-${language}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {language}
+                    </label>
+                    <Checkbox
+                      id={`language-${language}`}
+                      checked={filters.languages.includes(language)}
+                      onCheckedChange={() => {
+                        const newLanguages = filters.languages.includes(language)
+                          ? filters.languages.filter(l => l !== language)
+                          : [...filters.languages, language];
+                        const newFilters = { ...filters, languages: newLanguages };
+                        setFilters(newFilters);
+                        onFilterChange?.(newFilters);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </FilterSection>
+
+            {/* Certifications */}
+            <FilterSection title="תעודות והסמכות" section="certifications">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor="verified"
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    פרילנסר מאומת
+                  </label>
+                  <Checkbox
+                    id="verified"
+                    checked={filters.certifications.includes("verified")}
+                    onCheckedChange={() => {
+                      const newCertifications = filters.certifications.includes("verified")
+                        ? filters.certifications.filter(c => c !== "verified")
+                        : [...filters.certifications, "verified"];
+                      const newFilters = { ...filters, certifications: newCertifications };
+                      setFilters(newFilters);
+                      onFilterChange?.(newFilters);
+                    }}
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor="certified"
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    בעל הסמכות מקצועיות
+                  </label>
+                  <Checkbox
+                    id="certified"
+                    checked={filters.certifications.includes("certified")}
+                    onCheckedChange={() => {
+                      const newCertifications = filters.certifications.includes("certified")
+                        ? filters.certifications.filter(c => c !== "certified")
+                        : [...filters.certifications, "certified"];
+                      const newFilters = { ...filters, certifications: newCertifications };
+                      setFilters(newFilters);
+                      onFilterChange?.(newFilters);
+                    }}
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor="portfolio"
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    עם תיק עבודות
+                  </label>
+                  <Checkbox
+                    id="portfolio"
+                    checked={filters.certifications.includes("portfolio")}
+                    onCheckedChange={() => {
+                      const newCertifications = filters.certifications.includes("portfolio")
+                        ? filters.certifications.filter(c => c !== "portfolio")
+                        : [...filters.certifications, "portfolio"];
+                      const newFilters = { ...filters, certifications: newCertifications };
+                      setFilters(newFilters);
+                      onFilterChange?.(newFilters);
+                    }}
+                  />
+                </div>
+              </div>
+            </FilterSection>
+          </div>
+        </Card>
       </div>
-    </Card>
     </div>
   );
 };
