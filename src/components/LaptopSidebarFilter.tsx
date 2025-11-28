@@ -158,7 +158,7 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
           </div>
         </div>
 
-        <div className="h-[calc(100vh-120px)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="h-[calc(100vh-80px)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {/* Brands */}
           <FilterSection title="יצרן" section="brands">
             <div className="space-y-3">
