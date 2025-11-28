@@ -8,6 +8,12 @@ import { useState } from "react";
 
 interface JobSidebarProps {
   onFilterChange?: (filters: JobFilters) => void;
+  counts?: {
+    categories?: Record<string, number>;
+    jobTypes?: Record<string, number>;
+    scopes?: Record<string, number>;
+    locations?: Record<string, number>;
+  };
 }
 
 export interface JobFilters {
@@ -34,7 +40,7 @@ const locations = [
   "הרצליה", "כפר סבא", "רעננה", "מודיעין", "רמת גן"
 ];
 
-export const JobSidebar = ({ onFilterChange }: JobSidebarProps) => {
+export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
   const [filters, setFilters] = useState<JobFilters>({
     categories: [],
     jobTypes: [],
@@ -158,12 +164,19 @@ export const JobSidebar = ({ onFilterChange }: JobSidebarProps) => {
               <div className="space-y-3">
                 {categories.map((category) => (
                   <div key={category} className="flex items-center justify-between gap-2">
-                    <label
-                      htmlFor={`category-${category}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {category}
-                    </label>
+                    <div className="flex items-center gap-2 flex-1">
+                      <label
+                        htmlFor={`category-${category}`}
+                        className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                      >
+                        {category}
+                      </label>
+                      {counts?.categories?.[category] !== undefined && (
+                        <Badge variant="outline" className="h-5 text-xs px-1.5">
+                          {counts.categories[category]}
+                        </Badge>
+                      )}
+                    </div>
                     <Checkbox
                       id={`category-${category}`}
                       checked={filters.categories.includes(category)}
@@ -179,12 +192,19 @@ export const JobSidebar = ({ onFilterChange }: JobSidebarProps) => {
               <div className="space-y-3">
                 {jobTypes.map((type) => (
                   <div key={type} className="flex items-center justify-between gap-2">
-                    <label
-                      htmlFor={`type-${type}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {type}
-                    </label>
+                    <div className="flex items-center gap-2 flex-1">
+                      <label
+                        htmlFor={`type-${type}`}
+                        className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                      >
+                        {type}
+                      </label>
+                      {counts?.jobTypes?.[type] !== undefined && (
+                        <Badge variant="outline" className="h-5 text-xs px-1.5">
+                          {counts.jobTypes[type]}
+                        </Badge>
+                      )}
+                    </div>
                     <Checkbox
                       id={`type-${type}`}
                       checked={filters.jobTypes.includes(type)}
@@ -200,12 +220,19 @@ export const JobSidebar = ({ onFilterChange }: JobSidebarProps) => {
               <div className="space-y-3">
                 {scopes.map((scope) => (
                   <div key={scope} className="flex items-center justify-between gap-2">
-                    <label
-                      htmlFor={`scope-${scope}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {scope}
-                    </label>
+                    <div className="flex items-center gap-2 flex-1">
+                      <label
+                        htmlFor={`scope-${scope}`}
+                        className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                      >
+                        {scope}
+                      </label>
+                      {counts?.scopes?.[scope] !== undefined && (
+                        <Badge variant="outline" className="h-5 text-xs px-1.5">
+                          {counts.scopes[scope]}
+                        </Badge>
+                      )}
+                    </div>
                     <Checkbox
                       id={`scope-${scope}`}
                       checked={filters.scopes.includes(scope)}

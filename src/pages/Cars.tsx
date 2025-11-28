@@ -100,6 +100,45 @@ const Cars = () => {
   });
   const itemsPerPage = 10;
   
+  // Calculate counts for filter options
+  const filterCounts = useMemo(() => {
+    const counts = {
+      manufacturers: {} as Record<string, number>,
+      fuelTypes: {} as Record<string, number>,
+      transmissions: {} as Record<string, number>,
+      hands: {} as Record<string, number>,
+      features: {} as Record<string, number>,
+    };
+
+    mockCars.forEach(car => {
+      // Count manufacturers
+      const manufacturer = car.title.split(' ')[0];
+      counts.manufacturers[manufacturer] = (counts.manufacturers[manufacturer] || 0) + 1;
+      
+      // Count fuel types and transmissions from subtitle
+      const subtitle = car.subtitle.toLowerCase();
+      if (subtitle.includes('היבריד')) counts.fuelTypes['היבריד'] = (counts.fuelTypes['היבריד'] || 0) + 1;
+      if (subtitle.includes('בנזין')) counts.fuelTypes['בנזין'] = (counts.fuelTypes['בנזין'] || 0) + 1;
+      if (subtitle.includes('דיזל')) counts.fuelTypes['דיזל'] = (counts.fuelTypes['דיזל'] || 0) + 1;
+      if (subtitle.includes('חשמלי')) counts.fuelTypes['חשמלי'] = (counts.fuelTypes['חשמלי'] || 0) + 1;
+      
+      if (subtitle.includes("אוט'") || subtitle.includes('אוטומט')) counts.transmissions['אוטומט'] = (counts.transmissions['אוטומט'] || 0) + 1;
+      if (subtitle.includes('ידני')) counts.transmissions['ידני'] = (counts.transmissions['ידני'] || 0) + 1;
+      if (subtitle.includes('רובוטרון')) counts.transmissions['רובוטרון'] = (counts.transmissions['רובוטרון'] || 0) + 1;
+      if (subtitle.includes('טיפטרוניק')) counts.transmissions['טיפטרוניק'] = (counts.transmissions['טיפטרוניק'] || 0) + 1;
+      
+      // Count hands
+      counts.hands[car.hand] = (counts.hands[car.hand] || 0) + 1;
+      
+      // Count features
+      car.features.forEach(feature => {
+        counts.features[feature] = (counts.features[feature] || 0) + 1;
+      });
+    });
+
+    return counts;
+  }, []);
+  
   // Generate popular suggestions from existing cars
   const popularSuggestions = useMemo(() => {
     const brandCounts = new Map<string, number>();
@@ -434,7 +473,7 @@ const Cars = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
           {/* Sidebar - Right side for RTL */}
-          <CarSidebar onFilterChange={handleSidebarFilterChange} />
+          <CarSidebar onFilterChange={handleSidebarFilterChange} counts={filterCounts} />
           
           {/* Cars List */}
           <div className="space-y-4">
