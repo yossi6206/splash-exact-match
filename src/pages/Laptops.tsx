@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { LaptopSidebarFilter } from "@/components/LaptopSidebarFilter";
@@ -86,6 +86,48 @@ const Laptops = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 12;
   
+  // Calculate counts for filter options
+  const filterCounts = useMemo(() => {
+    const counts = {
+      brands: {} as Record<string, number>,
+      processors: {} as Record<string, number>,
+      ramOptions: {} as Record<string, number>,
+      storageOptions: {} as Record<string, number>,
+      screenSizes: {} as Record<string, number>,
+      conditions: {} as Record<string, number>,
+      cities: {} as Record<string, number>,
+    };
+
+    mockLaptops.forEach(laptop => {
+      // Count brands
+      const brand = laptop.title.split(' ')[0];
+      counts.brands[brand] = (counts.brands[brand] || 0) + 1;
+      
+      // Count processors, RAM, storage, screen from subtitle
+      const subtitle = laptop.subtitle;
+      processors.forEach(proc => {
+        if (subtitle.includes(proc)) counts.processors[proc] = (counts.processors[proc] || 0) + 1;
+      });
+      ramOptions.forEach(ram => {
+        if (subtitle.includes(ram)) counts.ramOptions[ram] = (counts.ramOptions[ram] || 0) + 1;
+      });
+      storageOptions.forEach(storage => {
+        if (subtitle.includes(storage)) counts.storageOptions[storage] = (counts.storageOptions[storage] || 0) + 1;
+      });
+      screenSizes.forEach(size => {
+        if (subtitle.includes(size)) counts.screenSizes[size] = (counts.screenSizes[size] || 0) + 1;
+      });
+      
+      // Count condition
+      counts.conditions[laptop.condition] = (counts.conditions[laptop.condition] || 0) + 1;
+      
+      // Count cities
+      counts.cities[laptop.location] = (counts.cities[laptop.location] || 0) + 1;
+    });
+
+    return counts;
+  }, []);
+  
   const totalLaptops = useCountUp({ end: mockLaptops.length, duration: 2000, startOnView: false });
   const activeListings = useCountUp({ end: Math.floor(mockLaptops.length * 0.85), duration: 2000, startOnView: false });
   const avgViews = useCountUp({ end: 245, duration: 1500, startOnView: false });
@@ -169,7 +211,7 @@ const Laptops = () => {
                 <SheetTitle>סינון תוצאות</SheetTitle>
               </SheetHeader>
               <div className="mt-6">
-                <LaptopSidebarFilter />
+                <LaptopSidebarFilter counts={filterCounts} />
               </div>
             </SheetContent>
           </Sheet>
@@ -197,7 +239,7 @@ const Laptops = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
           {/* Sidebar Filters - Desktop */}
-          <LaptopSidebarFilter />
+          <LaptopSidebarFilter counts={filterCounts} />
 
           {/* Laptops Grid */}
           <div>

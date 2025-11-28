@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
@@ -21,6 +21,32 @@ const Jobs = () => {
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const itemsPerPage = 10;
+
+  // Calculate counts for filter options
+  const filterCounts = useMemo(() => {
+    const counts = {
+      categories: {} as Record<string, number>,
+      jobTypes: {} as Record<string, number>,
+      scopes: {} as Record<string, number>,
+      locations: {} as Record<string, number>,
+    };
+
+    jobs.forEach(job => {
+      // Count by industry/category
+      if (job.industry) counts.categories[job.industry] = (counts.categories[job.industry] || 0) + 1;
+      
+      // Count job types
+      counts.jobTypes[job.job_type] = (counts.jobTypes[job.job_type] || 0) + 1;
+      
+      // Count scopes
+      counts.scopes[job.scope] = (counts.scopes[job.scope] || 0) + 1;
+      
+      // Count locations
+      counts.locations[job.location] = (counts.locations[job.location] || 0) + 1;
+    });
+
+    return counts;
+  }, [jobs]);
 
   useEffect(() => {
     fetchJobs();
@@ -207,7 +233,7 @@ const Jobs = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
           {/* Sidebar - Right side for RTL */}
-          <JobSidebar />
+          <JobSidebar counts={filterCounts} />
           
           {/* Jobs List */}
           <div className="space-y-4">

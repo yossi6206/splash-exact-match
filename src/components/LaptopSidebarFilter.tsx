@@ -8,6 +8,15 @@ import { useState } from "react";
 
 interface LaptopSidebarFilterProps {
   onFilterChange?: (filters: LaptopFilters) => void;
+  counts?: {
+    brands?: Record<string, number>;
+    processors?: Record<string, number>;
+    ramOptions?: Record<string, number>;
+    storageOptions?: Record<string, number>;
+    screenSizes?: Record<string, number>;
+    conditions?: Record<string, number>;
+    cities?: Record<string, number>;
+  };
 }
 
 export interface LaptopFilters {
@@ -33,7 +42,7 @@ const cities = [
   "ראשון לציון", "אשדוד", "רחובות", "בני ברק", "הרצליה", "כפר סבא"
 ];
 
-export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps) => {
+export const LaptopSidebarFilter = ({ onFilterChange, counts }: LaptopSidebarFilterProps) => {
   const [filters, setFilters] = useState<LaptopFilters>({
     brands: [],
     processors: [],
@@ -165,12 +174,19 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
             <div className="space-y-3">
               {brands.slice(0, 7).map((brand) => (
                 <div key={brand} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`brand-${brand}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {brand}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`brand-${brand}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {brand}
+                    </label>
+                    {counts?.brands?.[brand] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.brands[brand]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`brand-${brand}`}
                     checked={filters.brands.includes(brand)}
@@ -186,12 +202,19 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
             <div className="space-y-3">
               {processors.slice(0, 7).map((processor) => (
                 <div key={processor} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`processor-${processor}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {processor}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`processor-${processor}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {processor}
+                    </label>
+                    {counts?.processors?.[processor] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.processors[processor]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`processor-${processor}`}
                     checked={filters.processors.includes(processor)}
@@ -207,12 +230,19 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
             <div className="space-y-3">
               {ramOptions.slice(0, 7).map((ram) => (
                 <div key={ram} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`ram-${ram}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {ram}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`ram-${ram}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {ram}
+                    </label>
+                    {counts?.ramOptions?.[ram] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.ramOptions[ram]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`ram-${ram}`}
                     checked={filters.ramOptions.includes(ram)}
@@ -228,12 +258,19 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
             <div className="space-y-3">
               {storageOptions.slice(0, 7).map((storage) => (
                 <div key={storage} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`storage-${storage}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {storage}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`storage-${storage}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {storage}
+                    </label>
+                    {counts?.storageOptions?.[storage] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.storageOptions[storage]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`storage-${storage}`}
                     checked={filters.storageOptions.includes(storage)}
@@ -249,12 +286,19 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
             <div className="space-y-3">
               {screenSizes.slice(0, 7).map((size) => (
                 <div key={size} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`size-${size}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {size}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`size-${size}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {size}
+                    </label>
+                    {counts?.screenSizes?.[size] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.screenSizes[size]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`size-${size}`}
                     checked={filters.screenSizes.includes(size)}
@@ -296,12 +340,19 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
             <div className="space-y-3">
               {conditions.slice(0, 7).map((condition) => (
                 <div key={condition} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`condition-${condition}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {condition}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`condition-${condition}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {condition}
+                    </label>
+                    {counts?.conditions?.[condition] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.conditions[condition]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`condition-${condition}`}
                     checked={filters.conditions.includes(condition)}
@@ -317,12 +368,19 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
             <div className="space-y-3">
               {cities.slice(0, 7).map((city) => (
                 <div key={city} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`city-${city}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {city}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`city-${city}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {city}
+                    </label>
+                    {counts?.cities?.[city] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.cities[city]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`city-${city}`}
                     checked={filters.cities.includes(city)}

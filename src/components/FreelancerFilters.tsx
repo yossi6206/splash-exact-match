@@ -10,6 +10,11 @@ import { useState } from "react";
 
 interface FreelancerFiltersProps {
   onFilterChange?: (filters: FreelancerFilters) => void;
+  counts?: {
+    categories?: Record<string, number>;
+    locations?: Record<string, number>;
+    languages?: Record<string, number>;
+  };
 }
 
 export interface FreelancerFilters {
@@ -23,7 +28,7 @@ export interface FreelancerFilters {
   certifications: string[];
 }
 
-export const FreelancerFilters = ({ onFilterChange }: FreelancerFiltersProps) => {
+export const FreelancerFilters = ({ onFilterChange, counts }: FreelancerFiltersProps) => {
   const [filters, setFilters] = useState<FreelancerFilters>({
     categories: [],
     hourlyRateMin: 0,
@@ -140,12 +145,19 @@ export const FreelancerFilters = ({ onFilterChange }: FreelancerFiltersProps) =>
               <div className="space-y-3">
                 {categories.map((category) => (
                   <div key={category} className="flex items-center justify-between gap-2">
-                    <label
-                      htmlFor={`category-${category}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {category}
-                    </label>
+                    <div className="flex items-center gap-2 flex-1">
+                      <label
+                        htmlFor={`category-${category}`}
+                        className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                      >
+                        {category}
+                      </label>
+                      {counts?.categories?.[category] !== undefined && (
+                        <Badge variant="outline" className="h-5 text-xs px-1.5">
+                          {counts.categories[category]}
+                        </Badge>
+                      )}
+                    </div>
                     <Checkbox
                       id={`category-${category}`}
                       checked={filters.categories.includes(category)}
@@ -229,12 +241,19 @@ export const FreelancerFilters = ({ onFilterChange }: FreelancerFiltersProps) =>
               <div className="space-y-3">
                 {locations.map((location) => (
                   <div key={location} className="flex items-center justify-between gap-2">
-                    <label
-                      htmlFor={`location-${location}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {location}
-                    </label>
+                    <div className="flex items-center gap-2 flex-1">
+                      <label
+                        htmlFor={`location-${location}`}
+                        className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                      >
+                        {location}
+                      </label>
+                      {counts?.locations?.[location] !== undefined && (
+                        <Badge variant="outline" className="h-5 text-xs px-1.5">
+                          {counts.locations[location]}
+                        </Badge>
+                      )}
+                    </div>
                     <Checkbox
                       id={`location-${location}`}
                       checked={filters.locations.includes(location)}
@@ -281,12 +300,19 @@ export const FreelancerFilters = ({ onFilterChange }: FreelancerFiltersProps) =>
               <div className="space-y-3">
                 {languages.map((language) => (
                   <div key={language} className="flex items-center justify-between gap-2">
-                    <label
-                      htmlFor={`language-${language}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {language}
-                    </label>
+                    <div className="flex items-center gap-2 flex-1">
+                      <label
+                        htmlFor={`language-${language}`}
+                        className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                      >
+                        {language}
+                      </label>
+                      {counts?.languages?.[language] !== undefined && (
+                        <Badge variant="outline" className="h-5 text-xs px-1.5">
+                          {counts.languages[language]}
+                        </Badge>
+                      )}
+                    </div>
                     <Checkbox
                       id={`language-${language}`}
                       checked={filters.languages.includes(language)}

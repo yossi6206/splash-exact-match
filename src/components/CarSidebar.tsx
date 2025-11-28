@@ -201,12 +201,19 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
             <div className="space-y-3">
               {manufacturers.slice(0, 8).map((brand) => (
                 <div key={brand} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`brand-${brand}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {brand}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`brand-${brand}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {brand}
+                    </label>
+                    {counts?.manufacturers?.[brand] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.manufacturers[brand]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`brand-${brand}`}
                     checked={filters.manufacturers.includes(brand)}
@@ -291,12 +298,19 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
             <div className="space-y-3">
               {fuelTypes.map((fuel) => (
                 <div key={fuel} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`fuel-${fuel}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {fuel}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`fuel-${fuel}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {fuel}
+                    </label>
+                    {counts?.fuelTypes?.[fuel] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.fuelTypes[fuel]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`fuel-${fuel}`}
                     checked={filters.fuelTypes.includes(fuel)}
@@ -312,12 +326,19 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
             <div className="space-y-3">
               {transmissionTypes.map((trans) => (
                 <div key={trans} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`trans-${trans}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {trans}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`trans-${trans}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {trans}
+                    </label>
+                    {counts?.transmissions?.[trans] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.transmissions[trans]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`trans-${trans}`}
                     checked={filters.transmissions.includes(trans)}
@@ -333,12 +354,19 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
             <div className="space-y-3">
               {handOptions.map((hand) => (
                 <div key={hand} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`hand-${hand}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {hand}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`hand-${hand}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {hand}
+                    </label>
+                    {counts?.hands?.[hand] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.hands[hand]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`hand-${hand}`}
                     checked={filters.hands.includes(hand)}
@@ -380,12 +408,19 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
             <div className="space-y-3">
               {popularFeatures.slice(0, 10).map((feature) => (
                 <div key={feature} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`feature-${feature}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {feature}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`feature-${feature}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {feature}
+                    </label>
+                    {counts?.features?.[feature] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.features[feature]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`feature-${feature}`}
                     checked={filters.features.includes(feature)}

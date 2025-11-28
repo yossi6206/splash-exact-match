@@ -15,7 +15,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -67,6 +67,33 @@ const Freelancers = () => {
   };
 
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+  
+  // Calculate counts for filter options
+  const filterCounts = useMemo(() => {
+    const counts = {
+      categories: {} as Record<string, number>,
+      locations: {} as Record<string, number>,
+      languages: {} as Record<string, number>,
+    };
+
+    freelancers.forEach(freelancer => {
+      // Count categories
+      counts.categories[freelancer.category] = (counts.categories[freelancer.category] || 0) + 1;
+      
+      // Count locations
+      if (freelancer.location) {
+        counts.locations[freelancer.location] = (counts.locations[freelancer.location] || 0) + 1;
+      }
+      
+      // Count languages
+      freelancer.languages?.forEach(language => {
+        counts.languages[language] = (counts.languages[language] || 0) + 1;
+      });
+    });
+
+    return counts;
+  }, [freelancers]);
+
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -160,7 +187,7 @@ const Freelancers = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
           {/* Filters Sidebar */}
-          <FreelancerFilters />
+          <FreelancerFilters counts={filterCounts} />
 
           {/* Main Content */}
           <div>
