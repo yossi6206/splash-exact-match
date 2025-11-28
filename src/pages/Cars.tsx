@@ -193,7 +193,13 @@ const Cars = () => {
       <Header />
       
       {/* Hero Section with Search */}
-      <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(30,80%,55%)] via-[hsl(20,75%,50%)] to-[hsl(10,70%,50%)]">
+      <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/90 via-primary/80 to-primary/70">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: `url(${heroCar})` }}
+        />
+        
         <div className="container mx-auto px-4 py-20 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             {/* Main Heading */}
@@ -222,7 +228,7 @@ const Cars = () => {
               <Button 
                 size="lg" 
                 onClick={handleSearch}
-                className="rounded-full px-8 bg-[hsl(30,80%,55%)] hover:bg-[hsl(30,80%,50%)]"
+                className="rounded-full px-8 bg-primary hover:bg-primary/90"
               >
                 חפש
               </Button>
