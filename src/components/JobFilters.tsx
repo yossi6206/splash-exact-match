@@ -8,7 +8,7 @@ import { Search, MapPin, Building2, X } from "lucide-react";
 
 export const JobFilters = () => {
   return (
-    <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-6 sticky top-20 z-10">
+    <div className="bg-card rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border border-border p-6 mb-6 sticky top-20 z-10">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Search */}
         <div className="relative">
