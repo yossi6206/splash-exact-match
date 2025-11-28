@@ -13,7 +13,7 @@ const Footer = () => {
   ];
 
   const aboutLinks = [
-    "אודות יד2",
+    "אודות שוק יד שנייה",
     "צור קשר",
     "מדיניות פרטיות",
     "תנאי שימוש",
@@ -29,7 +29,7 @@ const Footer = () => {
           {/* Brand & Social - Right Side */}
           <div className="lg:col-span-1 text-right space-y-6">
             <div>
-              <h3 className="text-3xl md:text-4xl font-bold text-primary mb-3">יד2</h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-primary mb-3">שוק יד שנייה</h3>
               <p className="text-foreground/70 text-sm leading-relaxed max-w-xs mr-auto">
                 הפלטפורמה המובילה למכירה וקנייה בישראל. מחברים בין אלפי משתמשים מדי יום.
               </p>
@@ -106,8 +106,8 @@ const Footer = () => {
           <div className="text-right">
             <h4 className="text-lg font-bold text-foreground mb-5 border-b border-border/30 pb-3">צור קשר</h4>
             <div className="space-y-4">
-              <a href="mailto:info@yad2.co.il" className="flex items-center gap-3 justify-end text-foreground/70 hover:text-primary transition-colors group">
-                <span className="text-sm">info@yad2.co.il</span>
+              <a href="mailto:info@shook-yad2.co.il" className="flex items-center gap-3 justify-end text-foreground/70 hover:text-primary transition-colors group">
+                <span className="text-sm">info@shook-yad2.co.il</span>
                 <div className="w-10 h-10 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center transition-colors">
                   <Mail className="w-5 h-5 text-primary" />
                 </div>
@@ -132,7 +132,7 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-border/50">
           <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-4 text-center">
             <p className="text-foreground/60 text-sm order-2 md:order-1">
-              © {currentYear} יד2. כל הזכויות שמורות.
+              © {currentYear} שוק יד שנייה. כל הזכויות שמורות.
             </p>
             <div className="flex gap-4 text-sm order-1 md:order-2 flex-wrap justify-center">
               <a href="#" className="text-foreground/60 hover:text-primary transition-colors whitespace-nowrap">

@@ -150,8 +150,8 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-12 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary">
-                <span className="text-2xl font-extrabold text-primary-foreground">yad2</span>
+              <div className="flex h-12 w-28 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary px-3">
+                <span className="text-base font-extrabold text-primary-foreground whitespace-nowrap">שוק יד שנייה</span>
               </div>
             </Link>
 
