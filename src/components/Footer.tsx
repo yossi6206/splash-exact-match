@@ -1,7 +1,20 @@
-import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Send } from "lucide-react";
+import { useState } from "react";
+import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+const newsletterSchema = z.object({
+  email: z.string().email({ message: "כתובת אימייל לא תקינה" }).max(255),
+});
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const categories = [
     "נדל\"ן",
@@ -20,6 +33,56 @@ const Footer = () => {
     "נגישות",
     "מרכז עזרה"
   ];
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      // Validate email
+      const result = newsletterSchema.safeParse({ email });
+      if (!result.success) {
+        toast({
+          title: "שגיאה",
+          description: result.error.errors[0].message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setIsSubmitting(true);
+
+      const { error } = await supabase
+        .from("newsletter_subscriptions")
+        .insert([{ email: email.trim().toLowerCase() }]);
+
+      if (error) {
+        if (error.code === "23505") { // Unique constraint violation
+          toast({
+            title: "כבר רשום",
+            description: "כתובת האימייל כבר רשומה לניוזלטר שלנו",
+            variant: "destructive",
+          });
+        } else {
+          throw error;
+        }
+      } else {
+        toast({
+          title: "תודה על ההרשמה!",
+          description: "נשלח לך עדכונים למייל שלך",
+        });
+        setEmail("");
+      }
+    } catch (error) {
+      console.error("Error subscribing to newsletter:", error);
+      toast({
+        title: "שגיאה",
+        description: "משהו השתבש. אנא נסה שוב מאוחר יותר",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <footer className="bg-gradient-to-br from-muted/50 via-background to-muted/50 border-t border-border/50">
@@ -125,6 +188,37 @@ const Footer = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Newsletter Signup Section */}
+        <div className="mt-12 pt-8 border-t border-border/50">
+          <div className="max-w-xl mx-auto text-center">
+            <div className="mb-4">
+              <h4 className="text-xl font-bold text-foreground mb-2">הישארו מעודכנים</h4>
+              <p className="text-foreground/70 text-sm">
+                הירשמו לניוזלטר שלנו וקבלו עדכונים על מוצרים חדשים, טיפים ומבצעים מיוחדים
+              </p>
+            </div>
+            <form onSubmit={handleNewsletterSubmit} className="flex gap-2 max-w-md mx-auto">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="px-6 bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <Send className="w-4 h-4 ml-2" />
+                הרשמה
+              </Button>
+              <Input
+                type="email"
+                placeholder="הכנס את כתובת המייל שלך"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isSubmitting}
+                required
+                className="flex-1 text-right"
+              />
+            </form>
           </div>
         </div>
 
