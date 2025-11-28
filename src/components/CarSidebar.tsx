@@ -147,14 +147,14 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
     <div className="border-b border-border last:border-b-0">
       <button
         onClick={() => toggleSection(section)}
-        className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
+        className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors text-right"
       >
-        <span className="font-semibold text-foreground">{title}</span>
         {expandedSections[section] ? (
           <ChevronUp className="h-4 w-4 text-muted-foreground" />
         ) : (
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         )}
+        <span className="font-semibold text-foreground flex-1 text-right">{title}</span>
       </button>
       {expandedSections[section] && (
         <div className="px-4 pb-4">{children}</div>
@@ -166,14 +166,6 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
     <div className="hidden lg:block sticky top-20">
       <Card className="overflow-hidden">
         <div className="bg-card border-b border-border p-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h3 className="font-bold text-foreground">סינון תוצאות</h3>
-            {activeFiltersCount > 0 && (
-              <Badge variant="secondary" className="h-5">
-                {activeFiltersCount}
-              </Badge>
-            )}
-          </div>
           {activeFiltersCount > 0 && (
             <Button 
               variant="ghost" 
@@ -185,6 +177,14 @@ export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
               נקה
             </Button>
           )}
+          <div className="flex items-center gap-2 mr-auto">
+            {activeFiltersCount > 0 && (
+              <Badge variant="secondary" className="h-5">
+                {activeFiltersCount}
+              </Badge>
+            )}
+            <h3 className="font-bold text-foreground">סינון תוצאות</h3>
+          </div>
         </div>
 
         <ScrollArea className="h-[calc(100vh-200px)]">
