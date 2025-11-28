@@ -158,14 +158,12 @@ const Freelancers = () => {
           <p className="text-muted-foreground text-right">מצא את המומחה המושלם לפרויקט שלך</p>
         </div>
 
-        <div className="flex gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
           {/* Filters Sidebar */}
-          <aside className="hidden lg:block w-80 flex-shrink-0">
-            <FreelancerFilters />
-          </aside>
+          <FreelancerFilters />
 
           {/* Main Content */}
-          <div className="flex-1">
+          <div>
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
