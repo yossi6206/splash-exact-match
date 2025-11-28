@@ -113,7 +113,7 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Heebo', sans-serif;
+    font-family: 'Rubik', 'Assistant', system-ui, sans-serif;
     direction: rtl;
   }
   
