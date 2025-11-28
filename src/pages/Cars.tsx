@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { CarFilters } from "@/components/CarFilters";
+import { CarFilters, FilterState } from "@/components/CarFilters";
 import { CarCard } from "@/components/CarCard";
 import { CarSidebar } from "@/components/CarSidebar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -75,12 +75,78 @@ const mockCars = generateCars();
 const Cars = () => {
   const [sortBy, setSortBy] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
+  const [filters, setFilters] = useState<FilterState>({
+    manufacturer: "",
+    yearFrom: "",
+    yearTo: "",
+    priceMin: 0,
+    priceMax: 300000,
+    fuelType: "",
+    transmission: "",
+  });
   const itemsPerPage = 10;
   
-  const totalPages = Math.ceil(mockCars.length / itemsPerPage);
+  // Filter and sort cars
+  const filteredCars = useMemo(() => {
+    let filtered = mockCars.filter((car) => {
+      // Filter by manufacturer
+      if (filters.manufacturer && filters.manufacturer !== "all" && !car.title.includes(filters.manufacturer)) {
+        return false;
+      }
+      
+      // Filter by year
+      if (filters.yearFrom && car.year < parseInt(filters.yearFrom)) {
+        return false;
+      }
+      if (filters.yearTo && car.year > parseInt(filters.yearTo)) {
+        return false;
+      }
+      
+      // Filter by price
+      if (car.price < filters.priceMin || car.price > filters.priceMax) {
+        return false;
+      }
+      
+      // Filter by fuel type
+      if (filters.fuelType && filters.fuelType !== "all" && !car.subtitle.includes(filters.fuelType)) {
+        return false;
+      }
+      
+      // Filter by transmission
+      if (filters.transmission && filters.transmission !== "all" && !car.subtitle.includes(filters.transmission)) {
+        return false;
+      }
+      
+      return true;
+    });
+    
+    // Sort cars
+    switch (sortBy) {
+      case "price-low":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "price-high":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "year":
+        filtered.sort((a, b) => b.year - a.year);
+        break;
+      default:
+        break;
+    }
+    
+    return filtered;
+  }, [filters, sortBy]);
+  
+  const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentCars = mockCars.slice(startIndex, endIndex);
+  const currentCars = filteredCars.slice(startIndex, endIndex);
+  
+  const handleFilterChange = (newFilters: FilterState) => {
+    setFilters(newFilters);
+    setCurrentPage(1); // Reset to first page when filters change
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -110,13 +176,13 @@ const Cars = () => {
         </div>
 
         {/* Filters */}
-        <CarFilters />
+        <CarFilters onFilterChange={handleFilterChange} />
 
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6 mt-8">
           <div>
             <h1 className="text-2xl font-bold text-foreground mb-1">רכבים למכירה</h1>
-            <p className="text-muted-foreground">54,885 תוצאות</p>
+            <p className="text-muted-foreground">{filteredCars.length.toLocaleString()} תוצאות</p>
           </div>
           
           <div className="flex items-center gap-4">
