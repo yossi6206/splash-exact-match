@@ -100,69 +100,54 @@ const Laptops = () => {
       <Header />
       
       {/* Hero Banner Section */}
-      <section className="relative bg-gradient-to-b from-primary/5 to-background">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-30"
-          style={{ backgroundImage: `url(${laptopsHeroBanner})` }}
-        />
-        <div className="relative container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto text-center space-y-6">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground">
-              מחשבים ניידים - לפטופים ומחשבים
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              מגוון רחב של מחשבים ניידים חדשים ומשומשים למכירה
-            </p>
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-accent py-16 md:py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
+            {/* Main Heading */}
+            <div className="space-y-4">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
+                מצא את המחשב הנייד המושלם
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+                מבחר ענק של מחשבים ניידים חדשים ומשומשים במחירים הכי טובים
+              </p>
+            </div>
             
             {/* Search Bar */}
-            <div className="flex gap-2 max-w-2xl mx-auto">
-              <Button size="lg" className="px-8">
-                <Search className="h-5 w-5" />
-              </Button>
-              <Input
-                type="text"
-                placeholder="חפש מחשב נייד..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-12 text-lg bg-card"
-              />
-            </div>
-
-            {/* Quick Filter Tags */}
-            <div className="flex flex-wrap gap-2 justify-center pt-4" dir="rtl">
-              {quickFilters.map((filter) => (
-                <Badge
-                  key={filter}
-                  variant="secondary"
-                  className="px-4 py-2 text-sm cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+            <div className="relative max-w-2xl mx-auto">
+              <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
+                <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="חפש לפי יצרן, דגם או תיאור..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
+                />
+                <Button
+                  className="ml-2 rounded-full px-8 h-10 font-bold"
+                  size="lg"
                 >
-                  {filter}
-                </Badge>
-              ))}
+                  חפש
+                </Button>
+              </div>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 pt-8 max-w-2xl mx-auto">
+            {/* Quick Stats */}
+            <div className="flex items-center justify-center gap-8 pt-4">
               <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Package className="h-5 w-5 text-primary" />
-                  <div className="text-3xl font-bold text-foreground">{totalLaptops.count.toLocaleString()}</div>
-                </div>
-                <div className="text-sm text-muted-foreground">סך הכל מודעות</div>
+                <div className="text-3xl font-bold text-white">{totalLaptops.count}+</div>
+                <div className="text-sm text-white/80">מחשבים זמינים</div>
               </div>
+              <div className="w-px h-12 bg-white/30" />
               <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <TrendingUp className="h-5 w-5 text-primary" />
-                  <div className="text-3xl font-bold text-foreground">{activeListings.count.toLocaleString()}</div>
-                </div>
-                <div className="text-sm text-muted-foreground">מודעות פעילות</div>
+                <div className="text-3xl font-bold text-white">{activeListings.count}+</div>
+                <div className="text-sm text-white/80">מודעות פעילות</div>
               </div>
+              <div className="w-px h-12 bg-white/30" />
               <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Eye className="h-5 w-5 text-primary" />
-                  <div className="text-3xl font-bold text-foreground">{avgViews.count.toLocaleString()}</div>
-                </div>
-                <div className="text-sm text-muted-foreground">ממוצע צפיות</div>
+                <div className="text-3xl font-bold text-white">{avgViews.count}+</div>
+                <div className="text-sm text-white/80">ממוצע צפיות</div>
               </div>
             </div>
           </div>
