@@ -101,21 +101,29 @@ const Laptops = () => {
       
       {/* Hero Banner Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-accent py-16 md:py-20">
-        <div className="container mx-auto px-4">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-secondary/80 to-accent/80 opacity-50"
+             style={{
+               backgroundSize: '200% 200%',
+               animation: 'gradient 8s ease infinite'
+             }}
+        />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             {/* Main Heading */}
-            <div className="space-y-4">
+            <div className="space-y-4 animate-fade-in">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
                 מצא את המחשב הנייד המושלם
               </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto animate-fade-in animation-delay-200">
                 מבחר ענק של מחשבים ניידים חדשים ומשומשים במחירים הכי טובים
               </p>
             </div>
             
             {/* Search Bar */}
-            <div className="relative max-w-2xl mx-auto">
-              <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
+            <div className="relative max-w-2xl mx-auto animate-fade-in animation-delay-400">
+              <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden hover-scale">
                 <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
                 <Input
                   type="text"
@@ -125,7 +133,7 @@ const Laptops = () => {
                   className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
                 />
                 <Button
-                  className="ml-2 rounded-full px-8 h-10 font-bold"
+                  className="ml-2 rounded-full px-8 h-10 font-bold transition-all duration-300 hover:scale-105"
                   size="lg"
                 >
                   חפש
@@ -134,24 +142,28 @@ const Laptops = () => {
             </div>
 
             {/* Quick Stats */}
-            <div className="flex items-center justify-center gap-8 pt-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-white">{totalLaptops.count}+</div>
+            <div className="flex items-center justify-center gap-8 pt-4 animate-fade-in animation-delay-600">
+              <div className="text-center hover-scale cursor-default">
+                <div className="text-3xl font-bold text-white transition-all duration-300">{totalLaptops.count}+</div>
                 <div className="text-sm text-white/80">מחשבים זמינים</div>
               </div>
               <div className="w-px h-12 bg-white/30" />
-              <div className="text-center">
-                <div className="text-3xl font-bold text-white">{activeListings.count}+</div>
+              <div className="text-center hover-scale cursor-default">
+                <div className="text-3xl font-bold text-white transition-all duration-300">{activeListings.count}+</div>
                 <div className="text-sm text-white/80">מודעות פעילות</div>
               </div>
               <div className="w-px h-12 bg-white/30" />
-              <div className="text-center">
-                <div className="text-3xl font-bold text-white">{avgViews.count}+</div>
+              <div className="text-center hover-scale cursor-default">
+                <div className="text-3xl font-bold text-white transition-all duration-300">{avgViews.count}+</div>
                 <div className="text-sm text-white/80">ממוצע צפיות</div>
               </div>
             </div>
           </div>
         </div>
+        
+        {/* Animated decorative elements */}
+        <div className="absolute top-1/4 left-10 w-32 h-32 bg-white/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl animate-pulse animation-delay-1000" />
       </section>
 
       <main className="container mx-auto px-4 py-6">

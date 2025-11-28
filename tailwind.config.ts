@@ -99,9 +99,28 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.2s ease-out",
+        "fade-in": "fade-in 0.6s ease-out forwards",
+      },
+      animationDelay: {
+        '0': '0ms',
+        '200': '200ms',
+        '400': '400ms',
+        '600': '600ms',
+        '800': '800ms',
+        '1000': '1000ms',
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function({ addUtilities }: any) {
+      const delays = {
+        '.animation-delay-200': { 'animation-delay': '200ms' },
+        '.animation-delay-400': { 'animation-delay': '400ms' },
+        '.animation-delay-600': { 'animation-delay': '600ms' },
+        '.animation-delay-1000': { 'animation-delay': '1000ms' },
+      };
+      addUtilities(delays);
+    },
+  ],
 } satisfies Config;
