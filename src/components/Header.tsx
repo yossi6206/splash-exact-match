@@ -121,6 +121,54 @@ const megaMenuData = {
         items: ["עגלות", "כיסאות אוכל", "מיטות", "צעצועים", "בגדי ילדים"]
       }
     ]
+  },
+  "דרושים IL": {
+    columns: [
+      {
+        title: "היי-טק וטכנולוגיה",
+        items: ["מפתחי תוכנה", "QA", "אנליסט מערכות", "מהנדסי DevOps", "UI/UX"]
+      },
+      {
+        title: "שיווק ומכירות",
+        items: ["מנהלי שיווק", "נציגי מכירות", "שיווק דיגיטלי", "קופירייטרים", "מנהלי קשרי לקוחות"]
+      },
+      {
+        title: "כספים וחשבונאות",
+        items: ["רואי חשבון", "בקרים", "אנליסטים פיננסיים", "מנהלי תקציב", "כלכלנים"]
+      },
+      {
+        title: "משאבי אנוש",
+        items: ["מנהלי משאבי אנוש", "מגייסים", "מנהלי תגמול", "יועצי ארגון", "מאמני עובדים"]
+      },
+      {
+        title: "בריאות וחינוך",
+        items: ["רופאים", "אחיות", "מורים", "פסיכולוגים", "עובדים סוציאליים"]
+      }
+    ]
+  },
+  "פרילנסרים": {
+    columns: [
+      {
+        title: "עיצוב גרפי",
+        items: ["עיצוב לוגו", "עיצוב UI/UX", "אינפוגרפיקה", "איורים", "מצגות"]
+      },
+      {
+        title: "פיתוח ותכנות",
+        items: ["פיתוח אתרים", "פיתוח אפליקציות", "WordPress", "פיתוח משחקים", "בוטים"]
+      },
+      {
+        title: "תוכן וכתיבה",
+        items: ["כתיבת תוכן", "קופירייטינג", "תרגום", "עריכה לשונית", "כתיבה שיווקית"]
+      },
+      {
+        title: "שיווק דיגיטלי",
+        items: ["ניהול רשתות חברתיות", "קידום אתרים SEO", "ניהול פרסום", "ייעוץ שיווקי", "אימייל מרקטינג"]
+      },
+      {
+        title: "מולטימדיה",
+        items: ["עריכת וידאו", "אנימציה", "עיבוד תמונות", "הקלטת אולפן", "מוזיקה"]
+      }
+    ]
   }
 };
 
@@ -309,13 +357,81 @@ const Header = () => {
                 )}
               </div>
 
-              <Button variant="ghost" className="text-sm font-medium" asChild>
-                <Link to="/jobs">דרושים IL</Link>
-              </Button>
+              <div 
+                className="relative"
+                onMouseEnter={() => setHoveredMenu("דרושים IL")}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <Button variant="ghost" className="text-sm font-medium" asChild>
+                  <Link to="/jobs">דרושים IL</Link>
+                </Button>
+                
+                {hoveredMenu === "דרושים IL" && megaMenuData["דרושים IL"] && (
+                  <div className="absolute top-full right-0 pt-2 z-50">
+                    <div className="bg-background border border-border rounded-lg shadow-xl p-8 w-[900px] animate-fade-in">
+                      <div className="grid grid-cols-5 gap-6">
+                        {megaMenuData["דרושים IL"].columns.map((column, index) => (
+                          <div key={index}>
+                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              {column.title}
+                            </h3>
+                            <ul className="space-y-1.5">
+                              {column.items.map((item, itemIndex) => (
+                                <li key={itemIndex}>
+                                  <a 
+                                    href="#" 
+                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
+                                  >
+                                    {item}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
               
-              <Button variant="ghost" className="text-sm font-medium" asChild>
-                <Link to="/freelancers">פרילנסרים</Link>
-              </Button>
+              <div 
+                className="relative"
+                onMouseEnter={() => setHoveredMenu("פרילנסרים")}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <Button variant="ghost" className="text-sm font-medium" asChild>
+                  <Link to="/freelancers">פרילנסרים</Link>
+                </Button>
+                
+                {hoveredMenu === "פרילנסרים" && megaMenuData["פרילנסרים"] && (
+                  <div className="absolute top-full right-0 pt-2 z-50">
+                    <div className="bg-background border border-border rounded-lg shadow-xl p-8 w-[900px] animate-fade-in">
+                      <div className="grid grid-cols-5 gap-6">
+                        {megaMenuData["פרילנסרים"].columns.map((column, index) => (
+                          <div key={index}>
+                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              {column.title}
+                            </h3>
+                            <ul className="space-y-1.5">
+                              {column.items.map((item, itemIndex) => (
+                                <li key={itemIndex}>
+                                  <a 
+                                    href="#" 
+                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
+                                  >
+                                    {item}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </nav>
           </div>
 
