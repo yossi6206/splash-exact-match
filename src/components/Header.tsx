@@ -1,7 +1,46 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MessageSquare, Heart, Plus, LogOut, LayoutDashboard, Settings, Search } from "lucide-react";
+import { 
+  MessageSquare, 
+  Heart, 
+  Plus, 
+  LogOut, 
+  LayoutDashboard, 
+  Settings, 
+  Search,
+  Home,
+  Building2,
+  MapPin,
+  Briefcase,
+  Key,
+  Car,
+  Truck,
+  Bike,
+  Wrench,
+  Settings2,
+  Laptop,
+  Monitor,
+  Cpu,
+  Mouse,
+  FileCode,
+  Sofa,
+  Zap,
+  Dumbbell,
+  Shirt,
+  Baby,
+  Code,
+  TrendingUp,
+  DollarSign,
+  Users,
+  GraduationCap,
+  Palette,
+  Smartphone,
+  PenTool,
+  Megaphone,
+  Video,
+  LucideIcon
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -25,27 +64,44 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const megaMenuData = {
+type MenuColumn = {
+  title: string;
+  icon: LucideIcon;
+  items: string[];
+};
+
+type MegaMenuData = {
+  [key: string]: {
+    columns: MenuColumn[];
+  };
+};
+
+const megaMenuData: MegaMenuData = {
   "נדל\"ן": {
     columns: [
       {
         title: "דירות למכירה",
+        icon: Home,
         items: ["דירות גן", "פנטהאוז", "דירות סטודיו", "דירות דופלקס", "דירות רגילות"]
       },
       {
         title: "בתים ונכסים מיוחדים",
+        icon: Building2,
         items: ["בתים פרטיים", "קוטג'ים", "וילות", "משקים וחוות", "מגרשים"]
       },
       {
         title: "לפי אזור",
+        icon: MapPin,
         items: ["מרכז", "צפון", "דרום", "ירושלים והסביבה", "השרון", "השפלה"]
       },
       {
         title: "נכסים מסחריים",
+        icon: Briefcase,
         items: ["נכסים להשקעה", "חניות", "נכסי נופש"]
       },
       {
         title: "דירות להשכרה",
+        icon: Key,
         items: ["דירות לטווח ארוך", "דירות לטווח קצר", "חדרים בשותפות", "מחסנים"]
       }
     ]
@@ -54,22 +110,27 @@ const megaMenuData = {
     columns: [
       {
         title: "רכב פרטי",
+        icon: Car,
         items: ["יד ראשונה", "יד שנייה", "רכב חדש", "רכב משומש", "קבוצת קנייה"]
       },
       {
         title: "רכב מסחרי",
+        icon: Truck,
         items: ["משאיות", "מסחריות", "טרקטורים", "אוטובוסים"]
       },
       {
         title: "אופנועים",
+        icon: Bike,
         items: ["אופנועים חדשים", "אופנועים משומשים", "קטנועים", "אופני שטח"]
       },
       {
         title: "אביזרים",
+        icon: Wrench,
         items: ["גלגלים וחישוקים", "מערכות שמע", "אביזרי קישוט", "ציוד בטיחות"]
       },
       {
         title: "שירותים",
+        icon: Settings2,
         items: ["מוסכים", "מכוני שירות", "גרירה", "ביטוח רכב"]
       }
     ]
@@ -78,22 +139,27 @@ const megaMenuData = {
     columns: [
       {
         title: "מחשבים ניידים",
+        icon: Laptop,
         items: ["מחשבי גיימינג", "מחשבים לעבודה", "מקבוק", "אולטרה בוק", "טאבלטים"]
       },
       {
         title: "מחשבים נייחים",
+        icon: Monitor,
         items: ["מחשבי גיימינג", "תחנות עבודה", "מחשבי all-in-one", "מחשבים מורכבים"]
       },
       {
         title: "רכיבי מחשב",
+        icon: Cpu,
         items: ["כרטיסי מסך", "מעבדים", "זיכרון RAM", "כוננים", "לוחות אם"]
       },
       {
         title: "אביזרים",
+        icon: Mouse,
         items: ["מסכים", "מקלדות", "עכברים", "אוזניות", "מצלמות"]
       },
       {
         title: "תוכנות",
+        icon: FileCode,
         items: ["מערכות הפעלה", "תוכנות משרד", "תוכנות עיצוב", "אנטי וירוס"]
       }
     ]
@@ -102,22 +168,27 @@ const megaMenuData = {
     columns: [
       {
         title: "ריהוט",
+        icon: Sofa,
         items: ["ספות וכורסאות", "שולחנות", "כיסאות", "ארונות", "מיטות"]
       },
       {
         title: "מוצרי חשמל",
+        icon: Zap,
         items: ["מקררים", "מכונות כביסה", "תנורים", "מיקרוגלים", "מזגנים"]
       },
       {
         title: "ספורט ופנאי",
+        icon: Dumbbell,
         items: ["אופניים", "ציוד כושר", "משחקים", "ספרים", "כלי נגינה"]
       },
       {
         title: "אופנה",
+        icon: Shirt,
         items: ["בגדים", "נעליים", "תיקים", "אביזרים", "תכשיטים"]
       },
       {
         title: "תינוקות וילדים",
+        icon: Baby,
         items: ["עגלות", "כיסאות אוכל", "מיטות", "צעצועים", "בגדי ילדים"]
       }
     ]
@@ -126,22 +197,27 @@ const megaMenuData = {
     columns: [
       {
         title: "היי-טק וטכנולוגיה",
+        icon: Code,
         items: ["מפתחי תוכנה", "QA", "אנליסט מערכות", "מהנדסי DevOps", "UI/UX"]
       },
       {
         title: "שיווק ומכירות",
+        icon: TrendingUp,
         items: ["מנהלי שיווק", "נציגי מכירות", "שיווק דיגיטלי", "קופירייטרים", "מנהלי קשרי לקוחות"]
       },
       {
         title: "כספים וחשבונאות",
+        icon: DollarSign,
         items: ["רואי חשבון", "בקרים", "אנליסטים פיננסיים", "מנהלי תקציב", "כלכלנים"]
       },
       {
         title: "משאבי אנוש",
+        icon: Users,
         items: ["מנהלי משאבי אנוש", "מגייסים", "מנהלי תגמול", "יועצי ארגון", "מאמני עובדים"]
       },
       {
         title: "בריאות וחינוך",
+        icon: GraduationCap,
         items: ["רופאים", "אחיות", "מורים", "פסיכולוגים", "עובדים סוציאליים"]
       }
     ]
@@ -150,22 +226,27 @@ const megaMenuData = {
     columns: [
       {
         title: "עיצוב גרפי",
+        icon: Palette,
         items: ["עיצוב לוגו", "עיצוב UI/UX", "אינפוגרפיקה", "איורים", "מצגות"]
       },
       {
         title: "פיתוח ותכנות",
+        icon: Smartphone,
         items: ["פיתוח אתרים", "פיתוח אפליקציות", "WordPress", "פיתוח משחקים", "בוטים"]
       },
       {
         title: "תוכן וכתיבה",
+        icon: PenTool,
         items: ["כתיבת תוכן", "קופירייטינג", "תרגום", "עריכה לשונית", "כתיבה שיווקית"]
       },
       {
         title: "שיווק דיגיטלי",
+        icon: Megaphone,
         items: ["ניהול רשתות חברתיות", "קידום אתרים SEO", "ניהול פרסום", "ייעוץ שיווקי", "אימייל מרקטינג"]
       },
       {
         title: "מולטימדיה",
+        icon: Video,
         items: ["עריכת וידאו", "אנימציה", "עיבוד תמונות", "הקלטת אולפן", "מוזיקה"]
       }
     ]
@@ -220,9 +301,10 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["נדל\"ן"].columns.map((column, index) => (
                           <div key={index}>
-                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              {column.title}
-                            </h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              <column.icon className="h-4 w-4" />
+                              <h3>{column.title}</h3>
+                            </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
                                 <li key={itemIndex}>
@@ -258,9 +340,10 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["רכב"].columns.map((column, index) => (
                           <div key={index}>
-                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              {column.title}
-                            </h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              <column.icon className="h-4 w-4" />
+                              <h3>{column.title}</h3>
+                            </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
                                 <li key={itemIndex}>
@@ -296,9 +379,10 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["מחשבים"].columns.map((column, index) => (
                           <div key={index}>
-                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              {column.title}
-                            </h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              <column.icon className="h-4 w-4" />
+                              <h3>{column.title}</h3>
+                            </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
                                 <li key={itemIndex}>
@@ -334,9 +418,10 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["יד שניה"].columns.map((column, index) => (
                           <div key={index}>
-                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              {column.title}
-                            </h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              <column.icon className="h-4 w-4" />
+                              <h3>{column.title}</h3>
+                            </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
                                 <li key={itemIndex}>
@@ -372,9 +457,10 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["דרושים IL"].columns.map((column, index) => (
                           <div key={index}>
-                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              {column.title}
-                            </h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              <column.icon className="h-4 w-4" />
+                              <h3>{column.title}</h3>
+                            </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
                                 <li key={itemIndex}>
@@ -410,9 +496,10 @@ const Header = () => {
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["פרילנסרים"].columns.map((column, index) => (
                           <div key={index}>
-                            <h3 className="text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
-                              {column.title}
-                            </h3>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20">
+                              <column.icon className="h-4 w-4" />
+                              <h3>{column.title}</h3>
+                            </div>
                             <ul className="space-y-1.5">
                               {column.items.map((item, itemIndex) => (
                                 <li key={itemIndex}>
