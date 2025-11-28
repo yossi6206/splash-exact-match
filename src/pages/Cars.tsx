@@ -11,6 +11,7 @@ import { Search } from "lucide-react";
 import carImage1 from "@/assets/item-car.jpg";
 import heroCar from "@/assets/hero-car.jpg";
 import carsBanner from "@/assets/cars-banner.jpg";
+import carsHeroBanner from "@/assets/cars-hero-banner.jpg";
 
 const carBrands = [
   { name: "טויוטה", models: ["קורולה", "קמרי", "יאריס", "RAV4", "אורליס"] },
@@ -196,8 +197,8 @@ const Cars = () => {
       <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/90 via-primary/80 to-primary/70">
         {/* Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-20"
-          style={{ backgroundImage: `url(${heroCar})` }}
+          className="absolute inset-0 bg-cover bg-center opacity-30"
+          style={{ backgroundImage: `url(${carsHeroBanner})` }}
         />
         
         <div className="container mx-auto px-4 py-20 relative z-10">
