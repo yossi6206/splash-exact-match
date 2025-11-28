@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { PropertyFilters } from "@/components/PropertyFilters";
 import PropertyCard from "@/components/PropertyCard";
-import { PropertySidebar } from "@/components/PropertySidebar";
+import { PropertySidebarFilter, PropertyFilters as PropertySidebarFilters } from "@/components/PropertySidebarFilter";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
+import { Search } from "lucide-react";
 import property1 from "@/assets/property-1.jpg";
 import property2 from "@/assets/property-2.jpg";
 import property3 from "@/assets/property-3.jpg";
 import property4 from "@/assets/property-4.jpg";
+import propertiesHeroBanner from "@/assets/properties-hero-banner.jpg";
 
 const propertyTypes = ["דירה", "פנטהאוז", "דירת גן", "דירת גג", "בית פרטי", "דופלקס"];
 const conditions = ["חדש מקבלן", "משופץ", "במצב טוב", "דורש שיפוץ", "במצב מצוין"];
@@ -71,45 +74,216 @@ const mockProperties = generateProperties();
 const Properties = () => {
   const [sortBy, setSortBy] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sidebarFilters, setSidebarFilters] = useState<PropertySidebarFilters>({
+    propertyTypes: [],
+    rooms: [],
+    priceMin: 0,
+    priceMax: 5000000,
+    sizeMin: 0,
+    sizeMax: 300,
+    cities: [],
+    features: [],
+  });
   const itemsPerPage = 10;
   
-  const totalPages = Math.ceil(mockProperties.length / itemsPerPage);
+  // Filter and sort properties
+  const filteredProperties = useMemo(() => {
+    let filtered = mockProperties.filter((property) => {
+      // Search query filter
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchesSearch = 
+          property.title.toLowerCase().includes(query) ||
+          property.subtitle.toLowerCase().includes(query) ||
+          property.location.toLowerCase().includes(query);
+        if (!matchesSearch) return false;
+      }
+      
+      // Property type filter
+      if (sidebarFilters.propertyTypes.length > 0 && !sidebarFilters.propertyTypes.includes(property.propertyType)) {
+        return false;
+      }
+      
+      // Rooms filter
+      if (sidebarFilters.rooms.length > 0) {
+        const roomMatch = sidebarFilters.rooms.some(r => {
+          if (r === "6+") return property.rooms >= 6;
+          return property.rooms === parseInt(r);
+        });
+        if (!roomMatch) return false;
+      }
+      
+      // Price filter
+      const price = parseInt(property.price.replace(/,/g, ''));
+      if (price < sidebarFilters.priceMin || price > sidebarFilters.priceMax) {
+        return false;
+      }
+      
+      // Size filter
+      if (property.size && (property.size < sidebarFilters.sizeMin || property.size > sidebarFilters.sizeMax)) {
+        return false;
+      }
+      
+      // City filter
+      if (sidebarFilters.cities.length > 0) {
+        const cityMatch = sidebarFilters.cities.some(city => property.location.includes(city));
+        if (!cityMatch) return false;
+      }
+      
+      // Features filter
+      if (sidebarFilters.features.length > 0) {
+        const hasFeature = sidebarFilters.features.every(f => 
+          property.features.some(pf => pf.includes(f) || f.includes(pf))
+        );
+        if (!hasFeature) return false;
+      }
+      
+      return true;
+    });
+    
+    // Sort properties
+    switch (sortBy) {
+      case "price-low":
+        filtered.sort((a, b) => parseInt(a.price.replace(/,/g, '')) - parseInt(b.price.replace(/,/g, '')));
+        break;
+      case "price-high":
+        filtered.sort((a, b) => parseInt(b.price.replace(/,/g, '')) - parseInt(a.price.replace(/,/g, '')));
+        break;
+      case "rooms":
+        filtered.sort((a, b) => b.rooms - a.rooms);
+        break;
+      default:
+        break;
+    }
+    
+    return filtered;
+  }, [searchQuery, sidebarFilters, sortBy]);
+  
+  const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentProperties = mockProperties.slice(startIndex, endIndex);
+  const currentProperties = filteredProperties.slice(startIndex, endIndex);
+  
+  const handleSidebarFilterChange = (newFilters: PropertySidebarFilters) => {
+    setSidebarFilters(newFilters);
+    setCurrentPage(1);
+  };
+  
+  const handleSearch = () => {
+    setCurrentPage(1);
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container mx-auto px-4 py-6">
-        {/* Category Tabs */}
-        <div className="flex gap-4 mb-6 overflow-x-auto pb-2">
-          <button className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium whitespace-nowrap border-b-4 border-primary">
-            דירות למכירה
-          </button>
-          <button className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80">
-            דירות להשכרה
-          </button>
-          <button className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80">
-            דירות שותפים
-          </button>
-          <button className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80">
-            בתים פרטיים
-          </button>
-          <button className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80">
-            מסחרי
-          </button>
+      {/* Hero Section with Search */}
+      <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/90 via-primary/80 to-primary/70">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-30"
+          style={{ backgroundImage: `url(${propertiesHeroBanner})` }}
+        />
+        
+        <div className="container mx-auto px-4 py-20 relative z-10">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
+            {/* Main Heading */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+              מצא את הבית המושלם שלך
+            </h1>
+            
+            {/* Subheading */}
+            <p className="text-xl md:text-2xl text-white/90 mb-8">
+              אלפי נכסים למכירה ולהשכרה ממיטב המתווכים והבעלים
+            </p>
+
+            {/* Search Bar */}
+            <div className="bg-white rounded-full shadow-2xl p-2 flex items-center gap-2 max-w-3xl mx-auto">
+              <div className="flex-1 flex items-center gap-2 px-4">
+                <Search className="w-5 h-5 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="חפש לפי עיר, שכונה או תיאור..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg"
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+              </div>
+              <Button 
+                size="lg" 
+                onClick={handleSearch}
+                className="rounded-full px-8 bg-primary hover:bg-primary/90"
+              >
+                חפש
+              </Button>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-3xl mx-auto">
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                  110+
+                </div>
+                <div className="text-white/80 text-lg">
+                  נכסים זמינים
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                  18+
+                </div>
+                <div className="text-white/80 text-lg">
+                  ערים
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                  100%
+                </div>
+                <div className="text-white/80 text-lg">
+                  מאומתים
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Filter Tags */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
+                דירות להשכרה
+              </button>
+              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
+                דירות שותפים
+              </button>
+              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
+                בתים פרטיים
+              </button>
+              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
+                מסחרי
+              </button>
+              <button className="px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-medium transition-colors shadow-lg">
+                דירות למכירה
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Filters */}
-        <PropertyFilters />
+        {/* Decorative Elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+        </div>
+      </section>
 
+      <main className="container mx-auto px-4 py-6">
+        {/* Category Tabs - Hidden since we now have filter tags in hero */}
+        
         {/* Results Header */}
-        <div className="flex items-center justify-between mb-6 mt-8">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-foreground mb-1">נכסים למכירה</h1>
-            <p className="text-muted-foreground">12,543 תוצאות</p>
+            <h2 className="text-2xl font-bold text-foreground mb-1">נכסים למכירה</h2>
+            <p className="text-muted-foreground">{filteredProperties.length.toLocaleString()} תוצאות</p>
           </div>
           
           <div className="flex items-center gap-4">
@@ -131,7 +305,10 @@ const Properties = () => {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
+          {/* Sidebar - Right side for RTL */}
+          <PropertySidebarFilter onFilterChange={handleSidebarFilterChange} />
+          
           {/* Properties List */}
           <div className="space-y-4">
             {currentProperties.map((property) => (
@@ -169,9 +346,6 @@ const Properties = () => {
               </PaginationContent>
             </Pagination>
           </div>
-
-          {/* Sidebar */}
-          <PropertySidebar />
         </div>
       </main>
 

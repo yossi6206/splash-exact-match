@@ -262,6 +262,28 @@ const Cars = () => {
                 </div>
               </div>
             </div>
+
+            {/* Quick Filter Tags */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
+                אופנועים
+              </button>
+              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
+                קטנועים
+              </button>
+              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
+                משאיות
+              </button>
+              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
+                כלי שיט
+              </button>
+              <button className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors backdrop-blur-sm border border-white/30">
+                מיוחדים
+              </button>
+              <button className="px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-medium transition-colors shadow-lg">
+                פריטים ומסחרים
+              </button>
+            </div>
           </div>
         </div>
 
