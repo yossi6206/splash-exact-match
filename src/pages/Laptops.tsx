@@ -216,7 +216,7 @@ const Laptops = () => {
 
           {/* Laptops Grid */}
           <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" dir="rtl">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-end" dir="rtl">
               {currentLaptops.map((laptop) => (
                 <LaptopCard key={laptop.id} laptop={laptop} />
               ))}
