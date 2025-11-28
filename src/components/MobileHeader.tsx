@@ -1,4 +1,4 @@
-import { Menu, Bell, MessageSquare } from "lucide-react";
+import { Menu, Bell, MessageSquare, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
@@ -59,10 +59,15 @@ const MobileHeader = () => {
         </Sheet>
 
         <Link to="/" className="flex items-center">
-          <div className="flex h-10 w-24 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary px-2">
-            <span className="text-sm font-extrabold text-primary-foreground whitespace-nowrap">
-              שוק יד שנייה
-            </span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-gradient-to-br from-primary via-primary/90 to-secondary shadow-md">
+            <div className="relative">
+              <Store className="w-4 h-4 text-primary-foreground" strokeWidth={2.5} />
+              <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-accent rounded-full"></div>
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="text-[9px] font-bold text-primary-foreground/90 tracking-wide">שוק</span>
+              <span className="text-xs font-black text-primary-foreground tracking-tight">יד שנייה</span>
+            </div>
           </div>
         </Link>
 

@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Store } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -28,12 +28,19 @@ const Footer = () => {
           
           {/* Brand & Social - Right Side */}
           <div className="lg:col-span-1 text-right space-y-6">
-            <div>
-              <h3 className="text-2xl md:text-3xl font-bold text-primary mb-3">שוק יד שנייה</h3>
-              <p className="text-foreground/70 text-sm leading-relaxed max-w-xs mr-auto">
-                הפלטפורמה המובילה למכירה וקנייה בישראל. מחברים בין אלפי משתמשים מדי יום.
-              </p>
+            <div className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 border border-primary/20">
+              <div className="flex flex-col leading-none">
+                <span className="text-xs font-bold text-primary/80 tracking-wider">שוק</span>
+                <span className="text-2xl md:text-3xl font-black text-primary tracking-tight">יד שנייה</span>
+              </div>
+              <div className="relative">
+                <Store className="w-8 h-8 text-primary" strokeWidth={2.5} />
+                <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-accent rounded-full"></div>
+              </div>
             </div>
+            <p className="text-foreground/70 text-sm leading-relaxed max-w-xs mr-auto">
+              הפלטפורמה המובילה למכירה וקנייה בישראל. מחברים בין אלפי משתמשים מדי יום.
+            </p>
             
             {/* Social Media Icons */}
             <div className="flex gap-3 justify-end flex-wrap">
