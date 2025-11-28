@@ -11,6 +11,13 @@ import { useState } from "react";
 
 interface CarSidebarProps {
   onFilterChange?: (filters: SidebarFilters) => void;
+  counts?: {
+    manufacturers?: Record<string, number>;
+    fuelTypes?: Record<string, number>;
+    transmissions?: Record<string, number>;
+    hands?: Record<string, number>;
+    features?: Record<string, number>;
+  };
 }
 
 export interface SidebarFilters {
@@ -43,7 +50,7 @@ const popularFeatures = [
   "מושבים חשמליים", "דרייב אסיסט", "נקודה עיוורת", "שמירת נתיב"
 ];
 
-export const CarSidebar = ({ onFilterChange }: CarSidebarProps) => {
+export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
   const [filters, setFilters] = useState<SidebarFilters>({
     manufacturers: [],
     yearFrom: "",

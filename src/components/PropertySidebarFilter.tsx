@@ -10,6 +10,12 @@ import { useState } from "react";
 
 interface PropertySidebarFilterProps {
   onFilterChange?: (filters: PropertyFilters) => void;
+  counts?: {
+    propertyTypes?: Record<string, number>;
+    rooms?: Record<string, number>;
+    cities?: Record<string, number>;
+    features?: Record<string, number>;
+  };
 }
 
 export interface PropertyFilters {
@@ -36,7 +42,7 @@ const propertyFeatures = [
   "שמירה", "מיזוג מרכזי", "גג משותף", "חדר מקלחת אמבטיה"
 ];
 
-export const PropertySidebarFilter = ({ onFilterChange }: PropertySidebarFilterProps) => {
+export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySidebarFilterProps) => {
   const [filters, setFilters] = useState<PropertyFilters>({
     propertyTypes: [],
     rooms: [],
@@ -167,12 +173,19 @@ export const PropertySidebarFilter = ({ onFilterChange }: PropertySidebarFilterP
             <div className="space-y-3">
               {propertyTypes.map((type) => (
                 <div key={type} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`type-${type}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {type}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`type-${type}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {type}
+                    </label>
+                    {counts?.propertyTypes?.[type] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.propertyTypes[type]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`type-${type}`}
                     checked={filters.propertyTypes.includes(type)}
@@ -188,12 +201,19 @@ export const PropertySidebarFilter = ({ onFilterChange }: PropertySidebarFilterP
             <div className="space-y-3">
               {roomOptions.map((room) => (
                 <div key={room} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`room-${room}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {room} חדרים
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`room-${room}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {room} חדרים
+                    </label>
+                    {counts?.rooms?.[room] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.rooms[room]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`room-${room}`}
                     checked={filters.rooms.includes(room)}
@@ -261,12 +281,19 @@ export const PropertySidebarFilter = ({ onFilterChange }: PropertySidebarFilterP
             <div className="space-y-3">
               {cities.slice(0, 10).map((city) => (
                 <div key={city} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`city-${city}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {city}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`city-${city}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {city}
+                    </label>
+                    {counts?.cities?.[city] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.cities[city]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`city-${city}`}
                     checked={filters.cities.includes(city)}
@@ -287,12 +314,19 @@ export const PropertySidebarFilter = ({ onFilterChange }: PropertySidebarFilterP
             <div className="space-y-3">
               {propertyFeatures.slice(0, 10).map((feature) => (
                 <div key={feature} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`feature-${feature}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {feature}
-                  </label>
+                  <div className="flex items-center gap-2 flex-1">
+                    <label
+                      htmlFor={`feature-${feature}`}
+                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                    >
+                      {feature}
+                    </label>
+                    {counts?.features?.[feature] !== undefined && (
+                      <Badge variant="outline" className="h-5 text-xs px-1.5">
+                        {counts.features[feature]}
+                      </Badge>
+                    )}
+                  </div>
                   <Checkbox
                     id={`feature-${feature}`}
                     checked={filters.features.includes(feature)}
