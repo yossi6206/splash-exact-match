@@ -134,8 +134,9 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
   );
 
   return (
-    <div className="hidden lg:block sticky top-20">
-      <Card className="overflow-hidden">
+    <div className="hidden lg:block">
+      <div className="sticky top-20 max-h-[calc(100vh-96px)]">
+        <Card className="overflow-hidden">
         <div className="bg-card border-b border-border p-4 flex items-center justify-center relative">
           {activeFiltersCount > 0 && (
             <Button 
@@ -158,7 +159,7 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
           </div>
         </div>
 
-        <div className="h-[calc(100vh-80px)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="max-h-[calc(100vh-280px)] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent">
           {/* Brands */}
           <FilterSection title="יצרן" section="brands">
             <div className="space-y-3">
@@ -333,6 +334,7 @@ export const LaptopSidebarFilter = ({ onFilterChange }: LaptopSidebarFilterProps
           </FilterSection>
         </div>
       </Card>
+      </div>
     </div>
   );
 };
