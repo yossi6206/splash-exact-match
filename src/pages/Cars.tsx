@@ -1,11 +1,13 @@
 import { useState, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { CarFilters, FilterState } from "@/components/CarFilters";
 import { CarCard } from "@/components/CarCard";
 import { CarSidebar, SidebarFilters } from "@/components/CarSidebar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
+import { Search } from "lucide-react";
 import carImage1 from "@/assets/item-car.jpg";
 import heroCar from "@/assets/hero-car.jpg";
 import carsBanner from "@/assets/cars-banner.jpg";
@@ -75,15 +77,7 @@ const mockCars = generateCars();
 const Cars = () => {
   const [sortBy, setSortBy] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
-  const [topFilters, setTopFilters] = useState<FilterState>({
-    manufacturer: "",
-    yearFrom: "",
-    yearTo: "",
-    priceMin: 0,
-    priceMax: 300000,
-    fuelType: "",
-    transmission: "",
-  });
+  const [searchQuery, setSearchQuery] = useState("");
   const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>({
     manufacturers: [],
     yearFrom: "",
@@ -99,12 +93,16 @@ const Cars = () => {
   });
   const itemsPerPage = 10;
   
-  // Combine filters from top bar and sidebar
+  // Filter and sort cars
   const filteredCars = useMemo(() => {
     let filtered = mockCars.filter((car) => {
-      // Top bar manufacturer filter
-      if (topFilters.manufacturer && topFilters.manufacturer !== "all" && !car.title.includes(topFilters.manufacturer)) {
-        return false;
+      // Search query filter
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchesSearch = 
+          car.title.toLowerCase().includes(query) ||
+          car.subtitle.toLowerCase().includes(query);
+        if (!matchesSearch) return false;
       }
       
       // Sidebar manufacturers filter
@@ -112,23 +110,16 @@ const Cars = () => {
         return false;
       }
       
-      // Year filters (use sidebar if set, otherwise top bar)
-      const yearFrom = sidebarFilters.yearFrom || topFilters.yearFrom;
-      const yearTo = sidebarFilters.yearTo || topFilters.yearTo;
-      if (yearFrom && car.year < parseInt(yearFrom)) {
+      // Year filters
+      if (sidebarFilters.yearFrom && car.year < parseInt(sidebarFilters.yearFrom)) {
         return false;
       }
-      if (yearTo && car.year > parseInt(yearTo)) {
+      if (sidebarFilters.yearTo && car.year > parseInt(sidebarFilters.yearTo)) {
         return false;
       }
       
-      // Price filters (use sidebar values)
+      // Price filters
       if (car.price < sidebarFilters.priceMin || car.price > sidebarFilters.priceMax) {
-        return false;
-      }
-      
-      // Top bar fuel type filter
-      if (topFilters.fuelType && topFilters.fuelType !== "all" && !car.subtitle.includes(topFilters.fuelType)) {
         return false;
       }
       
@@ -137,17 +128,12 @@ const Cars = () => {
         return false;
       }
       
-      // Top bar transmission filter
-      if (topFilters.transmission && topFilters.transmission !== "all" && !car.subtitle.includes(topFilters.transmission)) {
-        return false;
-      }
-      
       // Sidebar transmissions filter
       if (sidebarFilters.transmissions.length > 0 && !sidebarFilters.transmissions.some(t => car.subtitle.includes(t))) {
         return false;
       }
       
-      // Hand filter (sidebar only)
+      // Hand filter
       if (sidebarFilters.hands.length > 0) {
         const handMatches = sidebarFilters.hands.some(h => {
           if (h === "יד ראשונה") return car.hand === "יד 1";
@@ -159,7 +145,7 @@ const Cars = () => {
         if (!handMatches) return false;
       }
       
-      // Features filter (sidebar only)
+      // Features filter
       if (sidebarFilters.features.length > 0) {
         const hasFeature = sidebarFilters.features.some(f => 
           car.features.some(cf => cf.includes(f) || f.includes(cf))
@@ -186,20 +172,19 @@ const Cars = () => {
     }
     
     return filtered;
-  }, [topFilters, sidebarFilters, sortBy]);
+  }, [searchQuery, sidebarFilters, sortBy]);
   
   const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentCars = filteredCars.slice(startIndex, endIndex);
   
-  const handleTopFilterChange = (newFilters: FilterState) => {
-    setTopFilters(newFilters);
+  const handleSidebarFilterChange = (newFilters: SidebarFilters) => {
+    setSidebarFilters(newFilters);
     setCurrentPage(1);
   };
   
-  const handleSidebarFilterChange = (newFilters: SidebarFilters) => {
-    setSidebarFilters(newFilters);
+  const handleSearch = () => {
     setCurrentPage(1);
   };
 
@@ -207,6 +192,79 @@ const Cars = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
+      {/* Hero Section with Search */}
+      <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(30,80%,55%)] via-[hsl(20,75%,50%)] to-[hsl(10,70%,50%)]">
+        <div className="container mx-auto px-4 py-20 relative z-10">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
+            {/* Main Heading */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+              מצא את הרכב המושלם שלך
+            </h1>
+            
+            {/* Subheading */}
+            <p className="text-xl md:text-2xl text-white/90 mb-8">
+              אלפי רכבים למכירה ממוכרים פרטיים וסוחרים מובילים
+            </p>
+
+            {/* Search Bar */}
+            <div className="bg-white rounded-full shadow-2xl p-2 flex items-center gap-2 max-w-3xl mx-auto">
+              <div className="flex-1 flex items-center gap-2 px-4">
+                <Search className="w-5 h-5 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="חפש לפי יצרן, דגם או תיאור..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg"
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+              </div>
+              <Button 
+                size="lg" 
+                onClick={handleSearch}
+                className="rounded-full px-8 bg-[hsl(30,80%,55%)] hover:bg-[hsl(30,80%,50%)]"
+              >
+                חפש
+              </Button>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-3xl mx-auto">
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                  110+
+                </div>
+                <div className="text-white/80 text-lg">
+                  רכבים זמינים
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                  15+
+                </div>
+                <div className="text-white/80 text-lg">
+                  יצרנים שונים
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                  100%
+                </div>
+                <div className="text-white/80 text-lg">
+                  בדוקים ומאומתים
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative Elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+        </div>
+      </section>
+
       <main className="container mx-auto px-4 py-6">
         {/* Category Tabs */}
         <div className="flex gap-4 mb-6 overflow-x-auto pb-2">
@@ -230,13 +288,10 @@ const Cars = () => {
           </button>
         </div>
 
-        {/* Filters */}
-        <CarFilters onFilterChange={handleTopFilterChange} />
-
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6 mt-8">
           <div>
-            <h1 className="text-2xl font-bold text-foreground mb-1">רכבים למכירה</h1>
+            <h2 className="text-2xl font-bold text-foreground mb-1">רכבים למכירה</h2>
             <p className="text-muted-foreground">{filteredCars.length.toLocaleString()} תוצאות</p>
           </div>
           
