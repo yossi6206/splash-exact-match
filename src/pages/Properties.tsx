@@ -90,6 +90,36 @@ const Properties = () => {
   });
   const itemsPerPage = 10;
   
+  // Calculate counts for filter options
+  const filterCounts = useMemo(() => {
+    const counts = {
+      propertyTypes: {} as Record<string, number>,
+      rooms: {} as Record<string, number>,
+      cities: {} as Record<string, number>,
+      features: {} as Record<string, number>,
+    };
+
+    mockProperties.forEach(property => {
+      // Count property types
+      counts.propertyTypes[property.propertyType] = (counts.propertyTypes[property.propertyType] || 0) + 1;
+      
+      // Count rooms
+      const roomKey = property.rooms >= 6 ? "6+" : property.rooms.toString();
+      counts.rooms[roomKey] = (counts.rooms[roomKey] || 0) + 1;
+      
+      // Count cities
+      const city = property.location.split(',')[0].trim();
+      counts.cities[city] = (counts.cities[city] || 0) + 1;
+      
+      // Count features
+      property.features.forEach(feature => {
+        counts.features[feature] = (counts.features[feature] || 0) + 1;
+      });
+    });
+
+    return counts;
+  }, []);
+  
   // Filter and sort properties
   const filteredProperties = useMemo(() => {
     let filtered = mockProperties.filter((property) => {
@@ -269,7 +299,7 @@ const Properties = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
           {/* Sidebar - Right side for RTL */}
-          <PropertySidebarFilter onFilterChange={handleSidebarFilterChange} />
+          <PropertySidebarFilter onFilterChange={handleSidebarFilterChange} counts={filterCounts} />
           
           {/* Properties List */}
           <div className="space-y-4">
