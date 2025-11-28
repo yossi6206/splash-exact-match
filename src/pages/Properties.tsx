@@ -12,13 +12,16 @@ import property1 from "@/assets/property-1.jpg";
 import property2 from "@/assets/property-2.jpg";
 import property3 from "@/assets/property-3.jpg";
 import property4 from "@/assets/property-4.jpg";
-import propertiesHeroBanner from "@/assets/properties-hero-banner.jpg";
+import propertiesHeroBanner from "@/assets/properties-hero-modern.jpg";
+import propertyModern1 from "@/assets/property-modern-1.jpg";
+import propertyModern2 from "@/assets/property-modern-2.jpg";
+import propertyModern3 from "@/assets/property-modern-3.jpg";
 
 const propertyTypes = ["דירה", "פנטהאוז", "דירת גן", "דירת גג", "בית פרטי", "דופלקס"];
 const conditions = ["חדש מקבלן", "משופץ", "במצב טוב", "דורש שיפוץ", "במצב מצוין"];
 const cities = ["תל אביב", "ירושלים", "חיפה", "באר שבע", "נתניה", "פתח תקווה", "ראשון לציון", "אשדוד", "רחובות", "בני ברק", "הרצליה", "כפר סבא", "רעננה", "מודיעין", "רמת גן", "גבעתיים", "חולון"];
 const neighborhoods = ["נווה צדק", "פלורנטין", "בורסה", "קריית אליעזר", "רמת אביב", "צהלה", "רמת חן", "שכון ג׳", "גבעת שאול", "הדר", "נווה שאנן", "רמת גן", "קריית מנחם", "נאות אפקה", "רמת פולג"];
-const images = [property1, property2, property3, property4];
+const images = [property1, property2, property3, property4, propertyModern1, propertyModern2, propertyModern3];
 
 const generateProperties = () => {
   const properties = [];

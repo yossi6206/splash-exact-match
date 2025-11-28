@@ -11,7 +11,8 @@ import { Search } from "lucide-react";
 import carImage1 from "@/assets/item-car.jpg";
 import heroCar from "@/assets/hero-car.jpg";
 import carsBanner from "@/assets/cars-banner.jpg";
-import carsHeroBanner from "@/assets/cars-hero-banner.jpg";
+import carsHeroBanner from "@/assets/cars-hero-modern.jpg";
+import carModern1 from "@/assets/car-modern-1.jpg";
 
 const carBrands = [
   { name: "טויוטה", models: ["קורולה", "קמרי", "יאריס", "RAV4", "אורליס"] },
@@ -39,7 +40,7 @@ const allFeatures = [
   "מערכת ניווט", "מערכת בידור", "גג פנורמי", "עור מלא",
   "מושבים חשמליים", "מושב נהג חשמלי", "מערכת שמע פרימיום"
 ];
-const images = [carImage1, heroCar, carsBanner];
+const images = [carImage1, heroCar, carsBanner, carModern1];
 
 const generateCars = () => {
   const cars = [];
