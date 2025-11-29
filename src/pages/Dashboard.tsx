@@ -1,6 +1,6 @@
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus } from "lucide-react";
+import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavLink } from "@/components/NavLink";
@@ -117,6 +117,63 @@ const Dashboard = () => {
             <Route path="/" element={
               <div className="max-w-7xl mx-auto">
                 <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4 md:mb-8">סקירה כללית</h1>
+                
+                {/* Quick Post Options */}
+                <div className="mb-8">
+                  <h2 className="text-xl font-bold text-foreground mb-4">פרסם מודעה חדשה</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <Link to="/dashboard/post-car">
+                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
+                        <div className="flex flex-col items-center gap-2">
+                          <div className="p-3 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 group-hover:scale-110 transition-transform">
+                            <Car className="h-6 w-6 text-white" />
+                          </div>
+                          <span className="font-semibold text-sm text-center">רכב</span>
+                        </div>
+                      </Card>
+                    </Link>
+                    <Link to="/dashboard/post-property">
+                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
+                        <div className="flex flex-col items-center gap-2">
+                          <div className="p-3 rounded-lg bg-gradient-to-br from-green-500 to-green-600 group-hover:scale-110 transition-transform">
+                            <Home className="h-6 w-6 text-white" />
+                          </div>
+                          <span className="font-semibold text-sm text-center">נדל״ן</span>
+                        </div>
+                      </Card>
+                    </Link>
+                    <Link to="/dashboard/post-laptop">
+                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
+                        <div className="flex flex-col items-center gap-2">
+                          <div className="p-3 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 group-hover:scale-110 transition-transform">
+                            <Laptop className="h-6 w-6 text-white" />
+                          </div>
+                          <span className="font-semibold text-sm text-center">מחשבים</span>
+                        </div>
+                      </Card>
+                    </Link>
+                    <Link to="/dashboard/post-secondhand">
+                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
+                        <div className="flex flex-col items-center gap-2">
+                          <div className="p-3 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 group-hover:scale-110 transition-transform">
+                            <Package className="h-6 w-6 text-white" />
+                          </div>
+                          <span className="font-semibold text-sm text-center">יד שנייה</span>
+                        </div>
+                      </Card>
+                    </Link>
+                    <Link to="/dashboard/post-job">
+                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
+                        <div className="flex flex-col items-center gap-2">
+                          <div className="p-3 rounded-lg bg-gradient-to-br from-pink-500 to-pink-600 group-hover:scale-110 transition-transform">
+                            <Briefcase className="h-6 w-6 text-white" />
+                          </div>
+                          <span className="font-semibold text-sm text-center">משרות</span>
+                        </div>
+                      </Card>
+                    </Link>
+                  </div>
+                </div>
                 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
