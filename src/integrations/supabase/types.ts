@@ -17,7 +17,9 @@ export type Database = {
       cars: {
         Row: {
           category: string | null
+          clicks_count: number | null
           condition: string | null
+          contacts_count: number | null
           created_at: string
           description: string | null
           features: string[] | null
@@ -37,11 +39,14 @@ export type Database = {
           updated_at: string
           user_id: string
           vehicle_type: string | null
+          views_count: number | null
           year: number
         }
         Insert: {
           category?: string | null
+          clicks_count?: number | null
           condition?: string | null
+          contacts_count?: number | null
           created_at?: string
           description?: string | null
           features?: string[] | null
@@ -61,11 +66,14 @@ export type Database = {
           updated_at?: string
           user_id: string
           vehicle_type?: string | null
+          views_count?: number | null
           year: number
         }
         Update: {
           category?: string | null
+          clicks_count?: number | null
           condition?: string | null
+          contacts_count?: number | null
           created_at?: string
           description?: string | null
           features?: string[] | null
@@ -85,6 +93,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
           vehicle_type?: string | null
+          views_count?: number | null
           year?: number
         }
         Relationships: []
@@ -357,8 +366,10 @@ export type Database = {
           applicants_count: number | null
           application_process: string[] | null
           benefits: string[] | null
+          clicks_count: number | null
           company_name: string
           company_size: string | null
+          contacts_count: number | null
           created_at: string
           description: string
           experience_max: number | null
@@ -382,8 +393,10 @@ export type Database = {
           applicants_count?: number | null
           application_process?: string[] | null
           benefits?: string[] | null
+          clicks_count?: number | null
           company_name: string
           company_size?: string | null
+          contacts_count?: number | null
           created_at?: string
           description: string
           experience_max?: number | null
@@ -407,8 +420,10 @@ export type Database = {
           applicants_count?: number | null
           application_process?: string[] | null
           benefits?: string[] | null
+          clicks_count?: number | null
           company_name?: string
           company_size?: string | null
+          contacts_count?: number | null
           created_at?: string
           description?: string
           experience_max?: number | null
@@ -434,8 +449,10 @@ export type Database = {
         Row: {
           battery: string | null
           brand: string
+          clicks_count: number | null
           condition: string
           connectivity: string | null
+          contacts_count: number | null
           created_at: string
           description: string | null
           features: string[] | null
@@ -458,13 +475,16 @@ export type Database = {
           storage_type: string | null
           updated_at: string
           user_id: string
+          views_count: number | null
           weight: string | null
         }
         Insert: {
           battery?: string | null
           brand: string
+          clicks_count?: number | null
           condition: string
           connectivity?: string | null
+          contacts_count?: number | null
           created_at?: string
           description?: string | null
           features?: string[] | null
@@ -487,13 +507,16 @@ export type Database = {
           storage_type?: string | null
           updated_at?: string
           user_id: string
+          views_count?: number | null
           weight?: string | null
         }
         Update: {
           battery?: string | null
           brand?: string
+          clicks_count?: number | null
           condition?: string
           connectivity?: string | null
+          contacts_count?: number | null
           created_at?: string
           description?: string | null
           features?: string[] | null
@@ -516,6 +539,7 @@ export type Database = {
           storage_type?: string | null
           updated_at?: string
           user_id?: string
+          views_count?: number | null
           weight?: string | null
         }
         Relationships: []
@@ -575,7 +599,9 @@ export type Database = {
         Row: {
           accessible: boolean | null
           balcony: boolean | null
+          clicks_count: number | null
           condition: string | null
+          contacts_count: number | null
           created_at: string
           description: string | null
           elevator: boolean | null
@@ -596,12 +622,15 @@ export type Database = {
           total_floors: number | null
           updated_at: string
           user_id: string
+          views_count: number | null
           year: number | null
         }
         Insert: {
           accessible?: boolean | null
           balcony?: boolean | null
+          clicks_count?: number | null
           condition?: string | null
+          contacts_count?: number | null
           created_at?: string
           description?: string | null
           elevator?: boolean | null
@@ -622,12 +651,15 @@ export type Database = {
           total_floors?: number | null
           updated_at?: string
           user_id: string
+          views_count?: number | null
           year?: number | null
         }
         Update: {
           accessible?: boolean | null
           balcony?: boolean | null
+          clicks_count?: number | null
           condition?: string | null
+          contacts_count?: number | null
           created_at?: string
           description?: string | null
           elevator?: boolean | null
@@ -648,6 +680,7 @@ export type Database = {
           total_floors?: number | null
           updated_at?: string
           user_id?: string
+          views_count?: number | null
           year?: number | null
         }
         Relationships: []
@@ -728,8 +761,10 @@ export type Database = {
           age: string | null
           brand: string | null
           category: string
+          clicks_count: number | null
           color: string | null
           condition: string
+          contacts_count: number | null
           created_at: string
           description: string | null
           features: string[] | null
@@ -746,13 +781,16 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
+          views_count: number | null
         }
         Insert: {
           age?: string | null
           brand?: string | null
           category: string
+          clicks_count?: number | null
           color?: string | null
           condition: string
+          contacts_count?: number | null
           created_at?: string
           description?: string | null
           features?: string[] | null
@@ -769,13 +807,16 @@ export type Database = {
           title: string
           updated_at?: string
           user_id: string
+          views_count?: number | null
         }
         Update: {
           age?: string | null
           brand?: string | null
           category?: string
+          clicks_count?: number | null
           color?: string | null
           condition?: string
+          contacts_count?: number | null
           created_at?: string
           description?: string | null
           features?: string[] | null
@@ -792,6 +833,7 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+          views_count?: number | null
         }
         Relationships: []
       }

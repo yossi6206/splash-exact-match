@@ -52,6 +52,12 @@ const LaptopDetails = () => {
         });
       } else {
         setLaptop(data);
+        
+        // Increment view count
+        await supabase
+          .from("laptops")
+          .update({ views_count: (data.views_count || 0) + 1 })
+          .eq("id", id);
       }
       setLoading(false);
     };
@@ -73,6 +79,21 @@ const LaptopDetails = () => {
       title: isFavorite ? "הוסר מהמועדפים" : "נוסף למועדפים",
       description: isFavorite ? "המוצר הוסר מרשימת המועדפים" : "המוצר נוסף לרשימת המועדפים"
     });
+  };
+
+  const handleContactClick = async () => {
+    if (!id || !laptop) return;
+    
+    // Increment contacts count
+    await supabase
+      .from("laptops")
+      .update({ contacts_count: (laptop.contacts_count || 0) + 1 })
+      .eq("id", id);
+  };
+
+  const handleShowPhone = async () => {
+    setShowPhone(true);
+    await handleContactClick();
   };
 
   if (loading) {
@@ -364,11 +385,11 @@ const LaptopDetails = () => {
 
                   {/* Contact Buttons */}
                   <div className="space-y-2">
-                    <Button className="w-full" size="lg">
+                    <Button className="w-full" size="lg" onClick={handleContactClick}>
                       <Phone className="ml-2 h-4 w-4" />
                       צור קשר טלפוני
                     </Button>
-                    <Button variant="outline" className="w-full" size="lg">
+                    <Button variant="outline" className="w-full" size="lg" onClick={handleContactClick}>
                       <MessageSquare className="ml-2 h-4 w-4" />
                       שלח הודעה
                     </Button>
@@ -402,7 +423,7 @@ const LaptopDetails = () => {
                           <Button 
                             variant="outline" 
                             className="w-full"
-                            onClick={() => setShowPhone(true)}
+                            onClick={handleShowPhone}
                           >
                             <Phone className="h-4 w-4 ml-2" />
                             הצג מספר טלפון
