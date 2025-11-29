@@ -235,7 +235,8 @@ const LaptopDetails = () => {
             )}
 
             {/* Technical Specifications */}
-            {(laptop.processor || laptop.ram || laptop.storage || laptop.screen_size || laptop.graphics_card) && (
+            {(laptop.processor || laptop.ram || laptop.storage || laptop.screen_size || laptop.graphics_card || 
+              laptop.resolution || laptop.operating_system || laptop.weight || laptop.battery || laptop.connectivity || laptop.ports) && (
               <Card>
                 <CardHeader>
                   <CardTitle className="text-xl">מפרט טכני</CardTitle>
@@ -266,10 +267,46 @@ const LaptopDetails = () => {
                         <div className="text-foreground font-semibold">{laptop.screen_size}"</div>
                       </div>
                     )}
+                    {laptop.resolution && (
+                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                        <div className="text-muted-foreground font-medium">רזולוציה</div>
+                        <div className="text-foreground font-semibold">{laptop.resolution}</div>
+                      </div>
+                    )}
                     {laptop.graphics_card && (
                       <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
                         <div className="text-muted-foreground font-medium">כרטיס מסך</div>
                         <div className="text-foreground font-semibold">{laptop.graphics_card}</div>
+                      </div>
+                    )}
+                    {laptop.operating_system && (
+                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                        <div className="text-muted-foreground font-medium">מערכת הפעלה</div>
+                        <div className="text-foreground font-semibold">{laptop.operating_system}</div>
+                      </div>
+                    )}
+                    {laptop.weight && (
+                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                        <div className="text-muted-foreground font-medium">משקל</div>
+                        <div className="text-foreground font-semibold">{laptop.weight}</div>
+                      </div>
+                    )}
+                    {laptop.battery && (
+                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                        <div className="text-muted-foreground font-medium">סוללה</div>
+                        <div className="text-foreground font-semibold">{laptop.battery}</div>
+                      </div>
+                    )}
+                    {laptop.connectivity && (
+                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                        <div className="text-muted-foreground font-medium">תקשורת</div>
+                        <div className="text-foreground font-semibold">{laptop.connectivity}</div>
+                      </div>
+                    )}
+                    {laptop.ports && (
+                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                        <div className="text-muted-foreground font-medium">יציאות</div>
+                        <div className="text-foreground font-semibold">{laptop.ports}</div>
                       </div>
                     )}
                   </div>
