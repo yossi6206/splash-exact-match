@@ -12,6 +12,7 @@ import PostCar from "./dashboard/PostCar";
 import PostProperty from "./dashboard/PostProperty";
 import PostLaptop from "./dashboard/PostLaptop";
 import PostSecondhand from "./dashboard/PostSecondhand";
+import MyAds from "./dashboard/MyAds";
 
 const Dashboard = () => {
   const stats = [
@@ -215,6 +216,7 @@ const Dashboard = () => {
                 </Card>
               </div>
             } />
+            <Route path="/ads" element={<MyAds />} />
             <Route path="/post-job" element={<PostJob />} />
             <Route path="/my-jobs" element={<MyJobs />} />
             <Route path="/post-car" element={<PostCar />} />
