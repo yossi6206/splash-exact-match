@@ -495,7 +495,7 @@ const Cars = () => {
             ) : (
               currentCars.map((car) => {
                 const carForCard = {
-                  id: parseInt(car.id) || 0,
+                  id: car.id,
                   image: car.images && car.images.length > 0 ? car.images[0] : carImage1,
                   title: `${car.manufacturer || ''} ${car.model}`.trim(),
                   subtitle: `${car.transmission || ''} ${car.fuel_type || ''}`,
