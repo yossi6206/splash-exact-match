@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
@@ -7,77 +7,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
-import { Search } from "lucide-react";
-import property1 from "@/assets/property-1.jpg";
-import property2 from "@/assets/property-2.jpg";
-import property3 from "@/assets/property-3.jpg";
-import property4 from "@/assets/property-4.jpg";
+import { Search, Loader2 } from "lucide-react";
 import propertiesHeroBanner from "@/assets/properties-hero-modern.jpg";
-import propertyModern1 from "@/assets/property-modern-1.jpg";
-import propertyModern2 from "@/assets/property-modern-2.jpg";
-import propertyModern3 from "@/assets/property-modern-3.jpg";
-
-const propertyTypes = ["דירה", "פנטהאוז", "דירת גן", "דירת גג", "בית פרטי", "דופלקס"];
-const conditions = ["חדש מקבלן", "משופץ", "במצב טוב", "דורש שיפוץ", "במצב מצוין"];
-const cities = ["תל אביב", "ירושלים", "חיפה", "באר שבע", "נתניה", "פתח תקווה", "ראשון לציון", "אשדוד", "רחובות", "בני ברק", "הרצליה", "כפר סבא", "רעננה", "מודיעין", "רמת גן", "גבעתיים", "חולון"];
-const neighborhoods = ["נווה צדק", "פלורנטין", "בורסה", "קריית אליעזר", "רמת אביב", "צהלה", "רמת חן", "שכון ג׳", "גבעת שאול", "הדר", "נווה שאנן", "רמת גן", "קריית מנחם", "נאות אפקה", "רמת פולג"];
-const images = [property1, property2, property3, property4, propertyModern1, propertyModern2, propertyModern3];
-
-const generateProperties = () => {
-  const properties = [];
-  for (let i = 1; i <= 110; i++) {
-    const propertyType = propertyTypes[Math.floor(Math.random() * propertyTypes.length)];
-    const condition = conditions[Math.floor(Math.random() * conditions.length)];
-    const city = cities[Math.floor(Math.random() * cities.length)];
-    const neighborhood = neighborhoods[Math.floor(Math.random() * neighborhoods.length)];
-    const image = images[Math.floor(Math.random() * images.length)];
-    const rooms = Math.floor(Math.random() * 5) + 2; // 2-6 חדרים
-    const size = Math.floor(Math.random() * 100) + 60; // 60-160 מ״ר
-    const floor = Math.floor(Math.random() * 10) + 1; // קומה 1-10
-    const basePrice = Math.floor(Math.random() * 3000000) + 800000; // 800k-3.8M
-    const formattedPrice = basePrice.toLocaleString('he-IL');
-    
-    const allFeatures = ["מעלית", "חניה", "מרפסת", "מחסן", "ממ״ד", "מרפסת שמש", "נגיש לנכים", "משופץ", "אויר מרכזי"];
-    const numFeatures = Math.floor(Math.random() * 4) + 2;
-    const features = [...allFeatures].sort(() => 0.5 - Math.random()).slice(0, numFeatures);
-    
-    const subtitles = [
-      "דירה מרווחת ומוארת במיקום מעולה",
-      "קרוב לתחבורה ציבורית ושירותים",
-      "דירה שקטה במיקום מעולה",
-      "במיקום מרכזי וחיוני",
-      "דירה מושקעת ומעוצבת",
-      "נוף פתוח ללא מפגעים",
-      "בלב השכונה המבוקשת",
-      "קרוב לבתי ספר וגני ילדים",
-      "דירה יוקרתית במיקום מעולה",
-      "דירה מתוחזקת היטב"
-    ];
-    
-    properties.push({
-      id: i,
-      image: image,
-      title: `${propertyType} ${rooms} חדרים ב${neighborhood}`,
-      subtitle: subtitles[Math.floor(Math.random() * subtitles.length)],
-      propertyType: propertyType,
-      condition: condition,
-      price: formattedPrice,
-      location: `${city}, ${neighborhood}`,
-      rooms: rooms,
-      size: size,
-      floor: floor,
-      features: features,
-    });
-  }
-  return properties;
-};
-
-const mockProperties = generateProperties();
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Properties = () => {
   const [sortBy, setSortBy] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [properties, setProperties] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [sidebarFilters, setSidebarFilters] = useState<PropertySidebarFilters>({
     propertyTypes: [],
     rooms: [],
@@ -93,6 +33,29 @@ const Properties = () => {
     features: [],
   });
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    fetchProperties();
+  }, []);
+
+  const fetchProperties = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("properties")
+        .select("*")
+        .eq("status", "active")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setProperties(data || []);
+    } catch (error: any) {
+      console.error("Error fetching properties:", error);
+      toast.error("שגיאה באחזור הנכסים");
+    } finally {
+      setLoading(false);
+    }
+  };
   
   // Calculate counts for filter options
   const filterCounts = useMemo(() => {
@@ -103,42 +66,50 @@ const Properties = () => {
       features: {} as Record<string, number>,
     };
 
-    mockProperties.forEach(property => {
+    properties.forEach(property => {
       // Count property types
-      counts.propertyTypes[property.propertyType] = (counts.propertyTypes[property.propertyType] || 0) + 1;
+      if (property.property_type) {
+        counts.propertyTypes[property.property_type] = (counts.propertyTypes[property.property_type] || 0) + 1;
+      }
       
       // Count rooms
-      const roomKey = property.rooms >= 6 ? "6+" : property.rooms.toString();
-      counts.rooms[roomKey] = (counts.rooms[roomKey] || 0) + 1;
+      const roomKey = property.rooms >= 6 ? "6+" : property.rooms?.toString();
+      if (roomKey) {
+        counts.rooms[roomKey] = (counts.rooms[roomKey] || 0) + 1;
+      }
       
       // Count cities
-      const city = property.location.split(',')[0].trim();
-      counts.cities[city] = (counts.cities[city] || 0) + 1;
+      const city = property.location?.split(',')[0]?.trim();
+      if (city) {
+        counts.cities[city] = (counts.cities[city] || 0) + 1;
+      }
       
       // Count features
-      property.features.forEach(feature => {
-        counts.features[feature] = (counts.features[feature] || 0) + 1;
-      });
+      if (property.features) {
+        property.features.forEach((feature: string) => {
+          counts.features[feature] = (counts.features[feature] || 0) + 1;
+        });
+      }
     });
 
     return counts;
-  }, []);
+  }, [properties]);
   
   // Filter and sort properties
   const filteredProperties = useMemo(() => {
-    let filtered = mockProperties.filter((property) => {
+    let filtered = properties.filter((property) => {
       // Search query filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         const matchesSearch = 
-          property.title.toLowerCase().includes(query) ||
-          property.subtitle.toLowerCase().includes(query) ||
-          property.location.toLowerCase().includes(query);
+          property.title?.toLowerCase().includes(query) ||
+          property.description?.toLowerCase().includes(query) ||
+          property.location?.toLowerCase().includes(query);
         if (!matchesSearch) return false;
       }
       
       // Property type filter
-      if (sidebarFilters.propertyTypes.length > 0 && !sidebarFilters.propertyTypes.includes(property.propertyType)) {
+      if (sidebarFilters.propertyTypes.length > 0 && !sidebarFilters.propertyTypes.includes(property.property_type)) {
         return false;
       }
       
@@ -152,7 +123,7 @@ const Properties = () => {
       }
       
       // Price filter
-      const price = parseInt(property.price.replace(/,/g, ''));
+      const price = property.price;
       if (price < sidebarFilters.priceMin || price > sidebarFilters.priceMax) {
         return false;
       }
@@ -181,14 +152,14 @@ const Properties = () => {
       
       // City filter
       if (sidebarFilters.cities.length > 0) {
-        const cityMatch = sidebarFilters.cities.some(city => property.location.includes(city));
+        const cityMatch = sidebarFilters.cities.some(city => property.location?.includes(city));
         if (!cityMatch) return false;
       }
       
       // Features filter
-      if (sidebarFilters.features.length > 0) {
+      if (sidebarFilters.features.length > 0 && property.features) {
         const hasFeature = sidebarFilters.features.every(f => 
-          property.features.some(pf => pf.includes(f) || f.includes(pf))
+          property.features.some((pf: string) => pf.includes(f) || f.includes(pf))
         );
         if (!hasFeature) return false;
       }
@@ -271,18 +242,18 @@ const Properties = () => {
             {/* Quick Stats */}
             <div className="flex items-center justify-center gap-8 pt-4">
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">110+</div>
+                <div className="text-3xl font-bold text-white">{properties.length}+</div>
                 <div className="text-sm text-white/80">נכסים זמינים</div>
               </div>
               <div className="w-px h-12 bg-white/30" />
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">17+</div>
+                <div className="text-3xl font-bold text-white">{Object.keys(filterCounts.cities).length}+</div>
                 <div className="text-sm text-white/80">ערים</div>
               </div>
               <div className="w-px h-12 bg-white/30" />
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">98%</div>
-                <div className="text-sm text-white/80">שביעות רצון</div>
+                <div className="text-3xl font-bold text-white">{filteredProperties.length}</div>
+                <div className="text-sm text-white/80">תוצאות</div>
               </div>
             </div>
           </div>
@@ -324,9 +295,29 @@ const Properties = () => {
           
           {/* Properties List */}
           <div className="space-y-4">
-            {currentProperties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
-            ))}
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : currentProperties.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-muted-foreground text-lg">לא נמצאו נכסים התואמים את החיפוש</p>
+              </div>
+            ) : (
+              <>
+                {currentProperties.map((property) => (
+                  <PropertyCard 
+                    key={property.id} 
+                    property={{
+                      ...property,
+                      image: property.images && property.images[0] ? property.images[0] : undefined,
+                      propertyType: property.property_type,
+                      subtitle: property.description?.substring(0, 100) || '',
+                    }} 
+                  />
+                ))}
+              </>
+            )}
             
             {/* Pagination */}
             <Pagination className="mt-8">
