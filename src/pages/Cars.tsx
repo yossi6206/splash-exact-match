@@ -507,7 +507,7 @@ const Cars = () => {
                   fuel_type: car.fuel_type,
                   transmission: car.transmission,
                   condition: car.condition,
-                  price: parseFloat(car.price || "0"),
+                  price: parseFloat((car.price || "0").replace(/,/g, "")),
                   location: car.location,
                   features: car.features || [],
                 };

@@ -46,8 +46,14 @@ const CarDetails = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [analysis, setAnalysis] = useState("");
+  const [showPhone, setShowPhone] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
+
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   // Fetch car data from Supabase
   useEffect(() => {
@@ -314,9 +320,11 @@ const CarDetails = () => {
               <CardContent className="p-6">
                 <div className="text-center mb-6">
                   <div className="text-4xl font-bold text-foreground mb-2">
-                    {carDetails.price === "לא ציין מחיר" ? "לא ציין מחיר" : `${parseFloat(carDetails.price).toLocaleString()} ₪`}
+                    {carDetails.price === "לא ציין מחיר" || !carDetails.price 
+                      ? "לא ציין מחיר" 
+                      : `${parseFloat(carDetails.price).toLocaleString('he-IL')} ₪`}
                   </div>
-                  {carDetails.price !== "לא ציין מחיר" && (
+                  {carDetails.price && carDetails.price !== "לא ציין מחיר" && (
                     <p className="text-sm text-muted-foreground">
                       ניתן למשא ומתן
                     </p>
@@ -365,10 +373,23 @@ const CarDetails = () => {
                     )}
                     {carData.seller_phone && (
                       <div className="pt-3 border-t border-border">
-                        <div className="text-sm text-muted-foreground mb-1">טלפון</div>
-                        <a href={`tel:${carData.seller_phone}`} className="text-lg font-bold text-primary hover:underline" dir="ltr">
-                          {carData.seller_phone}
-                        </a>
+                        {!showPhone ? (
+                          <Button 
+                            variant="outline" 
+                            className="w-full"
+                            onClick={() => setShowPhone(true)}
+                          >
+                            <Phone className="h-4 w-4 ml-2" />
+                            הצג מספר טלפון
+                          </Button>
+                        ) : (
+                          <>
+                            <div className="text-sm text-muted-foreground mb-1">טלפון</div>
+                            <a href={`tel:${carData.seller_phone}`} className="text-lg font-bold text-primary hover:underline" dir="ltr">
+                              {carData.seller_phone}
+                            </a>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
