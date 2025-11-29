@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
+import { ImageUpload } from "@/components/ImageUpload";
 
 const carSchema = z.object({
   manufacturer: z.string().trim().min(2, "יצרן חובה"),
@@ -43,11 +44,13 @@ const PostCar = () => {
     transmission: "",
     vehicle_type: "",
     condition: "",
+    category: "",
     price: "",
     location: "",
     description: "",
   });
 
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [features, setFeatures] = useState<string[]>([""]);
   
   const carFeatures = [
@@ -116,6 +119,11 @@ const PostCar = () => {
       }
     }
 
+    if (imageUrls.length === 0) {
+      toast.error("נא להעלות לפחות תמונה אחת");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -128,12 +136,14 @@ const PostCar = () => {
         hand: parseInt(formData.hand),
         fuel_type: formData.fuel_type,
         transmission: formData.transmission,
-        vehicle_type: formData.vehicle_type,
+        vehicle_type: formData.vehicle_type || "רכב פרטי",
         condition: formData.condition,
+        category: formData.category || null,
         price: formData.price,
         location: formData.location,
         description: formData.description,
         features: selectedFeatures,
+        images: imageUrls,
         status: "active",
       });
 
@@ -162,6 +172,15 @@ const PostCar = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        <Card className="p-6">
+          <h2 className="text-xl font-bold text-foreground mb-4">תמונות *</h2>
+          <ImageUpload
+            onImagesChange={setImageUrls}
+            maxImages={8}
+            existingImages={imageUrls}
+          />
+        </Card>
+
         <Card className="p-6">
           <h2 className="text-xl font-bold text-foreground mb-4">פרטי הרכב</h2>
           <div className="space-y-4">
@@ -331,6 +350,29 @@ const PostCar = () => {
                 </Select>
               </div>
               <div className="space-y-2">
+                <Label htmlFor="category">קטגוריה</Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => setFormData({ ...formData, category: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר קטגוריה" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="אופנועים חדשים">אופנועים חדשים</SelectItem>
+                    <SelectItem value="אופנועים משומשים">אופנועים משומשים</SelectItem>
+                    <SelectItem value="אביזרים - גלגלים וחישוקים">אביזרים - גלגלים וחישוקים</SelectItem>
+                    <SelectItem value="אביזרים - מערכות שמע">אביזרים - מערכות שמע</SelectItem>
+                    <SelectItem value="אביזרים - אביזרי קישוט">אביזרים - אביזרי קישוט</SelectItem>
+                    <SelectItem value="אביזרים - ציוד בטיחות">אביזרים - ציוד בטיחות</SelectItem>
+                    <SelectItem value="שירותים - מוסכים">שירותים - מוסכים</SelectItem>
+                    <SelectItem value="שירותים - מכוני שירות">שירותים - מכוני שירות</SelectItem>
+                    <SelectItem value="שירותים - גרירה">שירותים - גרירה</SelectItem>
+                    <SelectItem value="שירותים - ביטוח רכב">שירותים - ביטוח רכב</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="price">מחיר *</Label>
                 <Input
                   id="price"
@@ -341,17 +383,18 @@ const PostCar = () => {
                   placeholder="150,000 ₪"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="location">מיקום *</Label>
-                <Input
-                  id="location"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="תל אביב"
-                />
-              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="location">מיקום *</Label>
+              <Input
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleInputChange}
+                required
+                placeholder="תל אביב"
+              />
             </div>
 
             <div className="space-y-2">

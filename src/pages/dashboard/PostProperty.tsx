@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
+import { ImageUpload } from "@/components/ImageUpload";
 
 const propertySchema = z.object({
   title: z.string().trim().min(3, "כותרת חייבת להכיל לפחות 3 תווים").max(200, "כותרת ארוכה מדי"),
@@ -42,6 +43,8 @@ const PostProperty = () => {
     condition: "",
     description: "",
   });
+
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const propertyFeatures = [
     "חניה",
@@ -105,6 +108,11 @@ const PostProperty = () => {
       }
     }
 
+    if (imageUrls.length === 0) {
+      toast.error("נא להעלות לפחות תמונה אחת");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -126,6 +134,7 @@ const PostProperty = () => {
         elevator: selectedFeatures.includes("מעלית"),
         balcony: selectedFeatures.includes("מרפסת"),
         accessible: selectedFeatures.includes("נגיש לנכים"),
+        images: imageUrls,
         status: "active",
       });
 
@@ -154,6 +163,15 @@ const PostProperty = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        <Card className="p-6">
+          <h2 className="text-xl font-bold text-foreground mb-4">תמונות *</h2>
+          <ImageUpload
+            onImagesChange={setImageUrls}
+            maxImages={8}
+            existingImages={imageUrls}
+          />
+        </Card>
+
         <Card className="p-6">
           <h2 className="text-xl font-bold text-foreground mb-4">פרטי הנכס</h2>
           <div className="space-y-4">
