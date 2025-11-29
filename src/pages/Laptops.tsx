@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { LaptopSidebarFilter } from "@/components/LaptopSidebarFilter";
@@ -7,10 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { SlidersHorizontal, Search, TrendingUp, Eye, Package } from "lucide-react";
+import { SlidersHorizontal, Search, TrendingUp, Eye, Package, Loader2 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { useCountUp } from "@/hooks/useCountUp";
+import { supabase } from "@/integrations/supabase/client";
 import laptopImage from "@/assets/item-laptop.jpg";
 import phoneImage from "@/assets/item-phone.jpg";
 import heroLaptopImage from "@/assets/hero-laptop.jpg";
@@ -84,7 +85,29 @@ const Laptops = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [laptops, setLaptops] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 12;
+
+  useEffect(() => {
+    fetchLaptops();
+  }, []);
+
+  const fetchLaptops = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("laptops")
+      .select("*")
+      .eq("status", "active")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching laptops:", error);
+    } else {
+      setLaptops(data || []);
+    }
+    setLoading(false);
+  };
   
   // Calculate counts for filter options
   const filterCounts = useMemo(() => {
@@ -97,45 +120,28 @@ const Laptops = () => {
       conditions: {} as Record<string, number>,
       cities: {} as Record<string, number>,
     };
-
-    mockLaptops.forEach(laptop => {
-      // Count brands
-      const brand = laptop.title.split(' ')[0];
-      counts.brands[brand] = (counts.brands[brand] || 0) + 1;
-      
-      // Count processors, RAM, storage, screen from subtitle
-      const subtitle = laptop.subtitle;
-      processors.forEach(proc => {
-        if (subtitle.includes(proc)) counts.processors[proc] = (counts.processors[proc] || 0) + 1;
-      });
-      ramOptions.forEach(ram => {
-        if (subtitle.includes(ram)) counts.ramOptions[ram] = (counts.ramOptions[ram] || 0) + 1;
-      });
-      storageOptions.forEach(storage => {
-        if (subtitle.includes(storage)) counts.storageOptions[storage] = (counts.storageOptions[storage] || 0) + 1;
-      });
-      screenSizes.forEach(size => {
-        if (subtitle.includes(size)) counts.screenSizes[size] = (counts.screenSizes[size] || 0) + 1;
-      });
-      
-      // Count condition
-      counts.conditions[laptop.condition] = (counts.conditions[laptop.condition] || 0) + 1;
-      
-      // Count cities
-      counts.cities[laptop.location] = (counts.cities[laptop.location] || 0) + 1;
+    
+    laptops.forEach(laptop => {
+      if (laptop.brand) counts.brands[laptop.brand] = (counts.brands[laptop.brand] || 0) + 1;
+      if (laptop.processor) counts.processors[laptop.processor] = (counts.processors[laptop.processor] || 0) + 1;
+      if (laptop.ram) counts.ramOptions[`${laptop.ram}GB`] = (counts.ramOptions[`${laptop.ram}GB`] || 0) + 1;
+      if (laptop.storage) counts.storageOptions[`${laptop.storage}GB`] = (counts.storageOptions[`${laptop.storage}GB`] || 0) + 1;
+      if (laptop.screen_size) counts.screenSizes[`${laptop.screen_size}"`] = (counts.screenSizes[`${laptop.screen_size}"`] || 0) + 1;
+      if (laptop.condition) counts.conditions[laptop.condition] = (counts.conditions[laptop.condition] || 0) + 1;
+      if (laptop.location) counts.cities[laptop.location] = (counts.cities[laptop.location] || 0) + 1;
     });
 
     return counts;
-  }, []);
+  }, [laptops]);
   
-  const totalLaptops = useCountUp({ end: mockLaptops.length, duration: 2000, startOnView: false });
-  const activeListings = useCountUp({ end: Math.floor(mockLaptops.length * 0.85), duration: 2000, startOnView: false });
+  const totalLaptops = useCountUp({ end: laptops.length, duration: 2000, startOnView: false });
+  const activeListings = useCountUp({ end: Math.floor(laptops.length * 0.85), duration: 2000, startOnView: false });
   const avgViews = useCountUp({ end: 245, duration: 1500, startOnView: false });
   
-  const totalPages = Math.ceil(mockLaptops.length / itemsPerPage);
+  const totalPages = Math.ceil(laptops.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentLaptops = mockLaptops.slice(startIndex, endIndex);
+  const currentLaptops = laptops.slice(startIndex, endIndex);
 
   return (
     <div className="min-h-screen bg-background">
@@ -233,7 +239,7 @@ const Laptops = () => {
               </SelectContent>
             </Select>
           </div>
-          <p className="text-muted-foreground">{mockLaptops.length.toLocaleString()} תוצאות</p>
+          <p className="text-muted-foreground">{laptops.length.toLocaleString()} תוצאות</p>
         </div>
 
         {/* Main Content */}
@@ -243,11 +249,31 @@ const Laptops = () => {
 
           {/* Laptops Grid */}
           <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-end" dir="rtl">
-              {currentLaptops.map((laptop) => (
-                <LaptopCard key={laptop.id} laptop={laptop} />
-              ))}
-            </div>
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : currentLaptops.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-lg text-muted-foreground">לא נמצאו מחשבים</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-end" dir="rtl">
+                {currentLaptops.map((laptop) => {
+                  const laptopForCard = {
+                    id: laptop.id,
+                    image: laptop.images && laptop.images.length > 0 ? laptop.images[0] : laptopImage,
+                    title: `${laptop.brand} ${laptop.model}`,
+                    subtitle: `${laptop.processor || ''} ${laptop.ram ? laptop.ram + 'GB' : ''} ${laptop.storage ? laptop.storage + 'GB' : ''}`.trim(),
+                    price: laptop.price,
+                    condition: laptop.condition,
+                    location: laptop.location,
+                    features: laptop.features || [],
+                  };
+                  return <LaptopCard key={laptop.id} laptop={laptopForCard} />;
+                })}
+              </div>
+            )}
             
             {/* Pagination */}
             <Pagination className="mt-8">
