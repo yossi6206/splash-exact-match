@@ -6,18 +6,18 @@ import { Link } from "react-router-dom";
 
 interface CarCardProps {
   car: {
-    id: number;
+    id: number | string;
     image: string;
     title: string;
     subtitle: string;
-    manufacturer?: string;
+    manufacturer?: string | null;
     model?: string;
     year: number;
     hand: string;
     km?: number;
-    fuel_type?: string;
-    transmission?: string;
-    condition?: string;
+    fuel_type?: string | null;
+    transmission?: string | null;
+    condition?: string | null;
     price: number;
     location?: string;
     features: string[];
