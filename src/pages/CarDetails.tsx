@@ -36,6 +36,9 @@ interface CarData {
   user_id: string;
   seller_name: string | null;
   seller_phone: string | null;
+  views_count?: number;
+  clicks_count?: number;
+  contacts_count?: number;
 }
 
 const CarDetails = () => {
@@ -79,6 +82,12 @@ const CarDetails = () => {
         if (data.images && data.images.length > 0) {
           setMainImage(data.images[0]);
         }
+        
+        // Increment view count
+        await supabase
+          .from("cars")
+          .update({ views_count: (data.views_count || 0) + 1 })
+          .eq("id", id);
       }
       setLoading(false);
     };
@@ -136,6 +145,21 @@ const CarDetails = () => {
     } finally {
       setIsAnalyzing(false);
     }
+  };
+
+  const handleContactClick = async () => {
+    if (!id || !carData) return;
+    
+    // Increment contacts count
+    await supabase
+      .from("cars")
+      .update({ contacts_count: (carData.contacts_count || 0) + 1 })
+      .eq("id", id);
+  };
+
+  const handleShowPhone = async () => {
+    setShowPhone(true);
+    await handleContactClick();
   };
 
   if (loading) {
@@ -334,6 +358,7 @@ const CarDetails = () => {
                 <div className="space-y-3">
                   <Button 
                     className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-12 text-lg font-semibold gap-2"
+                    onClick={handleContactClick}
                   >
                     <Phone className="h-5 w-5" />
                     הצעת מספר טלפון
@@ -341,6 +366,7 @@ const CarDetails = () => {
                   <Button 
                     variant="outline" 
                     className="w-full h-12 text-lg font-semibold gap-2 border-2"
+                    onClick={handleContactClick}
                   >
                     <MessageSquare className="h-5 w-5" />
                     שליחת הודעה
@@ -377,7 +403,7 @@ const CarDetails = () => {
                           <Button 
                             variant="outline" 
                             className="w-full"
-                            onClick={() => setShowPhone(true)}
+                            onClick={handleShowPhone}
                           >
                             <Phone className="h-4 w-4 ml-2" />
                             הצג מספר טלפון
