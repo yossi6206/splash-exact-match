@@ -30,6 +30,8 @@ export type Database = {
           manufacturer: string | null
           model: string
           price: string | null
+          seller_name: string | null
+          seller_phone: string | null
           status: string
           transmission: string | null
           updated_at: string
@@ -52,6 +54,8 @@ export type Database = {
           manufacturer?: string | null
           model: string
           price?: string | null
+          seller_name?: string | null
+          seller_phone?: string | null
           status?: string
           transmission?: string | null
           updated_at?: string
@@ -74,6 +78,8 @@ export type Database = {
           manufacturer?: string | null
           model?: string
           price?: string | null
+          seller_name?: string | null
+          seller_phone?: string | null
           status?: string
           transmission?: string | null
           updated_at?: string
@@ -440,6 +446,8 @@ export type Database = {
           processor: string | null
           ram: number | null
           screen_size: number | null
+          seller_name: string | null
+          seller_phone: string | null
           status: string
           storage: number | null
           storage_type: string | null
@@ -461,6 +469,8 @@ export type Database = {
           processor?: string | null
           ram?: number | null
           screen_size?: number | null
+          seller_name?: string | null
+          seller_phone?: string | null
           status?: string
           storage?: number | null
           storage_type?: string | null
@@ -482,6 +492,8 @@ export type Database = {
           processor?: string | null
           ram?: number | null
           screen_size?: number | null
+          seller_name?: string | null
+          seller_phone?: string | null
           status?: string
           storage?: number | null
           storage_type?: string | null
@@ -558,6 +570,8 @@ export type Database = {
           price: number
           property_type: string
           rooms: number
+          seller_name: string | null
+          seller_phone: string | null
           size: number | null
           status: string
           title: string
@@ -582,6 +596,8 @@ export type Database = {
           price: number
           property_type: string
           rooms: number
+          seller_name?: string | null
+          seller_phone?: string | null
           size?: number | null
           status?: string
           title: string
@@ -606,6 +622,8 @@ export type Database = {
           price?: number
           property_type?: string
           rooms?: number
+          seller_name?: string | null
+          seller_phone?: string | null
           size?: number | null
           status?: string
           title?: string
@@ -702,6 +720,8 @@ export type Database = {
           location: string
           material: string | null
           price: number
+          seller_name: string | null
+          seller_phone: string | null
           size: string | null
           status: string
           subcategory: string | null
@@ -723,6 +743,8 @@ export type Database = {
           location: string
           material?: string | null
           price: number
+          seller_name?: string | null
+          seller_phone?: string | null
           size?: string | null
           status?: string
           subcategory?: string | null
@@ -744,6 +766,8 @@ export type Database = {
           location?: string
           material?: string | null
           price?: number
+          seller_name?: string | null
+          seller_phone?: string | null
           size?: string | null
           status?: string
           subcategory?: string | null
