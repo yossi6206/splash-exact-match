@@ -32,6 +32,9 @@ export interface SidebarFilters {
   kmMin: number;
   kmMax: number;
   features: string[];
+  vehicleTypes: string[];
+  conditions: string[];
+  categories: string[];
 }
 
 const manufacturers = [
@@ -43,6 +46,20 @@ const manufacturers = [
 const fuelTypes = ["בנזין", "דיזל", "היבריד", "חשמלי", "היבריד פלאג-אין"];
 const transmissionTypes = ["אוטומט", "ידני", "רובוטרון", "טיפטרוניק"];
 const handOptions = ["יד ראשונה", "יד שנייה", "יד שלישית", "יד 4+"];
+const vehicleTypes = [
+  "רכב פרטי", "רכב מסחרי", "משאיות", "מסחריות", "טרקטורים", 
+  "אוטובוסים", "אופנועים", "קטנועים", "אופני שטח"
+];
+const conditions = [
+  "רכב חדש", "רכב משומש", "קבוצת קנייה"
+];
+const categories = [
+  "אופנועים חדשים", "אופנועים משומשים", 
+  "אביזרים - גלגלים וחישוקים", "אביזרים - מערכות שמע", 
+  "אביזרים - אביזרי קישוט", "אביזרים - ציוד בטיחות",
+  "שירותים - מוסכים", "שירותים - מכוני שירות", 
+  "שירותים - גרירה", "שירותים - ביטוח רכב"
+];
 const popularFeatures = [
   "מצלמת רוורס", "חיישני רוורס", "בקרת שיוט", "גג פנורמי",
   "מושבים מחוממים", "הגה מחומם", "מערכת ניווט", "מערכת שמע",
@@ -63,10 +80,15 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
     kmMin: 0,
     kmMax: 300000,
     features: [],
+    vehicleTypes: [],
+    conditions: [],
+    categories: [],
   });
 
   const [expandedSections, setExpandedSections] = useState({
     manufacturer: true,
+    vehicleType: true,
+    condition: true,
     year: true,
     price: true,
     fuel: true,
@@ -74,6 +96,7 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
     hand: false,
     km: false,
     features: false,
+    categories: false,
   });
 
   const currentYear = new Date().getFullYear();
@@ -84,7 +107,7 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
   };
 
   const handleArrayFilterChange = (
-    key: keyof Pick<SidebarFilters, 'manufacturers' | 'fuelTypes' | 'transmissions' | 'hands' | 'features'>,
+    key: keyof Pick<SidebarFilters, 'manufacturers' | 'fuelTypes' | 'transmissions' | 'hands' | 'features' | 'vehicleTypes' | 'conditions' | 'categories'>,
     value: string
   ) => {
     const currentValues = filters[key] as string[];
@@ -128,6 +151,9 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
       kmMin: 0,
       kmMax: 300000,
       features: [],
+      vehicleTypes: [],
+      conditions: [],
+      categories: [],
     };
     setFilters(defaultFilters);
     onFilterChange?.(defaultFilters);
@@ -139,6 +165,9 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
     filters.transmissions.length +
     filters.hands.length +
     filters.features.length +
+    filters.vehicleTypes.length +
+    filters.conditions.length +
+    filters.categories.length +
     (filters.yearFrom ? 1 : 0) +
     (filters.yearTo ? 1 : 0);
 
@@ -226,6 +255,48 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
                   הצג עוד יצרנים
                 </Button>
               )}
+            </div>
+          </FilterSection>
+
+          {/* Vehicle Type */}
+          <FilterSection title="סוג רכב" section="vehicleType">
+            <div className="space-y-3">
+              {vehicleTypes.map((type) => (
+                <div key={type} className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor={`vehicle-type-${type}`}
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    {type}
+                  </label>
+                  <Checkbox
+                    id={`vehicle-type-${type}`}
+                    checked={filters.vehicleTypes.includes(type)}
+                    onCheckedChange={() => handleArrayFilterChange('vehicleTypes', type)}
+                  />
+                </div>
+              ))}
+            </div>
+          </FilterSection>
+
+          {/* Condition */}
+          <FilterSection title="מצב רכב" section="condition">
+            <div className="space-y-3">
+              {conditions.map((condition) => (
+                <div key={condition} className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor={`condition-${condition}`}
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    {condition}
+                  </label>
+                  <Checkbox
+                    id={`condition-${condition}`}
+                    checked={filters.conditions.includes(condition)}
+                    onCheckedChange={() => handleArrayFilterChange('conditions', condition)}
+                  />
+                </div>
+              ))}
             </div>
           </FilterSection>
 
@@ -433,6 +504,27 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
                   הצג עוד תכונות
                 </Button>
               )}
+            </div>
+          </FilterSection>
+
+          {/* Categories */}
+          <FilterSection title="קטגוריות נוספות" section="categories">
+            <div className="space-y-3">
+              {categories.map((category) => (
+                <div key={category} className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor={`category-${category}`}
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    {category}
+                  </label>
+                  <Checkbox
+                    id={`category-${category}`}
+                    checked={filters.categories.includes(category)}
+                    onCheckedChange={() => handleArrayFilterChange('categories', category)}
+                  />
+                </div>
+              ))}
             </div>
           </FilterSection>
         </div>
