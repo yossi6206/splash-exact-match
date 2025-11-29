@@ -406,6 +406,72 @@ export type Database = {
         }
         Relationships: []
       }
+      laptops: {
+        Row: {
+          brand: string
+          condition: string
+          created_at: string
+          description: string | null
+          features: string[] | null
+          graphics_card: string | null
+          id: string
+          images: string[] | null
+          location: string
+          model: string
+          price: number
+          processor: string | null
+          ram: number | null
+          screen_size: number | null
+          status: string
+          storage: number | null
+          storage_type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          brand: string
+          condition: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          graphics_card?: string | null
+          id?: string
+          images?: string[] | null
+          location: string
+          model: string
+          price: number
+          processor?: string | null
+          ram?: number | null
+          screen_size?: number | null
+          status?: string
+          storage?: number | null
+          storage_type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          brand?: string
+          condition?: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          graphics_card?: string | null
+          id?: string
+          images?: string[] | null
+          location?: string
+          model?: string
+          price?: number
+          processor?: string | null
+          ram?: number | null
+          screen_size?: number | null
+          status?: string
+          storage?: number | null
+          storage_type?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       newsletter_subscriptions: {
         Row: {
           created_at: string
@@ -597,6 +663,72 @@ export type Database = {
           updated_at?: string
           user_id?: string
           verified_purchase?: boolean | null
+        }
+        Relationships: []
+      }
+      secondhand_items: {
+        Row: {
+          age: string | null
+          brand: string | null
+          category: string
+          color: string | null
+          condition: string
+          created_at: string
+          description: string | null
+          features: string[] | null
+          id: string
+          images: string[] | null
+          location: string
+          material: string | null
+          price: number
+          size: string | null
+          status: string
+          subcategory: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age?: string | null
+          brand?: string | null
+          category: string
+          color?: string | null
+          condition: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          images?: string[] | null
+          location: string
+          material?: string | null
+          price: number
+          size?: string | null
+          status?: string
+          subcategory?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age?: string | null
+          brand?: string | null
+          category?: string
+          color?: string | null
+          condition?: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          images?: string[] | null
+          location?: string
+          material?: string | null
+          price?: number
+          size?: string | null
+          status?: string
+          subcategory?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

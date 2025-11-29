@@ -8,6 +8,10 @@ import { Link, Routes, Route } from "react-router-dom";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import PostJob from "./dashboard/PostJob";
 import MyJobs from "./dashboard/MyJobs";
+import PostCar from "./dashboard/PostCar";
+import PostProperty from "./dashboard/PostProperty";
+import PostLaptop from "./dashboard/PostLaptop";
+import PostSecondhand from "./dashboard/PostSecondhand";
 
 const Dashboard = () => {
   const stats = [
@@ -21,6 +25,10 @@ const Dashboard = () => {
     { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
     { title: "המשרות שלי", icon: Briefcase, path: "/dashboard/my-jobs" },
     { title: "פרסם משרה", icon: Plus, path: "/dashboard/post-job" },
+    { title: "פרסם רכב", icon: Plus, path: "/dashboard/post-car" },
+    { title: "פרסם נדל״ן", icon: Plus, path: "/dashboard/post-property" },
+    { title: "פרסם מחשב", icon: Plus, path: "/dashboard/post-laptop" },
+    { title: "פרסם יד שנייה", icon: Plus, path: "/dashboard/post-secondhand" },
     { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile" },
     { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats" },
     { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved" },
@@ -152,6 +160,10 @@ const Dashboard = () => {
             } />
             <Route path="/post-job" element={<PostJob />} />
             <Route path="/my-jobs" element={<MyJobs />} />
+            <Route path="/post-car" element={<PostCar />} />
+            <Route path="/post-property" element={<PostProperty />} />
+            <Route path="/post-laptop" element={<PostLaptop />} />
+            <Route path="/post-secondhand" element={<PostSecondhand />} />
           </Routes>
         </main>
       </div>
