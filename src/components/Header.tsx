@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import PostAdDialog from "@/components/PostAdDialog";
 import { 
   MessageSquare, 
   Heart, 
@@ -259,6 +260,7 @@ const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [postDialogOpen, setPostDialogOpen] = useState(false);
 
   // Search suggestions based on mega menu data
   const searchSuggestions = [
@@ -628,13 +630,18 @@ const Header = () => {
               </Button>
             )}
             
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full gap-2">
+            <Button 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full gap-2"
+              onClick={() => setPostDialogOpen(true)}
+            >
               <Plus className="h-4 w-4" />
               לפרסם מודעה
             </Button>
           </div>
         </div>
       </div>
+      
+      <PostAdDialog open={postDialogOpen} onOpenChange={setPostDialogOpen} />
     </header>
   );
 };

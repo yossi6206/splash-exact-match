@@ -2,9 +2,12 @@ import { Home, Search, Heart, User, Plus } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import PostAdDialog from "@/components/PostAdDialog";
 
 const MobileNav = () => {
   const location = useLocation();
+  const [postDialogOpen, setPostDialogOpen] = useState(false);
 
   const navItems = [
     { icon: Home, label: "בית", path: "/" },
@@ -24,14 +27,15 @@ const MobileNav = () => {
 
           if (isCenter) {
             return (
-              <Link key={item.path} to={item.path} className="relative -mt-8">
+              <div key={item.path} className="relative -mt-8">
                 <Button
                   size="icon"
                   className="h-14 w-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
+                  onClick={() => setPostDialogOpen(true)}
                 >
                   <Icon className="h-6 w-6" />
                 </Button>
-              </Link>
+              </div>
             );
           }
 
@@ -52,6 +56,8 @@ const MobileNav = () => {
           );
         })}
       </div>
+      
+      <PostAdDialog open={postDialogOpen} onOpenChange={setPostDialogOpen} />
     </nav>
   );
 };
