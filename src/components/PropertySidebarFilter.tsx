@@ -25,12 +25,18 @@ export interface PropertyFilters {
   priceMax: number;
   sizeMin: number;
   sizeMax: number;
+  yearFrom: string;
+  yearTo: string;
+  floors: string[];
+  conditions: string[];
   cities: string[];
   features: string[];
 }
 
 const propertyTypes = ["דירה", "פנטהאוז", "דירת גן", "דירת גג", "בית פרטי", "דופלקס", "סטודיו"];
 const roomOptions = ["1", "2", "3", "4", "5", "6+"];
+const floorOptions = ["קרקע", "1-3", "4-7", "8+"];
+const conditions = ["חדש מקבלן", "משופץ", "במצב טוב", "דורש שיפוץ", "במצב מצוין"];
 const cities = [
   "תל אביב", "ירושלים", "חיפה", "באר שבע", "נתניה", "פתח תקווה",
   "ראשון לציון", "אשדוד", "רחובות", "בני ברק", "הרצליה", "כפר סבא",
@@ -42,6 +48,9 @@ const propertyFeatures = [
   "שמירה", "מיזוג מרכזי", "גג משותף", "חדר מקלחת אמבטיה"
 ];
 
+const currentYear = new Date().getFullYear();
+const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+
 export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySidebarFilterProps) => {
   const [filters, setFilters] = useState<PropertyFilters>({
     propertyTypes: [],
@@ -50,6 +59,10 @@ export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySideba
     priceMax: 5000000,
     sizeMin: 0,
     sizeMax: 300,
+    yearFrom: "",
+    yearTo: "",
+    floors: [],
+    conditions: [],
     cities: [],
     features: [],
   });
@@ -59,6 +72,9 @@ export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySideba
     rooms: true,
     price: true,
     size: true,
+    year: false,
+    floor: false,
+    condition: false,
     city: false,
     features: false,
   });
@@ -68,7 +84,7 @@ export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySideba
   };
 
   const handleArrayFilterChange = (
-    key: keyof Pick<PropertyFilters, 'propertyTypes' | 'rooms' | 'cities' | 'features'>,
+    key: keyof Pick<PropertyFilters, 'propertyTypes' | 'rooms' | 'cities' | 'features' | 'floors' | 'conditions'>,
     value: string
   ) => {
     const currentValues = filters[key] as string[];
@@ -77,6 +93,12 @@ export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySideba
       : [...currentValues, value];
     
     const newFilters = { ...filters, [key]: newValues };
+    setFilters(newFilters);
+    onFilterChange?.(newFilters);
+  };
+
+  const handleFilterChange = (key: keyof PropertyFilters, value: string | number) => {
+    const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     onFilterChange?.(newFilters);
   };
@@ -101,6 +123,10 @@ export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySideba
       priceMax: 5000000,
       sizeMin: 0,
       sizeMax: 300,
+      yearFrom: "",
+      yearTo: "",
+      floors: [],
+      conditions: [],
       cities: [],
       features: [],
     };
@@ -111,8 +137,12 @@ export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySideba
   const activeFiltersCount = 
     filters.propertyTypes.length +
     filters.rooms.length +
+    filters.floors.length +
+    filters.conditions.length +
     filters.cities.length +
-    filters.features.length;
+    filters.features.length +
+    (filters.yearFrom ? 1 : 0) +
+    (filters.yearTo ? 1 : 0);
 
   const FilterSection = ({ 
     title, 
@@ -273,6 +303,86 @@ export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySideba
                 <span>0 מ״ר</span>
                 <span>300+ מ״ר</span>
               </div>
+            </div>
+          </FilterSection>
+
+          {/* Year Range */}
+          <FilterSection title="שנת בנייה" section="year">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-xs text-muted-foreground mb-1 block">משנה</label>
+                <Select 
+                  value={filters.yearFrom} 
+                  onValueChange={(value) => handleFilterChange("yearFrom", value)}
+                >
+                  <SelectTrigger className="bg-background">
+                    <SelectValue placeholder="בחר" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card z-50 max-h-[200px]">
+                    {years.map((year) => (
+                      <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground mb-1 block">עד שנה</label>
+                <Select 
+                  value={filters.yearTo} 
+                  onValueChange={(value) => handleFilterChange("yearTo", value)}
+                >
+                  <SelectTrigger className="bg-background">
+                    <SelectValue placeholder="בחר" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card z-50 max-h-[200px]">
+                    {years.map((year) => (
+                      <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </FilterSection>
+
+          {/* Floor */}
+          <FilterSection title="קומה" section="floor">
+            <div className="space-y-3">
+              {floorOptions.map((floor) => (
+                <div key={floor} className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor={`floor-${floor}`}
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    {floor}
+                  </label>
+                  <Checkbox
+                    id={`floor-${floor}`}
+                    checked={filters.floors.includes(floor)}
+                    onCheckedChange={() => handleArrayFilterChange('floors', floor)}
+                  />
+                </div>
+              ))}
+            </div>
+          </FilterSection>
+
+          {/* Condition */}
+          <FilterSection title="מצב הנכס" section="condition">
+            <div className="space-y-3">
+              {conditions.map((condition) => (
+                <div key={condition} className="flex items-center justify-between gap-2">
+                  <label
+                    htmlFor={`condition-${condition}`}
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    {condition}
+                  </label>
+                  <Checkbox
+                    id={`condition-${condition}`}
+                    checked={filters.conditions.includes(condition)}
+                    onCheckedChange={() => handleArrayFilterChange('conditions', condition)}
+                  />
+                </div>
+              ))}
             </div>
           </FilterSection>
 

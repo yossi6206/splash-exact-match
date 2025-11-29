@@ -138,7 +138,7 @@ const PropertyDetails = () => {
                 <div className="flex items-center gap-3">
                   <Calendar className="h-5 w-5 text-muted-foreground" />
                   <div>
-                    <div className="text-sm text-muted-foreground">שנה</div>
+                    <div className="text-sm text-muted-foreground">שנת בנייה</div>
                     <div className="font-semibold">{property.year}</div>
                   </div>
                 </div>

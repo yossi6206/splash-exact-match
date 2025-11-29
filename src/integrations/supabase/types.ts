@@ -16,51 +16,69 @@ export type Database = {
     Tables: {
       cars: {
         Row: {
+          category: string | null
+          condition: string | null
           created_at: string
           description: string | null
           features: string[] | null
+          fuel_type: string | null
           hand: number
           id: string
           images: string[] | null
           km: number
           location: string
+          manufacturer: string | null
           model: string
           price: string | null
           status: string
+          transmission: string | null
           updated_at: string
           user_id: string
+          vehicle_type: string | null
           year: number
         }
         Insert: {
+          category?: string | null
+          condition?: string | null
           created_at?: string
           description?: string | null
           features?: string[] | null
+          fuel_type?: string | null
           hand: number
           id?: string
           images?: string[] | null
           km: number
           location: string
+          manufacturer?: string | null
           model: string
           price?: string | null
           status?: string
+          transmission?: string | null
           updated_at?: string
           user_id: string
+          vehicle_type?: string | null
           year: number
         }
         Update: {
+          category?: string | null
+          condition?: string | null
           created_at?: string
           description?: string | null
           features?: string[] | null
+          fuel_type?: string | null
           hand?: number
           id?: string
           images?: string[] | null
           km?: number
           location?: string
+          manufacturer?: string | null
           model?: string
           price?: string | null
           status?: string
+          transmission?: string | null
           updated_at?: string
           user_id?: string
+          vehicle_type?: string | null
           year?: number
         }
         Relationships: []
@@ -546,6 +564,7 @@ export type Database = {
           total_floors: number | null
           updated_at: string
           user_id: string
+          year: number | null
         }
         Insert: {
           accessible?: boolean | null
@@ -569,6 +588,7 @@ export type Database = {
           total_floors?: number | null
           updated_at?: string
           user_id: string
+          year?: number | null
         }
         Update: {
           accessible?: boolean | null
@@ -592,6 +612,7 @@ export type Database = {
           total_floors?: number | null
           updated_at?: string
           user_id?: string
+          year?: number | null
         }
         Relationships: []
       }

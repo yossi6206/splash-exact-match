@@ -10,9 +10,16 @@ interface CarCardProps {
     image: string;
     title: string;
     subtitle: string;
+    manufacturer?: string;
+    model?: string;
     year: number;
     hand: string;
+    km?: number;
+    fuel_type?: string;
+    transmission?: string;
+    condition?: string;
     price: number;
+    location?: string;
     features: string[];
   };
 }
@@ -37,10 +44,28 @@ export const CarCard = ({ car }: CarCardProps) => {
               <div>
                 <h3 className="text-xl font-bold text-foreground mb-1">{car.title}</h3>
                 <p className="text-sm text-muted-foreground mb-2">{car.subtitle}</p>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
                   <span>{car.year}</span>
                   <span>•</span>
                   <span>{car.hand}</span>
+                  {car.km && (
+                    <>
+                      <span>•</span>
+                      <span>{car.km.toLocaleString()} ק״מ</span>
+                    </>
+                  )}
+                  {car.fuel_type && (
+                    <>
+                      <span>•</span>
+                      <span>{car.fuel_type}</span>
+                    </>
+                  )}
+                  {car.transmission && (
+                    <>
+                      <span>•</span>
+                      <span>{car.transmission}</span>
+                    </>
+                  )}
                 </div>
               </div>
               <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-accent">
