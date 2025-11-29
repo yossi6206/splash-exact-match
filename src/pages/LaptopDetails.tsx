@@ -376,43 +376,35 @@ const LaptopDetails = () => {
                             <a href={`tel:${laptop.seller_phone}`} className="text-lg font-bold text-primary hover:underline" dir="ltr">
                               {laptop.seller_phone}
                             </a>
-                          </>
-                        )}
-                      </div>
+                      </>
                     )}
                   </div>
-                ) : (
-                  <div className="flex items-start gap-3">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
-                      M
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-semibold">מוכר פרטי</div>
-                      <div className="text-sm text-muted-foreground">צור קשר דרך הטופס</div>
-                    </div>
-                  </div>
                 )}
-              </CardContent>
-            </Card>
-
-                <Separator />
-
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">דירוג</span>
-                    <span className="font-semibold">⭐ {laptop.seller.rating}/5</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">מכירות</span>
-                    <span className="font-semibold">{laptop.seller.totalSales} עסקאות</span>
-                  </div>
+                {laptop.seller_name && (
+                  <>
+                    <Separator />
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">חבר מאז</span>
+                        <span className="font-semibold">{new Date(laptop.created_at).getFullYear()}</span>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-start gap-3">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
+                  M
                 </div>
-
-                <Button variant="outline" className="w-full">
-                  צפה בפרופיל המוכר
-                </Button>
-              </CardContent>
-            </Card>
+                <div className="flex-1">
+                  <div className="font-semibold">מוכר פרטי</div>
+                  <div className="text-sm text-muted-foreground">צור קשר דרך הטופס</div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
             {/* Safety Tips */}
             <Card className="bg-muted/30">
@@ -444,7 +436,7 @@ const LaptopDetails = () => {
               </CardContent>
             </Card>
 
-            <AIReport itemType="laptop" itemData={laptop} />
+            <AIReport itemType="laptop" itemData={{ brand: laptop.brand, model: laptop.model, price: laptop.price, condition: laptop.condition }} />
           </div>
         </div>
       </main>
