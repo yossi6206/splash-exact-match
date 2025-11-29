@@ -27,6 +27,8 @@ const carSchema = z.object({
   price: z.string().trim().min(1, "מחיר חובה"),
   location: z.string().trim().min(2, "מיקום חובה"),
   description: z.string().trim().min(20, "תיאור חייב להכיל לפחות 20 תווים").max(10000, "תיאור ארוך מדי"),
+  seller_name: z.string().trim().min(2, "שם מוכר חובה"),
+  seller_phone: z.string().trim().regex(/^05\d{8}$/, "מספר טלפון לא תקין (צריך להיות 05XXXXXXXX)"),
 });
 
 const PostCar = () => {
@@ -48,6 +50,8 @@ const PostCar = () => {
     price: "",
     location: "",
     description: "",
+    seller_name: "",
+    seller_phone: "",
   });
 
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -111,6 +115,8 @@ const PostCar = () => {
         price: formData.price,
         location: formData.location,
         description: formData.description,
+        seller_name: formData.seller_name,
+        seller_phone: formData.seller_phone,
       });
     } catch (validationError) {
       if (validationError instanceof z.ZodError) {
@@ -145,6 +151,8 @@ const PostCar = () => {
         features: selectedFeatures,
         images: imageUrls,
         status: "active",
+        seller_name: formData.seller_name,
+        seller_phone: formData.seller_phone,
       });
 
       if (error) throw error;
@@ -408,6 +416,38 @@ const PostCar = () => {
                 rows={6}
                 placeholder="תאר את הרכב, מצבו, היסטוריית שירות וכל פרט רלוונטי אחר..."
               />
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <h2 className="text-xl font-bold text-foreground mb-4">פרטי המוכר</h2>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="seller_name">שם המוכר *</Label>
+                <Input
+                  id="seller_name"
+                  name="seller_name"
+                  value={formData.seller_name}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="שם מלא"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="seller_phone">טלפון ליצירת קשר *</Label>
+                <Input
+                  id="seller_phone"
+                  name="seller_phone"
+                  value={formData.seller_phone}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="0501234567"
+                  type="tel"
+                  dir="ltr"
+                />
+              </div>
             </div>
           </div>
         </Card>

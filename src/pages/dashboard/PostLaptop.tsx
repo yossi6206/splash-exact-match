@@ -21,6 +21,8 @@ const laptopSchema = z.object({
   price: z.number().int().min(1, "מחיר חובה").max(100000, "מחיר גבוה מדי"),
   location: z.string().trim().min(2, "מיקום חובה"),
   description: z.string().trim().min(20, "תיאור חייב להכיל לפחות 20 תווים").max(10000, "תיאור ארוך מדי"),
+  seller_name: z.string().trim().min(2, "שם מוכר חובה"),
+  seller_phone: z.string().trim().regex(/^05\d{8}$/, "מספר טלפון לא תקין (צריך להיות 05XXXXXXXX)"),
 });
 
 const PostLaptop = () => {

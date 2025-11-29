@@ -56,16 +56,10 @@ export const CarCard = ({ car }: CarCardProps) => {
                       <span>{car.km.toLocaleString()} ק״מ</span>
                     </>
                   )}
-                  {car.fuel_type && (
+                  {car.location && (
                     <>
                       <span>•</span>
-                      <span>{car.fuel_type}</span>
-                    </>
-                  )}
-                  {car.transmission && (
-                    <>
-                      <span>•</span>
-                      <span>{car.transmission}</span>
+                      <span>{car.location}</span>
                     </>
                   )}
                 </div>
