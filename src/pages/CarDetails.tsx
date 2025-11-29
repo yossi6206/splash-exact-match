@@ -322,7 +322,7 @@ const CarDetails = () => {
                   <div className="text-4xl font-bold text-foreground mb-2">
                     {carDetails.price === "לא ציין מחיר" || !carDetails.price 
                       ? "לא ציין מחיר" 
-                      : `${parseFloat(carDetails.price).toLocaleString('he-IL')} ₪`}
+                      : `${parseFloat(carDetails.price.replace(/,/g, "")).toLocaleString('he-IL')} ₪`}
                   </div>
                   {carDetails.price && carDetails.price !== "לא ציין מחיר" && (
                     <p className="text-sm text-muted-foreground">
