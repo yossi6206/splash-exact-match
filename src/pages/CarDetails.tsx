@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -13,40 +14,91 @@ import carImage1 from "@/assets/item-car.jpg";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 
+interface CarData {
+  id: string;
+  manufacturer: string | null;
+  model: string;
+  description: string | null;
+  year: number;
+  km: number;
+  hand: number;
+  fuel_type: string | null;
+  transmission: string | null;
+  vehicle_type: string | null;
+  condition: string | null;
+  category: string | null;
+  location: string;
+  price: string | null;
+  features: string[] | null;
+  images: string[] | null;
+  status: string;
+  created_at: string;
+  user_id: string;
+}
+
 const CarDetails = () => {
+  const { id } = useParams<{ id: string }>();
+  const [carData, setCarData] = useState<CarData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [mainImage, setMainImage] = useState(carImage1);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [analysis, setAnalysis] = useState("");
   const { toast } = useToast();
   const { user } = useAuth();
-  
-  const images = [carImage1, carImage1, carImage1];
 
-  const carDetails = {
-    manufacturer: "ב מ וו",
-    model: "סדרה 7",
-    description: "Luxury 740Le פלאג-אין אוט' 5 דל 2.0 (258 כ\"ס)",
-    year: 2019,
-    km: 48000,
-    hand: 2,
-    fuel_type: "היבריד פלאג-אין",
-    transmission: "אוטומט",
-    vehicle_type: "רכב פרטי",
-    condition: "רכב משומש",
-    location: "כפר קאסם",
-    price: "לא ציין מחיר",
-    features: [
-      "סטט בתקופה",
-      "גלגל מגנזיום",
-      "בקרת שיוט מרחק",
-      "מצלמות היקפיות",
-      "חיישני חניה",
-      "תיבת הילוכים אוטומטית"
-    ]
-  };
+  // Fetch car data from Supabase
+  useEffect(() => {
+    const fetchCar = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("cars")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching car:", error);
+        toast({
+          title: "שגיאה",
+          description: "לא ניתן לטעון את פרטי הרכב",
+          variant: "destructive"
+        });
+      } else {
+        setCarData(data);
+        if (data.images && data.images.length > 0) {
+          setMainImage(data.images[0]);
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchCar();
+  }, [id, toast]);
+
+  const images = carData?.images || [carImage1];
+
+  const carDetails = carData ? {
+    manufacturer: carData.manufacturer || "לא צוין",
+    model: carData.model,
+    description: carData.description || "",
+    year: carData.year,
+    km: carData.km,
+    hand: carData.hand,
+    fuel_type: carData.fuel_type || "לא צוין",
+    transmission: carData.transmission || "לא צוין",
+    vehicle_type: carData.vehicle_type || "רכב פרטי",
+    condition: carData.condition || "לא צוין",
+    location: carData.location,
+    price: carData.price || "לא ציין מחיר",
+    features: carData.features || []
+  } : null;
 
   const handleAnalyze = async () => {
+    if (!carDetails) return;
+    
     setIsAnalyzing(true);
     try {
       const { data, error } = await supabase.functions.invoke('analyze-car', {
@@ -77,6 +129,31 @@ const CarDetails = () => {
       setIsAnalyzing(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!carData || !carDetails) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container mx-auto px-4 py-20 text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">הרכב לא נמצא</h1>
+          <p className="text-muted-foreground">המודעה שחיפשת אינה קיימת או הוסרה</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -121,7 +198,7 @@ const CarDetails = () => {
                   </Button>
                 </div>
                 <Badge className="absolute bottom-4 right-4 bg-foreground/80 text-background text-sm px-4 py-2">
-                  תמונה 1 מתוך 10
+                  תמונה 1 מתוך {images.length}
                 </Badge>
               </div>
               
@@ -202,32 +279,28 @@ const CarDetails = () => {
                 </div>
 
                 {/* Description */}
-                <div className="border-t border-border pt-6">
-                  <h2 className="text-xl font-bold text-foreground mb-4">תיאור</h2>
-                  <p className="text-foreground leading-relaxed">
-                    רכב במצב מצוין מאוד שמור מאוד, טופול על יד החברה תמיד במוסך , הרכב לנהג יחיד ללא ידיים טובנים 
-                    תיירה פרטית, ללא תאונות, נבדק עפ שדרוג.
-                  </p>
-                </div>
+                {carDetails.description && (
+                  <div className="border-t border-border pt-6">
+                    <h2 className="text-xl font-bold text-foreground mb-4">תיאור</h2>
+                    <p className="text-foreground leading-relaxed">
+                      {carDetails.description}
+                    </p>
+                  </div>
+                )}
 
                 {/* Features */}
-                <div className="border-t border-border pt-6 mt-6">
-                  <h2 className="text-xl font-bold text-foreground mb-4">ציוד ואבזור</h2>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {[
-                      "סטט בתקופה",
-                      "גלגל מגנזיום",
-                      "בקרת שיוט מרחק",
-                      "מצלמות היקפיות",
-                      "חיישני חניה",
-                      "תיבת הילוכים אוטומטית",
-                    ].map((feature, index) => (
-                      <Badge key={index} variant="secondary" className="justify-center py-2">
-                        {feature}
-                      </Badge>
-                    ))}
+                {carDetails.features && carDetails.features.length > 0 && (
+                  <div className="border-t border-border pt-6 mt-6">
+                    <h2 className="text-xl font-bold text-foreground mb-4">ציוד ואבזור</h2>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {carDetails.features.map((feature, index) => (
+                        <Badge key={index} variant="secondary" className="justify-center py-2">
+                          {feature}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -238,10 +311,14 @@ const CarDetails = () => {
             <Card className="mb-6 border-border">
               <CardContent className="p-6">
                 <div className="text-center mb-6">
-                  <div className="text-4xl font-bold text-foreground mb-2">לא ציון מחיר</div>
-                  <p className="text-sm text-muted-foreground">
-                    מוכנים ברבית מתאימה לקבוצות יד 2 +
-                  </p>
+                  <div className="text-4xl font-bold text-foreground mb-2">
+                    {carDetails.price === "לא ציין מחיר" ? "לא ציין מחיר" : `${parseFloat(carDetails.price).toLocaleString()} ₪`}
+                  </div>
+                  {carDetails.price !== "לא ציין מחיר" && (
+                    <p className="text-sm text-muted-foreground">
+                      ניתן למשא ומתן
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-3">
@@ -261,8 +338,8 @@ const CarDetails = () => {
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-border text-center text-sm text-muted-foreground">
-                  <p>פורסם ב 26/11/25</p>
-                  <p>דווח על מודעה 41484453</p>
+                  <p>פורסם ב {new Date(carData.created_at).toLocaleDateString('he-IL')}</p>
+                  <p>מזהה מודעה: {carData.id.substring(0, 8)}</p>
                 </div>
               </CardContent>
             </Card>

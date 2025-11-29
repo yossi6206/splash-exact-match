@@ -25,9 +25,11 @@ interface CarCardProps {
 }
 
 export const CarCard = ({ car }: CarCardProps) => {
+  const carId = typeof car.id === 'string' ? car.id : car.id.toString();
+  
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-white border-border">
-      <Link to={`/cars/${car.id}`}>
+      <Link to={`/cars/${carId}`}>
         <div className="flex flex-col sm:flex-row gap-4 p-4">
           {/* Image */}
           <div className="w-full sm:w-64 h-48 rounded-lg overflow-hidden flex-shrink-0">
