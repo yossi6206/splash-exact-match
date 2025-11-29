@@ -240,36 +240,36 @@ const LaptopDetails = () => {
                 <CardHeader>
                   <CardTitle className="text-xl">מפרט טכני</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-0 divide-y">
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border">
                     {laptop.processor && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">מעבד</div>
-                        <div className="text-foreground font-semibold">{laptop.processor}</div>
+                      <div className="grid grid-cols-[1fr_2fr] gap-4 py-4 px-6 hover:bg-muted/30 transition-colors">
+                        <div className="text-muted-foreground font-medium text-right">מעבד</div>
+                        <div className="text-foreground font-bold text-left">{laptop.processor}</div>
                       </div>
                     )}
                     {laptop.ram && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">זיכרון RAM</div>
-                        <div className="text-foreground font-semibold">{laptop.ram}GB</div>
+                      <div className="grid grid-cols-[1fr_2fr] gap-4 py-4 px-6 bg-muted/20 hover:bg-muted/40 transition-colors">
+                        <div className="text-muted-foreground font-medium text-right">זיכרון</div>
+                        <div className="text-foreground font-bold text-left">{laptop.ram}GB RAM</div>
                       </div>
                     )}
                     {laptop.storage && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">אחסון</div>
-                        <div className="text-foreground font-semibold">{laptop.storage}GB {laptop.storage_type || 'SSD'}</div>
+                      <div className="grid grid-cols-[1fr_2fr] gap-4 py-4 px-6 hover:bg-muted/30 transition-colors">
+                        <div className="text-muted-foreground font-medium text-right">אחסון</div>
+                        <div className="text-foreground font-bold text-left">{laptop.storage}GB {laptop.storage_type || 'SSD'}</div>
                       </div>
                     )}
                     {laptop.screen_size && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">גודל מסך</div>
-                        <div className="text-foreground font-semibold">{laptop.screen_size}"</div>
+                      <div className="grid grid-cols-[1fr_2fr] gap-4 py-4 px-6 bg-muted/20 hover:bg-muted/40 transition-colors">
+                        <div className="text-muted-foreground font-medium text-right">מסך</div>
+                        <div className="text-foreground font-bold text-left">{laptop.screen_size}"</div>
                       </div>
                     )}
                     {laptop.graphics_card && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">כרטיס מסך</div>
-                        <div className="text-foreground font-semibold">{laptop.graphics_card}</div>
+                      <div className="grid grid-cols-[1fr_2fr] gap-4 py-4 px-6 hover:bg-muted/30 transition-colors">
+                        <div className="text-muted-foreground font-medium text-right">כרטיס גרפי</div>
+                        <div className="text-foreground font-bold text-left">{laptop.graphics_card}</div>
                       </div>
                     )}
                   </div>
