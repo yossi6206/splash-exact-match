@@ -15,7 +15,9 @@ import {
   Edit, 
   Trash2,
   Calendar,
-  MapPin
+  MapPin,
+  MousePointer,
+  Phone
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -41,6 +43,10 @@ interface Listing {
   images?: string[];
   status: string;
   created_at: string;
+  views_count?: number;
+  clicks_count?: number;
+  contacts_count?: number;
+  applicants_count?: number;
   type: 'car' | 'property' | 'laptop' | 'secondhand' | 'job' | 'freelancer';
 }
 
@@ -233,11 +239,42 @@ const MyAds = () => {
               </div>
             </div>
 
-            <div className="text-2xl font-bold text-primary">
+            <div className="text-2xl font-bold text-primary mb-3">
               {listing.type === 'job' 
                 ? `₪${listing.price}` 
                 : `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}`
               }
+            </div>
+
+            {/* Statistics */}
+            <div className="grid grid-cols-3 gap-3 p-3 bg-muted/30 rounded-lg">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
+                  <Eye className="h-3 w-3" />
+                  <span>צפיות</span>
+                </div>
+                <div className="text-lg font-bold text-foreground">
+                  {listing.views_count || 0}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
+                  <MousePointer className="h-3 w-3" />
+                  <span>לחיצות</span>
+                </div>
+                <div className="text-lg font-bold text-foreground">
+                  {listing.clicks_count || 0}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
+                  <Phone className="h-3 w-3" />
+                  <span>{listing.type === 'job' ? 'מועמדים' : 'פניות'}</span>
+                </div>
+                <div className="text-lg font-bold text-foreground">
+                  {listing.type === 'job' ? (listing.applicants_count || 0) : (listing.contacts_count || 0)}
+                </div>
+              </div>
             </div>
           </div>
 
