@@ -43,6 +43,8 @@ const PostLaptop = () => {
     price: "",
     location: "",
     description: "",
+    seller_name: "",
+    seller_phone: "",
   });
 
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -99,6 +101,8 @@ const PostLaptop = () => {
         price: parseInt(formData.price),
         location: formData.location,
         description: formData.description,
+        seller_name: formData.seller_name,
+        seller_phone: formData.seller_phone,
       });
     } catch (validationError) {
       if (validationError instanceof z.ZodError) {
@@ -129,6 +133,8 @@ const PostLaptop = () => {
         price: parseInt(formData.price),
         location: formData.location,
         description: formData.description,
+        seller_name: formData.seller_name,
+        seller_phone: formData.seller_phone,
         features: selectedFeatures,
         images: imageUrls,
         status: "active",
@@ -353,6 +359,31 @@ const PostLaptop = () => {
                 rows={6}
                 placeholder="תאר את המחשב, מצבו, אחריות, אביזרים נלווים וכל פרט רלוונטי אחר..."
               />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="seller_name">שם המוכר *</Label>
+                <Input
+                  id="seller_name"
+                  name="seller_name"
+                  value={formData.seller_name}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="שם מלא"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="seller_phone">טלפון *</Label>
+                <Input
+                  id="seller_phone"
+                  name="seller_phone"
+                  value={formData.seller_phone}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="0501234567"
+                />
+              </div>
             </div>
           </div>
         </Card>
