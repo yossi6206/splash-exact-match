@@ -24,11 +24,16 @@ const CarDetails = () => {
   const images = [carImage1, carImage1, carImage1];
 
   const carDetails = {
-    model: "ב מ וו סדרה 7",
+    manufacturer: "ב מ וו",
+    model: "סדרה 7",
     description: "Luxury 740Le פלאג-אין אוט' 5 דל 2.0 (258 כ\"ס)",
     year: 2019,
     km: 48000,
     hand: 2,
+    fuel_type: "היבריד פלאג-אין",
+    transmission: "אוטומט",
+    vehicle_type: "רכב פרטי",
+    condition: "רכב משומש",
     location: "כפר קאסם",
     price: "לא ציין מחיר",
     features: [
@@ -141,9 +146,11 @@ const CarDetails = () => {
             {/* Car Details */}
             <Card className="mb-6 border-border">
               <CardContent className="p-6">
-                <h1 className="text-3xl font-bold text-foreground mb-2">ב מ וו סדרה 7</h1>
+                <h1 className="text-3xl font-bold text-foreground mb-2">
+                  {carDetails.manufacturer} {carDetails.model}
+                </h1>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Luxury 740Le פלאג-אין אוט' 5 דל 2.0 (258 כ"ס)
+                  {carDetails.description}
                 </p>
 
                 {/* Key Stats */}
@@ -152,29 +159,45 @@ const CarDetails = () => {
                     <Gauge className="h-5 w-5 text-primary" />
                     <div>
                       <div className="text-sm text-muted-foreground">ק״מ</div>
-                      <div className="font-bold text-foreground">48,000</div>
+                      <div className="font-bold text-foreground">{carDetails.km.toLocaleString()}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-4 rounded-lg bg-muted">
                     <Hand className="h-5 w-5 text-primary" />
                     <div>
                       <div className="text-sm text-muted-foreground">יד</div>
-                      <div className="font-bold text-foreground">2</div>
+                      <div className="font-bold text-foreground">{carDetails.hand}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-4 rounded-lg bg-muted">
                     <Calendar className="h-5 w-5 text-primary" />
                     <div>
                       <div className="text-sm text-muted-foreground">שנה</div>
-                      <div className="font-bold text-foreground">2019</div>
+                      <div className="font-bold text-foreground">{carDetails.year}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-4 rounded-lg bg-muted">
                     <MapPin className="h-5 w-5 text-primary" />
                     <div>
                       <div className="text-sm text-muted-foreground">מיקום</div>
-                      <div className="font-bold text-foreground">כפר קאסם</div>
+                      <div className="font-bold text-foreground">{carDetails.location}</div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Additional Info */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+                  <div className="p-4 rounded-lg bg-muted/50">
+                    <div className="text-sm text-muted-foreground mb-1">סוג דלק</div>
+                    <div className="font-bold text-foreground">{carDetails.fuel_type}</div>
+                  </div>
+                  <div className="p-4 rounded-lg bg-muted/50">
+                    <div className="text-sm text-muted-foreground mb-1">תיבת הילוכים</div>
+                    <div className="font-bold text-foreground">{carDetails.transmission}</div>
+                  </div>
+                  <div className="p-4 rounded-lg bg-muted/50">
+                    <div className="text-sm text-muted-foreground mb-1">מצב</div>
+                    <div className="font-bold text-foreground">{carDetails.condition}</div>
                   </div>
                 </div>
 

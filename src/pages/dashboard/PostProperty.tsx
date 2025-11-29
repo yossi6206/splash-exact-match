@@ -36,6 +36,7 @@ const PostProperty = () => {
     size: "",
     floor: "",
     total_floors: "",
+    year: "",
     price: "",
     location: "",
     condition: "",
@@ -115,6 +116,7 @@ const PostProperty = () => {
         size: formData.size ? parseInt(formData.size) : null,
         floor: formData.floor ? parseInt(formData.floor) : null,
         total_floors: formData.total_floors ? parseInt(formData.total_floors) : null,
+        year: formData.year ? parseInt(formData.year) : null,
         price: parseInt(formData.price),
         location: formData.location,
         condition: formData.condition || null,
@@ -215,7 +217,7 @@ const PostProperty = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="floor">קומה</Label>
                 <Input
@@ -236,6 +238,17 @@ const PostProperty = () => {
                   value={formData.total_floors}
                   onChange={handleInputChange}
                   placeholder="5"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="year">שנת בנייה</Label>
+                <Input
+                  id="year"
+                  name="year"
+                  type="number"
+                  value={formData.year}
+                  onChange={handleInputChange}
+                  placeholder="2015"
                 />
               </div>
               <div className="space-y-2">

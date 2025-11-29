@@ -85,6 +85,10 @@ const Properties = () => {
     priceMax: 5000000,
     sizeMin: 0,
     sizeMax: 300,
+    yearFrom: "",
+    yearTo: "",
+    floors: [],
+    conditions: [],
     cities: [],
     features: [],
   });
@@ -155,6 +159,23 @@ const Properties = () => {
       
       // Size filter
       if (property.size && (property.size < sidebarFilters.sizeMin || property.size > sidebarFilters.sizeMax)) {
+        return false;
+      }
+      
+      // Floor filter
+      if (sidebarFilters.floors.length > 0) {
+        const floorMatch = sidebarFilters.floors.some(f => {
+          if (f === "קרקע") return property.floor === 0;
+          if (f === "1-3") return property.floor >= 1 && property.floor <= 3;
+          if (f === "4-7") return property.floor >= 4 && property.floor <= 7;
+          if (f === "8+") return property.floor >= 8;
+          return false;
+        });
+        if (!floorMatch) return false;
+      }
+      
+      // Condition filter
+      if (sidebarFilters.conditions.length > 0 && !sidebarFilters.conditions.includes(property.condition)) {
         return false;
       }
       

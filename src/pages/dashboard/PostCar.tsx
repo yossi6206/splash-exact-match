@@ -14,10 +14,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
 
 const carSchema = z.object({
+  manufacturer: z.string().trim().min(2, "יצרן חובה"),
   model: z.string().trim().min(2, "דגם חייב להכיל לפחות 2 תווים").max(200, "דגם ארוך מדי"),
   year: z.number().int().min(1900, "שנה לא תקינה").max(new Date().getFullYear() + 1, "שנה לא תקינה"),
   km: z.number().int().min(0, "קילומטראז' לא יכול להיות שלילי").max(5000000, "קילומטראז' גבוה מדי"),
   hand: z.number().int().min(0, "יד לא יכולה להיות שלילית").max(20, "יד גבוהה מדי"),
+  fuel_type: z.string().min(1, "סוג דלק חובה"),
+  transmission: z.string().min(1, "תיבת הילוכים חובה"),
+  vehicle_type: z.string().min(1, "סוג רכב חובה"),
+  condition: z.string().min(1, "מצב הרכב חובה"),
   price: z.string().trim().min(1, "מחיר חובה"),
   location: z.string().trim().min(2, "מיקום חובה"),
   description: z.string().trim().min(20, "תיאור חייב להכיל לפחות 20 תווים").max(10000, "תיאור ארוך מדי"),
@@ -29,10 +34,15 @@ const PostCar = () => {
   const [loading, setLoading] = useState(false);
   
   const [formData, setFormData] = useState({
+    manufacturer: "",
     model: "",
     year: "",
     km: "",
     hand: "",
+    fuel_type: "",
+    transmission: "",
+    vehicle_type: "",
+    condition: "",
     price: "",
     location: "",
     description: "",
@@ -86,10 +96,15 @@ const PostCar = () => {
 
     try {
       carSchema.parse({
+        manufacturer: formData.manufacturer,
         model: formData.model,
         year: parseInt(formData.year),
         km: parseInt(formData.km),
         hand: parseInt(formData.hand),
+        fuel_type: formData.fuel_type,
+        transmission: formData.transmission,
+        vehicle_type: formData.vehicle_type,
+        condition: formData.condition,
         price: formData.price,
         location: formData.location,
         description: formData.description,
@@ -106,10 +121,15 @@ const PostCar = () => {
     try {
       const { error } = await supabase.from("cars").insert({
         user_id: user.id,
+        manufacturer: formData.manufacturer,
         model: formData.model,
         year: parseInt(formData.year),
         km: parseInt(formData.km),
         hand: parseInt(formData.hand),
+        fuel_type: formData.fuel_type,
+        transmission: formData.transmission,
+        vehicle_type: formData.vehicle_type,
+        condition: formData.condition,
         price: formData.price,
         location: formData.location,
         description: formData.description,
@@ -147,6 +167,37 @@ const PostCar = () => {
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
+                <Label htmlFor="manufacturer">יצרן *</Label>
+                <Select
+                  value={formData.manufacturer}
+                  onValueChange={(value) => setFormData({ ...formData, manufacturer: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר יצרן" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="טויוטה">טויוטה</SelectItem>
+                    <SelectItem value="מזדה">מזדה</SelectItem>
+                    <SelectItem value="יונדאי">יונדאי</SelectItem>
+                    <SelectItem value="קיה">קיה</SelectItem>
+                    <SelectItem value="הונדה">הונדה</SelectItem>
+                    <SelectItem value="ניסאן">ניסאן</SelectItem>
+                    <SelectItem value="פולקסווגן">פולקסווגן</SelectItem>
+                    <SelectItem value="שקודה">שקודה</SelectItem>
+                    <SelectItem value="סיאט">סיאט</SelectItem>
+                    <SelectItem value="ב מ וו">ב מ וו</SelectItem>
+                    <SelectItem value="מרצדס">מרצדס</SelectItem>
+                    <SelectItem value="אאודי">אאודי</SelectItem>
+                    <SelectItem value="רנו">רנו</SelectItem>
+                    <SelectItem value="פיג'ו">פיג'ו</SelectItem>
+                    <SelectItem value="סיטרואן">סיטרואן</SelectItem>
+                    <SelectItem value="פורד">פורד</SelectItem>
+                    <SelectItem value="שברולט">שברולט</SelectItem>
+                    <SelectItem value="מיצובישי">מיצובישי</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="model">דגם הרכב *</Label>
                 <Input
                   id="model"
@@ -154,9 +205,12 @@ const PostCar = () => {
                   value={formData.model}
                   onChange={handleInputChange}
                   required
-                  placeholder="טויוטה קורולה"
+                  placeholder="קורולה"
                 />
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="year">שנת ייצור *</Label>
                 <Input
@@ -169,9 +223,44 @@ const PostCar = () => {
                   placeholder="2020"
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="fuel_type">סוג דלק *</Label>
+                <Select
+                  value={formData.fuel_type}
+                  onValueChange={(value) => setFormData({ ...formData, fuel_type: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר סוג דלק" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="בנזין">בנזין</SelectItem>
+                    <SelectItem value="דיזל">דיזל</SelectItem>
+                    <SelectItem value="היבריד">היבריד</SelectItem>
+                    <SelectItem value="חשמלי">חשמלי</SelectItem>
+                    <SelectItem value="היבריד פלאג-אין">היבריד פלאג-אין</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="transmission">תיבת הילוכים *</Label>
+                <Select
+                  value={formData.transmission}
+                  onValueChange={(value) => setFormData({ ...formData, transmission: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר תיבה" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="אוטומט">אוטומט</SelectItem>
+                    <SelectItem value="ידני">ידני</SelectItem>
+                    <SelectItem value="רובוטרון">רובוטרון</SelectItem>
+                    <SelectItem value="טיפטרוניק">טיפטרוניק</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="km">קילומטראז' *</Label>
                 <Input
@@ -202,9 +291,45 @@ const PostCar = () => {
                   </SelectContent>
                 </Select>
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="vehicle_type">סוג רכב *</Label>
+                <Select
+                  value={formData.vehicle_type}
+                  onValueChange={(value) => setFormData({ ...formData, vehicle_type: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר סוג רכב" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="רכב פרטי">רכב פרטי</SelectItem>
+                    <SelectItem value="רכב מסחרי">רכב מסחרי</SelectItem>
+                    <SelectItem value="משאית">משאית</SelectItem>
+                    <SelectItem value="אופנוע">אופנוע</SelectItem>
+                    <SelectItem value="קטנוע">קטנוע</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="condition">מצב הרכב *</Label>
+                <Select
+                  value={formData.condition}
+                  onValueChange={(value) => setFormData({ ...formData, condition: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר מצב" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="רכב חדש">רכב חדש</SelectItem>
+                    <SelectItem value="רכב משומש">רכב משומש</SelectItem>
+                    <SelectItem value="במצב מצוין">במצב מצוין</SelectItem>
+                    <SelectItem value="במצב טוב">במצב טוב</SelectItem>
+                    <SelectItem value="דרוש תיקונים">דרוש תיקונים</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="price">מחיר *</Label>
                 <Input
