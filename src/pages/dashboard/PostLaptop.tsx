@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
+import { ImageUpload } from "@/components/ImageUpload";
 
 const laptopSchema = z.object({
   brand: z.string().trim().min(2, "יצרן חייב להכיל לפחות 2 תווים").max(100, "יצרן ארוך מדי"),
@@ -41,6 +42,8 @@ const PostLaptop = () => {
     location: "",
     description: "",
   });
+
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const laptopFeatures = [
     "מסך מגע",
@@ -102,6 +105,11 @@ const PostLaptop = () => {
       }
     }
 
+    if (imageUrls.length === 0) {
+      toast.error("נא להעלות לפחות תמונה אחת");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -120,6 +128,7 @@ const PostLaptop = () => {
         location: formData.location,
         description: formData.description,
         features: selectedFeatures,
+        images: imageUrls,
         status: "active",
       });
 
@@ -148,6 +157,15 @@ const PostLaptop = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        <Card className="p-6">
+          <h2 className="text-xl font-bold text-foreground mb-4">תמונות *</h2>
+          <ImageUpload
+            onImagesChange={setImageUrls}
+            maxImages={8}
+            existingImages={imageUrls}
+          />
+        </Card>
+
         <Card className="p-6">
           <h2 className="text-xl font-bold text-foreground mb-4">פרטי המחשב</h2>
           <div className="space-y-4">

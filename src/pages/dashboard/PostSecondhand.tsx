@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
+import { ImageUpload } from "@/components/ImageUpload";
 
 const secondhandSchema = z.object({
   title: z.string().trim().min(3, "כותרת חייבת להכיל לפחות 3 תווים").max(200, "כותרת ארוכה מדי"),
@@ -50,6 +51,7 @@ const PostSecondhand = () => {
   });
 
   const [availableSubcategories, setAvailableSubcategories] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const handleCategoryChange = (value: string) => {
     setFormData({ ...formData, category: value, subcategory: "" });
@@ -88,6 +90,11 @@ const PostSecondhand = () => {
       }
     }
 
+    if (imageUrls.length === 0) {
+      toast.error("נא להעלות לפחות תמונה אחת");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -105,6 +112,7 @@ const PostSecondhand = () => {
         material: formData.material || null,
         age: formData.age || null,
         description: formData.description,
+        images: imageUrls,
         status: "active",
       });
 
@@ -299,6 +307,15 @@ const PostSecondhand = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        <Card className="p-6">
+          <h2 className="text-xl font-bold text-foreground mb-4">תמונות *</h2>
+          <ImageUpload
+            onImagesChange={setImageUrls}
+            maxImages={8}
+            existingImages={imageUrls}
+          />
+        </Card>
+
         <Card className="p-6">
           <h2 className="text-xl font-bold text-foreground mb-4">פרטי המוצר</h2>
           <div className="space-y-4">
