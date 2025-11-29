@@ -39,6 +39,12 @@ const PostLaptop = () => {
     storage_type: "",
     screen_size: "",
     graphics_card: "",
+    resolution: "",
+    operating_system: "",
+    weight: "",
+    battery: "",
+    connectivity: "",
+    ports: "",
     condition: "",
     price: "",
     location: "",
@@ -129,6 +135,12 @@ const PostLaptop = () => {
         storage_type: formData.storage_type || null,
         screen_size: formData.screen_size ? parseFloat(formData.screen_size) : null,
         graphics_card: formData.graphics_card || null,
+        resolution: formData.resolution || null,
+        operating_system: formData.operating_system || null,
+        weight: formData.weight || null,
+        battery: formData.battery || null,
+        connectivity: formData.connectivity || null,
+        ports: formData.ports || null,
         condition: formData.condition,
         price: parseInt(formData.price),
         location: formData.location,
@@ -302,6 +314,76 @@ const PostLaptop = () => {
                   placeholder="NVIDIA RTX 3060"
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="resolution">רזולוציה</Label>
+                <Input
+                  id="resolution"
+                  name="resolution"
+                  value={formData.resolution}
+                  onChange={handleInputChange}
+                  placeholder="1920 x 1080"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="operating_system">מערכת הפעלה</Label>
+                <Input
+                  id="operating_system"
+                  name="operating_system"
+                  value={formData.operating_system}
+                  onChange={handleInputChange}
+                  placeholder="Windows 11 Pro"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="weight">משקל</Label>
+                <Input
+                  id="weight"
+                  name="weight"
+                  value={formData.weight}
+                  onChange={handleInputChange}
+                  placeholder="1.5 ק״ג"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="battery">סוללה</Label>
+                <Input
+                  id="battery"
+                  name="battery"
+                  value={formData.battery}
+                  onChange={handleInputChange}
+                  placeholder="עד 10 שעות"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="connectivity">תקשורת</Label>
+                <Input
+                  id="connectivity"
+                  name="connectivity"
+                  value={formData.connectivity}
+                  onChange={handleInputChange}
+                  placeholder="Wi-Fi 6, Bluetooth 5.0"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="ports">יציאות</Label>
+              <Input
+                id="ports"
+                name="ports"
+                value={formData.ports}
+                onChange={handleInputChange}
+                placeholder="2x USB-C, 2x USB 3.0, HDMI"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="condition">מצב המחשב *</Label>
                 <Select

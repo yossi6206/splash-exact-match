@@ -432,8 +432,10 @@ export type Database = {
       }
       laptops: {
         Row: {
+          battery: string | null
           brand: string
           condition: string
+          connectivity: string | null
           created_at: string
           description: string | null
           features: string[] | null
@@ -442,9 +444,12 @@ export type Database = {
           images: string[] | null
           location: string
           model: string
+          operating_system: string | null
+          ports: string | null
           price: number
           processor: string | null
           ram: number | null
+          resolution: string | null
           screen_size: number | null
           seller_name: string | null
           seller_phone: string | null
@@ -453,10 +458,13 @@ export type Database = {
           storage_type: string | null
           updated_at: string
           user_id: string
+          weight: string | null
         }
         Insert: {
+          battery?: string | null
           brand: string
           condition: string
+          connectivity?: string | null
           created_at?: string
           description?: string | null
           features?: string[] | null
@@ -465,9 +473,12 @@ export type Database = {
           images?: string[] | null
           location: string
           model: string
+          operating_system?: string | null
+          ports?: string | null
           price: number
           processor?: string | null
           ram?: number | null
+          resolution?: string | null
           screen_size?: number | null
           seller_name?: string | null
           seller_phone?: string | null
@@ -476,10 +487,13 @@ export type Database = {
           storage_type?: string | null
           updated_at?: string
           user_id: string
+          weight?: string | null
         }
         Update: {
+          battery?: string | null
           brand?: string
           condition?: string
+          connectivity?: string | null
           created_at?: string
           description?: string | null
           features?: string[] | null
@@ -488,9 +502,12 @@ export type Database = {
           images?: string[] | null
           location?: string
           model?: string
+          operating_system?: string | null
+          ports?: string | null
           price?: number
           processor?: string | null
           ram?: number | null
+          resolution?: string | null
           screen_size?: number | null
           seller_name?: string | null
           seller_phone?: string | null
@@ -499,6 +516,7 @@ export type Database = {
           storage_type?: string | null
           updated_at?: string
           user_id?: string
+          weight?: string | null
         }
         Relationships: []
       }
