@@ -97,6 +97,9 @@ const Cars = () => {
     kmMin: 0,
     kmMax: 300000,
     features: [],
+    vehicleTypes: [],
+    conditions: [],
+    categories: [],
   });
   const itemsPerPage = 10;
   
