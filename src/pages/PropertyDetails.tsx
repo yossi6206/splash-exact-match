@@ -1,46 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Heart, Share2, Home, MapPin, Bed, Square, Calendar, Shield } from "lucide-react";
-import property1 from "@/assets/property-1.jpg";
+import { Heart, Share2, Home, MapPin, Bed, Square, Calendar, Shield, Phone, MessageSquare, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
+import { supabase } from "@/integrations/supabase/client";
+import property1 from "@/assets/property-1.jpg";
 
 const PropertyDetails = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const { toast } = useToast();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [property, setProperty] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [showPhone, setShowPhone] = useState(false);
 
-  // Mock data - בפועל יגיע מהשרת
-  const property = {
-    id,
-    title: "דירת 4 חדרים מרווחת בנווה צדק",
-    price: "2,450,000",
-    location: "תל אביב, נווה צדק",
-    rooms: 4,
-    size: 120,
-    floor: 3,
-    totalFloors: 5,
-    propertyType: "דירה",
-    condition: "משופץ",
-    images: [property1],
-    description: "דירה מרווחת ומוארת בלב נווה צדק, משופצת ברמה גבוהה. הדירה כוללת סלון גדול, מטבח מעוצב, 3 חדרי שינה, 2 חדרי רחצה ומרפסת שמש.",
-    features: [
-      "מעלית",
-      "חניה",
-      "מרפסת",
-      "מחסן",
-      "ממ\"ד",
-      "כניסה נפרדת"
-    ],
-    year: 2018
-  };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  useEffect(() => {
+    const fetchProperty = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("properties")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching property:", error);
+        toast({
+          title: "שגיאה",
+          description: "לא ניתן לטעון את פרטי הנכס",
+          variant: "destructive"
+        });
+      } else {
+        setProperty(data);
+        
+        // Increment view count
+        await supabase
+          .from("properties")
+          .update({ views_count: (data.views_count || 0) + 1 })
+          .eq("id", id);
+      }
+      setLoading(false);
+    };
+
+    fetchProperty();
+  }, [id, toast]);
 
   const handleFavorite = () => {
     if (!user) {
@@ -58,8 +74,53 @@ const PropertyDetails = () => {
     });
   };
 
+  const handleContactClick = async () => {
+    if (!id || !property) return;
+    
+    // Increment contacts count
+    await supabase
+      .from("properties")
+      .update({ contacts_count: (property.contacts_count || 0) + 1 })
+      .eq("id", id);
+  };
+
+  const handleShowPhone = async () => {
+    setShowPhone(true);
+    await handleContactClick();
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background pb-20 md:pb-0">
+        <MobileHeader />
+        <Header />
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!property) {
+    return (
+      <div className="min-h-screen bg-background pb-20 md:pb-0">
+        <MobileHeader />
+        <Header />
+        <div className="container mx-auto px-4 py-20 text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">הנכס לא נמצא</h1>
+          <p className="text-muted-foreground">המודעה שחיפשת אינה קיימת או הוסרה</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const images = property.images && property.images.length > 0 ? property.images : [property1];
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
+      <MobileHeader />
       <Header />
 
       <main className="container mx-auto px-4 py-6">
@@ -67,17 +128,17 @@ const PropertyDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
           <div className="aspect-video relative overflow-hidden rounded-lg">
             <img 
-              src={property.images[0]} 
+              src={images[0]} 
               alt={property.title}
               className="w-full h-full object-cover"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            {[1, 2, 3, 4].map((i) => (
+            {images.slice(1, 5).map((img, i) => (
               <div key={i} className="aspect-video relative overflow-hidden rounded-lg bg-muted">
                 <img 
-                  src={property.images[0]} 
-                  alt={`תמונה ${i}`}
+                  src={img} 
+                  alt={`תמונה ${i + 2}`}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -121,48 +182,58 @@ const PropertyDetails = () => {
                     <div className="font-semibold">{property.rooms}</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Square className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">מ"ר</div>
-                    <div className="font-semibold">{property.size}</div>
+                {property.size && (
+                  <div className="flex items-center gap-3">
+                    <Square className="h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">מ"ר</div>
+                      <div className="font-semibold">{property.size}</div>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Home className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">קומה</div>
-                    <div className="font-semibold">{property.floor}/{property.totalFloors}</div>
+                )}
+                {property.floor && (
+                  <div className="flex items-center gap-3">
+                    <Home className="h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">קומה</div>
+                      <div className="font-semibold">{property.floor}{property.total_floors ? `/${property.total_floors}` : ''}</div>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Calendar className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">שנת בנייה</div>
-                    <div className="font-semibold">{property.year}</div>
+                )}
+                {property.year && (
+                  <div className="flex items-center gap-3">
+                    <Calendar className="h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">שנת בנייה</div>
+                      <div className="font-semibold">{property.year}</div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </Card>
 
             {/* Description */}
-            <Card className="p-6">
-              <h2 className="text-xl font-bold mb-4">תיאור הנכס</h2>
-              <p className="text-foreground/80 leading-relaxed">{property.description}</p>
-            </Card>
+            {property.description && (
+              <Card className="p-6">
+                <h2 className="text-xl font-bold mb-4">תיאור הנכס</h2>
+                <p className="text-foreground/80 leading-relaxed whitespace-pre-line">{property.description}</p>
+              </Card>
+            )}
 
             {/* Features */}
-            <Card className="p-6">
-              <h2 className="text-xl font-bold mb-4">תכונות</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {property.features.map((feature, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-primary" />
-                    <span className="text-foreground/80">{feature}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
+            {property.features && property.features.length > 0 && (
+              <Card className="p-6">
+                <h2 className="text-xl font-bold mb-4">תכונות</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {property.features.map((feature: string, index: number) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Shield className="h-4 w-4 text-primary" />
+                      <span className="text-foreground/80">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
           </div>
 
           {/* Sidebar - Contact Card */}
@@ -170,32 +241,64 @@ const PropertyDetails = () => {
             <Card className="p-6">
               <div className="mb-6">
                 <div className="text-3xl font-bold text-foreground mb-1">
-                  ₪{property.price}
+                  ₪{property.price.toLocaleString('he-IL')}
                 </div>
                 <div className="text-sm text-muted-foreground">מחיר מבוקש</div>
               </div>
 
               <div className="space-y-3">
-                <Button className="w-full" size="lg">
+                <Button className="w-full" size="lg" onClick={handleContactClick}>
+                  <Phone className="ml-2 h-4 w-4" />
                   צור קשר
                 </Button>
-                <Button variant="outline" className="w-full" size="lg">
+                <Button variant="outline" className="w-full" size="lg" onClick={handleContactClick}>
+                  <MessageSquare className="ml-2 h-4 w-4" />
                   שלח הודעה
                 </Button>
               </div>
 
               <div className="mt-6 pt-6 border-t">
                 <h3 className="font-semibold mb-3">פרטי המפרסם</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">שם</span>
-                    <span className="font-medium">יוסי כהן</span>
+                {property.seller_name || property.seller_phone ? (
+                  <div className="space-y-3">
+                    {property.seller_name && (
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                          <span className="font-bold text-primary">{property.seller_name.charAt(0)}</span>
+                        </div>
+                        <div>
+                          <div className="font-semibold text-foreground">{property.seller_name}</div>
+                          <div className="text-sm text-muted-foreground">מפרסם פרטי</div>
+                        </div>
+                      </div>
+                    )}
+                    {property.seller_phone && (
+                      <div className="pt-3 border-t border-border">
+                        {!showPhone ? (
+                          <Button 
+                            variant="outline" 
+                            className="w-full"
+                            onClick={handleShowPhone}
+                          >
+                            <Phone className="h-4 w-4 ml-2" />
+                            הצג מספר טלפון
+                          </Button>
+                        ) : (
+                          <>
+                            <div className="text-sm text-muted-foreground mb-1">טלפון</div>
+                            <a href={`tel:${property.seller_phone}`} className="text-lg font-bold text-primary hover:underline" dir="ltr">
+                              {property.seller_phone}
+                            </a>
+                          </>
+                        )}
+                      </div>
+                    )}
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">טלפון</span>
-                    <span className="font-medium">050-1234567</span>
+                ) : (
+                  <div className="text-sm text-muted-foreground">
+                    צור קשר דרך הכפתורים למעלה
                   </div>
-                </div>
+                )}
               </div>
             </Card>
 
