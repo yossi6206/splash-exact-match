@@ -27,12 +27,17 @@ export type Database = {
           id: string
           images: string[] | null
           includes: string[] | null
+          is_promoted: boolean | null
+          last_top_position_at: string | null
           lease_details: string | null
           lease_expiry_date: string | null
           lease_monthly_cost: number | null
           location: string
           monthly_profit: number | null
           price: number
+          promotion_end_date: string | null
+          promotion_impressions: number | null
+          promotion_start_date: string | null
           reasons_for_sale: string | null
           seller_name: string | null
           seller_phone: string | null
@@ -55,12 +60,17 @@ export type Database = {
           id?: string
           images?: string[] | null
           includes?: string[] | null
+          is_promoted?: boolean | null
+          last_top_position_at?: string | null
           lease_details?: string | null
           lease_expiry_date?: string | null
           lease_monthly_cost?: number | null
           location: string
           monthly_profit?: number | null
           price: number
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           reasons_for_sale?: string | null
           seller_name?: string | null
           seller_phone?: string | null
@@ -83,12 +93,17 @@ export type Database = {
           id?: string
           images?: string[] | null
           includes?: string[] | null
+          is_promoted?: boolean | null
+          last_top_position_at?: string | null
           lease_details?: string | null
           lease_expiry_date?: string | null
           lease_monthly_cost?: number | null
           location?: string
           monthly_profit?: number | null
           price?: number
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           reasons_for_sale?: string | null
           seller_name?: string | null
           seller_phone?: string | null
@@ -114,11 +129,16 @@ export type Database = {
           hand: number
           id: string
           images: string[] | null
+          is_promoted: boolean | null
           km: number
+          last_top_position_at: string | null
           location: string
           manufacturer: string | null
           model: string
           price: string | null
+          promotion_end_date: string | null
+          promotion_impressions: number | null
+          promotion_start_date: string | null
           seller_name: string | null
           seller_phone: string | null
           status: string
@@ -141,11 +161,16 @@ export type Database = {
           hand: number
           id?: string
           images?: string[] | null
+          is_promoted?: boolean | null
           km: number
+          last_top_position_at?: string | null
           location: string
           manufacturer?: string | null
           model: string
           price?: string | null
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           seller_name?: string | null
           seller_phone?: string | null
           status?: string
@@ -168,11 +193,16 @@ export type Database = {
           hand?: number
           id?: string
           images?: string[] | null
+          is_promoted?: boolean | null
           km?: number
+          last_top_position_at?: string | null
           location?: string
           manufacturer?: string | null
           model?: string
           price?: string | null
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           seller_name?: string | null
           seller_phone?: string | null
           status?: string
@@ -377,9 +407,14 @@ export type Database = {
           full_name: string
           hourly_rate: number
           id: string
+          is_promoted: boolean | null
           languages: string[] | null
+          last_top_position_at: string | null
           location: string | null
           portfolio_url: string | null
+          promotion_end_date: string | null
+          promotion_impressions: number | null
+          promotion_start_date: string | null
           rating: number | null
           skills: string[]
           title: string
@@ -400,9 +435,14 @@ export type Database = {
           full_name: string
           hourly_rate: number
           id?: string
+          is_promoted?: boolean | null
           languages?: string[] | null
+          last_top_position_at?: string | null
           location?: string | null
           portfolio_url?: string | null
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           rating?: number | null
           skills: string[]
           title: string
@@ -423,9 +463,14 @@ export type Database = {
           full_name?: string
           hourly_rate?: number
           id?: string
+          is_promoted?: boolean | null
           languages?: string[] | null
+          last_top_position_at?: string | null
           location?: string | null
           portfolio_url?: string | null
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           rating?: number | null
           skills?: string[]
           title?: string
@@ -507,9 +552,14 @@ export type Database = {
           experience_min: number | null
           id: string
           industry: string | null
+          is_promoted: boolean | null
           job_type: string
+          last_top_position_at: string | null
           location: string
           nice_to_have: string[] | null
+          promotion_end_date: string | null
+          promotion_impressions: number | null
+          promotion_start_date: string | null
           requirements: string[]
           salary_max: number | null
           salary_min: number | null
@@ -534,9 +584,14 @@ export type Database = {
           experience_min?: number | null
           id?: string
           industry?: string | null
+          is_promoted?: boolean | null
           job_type: string
+          last_top_position_at?: string | null
           location: string
           nice_to_have?: string[] | null
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           requirements: string[]
           salary_max?: number | null
           salary_min?: number | null
@@ -561,9 +616,14 @@ export type Database = {
           experience_min?: number | null
           id?: string
           industry?: string | null
+          is_promoted?: boolean | null
           job_type?: string
+          last_top_position_at?: string | null
           location?: string
           nice_to_have?: string[] | null
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           requirements?: string[]
           salary_max?: number | null
           salary_min?: number | null
@@ -590,12 +650,17 @@ export type Database = {
           graphics_card: string | null
           id: string
           images: string[] | null
+          is_promoted: boolean | null
+          last_top_position_at: string | null
           location: string
           model: string
           operating_system: string | null
           ports: string | null
           price: number
           processor: string | null
+          promotion_end_date: string | null
+          promotion_impressions: number | null
+          promotion_start_date: string | null
           ram: number | null
           resolution: string | null
           screen_size: number | null
@@ -622,12 +687,17 @@ export type Database = {
           graphics_card?: string | null
           id?: string
           images?: string[] | null
+          is_promoted?: boolean | null
+          last_top_position_at?: string | null
           location: string
           model: string
           operating_system?: string | null
           ports?: string | null
           price: number
           processor?: string | null
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           ram?: number | null
           resolution?: string | null
           screen_size?: number | null
@@ -654,12 +724,17 @@ export type Database = {
           graphics_card?: string | null
           id?: string
           images?: string[] | null
+          is_promoted?: boolean | null
+          last_top_position_at?: string | null
           location?: string
           model?: string
           operating_system?: string | null
           ports?: string | null
           price?: number
           processor?: string | null
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           ram?: number | null
           resolution?: string | null
           screen_size?: number | null
@@ -805,9 +880,14 @@ export type Database = {
           floor: number | null
           id: string
           images: string[] | null
+          is_promoted: boolean | null
+          last_top_position_at: string | null
           location: string
           parking: boolean | null
           price: number
+          promotion_end_date: string | null
+          promotion_impressions: number | null
+          promotion_start_date: string | null
           property_type: string
           rooms: number
           seller_name: string | null
@@ -834,9 +914,14 @@ export type Database = {
           floor?: number | null
           id?: string
           images?: string[] | null
+          is_promoted?: boolean | null
+          last_top_position_at?: string | null
           location: string
           parking?: boolean | null
           price: number
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           property_type: string
           rooms: number
           seller_name?: string | null
@@ -863,9 +948,14 @@ export type Database = {
           floor?: number | null
           id?: string
           images?: string[] | null
+          is_promoted?: boolean | null
+          last_top_position_at?: string | null
           location?: string
           parking?: boolean | null
           price?: number
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           property_type?: string
           rooms?: number
           seller_name?: string | null
@@ -968,10 +1058,15 @@ export type Database = {
           features: string[] | null
           id: string
           images: string[] | null
+          is_promoted: boolean | null
+          last_top_position_at: string | null
           location: string
           material: string | null
           negotiable: boolean | null
           price: number
+          promotion_end_date: string | null
+          promotion_impressions: number | null
+          promotion_start_date: string | null
           seller_name: string | null
           seller_phone: string | null
           size: string | null
@@ -1000,10 +1095,15 @@ export type Database = {
           features?: string[] | null
           id?: string
           images?: string[] | null
+          is_promoted?: boolean | null
+          last_top_position_at?: string | null
           location: string
           material?: string | null
           negotiable?: boolean | null
           price: number
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           seller_name?: string | null
           seller_phone?: string | null
           size?: string | null
@@ -1032,10 +1132,15 @@ export type Database = {
           features?: string[] | null
           id?: string
           images?: string[] | null
+          is_promoted?: boolean | null
+          last_top_position_at?: string | null
           location?: string
           material?: string | null
           negotiable?: boolean | null
           price?: number
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
           seller_name?: string | null
           seller_phone?: string | null
           size?: string | null

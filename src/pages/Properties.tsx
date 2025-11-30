@@ -41,14 +41,44 @@ const Properties = () => {
   const fetchProperties = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("properties")
-        .select("*")
-        .eq("status", "active")
-        .order("created_at", { ascending: false });
+      // Fetch promoted properties with fair rotation algorithm
+      const { data: promotedData, error: promotedError } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('status', 'active')
+        .eq('is_promoted', true)
+        .gte('promotion_end_date', new Date().toISOString())
+        .order('last_top_position_at', { ascending: true, nullsFirst: true })
+        .order('promotion_impressions', { ascending: true })
+        .limit(3);
 
-      if (error) throw error;
-      setProperties(data || []);
+      // Fetch regular properties
+      const { data: regularData, error: regularError } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('status', 'active')
+        .or(`is_promoted.is.null,is_promoted.eq.false,promotion_end_date.lt.${new Date().toISOString()}`)
+        .order('created_at', { ascending: false });
+
+      if (promotedError || regularError) throw promotedError || regularError;
+
+      // Update impressions for promoted properties
+      if (promotedData && promotedData.length > 0) {
+        const updatePromises = promotedData.map(property =>
+          supabase
+            .from('properties')
+            .update({
+              promotion_impressions: (property.promotion_impressions || 0) + 1,
+              last_top_position_at: new Date().toISOString()
+            })
+            .eq('id', property.id)
+        );
+        await Promise.all(updatePromises);
+      }
+
+      // Combine promoted and regular properties
+      const allProperties = [...(promotedData || []), ...(regularData || [])];
+      setProperties(allProperties);
     } catch (error: any) {
       console.error("Error fetching properties:", error);
       toast.error("שגיאה באחזור הנכסים");

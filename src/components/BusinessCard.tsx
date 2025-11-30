@@ -1,6 +1,6 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Building2, MapPin, TrendingUp, Users, Phone, Eye } from "lucide-react";
+import { Building2, MapPin, TrendingUp, Users, Phone, Eye, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -18,6 +18,8 @@ interface BusinessCardProps {
   employees_count?: number;
   images?: string[];
   clicks_count?: number;
+  is_promoted?: boolean;
+  promotion_end_date?: string;
 }
 
 const BusinessCard = ({
@@ -34,7 +36,12 @@ const BusinessCard = ({
   employees_count,
   images,
   clicks_count = 0,
+  is_promoted,
+  promotion_end_date,
 }: BusinessCardProps) => {
+  const isPromoted = is_promoted && 
+    promotion_end_date && 
+    new Date(promotion_end_date) > new Date();
   const handleClick = async () => {
     try {
       await supabase
@@ -56,9 +63,19 @@ const BusinessCard = ({
 
   return (
     <Link to={`/businesses/${id}`} onClick={handleClick}>
-      <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden border-2 hover:border-primary/50">
+      <Card className={`group hover:shadow-xl transition-all duration-300 overflow-hidden border-2 hover:border-primary/50 ${
+        isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
+      }`}>
         {/* Image */}
         <div className="relative h-52 overflow-hidden bg-muted">
+          {isPromoted && (
+            <Badge 
+              className="absolute top-3 left-3 z-10 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg"
+            >
+              <Sparkles className="w-3 h-3 ml-1" />
+              מקודם
+            </Badge>
+          )}
           {images && images.length > 0 ? (
             <img
               src={images[0]}
