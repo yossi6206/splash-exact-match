@@ -1,4 +1,5 @@
 import { NavLink } from "@/components/NavLink";
+import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { 
@@ -14,7 +15,8 @@ import {
   MessageSquare,
   Sparkles,
   TrendingUp,
-  PlusCircle
+  PlusCircle,
+  Home
 } from "lucide-react";
 
 const menuItems = [
@@ -66,6 +68,15 @@ export const DashboardSidebar = () => {
 
       {/* Bottom Actions */}
       <div className="p-6 border-t border-border space-y-3">
+        <Link to="/">
+          <Button 
+            variant="outline" 
+            className="w-full justify-between border-border hover:bg-muted"
+          >
+            <span>חזרה לדף הבית</span>
+            <Home className="h-4 w-4" />
+          </Button>
+        </Link>
         <Button 
           variant="outline" 
           className="w-full justify-between border-border hover:bg-muted"
