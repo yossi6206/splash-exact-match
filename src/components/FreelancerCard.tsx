@@ -64,7 +64,7 @@ const FreelancerCard = ({
     }
 
     // Navigate to messages page with freelancer info
-    navigate("/dashboard/messages", { 
+    navigate("/messages", { 
       state: { 
         freelancerId: id,
         freelancerName: full_name,
