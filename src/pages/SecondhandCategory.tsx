@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileHeader from "@/components/MobileHeader";
-import { SecondhandSidebarFilter } from "@/components/SecondhandSidebarFilter";
+import { SecondhandSidebarFilter, SecondhandFilters } from "@/components/SecondhandSidebarFilter";
 import { SecondhandCard } from "@/components/SecondhandCard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -60,16 +60,39 @@ const SecondhandCategory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState<any[]>([]);
+  const [allItems, setAllItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState<SecondhandFilters>({
+    categories: [],
+    subcategories: [],
+    priceMin: 0,
+    priceMax: 10000,
+    conditions: [],
+    cities: [],
+    brands: [],
+    sizes: [],
+  });
   const itemsPerPage = 12;
 
   // Get category configuration
   const config = category ? categoryConfig[category] : categoryConfig["furniture"];
   const CategoryIcon = config.icon;
 
+  const categoryMap: Record<string, string> = {
+    "furniture": "ריהוט",
+    "electronics": "מוצרי חשמל",
+    "sports": "ספורט ופנאי",
+    "fashion": "אופנה",
+    "kids": "תינוקות וילדים"
+  };
+
   useEffect(() => {
     fetchItems();
   }, [category]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [filters, allItems, sortBy, searchQuery]);
 
   const fetchItems = async () => {
     setLoading(true);
@@ -80,13 +103,6 @@ const SecondhandCategory = () => {
 
     // Filter by category if specified
     if (category) {
-      const categoryMap: Record<string, string> = {
-        "furniture": "ריהוט",
-        "electronics": "מוצרי חשמל",
-        "sports": "ספורט ופנאי",
-        "fashion": "אופנה",
-        "kids": "תינוקות וילדים"
-      };
       query = query.eq("category", categoryMap[category]);
     }
 
@@ -97,10 +113,110 @@ const SecondhandCategory = () => {
     if (error) {
       console.error("Error fetching items:", error);
     } else {
+      setAllItems(data || []);
       setItems(data || []);
     }
     setLoading(false);
   };
+
+  const applyFilters = () => {
+    let filtered = [...allItems];
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(item =>
+        item.title?.toLowerCase().includes(query) ||
+        item.description?.toLowerCase().includes(query) ||
+        item.brand?.toLowerCase().includes(query) ||
+        item.location?.toLowerCase().includes(query)
+      );
+    }
+
+    // Category filter
+    if (filters.categories.length > 0) {
+      filtered = filtered.filter(item => filters.categories.includes(item.category));
+    }
+
+    // Subcategory filter
+    if (filters.subcategories.length > 0) {
+      filtered = filtered.filter(item => filters.subcategories.includes(item.subcategory));
+    }
+
+    // Price filter
+    filtered = filtered.filter(item =>
+      item.price >= filters.priceMin && item.price <= filters.priceMax
+    );
+
+    // Condition filter
+    if (filters.conditions.length > 0) {
+      filtered = filtered.filter(item => filters.conditions.includes(item.condition));
+    }
+
+    // City filter
+    if (filters.cities.length > 0) {
+      filtered = filtered.filter(item => filters.cities.includes(item.location));
+    }
+
+    // Brand filter
+    if (filters.brands.length > 0) {
+      filtered = filtered.filter(item => filters.brands.includes(item.brand));
+    }
+
+    // Size filter
+    if (filters.sizes.length > 0) {
+      filtered = filtered.filter(item => filters.sizes.includes(item.size));
+    }
+
+    // Sort
+    switch (sortBy) {
+      case "price-low":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "price-high":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "newest":
+        filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        break;
+      default:
+        // Keep default order
+        break;
+    }
+
+    setItems(filtered);
+    setCurrentPage(1);
+  };
+
+  const handleFilterChange = (newFilters: SecondhandFilters) => {
+    setFilters(newFilters);
+  };
+
+  // Calculate dynamic data for filters
+  const priceRange = useMemo(() => {
+    if (allItems.length === 0) return { min: 0, max: 10000 };
+    const prices = allItems.map(item => item.price).filter(p => p > 0);
+    return {
+      min: Math.floor(Math.min(...prices) / 50) * 50,
+      max: Math.ceil(Math.max(...prices) / 50) * 50
+    };
+  }, [allItems]);
+
+  const availableBrands = useMemo(() => {
+    const brandsSet = new Set<string>();
+    allItems.forEach(item => {
+      if (item.brand) brandsSet.add(item.brand);
+    });
+    return Array.from(brandsSet).sort();
+  }, [allItems]);
+
+  const availableSizes = useMemo(() => {
+    const sizesSet = new Set<string>();
+    allItems.forEach(item => {
+      if (item.size) sizesSet.add(item.size);
+    });
+    return Array.from(sizesSet).sort();
+  }, [allItems]);
 
   // Calculate counts for filter options
   const filterCounts = useMemo(() => {
@@ -110,6 +226,7 @@ const SecondhandCategory = () => {
       conditions: {} as Record<string, number>,
       cities: {} as Record<string, number>,
       brands: {} as Record<string, number>,
+      sizes: {} as Record<string, number>,
     };
 
     items.forEach(item => {
@@ -118,6 +235,7 @@ const SecondhandCategory = () => {
       if (item.condition) counts.conditions[item.condition] = (counts.conditions[item.condition] || 0) + 1;
       if (item.location) counts.cities[item.location] = (counts.cities[item.location] || 0) + 1;
       if (item.brand) counts.brands[item.brand] = (counts.brands[item.brand] || 0) + 1;
+      if (item.size) counts.sizes[item.size] = (counts.sizes[item.size] || 0) + 1;
     });
 
     return counts;
@@ -210,7 +328,14 @@ const SecondhandCategory = () => {
                 <SheetTitle>סינון תוצאות</SheetTitle>
               </SheetHeader>
               <div className="mt-6">
-                <SecondhandSidebarFilter counts={filterCounts} />
+                <SecondhandSidebarFilter 
+                  counts={filterCounts}
+                  onFilterChange={handleFilterChange}
+                  priceRange={priceRange}
+                  availableBrands={availableBrands}
+                  availableSizes={availableSizes}
+                  categoryType={category ? categoryMap[category] : undefined}
+                />
               </div>
             </SheetContent>
           </Sheet>
@@ -238,7 +363,14 @@ const SecondhandCategory = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
           {/* Sidebar Filters - Desktop */}
-          <SecondhandSidebarFilter counts={filterCounts} />
+          <SecondhandSidebarFilter 
+            counts={filterCounts}
+            onFilterChange={handleFilterChange}
+            priceRange={priceRange}
+            availableBrands={availableBrands}
+            availableSizes={availableSizes}
+            categoryType={category ? categoryMap[category] : undefined}
+          />
 
           {/* Items Grid */}
           <div>

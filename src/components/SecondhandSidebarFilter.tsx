@@ -14,7 +14,15 @@ interface SecondhandSidebarFilterProps {
     conditions?: Record<string, number>;
     cities?: Record<string, number>;
     brands?: Record<string, number>;
+    sizes?: Record<string, number>;
   };
+  priceRange?: {
+    min: number;
+    max: number;
+  };
+  availableBrands?: string[];
+  availableSizes?: string[];
+  categoryType?: string;
 }
 
 export interface SecondhandFilters {
@@ -25,6 +33,7 @@ export interface SecondhandFilters {
   conditions: string[];
   cities: string[];
   brands: string[];
+  sizes: string[];
 }
 
 const categories = ["ריהוט", "מוצרי חשמל", "ספורט ופנאי", "אופנה", "תינוקות וילדים"];
@@ -50,15 +59,35 @@ const popularBrands = [
   "Bugaboo", "Maxi-Cosi", "Giant", "Trek"
 ];
 
-export const SecondhandSidebarFilter = ({ onFilterChange, counts }: SecondhandSidebarFilterProps) => {
+// Category-specific sizes
+const categorySizes: Record<string, string[]> = {
+  "ריהוט": ["קטן", "בינוני", "גדול", "ענק", "חד-מושבי", "דו-מושבי", "תלת-מושבי"],
+  "מוצרי חשמל": ["קטן", "בינוני", "גדול", "משפחתי"],
+  "ספורט ופנאי": ["S", "M", "L", "XL", "XXL", "26\"", "27.5\"", "29\""],
+  "אופנה": ["XS", "S", "M", "L", "XL", "XXL", "36", "37", "38", "39", "40", "41", "42", "43", "44"],
+  "תינוקות וילדים": ["0-6 חודשים", "6-12 חודשים", "1-2 שנים", "2-4 שנים", "4-6 שנים", "6+ שנים"],
+};
+
+export const SecondhandSidebarFilter = ({ 
+  onFilterChange, 
+  counts, 
+  priceRange, 
+  availableBrands,
+  availableSizes,
+  categoryType 
+}: SecondhandSidebarFilterProps) => {
+  const defaultPriceMax = priceRange?.max || 10000;
+  const defaultPriceMin = priceRange?.min || 0;
+
   const [filters, setFilters] = useState<SecondhandFilters>({
     categories: [],
     subcategories: [],
-    priceMin: 0,
-    priceMax: 10000,
+    priceMin: defaultPriceMin,
+    priceMax: defaultPriceMax,
     conditions: [],
     cities: [],
     brands: [],
+    sizes: [],
   });
 
   const [expandedSections, setExpandedSections] = useState({
@@ -68,6 +97,7 @@ export const SecondhandSidebarFilter = ({ onFilterChange, counts }: SecondhandSi
     condition: true,
     city: false,
     brand: false,
+    size: false,
   });
 
   const toggleSection = (section: keyof typeof expandedSections) => {
@@ -75,7 +105,7 @@ export const SecondhandSidebarFilter = ({ onFilterChange, counts }: SecondhandSi
   };
 
   const handleArrayFilterChange = (
-    key: keyof Pick<SecondhandFilters, 'categories' | 'subcategories' | 'conditions' | 'cities' | 'brands'>,
+    key: keyof Pick<SecondhandFilters, 'categories' | 'subcategories' | 'conditions' | 'cities' | 'brands' | 'sizes'>,
     value: string
   ) => {
     const currentValues = filters[key] as string[];
@@ -98,11 +128,12 @@ export const SecondhandSidebarFilter = ({ onFilterChange, counts }: SecondhandSi
     const defaultFilters = {
       categories: [],
       subcategories: [],
-      priceMin: 0,
-      priceMax: 10000,
+      priceMin: defaultPriceMin,
+      priceMax: defaultPriceMax,
       conditions: [],
       cities: [],
       brands: [],
+      sizes: [],
     };
     setFilters(defaultFilters);
     onFilterChange?.(defaultFilters);
@@ -113,13 +144,27 @@ export const SecondhandSidebarFilter = ({ onFilterChange, counts }: SecondhandSi
     filters.subcategories.length +
     filters.conditions.length +
     filters.cities.length +
-    filters.brands.length;
+    filters.brands.length +
+    filters.sizes.length +
+    ((filters.priceMin !== defaultPriceMin || filters.priceMax !== defaultPriceMax) ? 1 : 0);
 
   const availableSubcategories = filters.categories.length === 1 
     ? subcategories[filters.categories[0]] || []
     : [];
 
-  const FilterSection = ({ 
+  // Get sizes based on category
+  const displaySizes = availableSizes && availableSizes.length > 0
+    ? availableSizes
+    : categoryType && categorySizes[categoryType]
+    ? categorySizes[categoryType]
+    : [];
+
+  // Get brands to display
+  const displayBrands = availableBrands && availableBrands.length > 0
+    ? availableBrands
+    : popularBrands;
+
+  const FilterSection = ({
     title, 
     section, 
     children 
@@ -245,14 +290,14 @@ export const SecondhandSidebarFilter = ({ onFilterChange, counts }: SecondhandSi
               <Slider
                 value={[filters.priceMin, filters.priceMax]}
                 onValueChange={handlePriceChange}
-                min={0}
-                max={10000}
-                step={100}
+                min={defaultPriceMin}
+                max={defaultPriceMax}
+                step={50}
                 className="w-full"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
-                <span>₪0</span>
-                <span>₪10,000+</span>
+                <span>₪{defaultPriceMin.toLocaleString()}</span>
+                <span>₪{defaultPriceMax.toLocaleString()}+</span>
               </div>
             </div>
           </FilterSection>
@@ -319,32 +364,64 @@ export const SecondhandSidebarFilter = ({ onFilterChange, counts }: SecondhandSi
           </FilterSection>
 
           {/* Brands */}
-          <FilterSection title="מותגים פופולריים" section="brand">
-            <div className="space-y-3">
-              {popularBrands.map((brand) => (
-                <div key={brand} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`brand-${brand}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {brand}
-                    </label>
-                    {counts?.brands?.[brand] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.brands[brand]}
-                      </Badge>
-                    )}
+          {displayBrands.length > 0 && (
+            <FilterSection title="מותגים" section="brand">
+              <div className="space-y-3">
+                {displayBrands.slice(0, 12).map((brand) => (
+                  <div key={brand} className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 flex-1">
+                      <label
+                        htmlFor={`brand-${brand}`}
+                        className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                      >
+                        {brand}
+                      </label>
+                      {counts?.brands?.[brand] !== undefined && (
+                        <Badge variant="outline" className="h-5 text-xs px-1.5">
+                          {counts.brands[brand]}
+                        </Badge>
+                      )}
+                    </div>
+                    <Checkbox
+                      id={`brand-${brand}`}
+                      checked={filters.brands.includes(brand)}
+                      onCheckedChange={() => handleArrayFilterChange('brands', brand)}
+                    />
                   </div>
-                  <Checkbox
-                    id={`brand-${brand}`}
-                    checked={filters.brands.includes(brand)}
-                    onCheckedChange={() => handleArrayFilterChange('brands', brand)}
-                  />
-                </div>
-              ))}
-            </div>
-          </FilterSection>
+                ))}
+              </div>
+            </FilterSection>
+          )}
+
+          {/* Sizes */}
+          {displaySizes.length > 0 && (
+            <FilterSection title="גודל" section="size">
+              <div className="space-y-3">
+                {displaySizes.map((size) => (
+                  <div key={size} className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 flex-1">
+                      <label
+                        htmlFor={`size-${size}`}
+                        className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                      >
+                        {size}
+                      </label>
+                      {counts?.sizes?.[size] !== undefined && (
+                        <Badge variant="outline" className="h-5 text-xs px-1.5">
+                          {counts.sizes[size]}
+                        </Badge>
+                      )}
+                    </div>
+                    <Checkbox
+                      id={`size-${size}`}
+                      checked={filters.sizes.includes(size)}
+                      onCheckedChange={() => handleArrayFilterChange('sizes', size)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </FilterSection>
+          )}
         </div>
       </Card>
       </div>
