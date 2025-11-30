@@ -23,6 +23,7 @@ import TipsGuidesPage from "./pages/TipsGuides";
 import TipDetails from "./pages/TipDetails";
 import Freelancers from "./pages/Freelancers";
 import FreelancerDetails from "./pages/FreelancerDetails";
+import SellerProfile from "./pages/SellerProfile";
 import NotFound from "./pages/NotFound";
 import MobileNav from "./components/MobileNav";
 
@@ -52,6 +53,7 @@ const AppContent = () => {
         <Route path="/secondhand" element={<Secondhand />} />
         <Route path="/secondhand/:category" element={<SecondhandCategory />} />
         <Route path="/secondhand/item/:id" element={<SecondhandDetails />} />
+        <Route path="/seller/:id" element={<SellerProfile />} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/jobs/:id" element={<JobDetails />} />
         <Route path="/freelancers" element={<Freelancers />} />
