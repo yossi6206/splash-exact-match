@@ -17,13 +17,26 @@ interface FeaturedPropertyCardProps {
     size: number;
     floor: number;
     features: string[];
+    clicks_count?: number;
   };
 }
 
 const FeaturedPropertyCard = ({ property }: FeaturedPropertyCardProps) => {
+  const handleClick = async () => {
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      await supabase
+        .from("properties")
+        .update({ clicks_count: (property.clicks_count || 0) + 1 })
+        .eq("id", String(property.id));
+    } catch (error) {
+      console.error("Error updating clicks count:", error);
+    }
+  };
+  
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-card border-border group relative">
-      <Link to={`/properties/${property.id}`}>
+      <Link to={`/properties/${property.id}`} onClick={handleClick}>
         {/* Image with Navigation Arrows */}
         <div className="relative h-40 md:h-48 lg:h-64 overflow-hidden">
           <img 

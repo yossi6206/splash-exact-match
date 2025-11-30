@@ -28,6 +28,7 @@ interface Car {
   features: string[] | null;
   images: string[] | null;
   status: string;
+  clicks_count?: number;
 }
 
 const Cars = () => {
@@ -510,6 +511,7 @@ const Cars = () => {
                   price: parseFloat((car.price || "0").replace(/,/g, "")),
                   location: car.location,
                   features: car.features || [],
+                  clicks_count: car.clicks_count,
                 };
                 return <CarCard key={car.id} car={carForCard} />;
               })

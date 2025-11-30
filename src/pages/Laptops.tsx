@@ -269,6 +269,7 @@ const Laptops = () => {
                     condition: laptop.condition,
                     location: laptop.location,
                     features: laptop.features || [],
+                    clicks_count: laptop.clicks_count,
                   };
                   return <LaptopCard key={laptop.id} laptop={laptopForCard} />;
                 })}

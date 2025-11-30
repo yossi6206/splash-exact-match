@@ -14,13 +14,26 @@ interface LaptopCardProps {
     condition: string;
     location: string;
     features: string[];
+    clicks_count?: number;
   };
 }
 
 export const LaptopCard = ({ laptop }: LaptopCardProps) => {
+  const handleClick = async () => {
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      await supabase
+        .from("laptops")
+        .update({ clicks_count: (laptop.clicks_count || 0) + 1 })
+        .eq("id", String(laptop.id));
+    } catch (error) {
+      console.error("Error updating clicks count:", error);
+    }
+  };
+  
   return (
     <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border">
-      <Link to={`/laptops/${laptop.id}`}>
+      <Link to={`/laptops/${laptop.id}`} onClick={handleClick}>
         <div className="relative">
           {/* Image */}
           <div className="aspect-[4/3] overflow-hidden bg-muted">
