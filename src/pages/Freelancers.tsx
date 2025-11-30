@@ -248,6 +248,7 @@ const Freelancers = () => {
                       title={freelancer.title}
                       bio={freelancer.bio || undefined}
                       skills={freelancer.skills}
+                      user_id={freelancer.user_id}
                       hourly_rate={freelancer.hourly_rate}
                       rating={Number(freelancer.rating)}
                       total_reviews={freelancer.total_reviews || 0}
