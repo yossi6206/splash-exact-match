@@ -4,9 +4,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { Eye, MousePointer, Phone, TrendingUp, Car, Home, Laptop, Briefcase, Loader2 } from "lucide-react";
+import { Eye, MousePointer, Phone, TrendingUp, Car, Home, Laptop, Briefcase, Loader2, Calendar as CalendarIcon, Filter, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCountUp } from "@/hooks/useCountUp";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 interface AdStats {
   id: string;
@@ -45,6 +52,12 @@ const Statistics = () => {
   const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
   const [topAds, setTopAds] = useState<AdStats[]>([]);
   const [timeSeriesData, setTimeSeriesData] = useState<TimeSeriesData[]>([]);
+  
+  // Filters
+  const [dateFrom, setDateFrom] = useState<Date>();
+  const [dateTo, setDateTo] = useState<Date>();
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [dataType, setDataType] = useState<string>("all");
 
   const { count: viewsCount, elementRef: viewsRef } = useCountUp({ end: totalViews, duration: 2000 });
   const { count: clicksCount, elementRef: clicksRef } = useCountUp({ end: totalClicks, duration: 2000 });
@@ -54,7 +67,7 @@ const Statistics = () => {
     if (user) {
       fetchStatistics();
     }
-  }, [user]);
+  }, [user, dateFrom, dateTo, selectedCategory, dataType]);
 
   const fetchStatistics = async () => {
     try {
@@ -84,8 +97,8 @@ const Statistics = () => {
         .select("id, title, views_count, clicks_count, contacts_count, created_at")
         .eq("user_id", user?.id);
 
-      // Process all ads
-      const allAds: AdStats[] = [
+      // Process all ads and apply filters
+      let allAds: AdStats[] = [
         ...(cars || []).map(c => ({
           id: c.id,
           title: `${c.manufacturer} ${c.model}`,
@@ -128,6 +141,19 @@ const Statistics = () => {
         }))
       ];
 
+      // Apply date filters
+      if (dateFrom) {
+        allAds = allAds.filter(ad => new Date(ad.created_at) >= dateFrom);
+      }
+      if (dateTo) {
+        allAds = allAds.filter(ad => new Date(ad.created_at) <= dateTo);
+      }
+
+      // Apply category filter
+      if (selectedCategory !== "all") {
+        allAds = allAds.filter(ad => ad.category === selectedCategory);
+      }
+
       // Calculate totals
       const views = allAds.reduce((sum, ad) => sum + ad.views, 0);
       const clicks = allAds.reduce((sum, ad) => sum + ad.clicks, 0);
@@ -160,20 +186,32 @@ const Statistics = () => {
       const sortedAds = [...allAds].sort((a, b) => b.views - a.views).slice(0, 10);
       setTopAds(sortedAds);
 
-      // Generate time series data (last 30 days)
-      const last30Days = Array.from({ length: 30 }, (_, i) => {
+      // Generate time series data based on date range or last 30 days
+      const startDate = dateFrom || (() => {
         const date = new Date();
-        date.setDate(date.getDate() - (29 - i));
+        date.setDate(date.getDate() - 29);
+        return date;
+      })();
+      const endDate = dateTo || new Date();
+      
+      const daysBetween = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+      const dateRange = Array.from({ length: daysBetween }, (_, i) => {
+        const date = new Date(startDate);
+        date.setDate(date.getDate() + i);
         return date.toISOString().split('T')[0];
       });
 
-      const timeData: TimeSeriesData[] = last30Days.map(date => {
+      const timeData: TimeSeriesData[] = dateRange.map(date => {
         const dayAds = allAds.filter(ad => ad.created_at.startsWith(date));
+        const views = dayAds.reduce((sum, ad) => sum + ad.views, 0);
+        const contacts = dayAds.reduce((sum, ad) => sum + ad.contacts, 0);
+        const clicks = dayAds.reduce((sum, ad) => sum + ad.clicks, 0);
+        
         return {
           date: new Date(date).toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit' }),
-          views: dayAds.reduce((sum, ad) => sum + ad.views, 0),
-          contacts: dayAds.reduce((sum, ad) => sum + ad.contacts, 0),
-          clicks: dayAds.reduce((sum, ad) => sum + ad.clicks, 0)
+          views: dataType === "all" || dataType === "views" ? views : 0,
+          contacts: dataType === "all" || dataType === "contacts" ? contacts : 0,
+          clicks: dataType === "all" || dataType === "clicks" ? clicks : 0
         };
       });
       setTimeSeriesData(timeData);
@@ -195,6 +233,15 @@ const Statistics = () => {
     }
   };
 
+  const clearFilters = () => {
+    setDateFrom(undefined);
+    setDateTo(undefined);
+    setSelectedCategory("all");
+    setDataType("all");
+  };
+
+  const hasActiveFilters = dateFrom || dateTo || selectedCategory !== "all" || dataType !== "all";
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -209,6 +256,149 @@ const Statistics = () => {
         <h1 className="text-3xl font-bold text-foreground mb-2">סטטיסטיקות וביצועים</h1>
         <p className="text-muted-foreground">ניתוח מפורט של כל המודעות שלך</p>
       </div>
+
+      {/* Filters Section */}
+      <Card className="bg-gradient-to-br from-muted/30 to-muted/10">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Filter className="h-5 w-5 text-primary" />
+              <CardTitle>סינון נתונים</CardTitle>
+            </div>
+            {hasActiveFilters && (
+              <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-2">
+                <X className="h-4 w-4" />
+                נקה סינון
+              </Button>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Date From */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">מתאריך</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-right font-normal",
+                      !dateFrom && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="ml-2 h-4 w-4" />
+                    {dateFrom ? format(dateFrom, "dd/MM/yyyy") : "בחר תאריך"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={dateFrom}
+                    onSelect={setDateFrom}
+                    disabled={(date) => date > new Date()}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Date To */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">עד תאריך</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-right font-normal",
+                      !dateTo && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="ml-2 h-4 w-4" />
+                    {dateTo ? format(dateTo, "dd/MM/yyyy") : "בחר תאריך"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={dateTo}
+                    onSelect={setDateTo}
+                    disabled={(date) => date > new Date() || (dateFrom && date < dateFrom)}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Category Filter */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">קטגוריה</label>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="בחר קטגוריה" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">כל הקטגוריות</SelectItem>
+                  <SelectItem value="רכבים">רכבים</SelectItem>
+                  <SelectItem value="נדל״ן">נדל״ן</SelectItem>
+                  <SelectItem value="מחשבים">מחשבים</SelectItem>
+                  <SelectItem value="משרות">משרות</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Data Type Filter */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">סוג נתונים</label>
+              <Select value={dataType} onValueChange={setDataType}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="בחר סוג נתונים" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">כל הנתונים</SelectItem>
+                  <SelectItem value="views">צפיות בלבד</SelectItem>
+                  <SelectItem value="clicks">לחיצות בלבד</SelectItem>
+                  <SelectItem value="contacts">פניות בלבד</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Active Filters Display */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t">
+              <span className="text-sm text-muted-foreground">סינונים פעילים:</span>
+              {dateFrom && (
+                <Badge variant="secondary" className="gap-1">
+                  מתאריך: {format(dateFrom, "dd/MM/yyyy")}
+                  <X className="h-3 w-3 cursor-pointer" onClick={() => setDateFrom(undefined)} />
+                </Badge>
+              )}
+              {dateTo && (
+                <Badge variant="secondary" className="gap-1">
+                  עד: {format(dateTo, "dd/MM/yyyy")}
+                  <X className="h-3 w-3 cursor-pointer" onClick={() => setDateTo(undefined)} />
+                </Badge>
+              )}
+              {selectedCategory !== "all" && (
+                <Badge variant="secondary" className="gap-1">
+                  {selectedCategory}
+                  <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedCategory("all")} />
+                </Badge>
+              )}
+              {dataType !== "all" && (
+                <Badge variant="secondary" className="gap-1">
+                  {dataType === "views" ? "צפיות" : dataType === "clicks" ? "לחיצות" : "פניות"}
+                  <X className="h-3 w-3 cursor-pointer" onClick={() => setDataType("all")} />
+                </Badge>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -264,7 +454,12 @@ const Statistics = () => {
         <TabsContent value="timeline" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>צפיות ופניות - 30 ימים אחרונים</CardTitle>
+              <CardTitle>
+                {dateFrom && dateTo 
+                  ? `ביצועים מ-${format(dateFrom, "dd/MM/yyyy")} עד ${format(dateTo, "dd/MM/yyyy")}`
+                  : "צפיות ופניות - 30 ימים אחרונים"
+                }
+              </CardTitle>
             </CardHeader>
             <CardContent className="h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -274,9 +469,15 @@ const Statistics = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="views" stroke="#3b82f6" name="צפיות" strokeWidth={2} />
-                  <Line type="monotone" dataKey="contacts" stroke="#10b981" name="פניות" strokeWidth={2} />
-                  <Line type="monotone" dataKey="clicks" stroke="#8b5cf6" name="לחיצות" strokeWidth={2} />
+                  {(dataType === "all" || dataType === "views") && (
+                    <Line type="monotone" dataKey="views" stroke="#3b82f6" name="צפיות" strokeWidth={2} />
+                  )}
+                  {(dataType === "all" || dataType === "contacts") && (
+                    <Line type="monotone" dataKey="contacts" stroke="#10b981" name="פניות" strokeWidth={2} />
+                  )}
+                  {(dataType === "all" || dataType === "clicks") && (
+                    <Line type="monotone" dataKey="clicks" stroke="#8b5cf6" name="לחיצות" strokeWidth={2} />
+                  )}
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
