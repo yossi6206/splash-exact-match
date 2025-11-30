@@ -3,14 +3,8 @@ import { useEffect } from 'react';
 const TawkToChat = () => {
   useEffect(() => {
     // Tawk.to Live Chat Widget
-    // הוסף כאן את ה-Property ID שלך מ-Tawk.to
-    const TAWK_PROPERTY_ID = 'YOUR_PROPERTY_ID'; // החלף את זה ב-Property ID שלך
-    const TAWK_WIDGET_ID = 'default'; // או Widget ID ספציפי אם יש לך
-    
-    if (TAWK_PROPERTY_ID === 'YOUR_PROPERTY_ID') {
-      console.warn('נא להגדיר את ה-TAWK_PROPERTY_ID ב-TawkToChat.tsx');
-      return;
-    }
+    const TAWK_PROPERTY_ID = '6764a682af5bfec1dbde8516';
+    const TAWK_WIDGET_ID = '1ifgiks1e';
 
     // בדוק אם הסקריפט כבר נטען
     if (document.getElementById('tawk-to-script')) {
