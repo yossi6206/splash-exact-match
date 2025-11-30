@@ -71,6 +71,10 @@ const SecondhandCategory = () => {
     cities: [],
     brands: [],
     sizes: [],
+    colors: [],
+    materials: [],
+    deliveryAvailable: false,
+    negotiable: false,
   });
   const itemsPerPage = 12;
 
@@ -168,6 +172,26 @@ const SecondhandCategory = () => {
       filtered = filtered.filter(item => filters.sizes.includes(item.size));
     }
 
+    // Color filter
+    if (filters.colors.length > 0) {
+      filtered = filtered.filter(item => filters.colors.includes(item.color));
+    }
+
+    // Material filter
+    if (filters.materials.length > 0) {
+      filtered = filtered.filter(item => filters.materials.includes(item.material));
+    }
+
+    // Delivery available filter
+    if (filters.deliveryAvailable) {
+      filtered = filtered.filter(item => item.delivery_available === true);
+    }
+
+    // Negotiable filter
+    if (filters.negotiable) {
+      filtered = filtered.filter(item => item.negotiable === true);
+    }
+
     // Sort
     switch (sortBy) {
       case "price-low":
@@ -218,6 +242,22 @@ const SecondhandCategory = () => {
     return Array.from(sizesSet).sort();
   }, [allItems]);
 
+  const availableColors = useMemo(() => {
+    const colorsSet = new Set<string>();
+    allItems.forEach(item => {
+      if (item.color) colorsSet.add(item.color);
+    });
+    return Array.from(colorsSet).sort();
+  }, [allItems]);
+
+  const availableMaterials = useMemo(() => {
+    const materialsSet = new Set<string>();
+    allItems.forEach(item => {
+      if (item.material) materialsSet.add(item.material);
+    });
+    return Array.from(materialsSet).sort();
+  }, [allItems]);
+
   // Calculate counts for filter options
   const filterCounts = useMemo(() => {
     const counts = {
@@ -227,6 +267,8 @@ const SecondhandCategory = () => {
       cities: {} as Record<string, number>,
       brands: {} as Record<string, number>,
       sizes: {} as Record<string, number>,
+      colors: {} as Record<string, number>,
+      materials: {} as Record<string, number>,
     };
 
     items.forEach(item => {
@@ -236,6 +278,8 @@ const SecondhandCategory = () => {
       if (item.location) counts.cities[item.location] = (counts.cities[item.location] || 0) + 1;
       if (item.brand) counts.brands[item.brand] = (counts.brands[item.brand] || 0) + 1;
       if (item.size) counts.sizes[item.size] = (counts.sizes[item.size] || 0) + 1;
+      if (item.color) counts.colors[item.color] = (counts.colors[item.color] || 0) + 1;
+      if (item.material) counts.materials[item.material] = (counts.materials[item.material] || 0) + 1;
     });
 
     return counts;
@@ -334,6 +378,8 @@ const SecondhandCategory = () => {
                   priceRange={priceRange}
                   availableBrands={availableBrands}
                   availableSizes={availableSizes}
+                  availableColors={availableColors}
+                  availableMaterials={availableMaterials}
                   categoryType={category ? categoryMap[category] : undefined}
                 />
               </div>
@@ -369,6 +415,8 @@ const SecondhandCategory = () => {
             priceRange={priceRange}
             availableBrands={availableBrands}
             availableSizes={availableSizes}
+            availableColors={availableColors}
+            availableMaterials={availableMaterials}
             categoryType={category ? categoryMap[category] : undefined}
           />
 

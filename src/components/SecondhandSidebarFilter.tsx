@@ -15,6 +15,8 @@ interface SecondhandSidebarFilterProps {
     cities?: Record<string, number>;
     brands?: Record<string, number>;
     sizes?: Record<string, number>;
+    colors?: Record<string, number>;
+    materials?: Record<string, number>;
   };
   priceRange?: {
     min: number;
@@ -22,6 +24,8 @@ interface SecondhandSidebarFilterProps {
   };
   availableBrands?: string[];
   availableSizes?: string[];
+  availableColors?: string[];
+  availableMaterials?: string[];
   categoryType?: string;
 }
 
@@ -34,16 +38,40 @@ export interface SecondhandFilters {
   cities: string[];
   brands: string[];
   sizes: string[];
+  colors: string[];
+  materials: string[];
+  deliveryAvailable: boolean;
+  negotiable: boolean;
 }
 
 const categories = ["ריהוט", "מוצרי חשמל", "ספורט ופנאי", "אופנה", "תינוקות וילדים"];
 
 const subcategories: Record<string, string[]> = {
-  "ריהוט": ["ספות וכורסאות", "שולחנות", "כיסאות", "ארונות", "מיטות"],
-  "מוצרי חשמל": ["מקררים", "מכונות כביסה", "תנורים", "מיקרוגלים", "מזגנים"],
-  "ספורט ופנאי": ["אופניים", "ציוד כושר", "משחקים", "ספרים", "כלי נגינה"],
-  "אופנה": ["בגדים", "נעליים", "תיקים", "אביזרים", "תכשיטים"],
-  "תינוקות וילדים": ["עגלות", "כיסאות אוכל", "מיטות", "צעצועים", "בגדי ילדים"],
+  "ריהוט": [
+    "ספות", "כורסאות", "שולחנות אוכל", "שולחנות סלון", "כיסאות",
+    "ארונות בגדים", "ארונות נעליים", "מיטות זוגיות", "מיטות יחיד",
+    "שידות", "מדפים", "מראות", "ארונות מטבח", "שולחנות עבודה"
+  ],
+  "מוצרי חשמל": [
+    "מקררים", "מקפיאים", "מכונות כביסה", "מייבשי כביסה",
+    "תנורים", "כיריים", "מיקרוגל", "מזגנים", "מאווררים",
+    "מדיחי כלים", "שואבי אבק", "מערכות סטריאו", "טלוויזיות"
+  ],
+  "ספורט ופנאי": [
+    "אופני כביש", "אופני הרים", "אופניים חשמליים", "קורקינטים",
+    "ציוד כושר ביתי", "משקולות", "הליכונים", "אופני כושר",
+    "משחקי קופסא", "משחקי וידאו", "ספרים", "גיטרות", "פסנתרים", "תופים"
+  ],
+  "אופנה": [
+    "חולצות", "מכנסיים", "שמלות", "חצאיות", "מעילים",
+    "נעלי ספורט", "נעלי עקב", "סנדלים", "מגפיים",
+    "תיקי יד", "תיקי גב", "שעונים", "תכשיטים", "משקפי שמש"
+  ],
+  "תינוקות וילדים": [
+    "עגלות", "טיולונים", "כיסאות אוכל", "מיטות תינוק", "עריסות",
+    "צעצועי התפתחות", "משחקי בנייה", "בגדי תינוקות (0-2)",
+    "בגדי ילדים (2-6)", "בגדי ילדים (6-12)", "אביזרי האכלה", "מוצצים ובקבוקים"
+  ]
 };
 
 const conditions = ["חדש באריזה", "כמו חדש", "במצב מצוין", "במצב טוב", "במצב סביר", "לשיפוץ"];
@@ -63,10 +91,13 @@ const popularBrands = [
 const categorySizes: Record<string, string[]> = {
   "ריהוט": ["קטן", "בינוני", "גדול", "ענק", "חד-מושבי", "דו-מושבי", "תלת-מושבי"],
   "מוצרי חשמל": ["קטן", "בינוני", "גדול", "משפחתי"],
-  "ספורט ופנאי": ["S", "M", "L", "XL", "XXL", "26\"", "27.5\"", "29\""],
+  "ספורט ופנאי": ["S", "M", "L", "XL", "XXL", '26"', '27.5"', '29"'],
   "אופנה": ["XS", "S", "M", "L", "XL", "XXL", "36", "37", "38", "39", "40", "41", "42", "43", "44"],
-  "תינוקות וילדים": ["0-6 חודשים", "6-12 חודשים", "1-2 שנים", "2-4 שנים", "4-6 שנים", "6+ שנים"],
+  "תינוקות וילדים": ["0-6 חודשים", "6-12 חודשים", "1-2 שנים", "2-4 שנים", "4-6 שנים", "6-8 שנים", "8-12 שנים"],
 };
+
+const colors = ["לבן", "שחור", "אפור", "חום", "בז'", "כחול", "ירוק", "אדום", "ורוד", "סגול", "צהוב", "כתום", "כסוף", "זהב", "צבעוני"];
+const materials = ["עץ מלא", "עץ MDF", "מתכת", "פלסטיק", "זכוכית", "עור", "בד", "ראטן", "שילוב"];
 
 export const SecondhandSidebarFilter = ({ 
   onFilterChange, 
@@ -74,6 +105,8 @@ export const SecondhandSidebarFilter = ({
   priceRange, 
   availableBrands,
   availableSizes,
+  availableColors,
+  availableMaterials,
   categoryType 
 }: SecondhandSidebarFilterProps) => {
   const defaultPriceMax = priceRange?.max || 10000;
@@ -88,6 +121,10 @@ export const SecondhandSidebarFilter = ({
     cities: [],
     brands: [],
     sizes: [],
+    colors: [],
+    materials: [],
+    deliveryAvailable: false,
+    negotiable: false,
   });
 
   const [expandedSections, setExpandedSections] = useState({
@@ -98,6 +135,9 @@ export const SecondhandSidebarFilter = ({
     city: false,
     brand: false,
     size: false,
+    color: false,
+    material: false,
+    options: false,
   });
 
   const toggleSection = (section: keyof typeof expandedSections) => {
@@ -105,7 +145,7 @@ export const SecondhandSidebarFilter = ({
   };
 
   const handleArrayFilterChange = (
-    key: keyof Pick<SecondhandFilters, 'categories' | 'subcategories' | 'conditions' | 'cities' | 'brands' | 'sizes'>,
+    key: keyof Pick<SecondhandFilters, 'categories' | 'subcategories' | 'conditions' | 'cities' | 'brands' | 'sizes' | 'colors' | 'materials'>,
     value: string
   ) => {
     const currentValues = filters[key] as string[];
@@ -134,6 +174,10 @@ export const SecondhandSidebarFilter = ({
       cities: [],
       brands: [],
       sizes: [],
+      colors: [],
+      materials: [],
+      deliveryAvailable: false,
+      negotiable: false,
     };
     setFilters(defaultFilters);
     onFilterChange?.(defaultFilters);
@@ -146,6 +190,10 @@ export const SecondhandSidebarFilter = ({
     filters.cities.length +
     filters.brands.length +
     filters.sizes.length +
+    filters.colors.length +
+    filters.materials.length +
+    (filters.deliveryAvailable ? 1 : 0) +
+    (filters.negotiable ? 1 : 0) +
     ((filters.priceMin !== defaultPriceMin || filters.priceMax !== defaultPriceMax) ? 1 : 0);
 
   const availableSubcategories = filters.categories.length === 1 
@@ -163,6 +211,16 @@ export const SecondhandSidebarFilter = ({
   const displayBrands = availableBrands && availableBrands.length > 0
     ? availableBrands
     : popularBrands;
+
+  // Get colors to display
+  const displayColors = availableColors && availableColors.length > 0
+    ? availableColors
+    : colors;
+
+  // Get materials to display
+  const displayMaterials = availableMaterials && availableMaterials.length > 0
+    ? availableMaterials
+    : materials;
 
   const FilterSection = ({
     title, 
@@ -395,7 +453,7 @@ export const SecondhandSidebarFilter = ({
 
           {/* Sizes */}
           {displaySizes.length > 0 && (
-            <FilterSection title="גודל" section="size">
+            <FilterSection title="גודל/מידה" section="size">
               <div className="space-y-3">
                 {displaySizes.map((size) => (
                   <div key={size} className="flex items-center justify-between gap-2">
@@ -422,6 +480,110 @@ export const SecondhandSidebarFilter = ({
               </div>
             </FilterSection>
           )}
+
+          {/* Colors */}
+          {(categoryType === "ריהוט" || categoryType === "אופנה" || categoryType === "ספורט ופנאי" || categoryType === "תינוקות וילדים") && displayColors.length > 0 && (
+            <FilterSection title="צבע" section="color">
+              <div className="space-y-3">
+                {displayColors.slice(0, 12).map((color) => (
+                  <div key={color} className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 flex-1">
+                      <label
+                        htmlFor={`color-${color}`}
+                        className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                      >
+                        {color}
+                      </label>
+                      {counts?.colors?.[color] !== undefined && (
+                        <Badge variant="outline" className="h-5 text-xs px-1.5">
+                          {counts.colors[color]}
+                        </Badge>
+                      )}
+                    </div>
+                    <Checkbox
+                      id={`color-${color}`}
+                      checked={filters.colors.includes(color)}
+                      onCheckedChange={() => handleArrayFilterChange('colors', color)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </FilterSection>
+          )}
+
+          {/* Materials */}
+          {categoryType === "ריהוט" && displayMaterials.length > 0 && (
+            <FilterSection title="חומר" section="material">
+              <div className="space-y-3">
+                {displayMaterials.map((material) => (
+                  <div key={material} className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 flex-1">
+                      <label
+                        htmlFor={`material-${material}`}
+                        className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                      >
+                        {material}
+                      </label>
+                      {counts?.materials?.[material] !== undefined && (
+                        <Badge variant="outline" className="h-5 text-xs px-1.5">
+                          {counts.materials[material]}
+                        </Badge>
+                      )}
+                    </div>
+                    <Checkbox
+                      id={`material-${material}`}
+                      checked={filters.materials.includes(material)}
+                      onCheckedChange={() => handleArrayFilterChange('materials', material)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </FilterSection>
+          )}
+
+          {/* Additional Options */}
+          <FilterSection title="אפשרויות נוספות" section="options">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 flex-1">
+                  <label
+                    htmlFor="delivery-available"
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    אפשרות למשלוח
+                  </label>
+                </div>
+                <Checkbox
+                  id="delivery-available"
+                  checked={filters.deliveryAvailable}
+                  onCheckedChange={(checked) => {
+                    const newFilters = { ...filters, deliveryAvailable: checked as boolean };
+                    setFilters(newFilters);
+                    onFilterChange?.(newFilters);
+                  }}
+                />
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 flex-1">
+                  <label
+                    htmlFor="negotiable"
+                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  >
+                    ניתן למיקוח
+                  </label>
+                </div>
+                <Checkbox
+                  id="negotiable"
+                  checked={filters.negotiable}
+                  onCheckedChange={(checked) => {
+                    const newFilters = { ...filters, negotiable: checked as boolean };
+                    setFilters(newFilters);
+                    onFilterChange?.(newFilters);
+                  }}
+                />
+              </div>
+            </div>
+          </FilterSection>
         </div>
       </Card>
       </div>
