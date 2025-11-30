@@ -885,6 +885,7 @@ export type Database = {
           images: string[] | null
           is_promoted: boolean | null
           last_top_position_at: string | null
+          listing_type: string
           location: string
           parking: boolean | null
           price: number
@@ -919,6 +920,7 @@ export type Database = {
           images?: string[] | null
           is_promoted?: boolean | null
           last_top_position_at?: string | null
+          listing_type?: string
           location: string
           parking?: boolean | null
           price: number
@@ -953,6 +955,7 @@ export type Database = {
           images?: string[] | null
           is_promoted?: boolean | null
           last_top_position_at?: string | null
+          listing_type?: string
           location?: string
           parking?: boolean | null
           price?: number
