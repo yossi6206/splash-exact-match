@@ -1,0 +1,460 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Heart, Share2, MapPin, Calendar, Users, TrendingUp, Building2, Phone, MessageSquare, Loader2, Maximize2, ChevronLeft, ChevronRight, DollarSign, Clock, FileText } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import AIReport from "@/components/AIReport";
+import MobileHeader from "@/components/MobileHeader";
+import { supabase } from "@/integrations/supabase/client";
+
+const BusinessDetails = () => {
+  const { id } = useParams();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [business, setBusiness] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [showPhone, setShowPhone] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  useEffect(() => {
+    const fetchBusiness = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("businesses")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching business:", error);
+        toast({
+          title: "שגיאה",
+          description: "לא ניתן לטעון את פרטי העסק",
+          variant: "destructive"
+        });
+      } else {
+        setBusiness(data);
+        
+        // Increment view count
+        await supabase
+          .from("businesses")
+          .update({ views_count: (data.views_count || 0) + 1 })
+          .eq("id", id);
+      }
+      setLoading(false);
+    };
+
+    fetchBusiness();
+  }, [id, toast]);
+
+  const handleFavorite = () => {
+    if (!user) {
+      toast({
+        title: "נדרשת התחברות",
+        description: "יש להתחבר כדי לשמור עסקים מועדפים",
+        variant: "destructive"
+      });
+      return;
+    }
+    setIsFavorite(!isFavorite);
+    toast({
+      title: isFavorite ? "הוסר מהמועדפים" : "נוסף למועדפים",
+      description: isFavorite ? "העסק הוסר מרשימת המועדפים" : "העסק נוסף לרשימת המועדפים"
+    });
+  };
+
+  const handleContactClick = async () => {
+    if (!id || !business) return;
+    
+    // Increment contacts count
+    await supabase
+      .from("businesses")
+      .update({ contacts_count: (business.contacts_count || 0) + 1 })
+      .eq("id", id);
+  };
+
+  const handleShowPhone = async () => {
+    setShowPhone(true);
+    await handleContactClick();
+  };
+
+  const openGallery = (index: number) => {
+    setCurrentImageIndex(index);
+    setGalleryOpen(true);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('he-IL', {
+      style: 'currency',
+      currency: 'ILS',
+      maximumFractionDigits: 0
+    }).format(price);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background pb-20 md:pb-0">
+        <MobileHeader />
+        <Header />
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!business) {
+    return (
+      <div className="min-h-screen bg-background pb-20 md:pb-0">
+        <MobileHeader />
+        <Header />
+        <div className="container mx-auto px-4 py-20 text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">העסק לא נמצא</h1>
+          <p className="text-muted-foreground">המודעה שחיפשת אינה קיימת או הוסרה</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const images = business.images && business.images.length > 0 ? business.images : ['/placeholder.svg'];
+
+  return (
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
+      <MobileHeader />
+      <Header />
+
+      <main className="container mx-auto px-4 py-6">
+        {/* Image Gallery */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <div className="aspect-video relative overflow-hidden rounded-lg group cursor-pointer" onClick={() => openGallery(0)}>
+            <img 
+              src={images[0]} 
+              alt={business.title}
+              className="w-full h-full object-cover transition-transform group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <Button variant="secondary" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <Maximize2 className="h-4 w-4 ml-2" />
+                צפה בגלריה
+              </Button>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {images.slice(1, 5).map((img, i) => (
+              <div 
+                key={i} 
+                className="aspect-video relative overflow-hidden rounded-lg bg-muted group cursor-pointer"
+                onClick={() => openGallery(i + 1)}
+              >
+                <img 
+                  src={img} 
+                  alt={`תמונה ${i + 2}`}
+                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                  <Maximize2 className="h-5 w-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Image Gallery Dialog */}
+        <Dialog open={galleryOpen} onOpenChange={setGalleryOpen}>
+          <DialogContent className="max-w-4xl p-0">
+            <div className="relative bg-black">
+              <img 
+                src={images[currentImageIndex]} 
+                alt={`תמונה ${currentImageIndex + 1}`}
+                className="w-full h-[70vh] object-contain"
+              />
+              {images.length > 1 && (
+                <>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white"
+                    onClick={nextImage}
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white"
+                    onClick={prevImage}
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </Button>
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
+                    {currentImageIndex + 1} / {images.length}
+                  </div>
+                </>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-6">
+          {/* Main Content */}
+          <div className="space-y-6">
+            {/* Title and Actions */}
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge variant="secondary">{business.category}</Badge>
+                  {business.years_operating && (
+                    <Badge variant="outline" className="gap-1">
+                      <Clock className="h-3 w-3" />
+                      {business.years_operating} שנות פעילות
+                    </Badge>
+                  )}
+                </div>
+                <h1 className="text-3xl font-bold text-foreground mb-2">{business.title}</h1>
+                <div className="flex items-center gap-4 text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="h-4 w-4" />
+                    <span>{business.business_type}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    <span>{business.location}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={handleFavorite}
+                >
+                  <Heart className={`h-5 w-5 ${isFavorite ? 'fill-primary text-primary' : ''}`} />
+                </Button>
+                <Button variant="outline" size="icon">
+                  <Share2 className="h-5 w-5" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Financial Info */}
+            <Card className="p-6">
+              <h2 className="text-xl font-bold mb-4">נתונים פיננסיים</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {business.annual_revenue && (
+                  <div className="flex items-center gap-3">
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">מחזור שנתי</div>
+                      <div className="font-semibold">{formatPrice(business.annual_revenue)}</div>
+                    </div>
+                  </div>
+                )}
+                {business.monthly_profit && (
+                  <div className="flex items-center gap-3">
+                    <DollarSign className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">רווח חודשי</div>
+                      <div className="font-semibold">{formatPrice(business.monthly_profit)}</div>
+                    </div>
+                  </div>
+                )}
+                {business.years_operating && (
+                  <div className="flex items-center gap-3">
+                    <Calendar className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">שנות פעילות</div>
+                      <div className="font-semibold">{business.years_operating} שנים</div>
+                    </div>
+                  </div>
+                )}
+                {business.employees_count && (
+                  <div className="flex items-center gap-3">
+                    <Users className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="text-sm text-muted-foreground">עובדים</div>
+                      <div className="font-semibold">{business.employees_count}</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+
+            {/* Description */}
+            {business.description && (
+              <Card className="p-6">
+                <h2 className="text-xl font-bold mb-4">תיאור העסק</h2>
+                <p className="text-foreground/80 leading-relaxed whitespace-pre-line">{business.description}</p>
+              </Card>
+            )}
+
+            {/* Lease Details */}
+            {(business.lease_details || business.lease_monthly_cost || business.lease_expiry_date) && (
+              <Card className="p-6">
+                <h2 className="text-xl font-bold mb-4">פרטי שכירות</h2>
+                <div className="space-y-3">
+                  {business.lease_monthly_cost && (
+                    <div className="flex justify-between items-center py-2 border-b border-border">
+                      <span className="text-muted-foreground">עלות שכירות חודשית</span>
+                      <span className="font-semibold">{formatPrice(business.lease_monthly_cost)}</span>
+                    </div>
+                  )}
+                  {business.lease_expiry_date && (
+                    <div className="flex justify-between items-center py-2 border-b border-border">
+                      <span className="text-muted-foreground">תוקף החוזה</span>
+                      <span className="font-semibold">{business.lease_expiry_date}</span>
+                    </div>
+                  )}
+                  {business.lease_details && (
+                    <div className="pt-2">
+                      <div className="text-sm text-muted-foreground mb-2">פרטים נוספים</div>
+                      <p className="text-foreground/80">{business.lease_details}</p>
+                    </div>
+                  )}
+                </div>
+              </Card>
+            )}
+
+            {/* What's Included */}
+            {business.includes && business.includes.length > 0 && (
+              <Card className="p-6">
+                <h2 className="text-xl font-bold mb-4">מה כלול במכירה</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {business.includes.map((item: string, index: number) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-primary" />
+                      <span className="text-foreground/80">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
+
+            {/* Reasons for Sale */}
+            {business.reasons_for_sale && (
+              <Card className="p-6">
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-primary" />
+                  סיבות למכירה
+                </h2>
+                <p className="text-foreground/80 leading-relaxed whitespace-pre-line">{business.reasons_for_sale}</p>
+              </Card>
+            )}
+          </div>
+
+          {/* Sidebar - Contact Card */}
+          <div className="lg:sticky lg:top-6 h-fit">
+            <Card className="p-6">
+              <div className="mb-6">
+                <div className="text-3xl font-bold text-foreground mb-1">
+                  {formatPrice(business.price)}
+                </div>
+                <div className="text-sm text-muted-foreground">מחיר מבוקש</div>
+              </div>
+
+              <div className="space-y-3">
+                <Button className="w-full" size="lg" onClick={handleContactClick}>
+                  <Phone className="ml-2 h-4 w-4" />
+                  צור קשר
+                </Button>
+                <Button variant="outline" className="w-full" size="lg" onClick={handleContactClick}>
+                  <MessageSquare className="ml-2 h-4 w-4" />
+                  שלח הודעה
+                </Button>
+              </div>
+
+              <div className="mt-6 pt-6 border-t">
+                <h3 className="font-semibold mb-3">פרטי המפרסם</h3>
+                {business.seller_name || business.seller_phone ? (
+                  <div className="space-y-3">
+                    {business.seller_name && (
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                          <span className="font-bold text-primary">{business.seller_name.charAt(0)}</span>
+                        </div>
+                        <div>
+                          <div className="font-semibold text-foreground">{business.seller_name}</div>
+                          <div className="text-sm text-muted-foreground">מפרסם</div>
+                        </div>
+                      </div>
+                    )}
+                    {business.seller_phone && (
+                      <div className="pt-3 border-t border-border">
+                        {!showPhone ? (
+                          <Button 
+                            variant="outline" 
+                            className="w-full"
+                            onClick={handleShowPhone}
+                          >
+                            <Phone className="h-4 w-4 ml-2" />
+                            הצג מספר טלפון
+                          </Button>
+                        ) : (
+                          <>
+                            <div className="text-sm text-muted-foreground mb-1">טלפון</div>
+                            <a href={`tel:${business.seller_phone}`} className="text-lg font-bold text-primary hover:underline" dir="ltr">
+                              {business.seller_phone}
+                            </a>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-sm text-muted-foreground">
+                    צור קשר דרך הכפתורים למעלה
+                  </div>
+                )}
+              </div>
+
+              {/* Stats */}
+              <div className="mt-6 pt-6 border-t grid grid-cols-3 gap-2 text-center">
+                <div>
+                  <div className="text-xl font-bold text-foreground">{business.views_count || 0}</div>
+                  <div className="text-xs text-muted-foreground">צפיות</div>
+                </div>
+                <div>
+                  <div className="text-xl font-bold text-foreground">{business.clicks_count || 0}</div>
+                  <div className="text-xs text-muted-foreground">קליקים</div>
+                </div>
+                <div>
+                  <div className="text-xl font-bold text-foreground">{business.contacts_count || 0}</div>
+                  <div className="text-xs text-muted-foreground">יצירות קשר</div>
+                </div>
+              </div>
+            </Card>
+
+            <AIReport itemType="business" itemData={business} />
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default BusinessDetails;
