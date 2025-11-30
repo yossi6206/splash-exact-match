@@ -1,0 +1,302 @@
+import { useState, useMemo, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import MobileHeader from "@/components/MobileHeader";
+import { SecondhandSidebarFilter } from "@/components/SecondhandSidebarFilter";
+import { SecondhandCard } from "@/components/SecondhandCard";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { SlidersHorizontal, Search, Loader2, Sofa, Zap, Dumbbell, Shirt, Baby } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { useCountUp } from "@/hooks/useCountUp";
+import { supabase } from "@/integrations/supabase/client";
+
+// Category configurations
+const categoryConfig: Record<string, {
+  title: string;
+  description: string;
+  icon: any;
+  heroGradient: string;
+}> = {
+  "furniture": {
+    title: "ריהוט",
+    description: "מבחר ענק של ריהוט יד שנייה במחירים מעולים - ספות, שולחנות, כיסאות ועוד",
+    icon: Sofa,
+    heroGradient: "from-amber-500 via-orange-500 to-red-500"
+  },
+  "electronics": {
+    title: "מוצרי חשמל",
+    description: "מוצרי חשמל יד שנייה באיכות גבוהה - מקררים, מכונות כביסה, תנורים ועוד",
+    icon: Zap,
+    heroGradient: "from-blue-500 via-cyan-500 to-teal-500"
+  },
+  "sports": {
+    title: "ספורט ופנאי",
+    description: "ציוד ספורט ופנאי יד שנייה - אופניים, ציוד כושר, משחקים וכלי נגינה",
+    icon: Dumbbell,
+    heroGradient: "from-green-500 via-emerald-500 to-teal-500"
+  },
+  "fashion": {
+    title: "אופנה",
+    description: "בגדים ואביזרים יד שנייה במצב מעולה - בגדים, נעליים, תיקים ותכשיטים",
+    icon: Shirt,
+    heroGradient: "from-pink-500 via-purple-500 to-indigo-500"
+  },
+  "kids": {
+    title: "תינוקות וילדים",
+    description: "ציוד לתינוקות וילדים יד שנייה - עגלות, כיסאות אוכל, מיטות וצעצועים",
+    icon: Baby,
+    heroGradient: "from-yellow-500 via-orange-500 to-pink-500"
+  }
+};
+
+const SecondhandCategory = () => {
+  const { category } = useParams<{ category: string }>();
+  const [sortBy, setSortBy] = useState("date");
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const itemsPerPage = 12;
+
+  // Get category configuration
+  const config = category ? categoryConfig[category] : categoryConfig["furniture"];
+  const CategoryIcon = config.icon;
+
+  useEffect(() => {
+    fetchItems();
+  }, [category]);
+
+  const fetchItems = async () => {
+    setLoading(true);
+    let query = supabase
+      .from("secondhand_items")
+      .select("*")
+      .eq("status", "active");
+
+    // Filter by category if specified
+    if (category) {
+      const categoryMap: Record<string, string> = {
+        "furniture": "ריהוט",
+        "electronics": "מוצרי חשמל",
+        "sports": "ספורט ופנאי",
+        "fashion": "אופנה",
+        "kids": "תינוקות וילדים"
+      };
+      query = query.eq("category", categoryMap[category]);
+    }
+
+    query = query.order("created_at", { ascending: false });
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("Error fetching items:", error);
+    } else {
+      setItems(data || []);
+    }
+    setLoading(false);
+  };
+
+  // Calculate counts for filter options
+  const filterCounts = useMemo(() => {
+    const counts = {
+      categories: {} as Record<string, number>,
+      subcategories: {} as Record<string, number>,
+      conditions: {} as Record<string, number>,
+      cities: {} as Record<string, number>,
+      brands: {} as Record<string, number>,
+    };
+
+    items.forEach(item => {
+      if (item.category) counts.categories[item.category] = (counts.categories[item.category] || 0) + 1;
+      if (item.subcategory) counts.subcategories[item.subcategory] = (counts.subcategories[item.subcategory] || 0) + 1;
+      if (item.condition) counts.conditions[item.condition] = (counts.conditions[item.condition] || 0) + 1;
+      if (item.location) counts.cities[item.location] = (counts.cities[item.location] || 0) + 1;
+      if (item.brand) counts.brands[item.brand] = (counts.brands[item.brand] || 0) + 1;
+    });
+
+    return counts;
+  }, [items]);
+
+  const totalItems = useCountUp({ end: items.length, duration: 2000, startOnView: false });
+  const activeListings = useCountUp({ end: Math.floor(items.length * 0.85), duration: 2000, startOnView: false });
+  const avgViews = useCountUp({ end: 158, duration: 1500, startOnView: false });
+
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = items.slice(startIndex, endIndex);
+
+  return (
+    <div className="min-h-screen bg-background">
+      <MobileHeader />
+      <Header />
+
+      {/* Hero Banner Section */}
+      <section className={`relative overflow-hidden bg-gradient-to-br ${config.heroGradient} py-8 md:py-12`}>
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
+            {/* Main Heading */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <CategoryIcon className="h-12 w-12 text-white drop-shadow-lg" />
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
+                {config.title}
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+                {config.description}
+              </p>
+            </div>
+
+            {/* Search Bar */}
+            <div className="relative max-w-2xl mx-auto">
+              <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
+                <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="חפש לפי תיאור, מותג או מיקום..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
+                />
+                <Button
+                  className="ml-2 rounded-full px-8 h-10 font-bold"
+                  size="lg"
+                >
+                  חפש
+                </Button>
+              </div>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="flex items-center justify-center gap-8 pt-4">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">{totalItems.count}+</div>
+                <div className="text-sm text-white/80">מוצרים זמינים</div>
+              </div>
+              <div className="w-px h-12 bg-white/30" />
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">{activeListings.count}+</div>
+                <div className="text-sm text-white/80">מודעות פעילות</div>
+              </div>
+              <div className="w-px h-12 bg-white/30" />
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">{avgViews.count}+</div>
+                <div className="text-sm text-white/80">ממוצע צפיות</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <main className="container mx-auto px-4 py-6">
+        {/* Mobile Filters Button */}
+        <div className="lg:hidden mb-4">
+          <Sheet open={showMobileFilters} onOpenChange={setShowMobileFilters}>
+            <SheetTrigger asChild>
+              <Button variant="outline" className="w-full">
+                <SlidersHorizontal className="ml-2 h-4 w-4" />
+                סינון ומיון
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle>סינון תוצאות</SheetTitle>
+              </SheetHeader>
+              <div className="mt-6">
+                <SecondhandSidebarFilter counts={filterCounts} />
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+
+        {/* Results Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">מיון לפי</span>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-40 bg-card">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-card z-50">
+                <SelectItem value="date">רלוונטיות</SelectItem>
+                <SelectItem value="price-low">מחיר נמוך-גבוה</SelectItem>
+                <SelectItem value="price-high">מחיר גבוה-נמוך</SelectItem>
+                <SelectItem value="newest">הכי חדש</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <p className="text-muted-foreground">{items.length.toLocaleString()} תוצאות</p>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+          {/* Sidebar Filters - Desktop */}
+          <SecondhandSidebarFilter counts={filterCounts} />
+
+          {/* Items Grid */}
+          <div>
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : currentItems.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-lg text-muted-foreground">לא נמצאו מוצרים</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-end" dir="rtl">
+                {currentItems.map((item) => (
+                  <SecondhandCard key={item.id} item={item} />
+                ))}
+              </div>
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <Pagination className="mt-8">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+
+                  {[...Array(Math.min(totalPages, 5))].map((_, i) => (
+                    <PaginationItem key={i + 1}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(i + 1)}
+                        isActive={currentPage === i + 1}
+                        className="cursor-pointer"
+                      >
+                        {i + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            )}
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default SecondhandCategory;

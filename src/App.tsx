@@ -14,6 +14,8 @@ import PropertyDetails from "./pages/PropertyDetails";
 import Laptops from "./pages/Laptops";
 import LaptopDetails from "./pages/LaptopDetails";
 import Secondhand from "./pages/Secondhand";
+import SecondhandCategory from "./pages/SecondhandCategory";
+import SecondhandDetails from "./pages/SecondhandDetails";
 import Jobs from "./pages/Jobs";
 import JobDetails from "./pages/JobDetails";
 import Auth from "./pages/Auth";
@@ -48,6 +50,8 @@ const AppContent = () => {
         <Route path="/laptops" element={<Laptops />} />
         <Route path="/laptops/:id" element={<LaptopDetails />} />
         <Route path="/secondhand" element={<Secondhand />} />
+        <Route path="/secondhand/:category" element={<SecondhandCategory />} />
+        <Route path="/secondhand/item/:id" element={<SecondhandDetails />} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/jobs/:id" element={<JobDetails />} />
         <Route path="/freelancers" element={<Freelancers />} />
