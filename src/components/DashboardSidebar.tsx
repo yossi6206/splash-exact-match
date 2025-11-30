@@ -12,12 +12,14 @@ import {
   LogOut,
   Phone,
   MessageSquare,
-  Sparkles
+  Sparkles,
+  TrendingUp
 } from "lucide-react";
 
 const menuItems = [
   { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
   { title: "קידום מודעות", icon: Sparkles, path: "/dashboard/promote" },
+  { title: "ניתוח קידום מתקדם", icon: TrendingUp, path: "/dashboard/promotion-analytics" },
   { title: "הודעות", icon: MessageSquare, path: "/messages" },
   { title: "פרסם פרופיל פרילנסר", icon: Edit3, path: "/dashboard/post-freelancer" },
   { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile" },
