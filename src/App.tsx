@@ -29,7 +29,7 @@ import SellerProfile from "./pages/SellerProfile";
 import Messages from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 import MobileNav from "./components/MobileNav";
-import AIChatbot from "./components/AIChatbot";
+import TawkToChat from "./components/TawkToChat";
 
 const queryClient = new QueryClient();
 
@@ -72,7 +72,7 @@ const AppContent = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
         <MobileNav />
-        <AIChatbot />
+        <TawkToChat />
     </>
   );
 };
