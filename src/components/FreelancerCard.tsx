@@ -97,9 +97,8 @@ const FreelancerCard = ({
                   {full_name}
                 </h3>
                 <Badge 
-                  variant={isOnline ? "default" : "secondary"} 
                   className={`text-xs px-2 py-0.5 ${
-                    isOnline ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-400 text-white'
+                    isOnline ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-400 hover:bg-gray-500 text-white'
                   }`}
                 >
                   {isOnline ? 'מחובר' : 'לא מחובר'}
