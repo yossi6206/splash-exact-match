@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -18,6 +19,7 @@ interface FeaturedPropertyCardProps {
     floor: number;
     features: string[];
     clicks_count?: number;
+    listing_type?: string;
   };
 }
 
@@ -45,11 +47,18 @@ const FeaturedPropertyCard = ({ property }: FeaturedPropertyCardProps) => {
             className="w-full h-full object-cover"
           />
           
+          {/* Listing Type Badge */}
+          {property.listing_type && (
+            <Badge className="absolute top-2 right-2 md:top-3 md:right-3 z-20 bg-primary text-primary-foreground font-semibold">
+              {property.listing_type}
+            </Badge>
+          )}
+          
           {/* Favorite Button */}
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-2 right-2 md:top-3 md:right-3 bg-white hover:bg-white/90 rounded-full shadow-md h-8 w-8 md:h-10 md:w-10"
+            className="absolute top-2 left-2 md:top-3 md:left-3 bg-white hover:bg-white/90 rounded-full shadow-md h-8 w-8 md:h-10 md:w-10"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();

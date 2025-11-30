@@ -22,6 +22,7 @@ interface PropertyCardProps {
     clicks_count?: number;
     is_promoted?: boolean;
     promotion_end_date?: string;
+    listing_type?: string;
   };
 }
 
@@ -50,14 +51,19 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         <div className="flex flex-col sm:flex-row gap-4 p-4">
           {/* Image */}
           <div className="w-full sm:w-64 h-48 rounded-lg overflow-hidden flex-shrink-0 relative">
-            {isPromoted && (
-              <Badge 
-                className="absolute top-2 right-2 z-10 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg"
-              >
-                <Sparkles className="w-3 h-3 ml-1" />
-                מקודם
-              </Badge>
-            )}
+            <div className="absolute top-2 right-2 z-10 flex gap-2">
+              {property.listing_type && (
+                <Badge className="bg-primary text-primary-foreground font-semibold">
+                  {property.listing_type}
+                </Badge>
+              )}
+              {isPromoted && (
+                <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg">
+                  <Sparkles className="w-3 h-3 ml-1" />
+                  מקודם
+                </Badge>
+              )}
+            </div>
             <img 
               src={property.image} 
               alt={property.title}
