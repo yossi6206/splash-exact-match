@@ -26,7 +26,7 @@ interface SecondhandCardProps {
 export const SecondhandCard = ({ item }: SecondhandCardProps) => {
   return (
     <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border">
-      <Link to={`/secondhand/${item.id}`}>
+      <Link to={`/secondhand/item/${item.id}`}>
         <div className="relative">
           {/* Image */}
           <div className="aspect-[4/3] overflow-hidden bg-muted">
