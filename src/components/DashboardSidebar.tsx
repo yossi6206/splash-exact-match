@@ -13,10 +13,12 @@ import {
   Phone,
   MessageSquare,
   Sparkles,
-  TrendingUp
+  TrendingUp,
+  PlusCircle
 } from "lucide-react";
 
 const menuItems = [
+  { title: "פרסום מודעה חדשה", icon: PlusCircle, path: "/dashboard/post-wizard" },
   { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
   { title: "קידום מודעות", icon: Sparkles, path: "/dashboard/promote" },
   { title: "ניתוח קידום מתקדם", icon: TrendingUp, path: "/dashboard/promotion-analytics" },
