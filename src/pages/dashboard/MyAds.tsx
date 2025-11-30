@@ -4,6 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { 
   Loader2, 
   Car, 
@@ -58,6 +67,8 @@ const MyAds = () => {
   const [listings, setListings] = useState<Listing[]>([]);
   const [deleteId, setDeleteId] = useState<{ id: string; type: string } | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   useEffect(() => {
     if (!user) {
@@ -213,6 +224,74 @@ const MyAds = () => {
   const filterByType = (type: string) => {
     if (type === 'all') return listings;
     return listings.filter(l => l.type === type);
+  };
+
+  const paginateListings = (listings: Listing[]) => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return listings.slice(startIndex, endIndex);
+  };
+
+  const getTotalPages = (listings: Listing[]) => {
+    return Math.ceil(listings.length / itemsPerPage);
+  };
+
+  const renderPagination = (totalItems: number) => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    
+    if (totalPages <= 1) return null;
+
+    return (
+      <Pagination className="mt-8">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious 
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            />
+          </PaginationItem>
+          
+          {[...Array(totalPages)].map((_, idx) => {
+            const pageNum = idx + 1;
+            // Show first page, last page, current page, and pages around current
+            if (
+              pageNum === 1 ||
+              pageNum === totalPages ||
+              (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+            ) {
+              return (
+                <PaginationItem key={pageNum}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(pageNum)}
+                    isActive={currentPage === pageNum}
+                    className="cursor-pointer"
+                  >
+                    {pageNum}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            } else if (
+              pageNum === currentPage - 2 ||
+              pageNum === currentPage + 2
+            ) {
+              return (
+                <PaginationItem key={pageNum}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
+            }
+            return null;
+          })}
+
+          <PaginationItem>
+            <PaginationNext 
+              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    );
   };
 
   const renderListingCard = (listing: Listing) => (
@@ -388,7 +467,10 @@ const MyAds = () => {
               <p className="text-muted-foreground text-sm mt-2">התחל לפרסם מודעות כדי לראות אותן כאן</p>
             </Card>
           ) : (
-            listings.map(renderListingCard)
+            <>
+              {paginateListings(listings).map(renderListingCard)}
+              {renderPagination(listings.length)}
+            </>
           )}
         </TabsContent>
 
@@ -399,7 +481,10 @@ const MyAds = () => {
               <p className="text-muted-foreground">אין לך מודעות רכב</p>
             </Card>
           ) : (
-            filterByType('car').map(renderListingCard)
+            <>
+              {paginateListings(filterByType('car')).map(renderListingCard)}
+              {renderPagination(filterByType('car').length)}
+            </>
           )}
         </TabsContent>
 
@@ -410,7 +495,10 @@ const MyAds = () => {
               <p className="text-muted-foreground">אין לך מודעות נדל״ן</p>
             </Card>
           ) : (
-            filterByType('property').map(renderListingCard)
+            <>
+              {paginateListings(filterByType('property')).map(renderListingCard)}
+              {renderPagination(filterByType('property').length)}
+            </>
           )}
         </TabsContent>
 
@@ -421,7 +509,10 @@ const MyAds = () => {
               <p className="text-muted-foreground">אין לך מודעות מחשבים</p>
             </Card>
           ) : (
-            filterByType('laptop').map(renderListingCard)
+            <>
+              {paginateListings(filterByType('laptop')).map(renderListingCard)}
+              {renderPagination(filterByType('laptop').length)}
+            </>
           )}
         </TabsContent>
 
@@ -432,7 +523,10 @@ const MyAds = () => {
               <p className="text-muted-foreground">אין לך מודעות יד שנייה</p>
             </Card>
           ) : (
-            filterByType('secondhand').map(renderListingCard)
+            <>
+              {paginateListings(filterByType('secondhand')).map(renderListingCard)}
+              {renderPagination(filterByType('secondhand').length)}
+            </>
           )}
         </TabsContent>
 
@@ -443,7 +537,10 @@ const MyAds = () => {
               <p className="text-muted-foreground">אין לך מודעות משרות</p>
             </Card>
           ) : (
-            filterByType('job').map(renderListingCard)
+            <>
+              {paginateListings(filterByType('job')).map(renderListingCard)}
+              {renderPagination(filterByType('job').length)}
+            </>
           )}
         </TabsContent>
 
@@ -454,7 +551,10 @@ const MyAds = () => {
               <p className="text-muted-foreground">אין לך פרופילי פרילנסר</p>
             </Card>
           ) : (
-            filterByType('freelancer').map(renderListingCard)
+            <>
+              {paginateListings(filterByType('freelancer')).map(renderListingCard)}
+              {renderPagination(filterByType('freelancer').length)}
+            </>
           )}
         </TabsContent>
       </Tabs>
