@@ -117,10 +117,10 @@ const Dashboard = () => {
         </div>
       </header>
 
-      <div className="min-h-screen flex w-full bg-slate-50">
+      <div className="flex w-full bg-slate-50 min-h-[calc(100vh-64px)]">
         <DashboardSidebar />
         
-        <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8">
+        <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8 h-full">
           <Routes>
             <Route path="/" element={
               <div className="max-w-7xl mx-auto">
