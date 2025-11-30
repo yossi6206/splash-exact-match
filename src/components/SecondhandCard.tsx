@@ -1,13 +1,14 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MapPin } from "lucide-react";
+import { Heart, MapPin, Truck, HandshakeIcon, Calendar, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 interface SecondhandCardProps {
   item: {
     id: number;
-    image: string;
+    image?: string;
+    images?: string[];
     title: string;
     category: string;
     subcategory?: string;
@@ -20,21 +21,34 @@ interface SecondhandCardProps {
     material?: string;
     age?: string;
     features?: string[];
+    delivery_available?: boolean;
+    negotiable?: boolean;
+    year_manufactured?: number;
+    dimensions?: string;
+    weight?: string;
   };
 }
 
 export const SecondhandCard = ({ item }: SecondhandCardProps) => {
+  const displayImage = item.images && item.images.length > 0 ? item.images[0] : item.image;
+  
   return (
     <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border">
       <Link to={`/secondhand/item/${item.id}`}>
         <div className="relative">
           {/* Image */}
           <div className="aspect-[4/3] overflow-hidden bg-muted">
-            <img 
-              src={item.image} 
-              alt={item.title}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            />
+            {displayImage ? (
+              <img 
+                src={displayImage} 
+                alt={item.title}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-muted">
+                <span className="text-muted-foreground">אין תמונה</span>
+              </div>
+            )}
           </div>
           
           {/* Favorite Button */}
@@ -50,14 +64,26 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
             <Heart className="h-4 w-4" />
           </Button>
 
-          {/* Condition Badge */}
-          <div className="absolute top-3 right-3">
+          {/* Badges - Top Right */}
+          <div className="absolute top-3 right-3 flex flex-col gap-2">
             <Badge className="bg-background/90 hover:bg-background text-foreground border backdrop-blur-sm">
               {item.condition}
             </Badge>
+            {item.delivery_available && (
+              <Badge className="bg-green-500/90 text-white border-0 backdrop-blur-sm flex items-center gap-1">
+                <Truck className="h-3 w-3" />
+                משלוח
+              </Badge>
+            )}
+            {item.negotiable && (
+              <Badge className="bg-blue-500/90 text-white border-0 backdrop-blur-sm flex items-center gap-1">
+                <HandshakeIcon className="h-3 w-3" />
+                מיקוח
+              </Badge>
+            )}
           </div>
 
-          {/* Category Badge */}
+          {/* Category Badge - Bottom Right */}
           <div className="absolute bottom-3 right-3">
             <Badge className="bg-primary/90 text-primary-foreground backdrop-blur-sm">
               {item.category}
@@ -79,14 +105,64 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
             )}
           </div>
 
-          {/* Details */}
-          <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-            {item.brand && <span>• {item.brand}</span>}
-            {item.size && <span>• מידה {item.size}</span>}
-            {item.color && <span>• {item.color}</span>}
-            {item.material && <span>• {item.material}</span>}
-            {item.age && <span>• גיל {item.age}</span>}
+          {/* Details Grid */}
+          <div className="space-y-2">
+            <div className="flex flex-wrap gap-1.5">
+              {item.brand && (
+                <Badge variant="outline" className="text-xs">
+                  {item.brand}
+                </Badge>
+              )}
+              {item.size && (
+                <Badge variant="outline" className="text-xs flex items-center gap-1">
+                  <Ruler className="h-3 w-3" />
+                  {item.size}
+                </Badge>
+              )}
+              {item.year_manufactured && (
+                <Badge variant="outline" className="text-xs flex items-center gap-1">
+                  <Calendar className="h-3 w-3" />
+                  {item.year_manufactured}
+                </Badge>
+              )}
+            </div>
+
+            {/* Color & Material Tags */}
+            <div className="flex flex-wrap gap-1.5">
+              {item.color && (
+                <Badge 
+                  variant="secondary" 
+                  className="text-xs bg-muted/70 text-foreground border-0"
+                >
+                  צבע: {item.color}
+                </Badge>
+              )}
+              {item.material && (
+                <Badge 
+                  variant="secondary" 
+                  className="text-xs bg-muted/70 text-foreground border-0"
+                >
+                  חומר: {item.material}
+                </Badge>
+              )}
+              {item.age && (
+                <Badge 
+                  variant="secondary" 
+                  className="text-xs bg-muted/70 text-foreground border-0"
+                >
+                  {item.age}
+                </Badge>
+              )}
+            </div>
           </div>
+
+          {/* Additional Details */}
+          {(item.dimensions || item.weight) && (
+            <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+              {item.dimensions && <span>📏 {item.dimensions}</span>}
+              {item.weight && <span>⚖️ {item.weight}</span>}
+            </div>
+          )}
 
           {/* Features */}
           {item.features && item.features.length > 0 && (
@@ -95,17 +171,17 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
                 <Badge 
                   key={index} 
                   variant="secondary" 
-                  className="text-xs bg-muted/50 text-foreground border-0"
+                  className="text-xs bg-primary/10 text-primary border-0"
                 >
-                  {feature}
+                  ✓ {feature}
                 </Badge>
               ))}
               {item.features.length > 2 && (
                 <Badge 
                   variant="secondary" 
-                  className="text-xs bg-muted/50 text-foreground border-0"
+                  className="text-xs bg-primary/10 text-primary border-0"
                 >
-                  +{item.features.length - 2}
+                  +{item.features.length - 2} עוד
                 </Badge>
               )}
             </div>
