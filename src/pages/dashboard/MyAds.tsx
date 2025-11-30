@@ -184,7 +184,7 @@ const MyAds = () => {
       listing.type === 'car' ? '/cars' :
       listing.type === 'property' ? '/properties' :
       listing.type === 'laptop' ? '/laptops' :
-      listing.type === 'secondhand' ? '/secondhand' :
+      listing.type === 'secondhand' ? '/secondhand/item' :
       listing.type === 'job' ? '/jobs' : '';
     
     return `${baseUrl}/${listing.id}`;
