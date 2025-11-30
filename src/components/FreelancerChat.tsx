@@ -129,6 +129,20 @@ export const FreelancerChat = ({
 
       if (error) throw error;
       setMessages(data || []);
+      
+      // Mark unread messages from other user as read
+      if (user && data) {
+        const unreadMessages = data.filter(
+          (msg) => msg.sender_id !== user.id && !msg.is_read
+        );
+        
+        if (unreadMessages.length > 0) {
+          await supabase
+            .from("messages")
+            .update({ is_read: true })
+            .in("id", unreadMessages.map((msg) => msg.id));
+        }
+      }
     } catch (error) {
       console.error("Error loading messages:", error);
     }
@@ -147,8 +161,17 @@ export const FreelancerChat = ({
           table: "messages",
           filter: `conversation_id=eq.${conversationId}`,
         },
-        (payload) => {
-          setMessages((prev) => [...prev, payload.new as Message]);
+        async (payload) => {
+          const newMessage = payload.new as Message;
+          setMessages((prev) => [...prev, newMessage]);
+          
+          // Mark as read if message is from other user
+          if (user && newMessage.sender_id !== user.id && !newMessage.is_read) {
+            await supabase
+              .from("messages")
+              .update({ is_read: true })
+              .eq("id", newMessage.id);
+          }
         }
       )
       .subscribe();
