@@ -1,6 +1,6 @@
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package, Building2, User } from "lucide-react";
+import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package, Building2, User, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavLink } from "@/components/NavLink";
@@ -18,6 +18,7 @@ import MyAds from "./dashboard/MyAds";
 import Statistics from "./dashboard/Statistics";
 import PromoteAds from "./dashboard/PromoteAds";
 import PromotionAnalytics from "./dashboard/PromotionAnalytics";
+import PostWizard from "./dashboard/PostWizard";
 
 const Dashboard = () => {
   const stats = [
@@ -28,6 +29,7 @@ const Dashboard = () => {
   ];
 
   const menuItems = [
+    { title: "פרסום מודעה חדשה", icon: PlusCircle, path: "/dashboard/post-wizard" },
     { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
     { title: "המשרות שלי", icon: Briefcase, path: "/dashboard/my-jobs" },
     { title: "פרסם משרה", icon: Plus, path: "/dashboard/post-job" },
@@ -313,6 +315,7 @@ const Dashboard = () => {
             <Route path="/stats" element={<Statistics />} />
             <Route path="/promote" element={<PromoteAds />} />
             <Route path="/promotion-analytics" element={<PromotionAnalytics />} />
+            <Route path="/post-wizard" element={<PostWizard />} />
           </Routes>
         </main>
       </div>
