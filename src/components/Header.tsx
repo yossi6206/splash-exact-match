@@ -633,18 +633,18 @@ const Header = () => {
                     {user.email}
                   </div>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer flex items-center justify-between" onClick={() => navigate("/dashboard")}>
-                    <span>לוח הבקרה</span>
+                  <DropdownMenuItem className="cursor-pointer flex flex-row-reverse items-center justify-between" onClick={() => navigate("/dashboard")}>
                     <LayoutDashboard className="h-4 w-4" />
+                    <span>לוח הבקרה</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer flex items-center justify-between">
-                    <span>הגדרות</span>
+                  <DropdownMenuItem className="cursor-pointer flex flex-row-reverse items-center justify-between">
                     <Settings className="h-4 w-4" />
+                    <span>הגדרות</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer text-destructive flex items-center justify-between" onClick={signOut}>
-                    <span>התנתק</span>
+                  <DropdownMenuItem className="cursor-pointer text-destructive flex flex-row-reverse items-center justify-between" onClick={signOut}>
                     <LogOut className="h-4 w-4" />
+                    <span>התנתק</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
