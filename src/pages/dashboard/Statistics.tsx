@@ -107,7 +107,7 @@ const Statistics = () => {
       // Fetch freelancers data
       const { data: freelancers } = await supabase
         .from("freelancers")
-        .select("id, title, full_name, total_reviews, created_at")
+        .select("id, title, full_name, views_count, clicks_count, contacts_count, created_at")
         .eq("user_id", user?.id);
 
       console.log("Data fetched:", { 
@@ -175,10 +175,10 @@ const Statistics = () => {
           id: f.id,
           title: `${f.full_name} - ${f.title}`,
           category: "פרילנסרים",
-          views: 0,
-          clicks: 0,
-          contacts: f.total_reviews || 0,
-          conversion: 0,
+          views: f.views_count || 0,
+          clicks: f.clicks_count || 0,
+          contacts: f.contacts_count || 0,
+          conversion: f.views_count ? ((f.contacts_count || 0) / f.views_count * 100) : 0,
           created_at: f.created_at
         }))
       ];

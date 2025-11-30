@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FreelancerCardProps {
   id: string;
@@ -49,7 +50,18 @@ const FreelancerCard = ({
       : name.substring(0, 2).toUpperCase();
   };
 
-  const handleChatClick = (e: React.MouseEvent) => {
+  const handleClick = async () => {
+    try {
+      await supabase
+        .from("freelancers")
+        .update({ clicks_count: (await supabase.from("freelancers").select("clicks_count").eq("id", id).single()).data?.clicks_count || 0 + 1 })
+        .eq("id", id);
+    } catch (error) {
+      console.error("Error updating clicks:", error);
+    }
+  };
+
+  const handleChatClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -63,6 +75,22 @@ const FreelancerCard = ({
       return;
     }
 
+    // Increment contacts count
+    try {
+      const { data: currentData } = await supabase
+        .from("freelancers")
+        .select("contacts_count")
+        .eq("id", id)
+        .single();
+      
+      await supabase
+        .from("freelancers")
+        .update({ contacts_count: (currentData?.contacts_count || 0) + 1 })
+        .eq("id", id);
+    } catch (error) {
+      console.error("Error updating contacts:", error);
+    }
+
     // Navigate to messages page with freelancer info
     navigate("/messages", { 
       state: { 
@@ -74,7 +102,7 @@ const FreelancerCard = ({
   };
 
   return (
-    <Link to={`/freelancers/${id}`} className="block">
+    <Link to={`/freelancers/${id}`} className="block" onClick={handleClick}>
       <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-border bg-card group h-full">
         <CardContent className="p-6 space-y-4">
           {/* Avatar and Online Status */}

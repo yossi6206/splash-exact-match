@@ -126,8 +126,28 @@ const FreelancerDetails = () => {
     fetchCurrentUser();
     if (id) {
       fetchReviewStats();
+      incrementViewCount();
     }
   }, [id]);
+
+  const incrementViewCount = async () => {
+    if (!id) return;
+    
+    try {
+      const { data: currentData } = await supabase
+        .from("freelancers")
+        .select("views_count")
+        .eq("id", id)
+        .single();
+      
+      await supabase
+        .from("freelancers")
+        .update({ views_count: (currentData?.views_count || 0) + 1 })
+        .eq("id", id);
+    } catch (error) {
+      console.error("Error updating views:", error);
+    }
+  };
 
   const fetchCurrentUser = async () => {
     const { data: { user } } = await supabase.auth.getUser();
