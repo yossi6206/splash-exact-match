@@ -17,7 +17,8 @@ import {
   Calendar,
   MapPin,
   MousePointer,
-  Phone
+  Phone,
+  Users
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -71,12 +72,13 @@ const MyAds = () => {
 
     setLoading(true);
     try {
-      const [carsRes, propsRes, laptopsRes, secondhandRes, jobsRes] = await Promise.all([
+      const [carsRes, propsRes, laptopsRes, secondhandRes, jobsRes, freelancersRes] = await Promise.all([
         supabase.from("cars").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
         supabase.from("properties").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
         supabase.from("laptops").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
         supabase.from("secondhand_items").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
         supabase.from("jobs").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("freelancers").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
       ]);
 
       const allListings: Listing[] = [
@@ -102,6 +104,18 @@ const MyAds = () => {
           ...job,
           price: `${job.salary_min || 0}-${job.salary_max || 0}`,
           type: 'job' as const
+        })),
+        ...(freelancersRes.data || []).map(freelancer => ({
+          ...freelancer,
+          title: `${freelancer.full_name} - ${freelancer.title}`,
+          price: freelancer.hourly_rate,
+          location: freelancer.location || '',
+          images: freelancer.avatar_url ? [freelancer.avatar_url] : [],
+          views_count: 0,
+          clicks_count: 0,
+          contacts_count: freelancer.total_reviews || 0,
+          status: freelancer.availability || 'available',
+          type: 'freelancer' as const
         })),
       ];
 
@@ -138,6 +152,9 @@ const MyAds = () => {
         case 'job':
           deletePromise = supabase.from('jobs').delete().eq('id', deleteId.id);
           break;
+        case 'freelancer':
+          deletePromise = supabase.from('freelancers').delete().eq('id', deleteId.id);
+          break;
         default:
           throw new Error('Invalid type');
       }
@@ -164,6 +181,7 @@ const MyAds = () => {
       case 'laptop': return <Laptop className="h-4 w-4" />;
       case 'secondhand': return <Package className="h-4 w-4" />;
       case 'job': return <Briefcase className="h-4 w-4" />;
+      case 'freelancer': return <Users className="h-4 w-4" />;
       default: return null;
     }
   };
@@ -175,6 +193,7 @@ const MyAds = () => {
       case 'laptop': return 'מחשב';
       case 'secondhand': return 'יד שנייה';
       case 'job': return 'משרה';
+      case 'freelancer': return 'פרילנסר';
       default: return type;
     }
   };
@@ -185,7 +204,8 @@ const MyAds = () => {
       listing.type === 'property' ? '/properties' :
       listing.type === 'laptop' ? '/laptops' :
       listing.type === 'secondhand' ? '/secondhand/item' :
-      listing.type === 'job' ? '/jobs' : '';
+      listing.type === 'job' ? '/jobs' :
+      listing.type === 'freelancer' ? '/freelancers' : '';
     
     return `${baseUrl}/${listing.id}`;
   };
@@ -224,6 +244,8 @@ const MyAds = () => {
             <div className="text-2xl font-bold text-primary mb-3">
               {listing.type === 'job' 
                 ? `₪${listing.price}` 
+                : listing.type === 'freelancer'
+                ? `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price} לשעה`
                 : `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}`
               }
             </div>
@@ -250,7 +272,7 @@ const MyAds = () => {
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
-                  <span>{listing.type === 'job' ? 'מועמדים' : 'פניות'}</span>
+                  <span>{listing.type === 'job' ? 'מועמדים' : listing.type === 'freelancer' ? 'ביקורות' : 'פניות'}</span>
                   <Phone className="h-3 w-3" />
                 </div>
                 <div className="text-lg font-bold text-foreground">
@@ -329,7 +351,7 @@ const MyAds = () => {
       </div>
 
       <Tabs defaultValue="all" className="space-y-6">
-        <TabsList className="grid grid-cols-3 md:grid-cols-6 w-full">
+        <TabsList className="grid grid-cols-3 md:grid-cols-7 w-full">
           <TabsTrigger value="all">
             הכל ({listings.length})
           </TabsTrigger>
@@ -352,6 +374,10 @@ const MyAds = () => {
           <TabsTrigger value="job">
             <Briefcase className="h-4 w-4 ml-2" />
             משרות ({filterByType('job').length})
+          </TabsTrigger>
+          <TabsTrigger value="freelancer">
+            <Users className="h-4 w-4 ml-2" />
+            פרילנסרים ({filterByType('freelancer').length})
           </TabsTrigger>
         </TabsList>
 
@@ -418,6 +444,17 @@ const MyAds = () => {
             </Card>
           ) : (
             filterByType('job').map(renderListingCard)
+          )}
+        </TabsContent>
+
+        <TabsContent value="freelancer" className="space-y-4">
+          {filterByType('freelancer').length === 0 ? (
+            <Card className="p-12 text-center">
+              <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">אין לך פרופילי פרילנסר</p>
+            </Card>
+          ) : (
+            filterByType('freelancer').map(renderListingCard)
           )}
         </TabsContent>
       </Tabs>
