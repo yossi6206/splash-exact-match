@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { Eye, MousePointer, Phone, TrendingUp, Car, Home, Laptop, Briefcase, Loader2, Calendar as CalendarIcon, Filter, X } from "lucide-react";
+import { Eye, MousePointer, Phone, TrendingUp, Car, Home, Laptop, Briefcase, Loader2, Calendar as CalendarIcon, Filter, X, Package, Users } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCountUp } from "@/hooks/useCountUp";
 import { Button } from "@/components/ui/button";
@@ -97,6 +97,18 @@ const Statistics = () => {
         .select("id, title, views_count, clicks_count, contacts_count, created_at")
         .eq("user_id", user?.id);
 
+      // Fetch secondhand items data
+      const { data: secondhand } = await supabase
+        .from("secondhand_items")
+        .select("id, title, views_count, clicks_count, contacts_count, created_at")
+        .eq("user_id", user?.id);
+
+      // Fetch freelancers data
+      const { data: freelancers } = await supabase
+        .from("freelancers")
+        .select("id, title, full_name, total_reviews, created_at")
+        .eq("user_id", user?.id);
+
       // Process all ads and apply filters
       let allAds: AdStats[] = [
         ...(cars || []).map(c => ({
@@ -138,6 +150,26 @@ const Statistics = () => {
           contacts: j.contacts_count || 0,
           conversion: j.views_count ? ((j.contacts_count || 0) / j.views_count * 100) : 0,
           created_at: j.created_at
+        })),
+        ...(secondhand || []).map(s => ({
+          id: s.id,
+          title: s.title,
+          category: "יד שנייה",
+          views: s.views_count || 0,
+          clicks: s.clicks_count || 0,
+          contacts: s.contacts_count || 0,
+          conversion: s.views_count ? ((s.contacts_count || 0) / s.views_count * 100) : 0,
+          created_at: s.created_at
+        })),
+        ...(freelancers || []).map(f => ({
+          id: f.id,
+          title: `${f.full_name} - ${f.title}`,
+          category: "פרילנסרים",
+          views: 0,
+          clicks: 0,
+          contacts: f.total_reviews || 0,
+          conversion: 0,
+          created_at: f.created_at
         }))
       ];
 
@@ -229,6 +261,8 @@ const Statistics = () => {
       case "נדל״ן": return Home;
       case "מחשבים": return Laptop;
       case "משרות": return Briefcase;
+      case "יד שנייה": return Package;
+      case "פרילנסרים": return Users;
       default: return Eye;
     }
   };
@@ -346,6 +380,8 @@ const Statistics = () => {
                   <SelectItem value="נדל״ן">נדל״ן</SelectItem>
                   <SelectItem value="מחשבים">מחשבים</SelectItem>
                   <SelectItem value="משרות">משרות</SelectItem>
+                  <SelectItem value="יד שנייה">יד שנייה</SelectItem>
+                  <SelectItem value="פרילנסרים">פרילנסרים</SelectItem>
                 </SelectContent>
               </Select>
             </div>
