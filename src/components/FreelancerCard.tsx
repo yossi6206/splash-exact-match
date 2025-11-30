@@ -87,7 +87,7 @@ const FreelancerCard = ({
                 </AvatarFallback>
               </Avatar>
               <div className={`absolute bottom-0 right-0 w-3.5 h-3.5 border-2 border-card rounded-full ${
-                isOnline ? 'bg-green-500' : 'bg-gray-400'
+                isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
               }`} />
             </div>
             
