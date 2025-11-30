@@ -376,6 +376,13 @@ const SecondhandDetails = () => {
                       </p>
                     )}
                   </div>
+                  {item.user_id && (
+                    <Link to={`/seller/${item.user_id}`}>
+                      <Button variant="outline" size="sm" className="w-full mt-2">
+                        צפה בפרופיל המוכר
+                      </Button>
+                    </Link>
+                  )}
                 </div>
 
                 <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
