@@ -5,10 +5,8 @@ import PropertyCard from "@/components/PropertyCard";
 import { PropertySidebarFilter, PropertyFilters as PropertySidebarFilters } from "@/components/PropertySidebarFilter";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
 import { Search, Loader2 } from "lucide-react";
-import propertiesHeroBanner from "@/assets/properties-hero-modern.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -16,6 +14,8 @@ const Properties = () => {
   const [sortBy, setSortBy] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [sidebarFilters, setSidebarFilters] = useState<PropertySidebarFilters>({
@@ -56,6 +56,20 @@ const Properties = () => {
       setLoading(false);
     }
   };
+
+  // Debounce search query for auto-filtering
+  useEffect(() => {
+    setIsSearching(true);
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setIsSearching(false);
+      setCurrentPage(1);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
   
   // Calculate counts for filter options
   const filterCounts = useMemo(() => {
@@ -99,8 +113,8 @@ const Properties = () => {
   const filteredProperties = useMemo(() => {
     let filtered = properties.filter((property) => {
       // Search query filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
+      if (debouncedSearchQuery) {
+        const query = debouncedSearchQuery.toLowerCase();
         const matchesSearch = 
           property.title?.toLowerCase().includes(query) ||
           property.description?.toLowerCase().includes(query) ||
@@ -183,7 +197,7 @@ const Properties = () => {
     }
     
     return filtered;
-  }, [searchQuery, sidebarFilters, sortBy]);
+  }, [properties, debouncedSearchQuery, sidebarFilters, sortBy]);
   
   const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -192,10 +206,6 @@ const Properties = () => {
   
   const handleSidebarFilterChange = (newFilters: PropertySidebarFilters) => {
     setSidebarFilters(newFilters);
-    setCurrentPage(1);
-  };
-  
-  const handleSearch = () => {
     setCurrentPage(1);
   };
 
@@ -217,26 +227,30 @@ const Properties = () => {
               </p>
             </div>
             
-            {/* Search Bar */}
+            {/* Search Bar with Auto-complete */}
             <div className="relative max-w-2xl mx-auto">
               <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
-                <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
+                <div className="absolute right-4 h-5 w-5 text-muted-foreground">
+                  {isSearching ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <Search className="h-5 w-5" />
+                  )}
+                </div>
                 <Input
                   type="text"
                   placeholder="חפש לפי עיר, שכונה או תיאור..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
-                <Button
-                  className="ml-2 rounded-full px-8 h-10 font-bold"
-                  size="lg"
-                  onClick={handleSearch}
-                >
-                  חפש
-                </Button>
               </div>
+
+              {searchQuery && (
+                <p className="text-center text-sm text-white/80 mt-2">
+                  חיפוש אוטומטי מופעל - התוצאות מתעדכנות בזמן אמת
+                </p>
+              )}
             </div>
 
             {/* Quick Stats */}
