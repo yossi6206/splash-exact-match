@@ -124,68 +124,122 @@ const Dashboard = () => {
                 
                 {/* Quick Post Options */}
                 <div className="mb-8">
-                  <h2 className="text-xl font-bold text-foreground mb-4">פרסם מודעה חדשה</h2>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    <Link to="/dashboard/post-car">
-                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
-                        <div className="flex flex-col items-center gap-2">
-                          <div className="p-3 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 group-hover:scale-110 transition-transform">
-                            <Car className="h-6 w-6 text-white" />
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-2xl font-bold text-foreground mb-2">פרסם מודעה חדשה</h2>
+                      <p className="text-muted-foreground">בחר את הקטגוריה המתאימה לפרסום שלך</p>
+                    </div>
+                  </div>
+
+                  {/* למכירה */}
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <div className="h-1 w-1 rounded-full bg-primary"></div>
+                      למכירה
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <Link to="/dashboard/post-car">
+                        <Card className="p-5 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50 bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 group-hover:scale-110 transition-transform shrink-0">
+                              <Car className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="flex-1 text-right">
+                              <h4 className="font-bold text-foreground mb-1">רכב למכירה</h4>
+                              <p className="text-sm text-muted-foreground">פרסם רכב פרטי, מסחרי או אופנוע</p>
+                            </div>
                           </div>
-                          <span className="font-semibold text-sm text-center">רכב</span>
-                        </div>
-                      </Card>
-                    </Link>
-                    <Link to="/dashboard/post-property">
-                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
-                        <div className="flex flex-col items-center gap-2">
-                          <div className="p-3 rounded-lg bg-gradient-to-br from-green-500 to-green-600 group-hover:scale-110 transition-transform">
-                            <Home className="h-6 w-6 text-white" />
+                        </Card>
+                      </Link>
+
+                      <Link to="/dashboard/post-property">
+                        <Card className="p-5 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50 bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-green-500 to-green-600 group-hover:scale-110 transition-transform shrink-0">
+                              <Home className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="flex-1 text-right">
+                              <h4 className="font-bold text-foreground mb-1">נדל״ן למכירה</h4>
+                              <p className="text-sm text-muted-foreground">דירה, בית, קרקע או נכס מסחרי</p>
+                            </div>
                           </div>
-                          <span className="font-semibold text-sm text-center">נדל״ן</span>
-                        </div>
-                      </Card>
-                    </Link>
-                    <Link to="/dashboard/post-laptop">
-                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
-                        <div className="flex flex-col items-center gap-2">
-                          <div className="p-3 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 group-hover:scale-110 transition-transform">
-                            <Laptop className="h-6 w-6 text-white" />
+                        </Card>
+                      </Link>
+
+                      <Link to="/dashboard/post-business">
+                        <Card className="p-5 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50 bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 group-hover:scale-110 transition-transform shrink-0">
+                              <Building2 className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="flex-1 text-right">
+                              <h4 className="font-bold text-foreground mb-1">עסק למכירה</h4>
+                              <p className="text-sm text-muted-foreground">מכור עסק פעיל עם נתונים פיננסיים</p>
+                            </div>
                           </div>
-                          <span className="font-semibold text-sm text-center">מחשבים</span>
-                        </div>
-                      </Card>
-                    </Link>
-                    <Link to="/dashboard/post-secondhand">
-                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
-                        <div className="flex flex-col items-center gap-2">
-                          <div className="p-3 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 group-hover:scale-110 transition-transform">
-                            <Package className="h-6 w-6 text-white" />
+                        </Card>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* מוצרים */}
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <div className="h-1 w-1 rounded-full bg-primary"></div>
+                      מוצרים ומכשירים
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <Link to="/dashboard/post-laptop">
+                        <Card className="p-5 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50 bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 group-hover:scale-110 transition-transform shrink-0">
+                              <Laptop className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="flex-1 text-right">
+                              <h4 className="font-bold text-foreground mb-1">מחשבים</h4>
+                              <p className="text-sm text-muted-foreground">מחשב נייד, נייח, טאבלט או אביזרים</p>
+                            </div>
                           </div>
-                          <span className="font-semibold text-sm text-center">יד שנייה</span>
-                        </div>
-                      </Card>
-                    </Link>
-                    <Link to="/dashboard/post-job">
-                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
-                        <div className="flex flex-col items-center gap-2">
-                          <div className="p-3 rounded-lg bg-gradient-to-br from-pink-500 to-pink-600 group-hover:scale-110 transition-transform">
-                            <Briefcase className="h-6 w-6 text-white" />
+                        </Card>
+                      </Link>
+
+                      <Link to="/dashboard/post-secondhand">
+                        <Card className="p-5 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50 bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 group-hover:scale-110 transition-transform shrink-0">
+                              <Package className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="flex-1 text-right">
+                              <h4 className="font-bold text-foreground mb-1">יד שנייה</h4>
+                              <p className="text-sm text-muted-foreground">ריהוט, מוצרי חשמל, ספורט ועוד</p>
+                            </div>
                           </div>
-                          <span className="font-semibold text-sm text-center">משרות</span>
-                        </div>
-                      </Card>
-                    </Link>
-                    <Link to="/dashboard/post-business">
-                      <Card className="p-4 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50">
-                        <div className="flex flex-col items-center gap-2">
-                          <div className="p-3 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 group-hover:scale-110 transition-transform">
-                            <Building2 className="h-6 w-6 text-white" />
+                        </Card>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* משרות */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <div className="h-1 w-1 rounded-full bg-primary"></div>
+                      דרושים ומשרות
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <Link to="/dashboard/post-job">
+                        <Card className="p-5 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50 bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 group-hover:scale-110 transition-transform shrink-0">
+                              <Briefcase className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="flex-1 text-right">
+                              <h4 className="font-bold text-foreground mb-1">פרסם משרה</h4>
+                              <p className="text-sm text-muted-foreground">חפש עובדים, פרילנסרים או שותפים</p>
+                            </div>
                           </div>
-                          <span className="font-semibold text-sm text-center">עסק למכירה</span>
-                        </div>
-                      </Card>
-                    </Link>
+                        </Card>
+                      </Link>
+                    </div>
                   </div>
                 </div>
                 
