@@ -2,9 +2,6 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import Header from "@/components/Header";
-import MobileHeader from "@/components/MobileHeader";
-import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -162,224 +159,213 @@ const PromoteAds = () => {
   const availableAds = ads.filter(ad => !isItemPromoted(ad));
 
   return (
-    <div className="min-h-screen bg-background">
-      <MobileHeader />
-      <Header />
-      
-      <div className="flex">
-        <DashboardSidebar />
-        
-        <div className="flex-1 p-8">
-          <div className="max-w-7xl mx-auto space-y-8">
-            {/* Header */}
-            <div>
-              <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
-                <Sparkles className="w-8 h-8 text-primary" />
-                קידום מודעות
-              </h1>
-              <p className="text-muted-foreground text-lg">
-                קדם את המודעות שלך והגדל את החשיפה והמכירות
-              </p>
-            </div>
-
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">מודעות פעילות</CardTitle>
-                  <TrendingUp className="w-4 h-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{ads.length}</div>
-                  <p className="text-xs text-muted-foreground mt-1">סך המודעות</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">מודעות מקודמות</CardTitle>
-                  <Sparkles className="w-4 h-4 text-amber-500" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{promotedAds.length}</div>
-                  <p className="text-xs text-muted-foreground mt-1">פעילות כעת</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">חשיפות כוללות</CardTitle>
-                  <Eye className="w-4 h-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {promotedAds.reduce((sum, ad) => sum + (ad.promotion_impressions || 0), 0)}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1">במודעות מקודמות</p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
-              <TabsList>
-                <TabsTrigger value="available">
-                  מודעות זמינות לקידום ({availableAds.length})
-                </TabsTrigger>
-                <TabsTrigger value="promoted">
-                  מודעות מקודמות ({promotedAds.length})
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="available" className="space-y-4 mt-6">
-                {loading ? (
-                  <div className="text-center py-12">טוען מודעות...</div>
-                ) : availableAds.length === 0 ? (
-                  <Card>
-                    <CardContent className="py-12 text-center">
-                      <p className="text-muted-foreground">אין מודעות זמינות לקידום</p>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {availableAds.map((ad) => (
-                      <Card key={`${ad.table_name}-${ad.id}`} className="hover:shadow-lg transition-shadow">
-                        <CardContent className="p-6">
-                          <div className="flex gap-4">
-                            <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-muted">
-                              {ad.images?.[0] ? (
-                                <img 
-                                  src={ad.images[0]} 
-                                  alt={ad.title}
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                  <Sparkles className="w-8 h-8 text-muted-foreground" />
-                                </div>
-                              )}
-                            </div>
-                            
-                            <div className="flex-1 space-y-2">
-                              <div>
-                                <Badge variant="secondary" className="mb-2">
-                                  {ad.category}
-                                </Badge>
-                                <h3 className="font-bold line-clamp-2">{ad.title}</h3>
-                              </div>
-                              
-                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                {ad.price && (
-                                  <span className="font-semibold text-primary">
-                                    ₪{typeof ad.price === 'number' ? ad.price.toLocaleString() : ad.price}
-                                  </span>
-                                )}
-                                {ad.location && <span>{ad.location}</span>}
-                              </div>
-
-                              <div className="flex items-center gap-3 text-sm text-muted-foreground pt-2">
-                                <div className="flex items-center gap-1">
-                                  <Eye className="w-4 h-4" />
-                                  <span>{ad.views_count || 0}</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <MousePointer className="w-4 h-4" />
-                                  <span>{ad.clicks_count || 0}</span>
-                                </div>
-                              </div>
-
-                              <Button 
-                                onClick={() => setSelectedAd(ad)}
-                                className="w-full mt-2"
-                                variant="default"
-                              >
-                                <Sparkles className="w-4 h-4 ml-2" />
-                                קדם מודעה
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </TabsContent>
-
-              <TabsContent value="promoted" className="space-y-4 mt-6">
-                {promotedAds.length === 0 ? (
-                  <Card>
-                    <CardContent className="py-12 text-center">
-                      <p className="text-muted-foreground">אין מודעות מקודמות כרגע</p>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {promotedAds.map((ad) => (
-                      <Card key={`${ad.table_name}-${ad.id}`} className="border-2 border-primary/20">
-                        <CardContent className="p-6">
-                          <div className="flex gap-4">
-                            <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-muted relative">
-                              <Badge className="absolute top-1 right-1 z-10 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 text-xs">
-                                מקודם
-                              </Badge>
-                              {ad.images?.[0] ? (
-                                <img 
-                                  src={ad.images[0]} 
-                                  alt={ad.title}
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                  <Sparkles className="w-8 h-8 text-muted-foreground" />
-                                </div>
-                              )}
-                            </div>
-                            
-                            <div className="flex-1 space-y-2">
-                              <div>
-                                <Badge variant="secondary" className="mb-2">
-                                  {ad.category}
-                                </Badge>
-                                <h3 className="font-bold line-clamp-2">{ad.title}</h3>
-                              </div>
-                              
-                              <div className="flex items-center gap-2 text-sm">
-                                <Calendar className="w-4 h-4 text-primary" />
-                                <span>
-                                  נותרו {getDaysRemaining(ad.promotion_end_date!)} ימים
-                                </span>
-                              </div>
-
-                              <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                                <div className="flex items-center gap-1">
-                                  <Eye className="w-4 h-4" />
-                                  <span>{ad.promotion_impressions || 0} חשיפות</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <MousePointer className="w-4 h-4" />
-                                  <span>{ad.clicks_count || 0} קליקים</span>
-                                </div>
-                              </div>
-
-                              <Button 
-                                onClick={() => handleStopPromotion(ad)}
-                                className="w-full mt-2"
-                                variant="outline"
-                              >
-                                הפסק קידום
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </TabsContent>
-            </Tabs>
-          </div>
-        </div>
+    <div className="max-w-7xl mx-auto space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
+          <Sparkles className="w-8 h-8 text-primary" />
+          קידום מודעות
+        </h1>
+        <p className="text-muted-foreground text-lg">
+          קדם את המודעות שלך והגדל את החשיפה והמכירות
+        </p>
       </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">מודעות פעילות</CardTitle>
+            <TrendingUp className="w-4 h-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{ads.length}</div>
+            <p className="text-xs text-muted-foreground mt-1">סך המודעות</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">מודעות מקודמות</CardTitle>
+            <Sparkles className="w-4 h-4 text-amber-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{promotedAds.length}</div>
+            <p className="text-xs text-muted-foreground mt-1">פעילות כעת</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">חשיפות כוללות</CardTitle>
+            <Eye className="w-4 h-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {promotedAds.reduce((sum, ad) => sum + (ad.promotion_impressions || 0), 0)}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">במודעות מקודמות</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
+        <TabsList>
+          <TabsTrigger value="available">
+            מודעות זמינות לקידום ({availableAds.length})
+          </TabsTrigger>
+          <TabsTrigger value="promoted">
+            מודעות מקודמות ({promotedAds.length})
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="available" className="space-y-4 mt-6">
+          {loading ? (
+            <div className="text-center py-12">טוען מודעות...</div>
+          ) : availableAds.length === 0 ? (
+            <Card>
+              <CardContent className="py-12 text-center">
+                <p className="text-muted-foreground">אין מודעות זמינות לקידום</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {availableAds.map((ad) => (
+                <Card key={`${ad.table_name}-${ad.id}`} className="hover:shadow-lg transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex gap-4">
+                      <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-muted">
+                        {ad.images?.[0] ? (
+                          <img 
+                            src={ad.images[0]} 
+                            alt={ad.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Sparkles className="w-8 h-8 text-muted-foreground" />
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex-1 space-y-2">
+                        <div>
+                          <Badge variant="secondary" className="mb-2">
+                            {ad.category}
+                          </Badge>
+                          <h3 className="font-bold line-clamp-2">{ad.title}</h3>
+                        </div>
+                        
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          {ad.price && (
+                            <span className="font-semibold text-primary">
+                              ₪{typeof ad.price === 'number' ? ad.price.toLocaleString() : ad.price}
+                            </span>
+                          )}
+                          {ad.location && <span>{ad.location}</span>}
+                        </div>
+
+                        <div className="flex items-center gap-3 text-sm text-muted-foreground pt-2">
+                          <div className="flex items-center gap-1">
+                            <Eye className="w-4 h-4" />
+                            <span>{ad.views_count || 0}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <MousePointer className="w-4 h-4" />
+                            <span>{ad.clicks_count || 0}</span>
+                          </div>
+                        </div>
+
+                        <Button 
+                          onClick={() => setSelectedAd(ad)}
+                          className="w-full mt-2"
+                          variant="default"
+                        >
+                          <Sparkles className="w-4 h-4 ml-2" />
+                          קדם מודעה
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="promoted" className="space-y-4 mt-6">
+          {promotedAds.length === 0 ? (
+            <Card>
+              <CardContent className="py-12 text-center">
+                <p className="text-muted-foreground">אין מודעות מקודמות כרגע</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {promotedAds.map((ad) => (
+                <Card key={`${ad.table_name}-${ad.id}`} className="border-2 border-primary/20">
+                  <CardContent className="p-6">
+                    <div className="flex gap-4">
+                      <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-muted relative">
+                        <Badge className="absolute top-1 right-1 z-10 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 text-xs">
+                          מקודם
+                        </Badge>
+                        {ad.images?.[0] ? (
+                          <img 
+                            src={ad.images[0]} 
+                            alt={ad.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Sparkles className="w-8 h-8 text-muted-foreground" />
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex-1 space-y-2">
+                        <div>
+                          <Badge variant="secondary" className="mb-2">
+                            {ad.category}
+                          </Badge>
+                          <h3 className="font-bold line-clamp-2">{ad.title}</h3>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 text-sm">
+                          <Calendar className="w-4 h-4 text-primary" />
+                          <span>
+                            נותרו {getDaysRemaining(ad.promotion_end_date!)} ימים
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <Eye className="w-4 h-4" />
+                            <span>{ad.promotion_impressions || 0} חשיפות</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <MousePointer className="w-4 h-4" />
+                            <span>{ad.clicks_count || 0} קליקים</span>
+                          </div>
+                        </div>
+
+                        <Button 
+                          onClick={() => handleStopPromotion(ad)}
+                          className="w-full mt-2"
+                          variant="outline"
+                        >
+                          הפסק קידום
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
 
       {/* Promotion Package Dialog */}
       <Dialog open={!!selectedAd} onOpenChange={(open) => !open && setSelectedAd(null)}>
