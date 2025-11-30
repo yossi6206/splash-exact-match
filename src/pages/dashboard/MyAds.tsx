@@ -448,7 +448,7 @@ const MyAds = () => {
             </Card>
           ) : (
             <>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 min-h-[800px]">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {getPaginatedListings(listings).map(renderListingCard)}
               </div>
               {renderPagination(listings)}
@@ -470,7 +470,7 @@ const MyAds = () => {
                 </Card>
               ) : (
                 <>
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 min-h-[800px]">
+                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {getPaginatedListings(filteredListings).map(renderListingCard)}
                   </div>
                   {renderPagination(filteredListings)}
