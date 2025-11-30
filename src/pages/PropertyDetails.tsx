@@ -4,7 +4,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Heart, Share2, Home, MapPin, Bed, Square, Calendar, Shield, Phone, MessageSquare, Loader2 } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Heart, Share2, Home, MapPin, Bed, Square, Calendar, Shield, Phone, MessageSquare, Loader2, Maximize2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
@@ -20,6 +21,8 @@ const PropertyDetails = () => {
   const [property, setProperty] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showPhone, setShowPhone] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -89,6 +92,19 @@ const PropertyDetails = () => {
     await handleContactClick();
   };
 
+  const openGallery = (index: number) => {
+    setCurrentImageIndex(index);
+    setGalleryOpen(true);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background pb-20 md:pb-0">
@@ -126,25 +142,74 @@ const PropertyDetails = () => {
       <main className="container mx-auto px-4 py-6">
         {/* Image Gallery */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          <div className="aspect-video relative overflow-hidden rounded-lg">
+          <div className="aspect-video relative overflow-hidden rounded-lg group cursor-pointer" onClick={() => openGallery(0)}>
             <img 
               src={images[0]} 
               alt={property.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform group-hover:scale-105"
             />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <Button variant="secondary" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <Maximize2 className="h-4 w-4 ml-2" />
+                צפה בגלריה
+              </Button>
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             {images.slice(1, 5).map((img, i) => (
-              <div key={i} className="aspect-video relative overflow-hidden rounded-lg bg-muted">
+              <div 
+                key={i} 
+                className="aspect-video relative overflow-hidden rounded-lg bg-muted group cursor-pointer"
+                onClick={() => openGallery(i + 1)}
+              >
                 <img 
                   src={img} 
                   alt={`תמונה ${i + 2}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                  <Maximize2 className="h-5 w-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
               </div>
             ))}
           </div>
         </div>
+
+        {/* Image Gallery Dialog */}
+        <Dialog open={galleryOpen} onOpenChange={setGalleryOpen}>
+          <DialogContent className="max-w-4xl p-0">
+            <div className="relative bg-black">
+              <img 
+                src={images[currentImageIndex]} 
+                alt={`תמונה ${currentImageIndex + 1}`}
+                className="w-full h-[70vh] object-contain"
+              />
+              {images.length > 1 && (
+                <>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white"
+                    onClick={nextImage}
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white"
+                    onClick={prevImage}
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </Button>
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
+                    {currentImageIndex + 1} / {images.length}
+                  </div>
+                </>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-6">
           {/* Main Content */}
