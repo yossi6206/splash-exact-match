@@ -40,8 +40,30 @@ const SecondhandDetails = () => {
   useEffect(() => {
     if (id) {
       fetchItemDetails();
+      incrementViewCount();
     }
   }, [id]);
+
+  const incrementViewCount = async () => {
+    if (!id) return;
+    
+    try {
+      const { data: currentItem } = await supabase
+        .from("secondhand_items")
+        .select("views_count")
+        .eq("id", id)
+        .single();
+
+      if (currentItem) {
+        await supabase
+          .from("secondhand_items")
+          .update({ views_count: (currentItem.views_count || 0) + 1 })
+          .eq("id", id);
+      }
+    } catch (error) {
+      console.error("Error incrementing view count:", error);
+    }
+  };
 
   const fetchItemDetails = async () => {
     setLoading(true);
@@ -341,7 +363,27 @@ const SecondhandDetails = () => {
 
                 {/* Contact Buttons */}
                 <div className="space-y-3">
-                  <Button className="w-full" size="lg">
+                  <Button 
+                    className="w-full" 
+                    size="lg"
+                    onClick={async () => {
+                      if (item.seller_phone) {
+                        // Increment contacts count
+                        try {
+                          await supabase
+                            .from("secondhand_items")
+                            .update({ contacts_count: (item.contacts_count || 0) + 1 })
+                            .eq("id", id);
+                        } catch (error) {
+                          console.error("Error updating contacts count:", error);
+                        }
+                        
+                        window.open(`tel:${item.seller_phone}`, '_self');
+                      } else {
+                        toast.error("מספר טלפון לא זמין");
+                      }
+                    }}
+                  >
                     <Phone className="ml-2 h-5 w-5" />
                     צור קשר עם המוכר
                   </Button>
@@ -350,7 +392,29 @@ const SecondhandDetails = () => {
                       <Heart className="ml-2 h-5 w-5" />
                       שמור
                     </Button>
-                    <Button variant="outline" size="lg">
+                    <Button 
+                      variant="outline" 
+                      size="lg"
+                      onClick={async () => {
+                        try {
+                          await navigator.share({
+                            title: item.title,
+                            text: `${item.title} - ₪${item.price.toLocaleString()}`,
+                            url: window.location.href,
+                          });
+                          
+                          // Increment clicks count for share
+                          await supabase
+                            .from("secondhand_items")
+                            .update({ clicks_count: (item.clicks_count || 0) + 1 })
+                            .eq("id", id);
+                        } catch (error) {
+                          // Fallback for browsers that don't support share
+                          navigator.clipboard.writeText(window.location.href);
+                          toast.success("הקישור הועתק ללוח");
+                        }
+                      }}
+                    >
                       <Share2 className="ml-2 h-5 w-5" />
                       שתף
                     </Button>
