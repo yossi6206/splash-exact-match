@@ -3,8 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAuth } from "@/contexts/AuthContext";
-import { Loader2, Eye, EyeOff, User, Rocket, MessageCircle, Bell } from "lucide-react";
+import { Loader2, Eye, EyeOff, User, Rocket, MessageCircle, Bell, ShoppingCart, Store, Briefcase, Search } from "lucide-react";
 import { z } from "zod";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -36,6 +37,7 @@ const Auth = () => {
     email: "",
     password: "",
     fullName: "",
+    userType: "buyer" as "buyer" | "seller" | "freelancer" | "service_seeker",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -95,7 +97,7 @@ const Auth = () => {
     }
 
     setIsLoading(true);
-    await signUp(signupData.email, signupData.password, signupData.fullName);
+    await signUp(signupData.email, signupData.password, signupData.fullName, signupData.userType);
     setIsLoading(false);
   };
 
@@ -322,6 +324,44 @@ const Auth = () => {
                   {errors.signupPassword && (
                     <p className="text-sm text-destructive text-right">{errors.signupPassword}</p>
                   )}
+                </div>
+
+                <div className="space-y-3">
+                  <Label className="text-right block">אני מתכוון/ת:</Label>
+                  <RadioGroup
+                    value={signupData.userType}
+                    onValueChange={(value) => setSignupData({ ...signupData, userType: value as any })}
+                    className="space-y-2"
+                  >
+                    <div className="flex items-center justify-end space-x-2 space-x-reverse p-3 rounded-lg border-2 border-gray-200 dark:border-border hover:border-primary/50 transition-colors cursor-pointer">
+                      <Label htmlFor="buyer" className="flex-1 text-right cursor-pointer flex items-center justify-end gap-2">
+                        <span>לקנות מוצרים</span>
+                        <ShoppingCart className="w-4 h-4 text-muted-foreground" />
+                      </Label>
+                      <RadioGroupItem value="buyer" id="buyer" />
+                    </div>
+                    <div className="flex items-center justify-end space-x-2 space-x-reverse p-3 rounded-lg border-2 border-gray-200 dark:border-border hover:border-primary/50 transition-colors cursor-pointer">
+                      <Label htmlFor="seller" className="flex-1 text-right cursor-pointer flex items-center justify-end gap-2">
+                        <span>למכור ולפרסם מודעות</span>
+                        <Store className="w-4 h-4 text-muted-foreground" />
+                      </Label>
+                      <RadioGroupItem value="seller" id="seller" />
+                    </div>
+                    <div className="flex items-center justify-end space-x-2 space-x-reverse p-3 rounded-lg border-2 border-gray-200 dark:border-border hover:border-primary/50 transition-colors cursor-pointer">
+                      <Label htmlFor="freelancer" className="flex-1 text-right cursor-pointer flex items-center justify-end gap-2">
+                        <span>להציע שירותים כפרילנסר</span>
+                        <Briefcase className="w-4 h-4 text-muted-foreground" />
+                      </Label>
+                      <RadioGroupItem value="freelancer" id="freelancer" />
+                    </div>
+                    <div className="flex items-center justify-end space-x-2 space-x-reverse p-3 rounded-lg border-2 border-gray-200 dark:border-border hover:border-primary/50 transition-colors cursor-pointer">
+                      <Label htmlFor="service_seeker" className="flex-1 text-right cursor-pointer flex items-center justify-end gap-2">
+                        <span>לחפש בעלי מקצוע ושירותים</span>
+                        <Search className="w-4 h-4 text-muted-foreground" />
+                      </Label>
+                      <RadioGroupItem value="service_seeker" id="service_seeker" />
+                    </div>
+                  </RadioGroup>
                 </div>
 
                 <Button
