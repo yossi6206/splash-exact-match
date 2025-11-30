@@ -4,7 +4,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Heart, Share2, Home, MapPin, Bed, Square, Calendar, Shield, Phone, MessageSquare, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -125,53 +124,27 @@ const PropertyDetails = () => {
       <Header />
 
       <main className="container mx-auto px-4 py-6">
-        {/* Main Image */}
-        <div className="mb-6">
-          <div className="relative rounded-2xl overflow-hidden bg-muted">
+        {/* Image Gallery */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <div className="aspect-video relative overflow-hidden rounded-lg">
             <img 
               src={images[0]} 
               alt={property.title}
-              className="w-full h-[500px] object-cover"
+              className="w-full h-full object-cover"
             />
-            <div className="absolute top-4 left-4 flex gap-2">
-              <Button 
-                variant="outline"
-                size="icon" 
-                className="rounded-full border-2"
-                onClick={handleFavorite}
-              >
-                <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-              </Button>
-              <Button 
-                size="icon" 
-                className="bg-white/90 hover:bg-white text-foreground rounded-full"
-              >
-                <Share2 className="h-5 w-5" />
-              </Button>
-            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {images.slice(1, 5).map((img, i) => (
+              <div key={i} className="aspect-video relative overflow-hidden rounded-lg bg-muted">
+                <img 
+                  src={img} 
+                  alt={`תמונה ${i + 2}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
           </div>
         </div>
-
-        {/* Image Gallery */}
-        {images.length > 1 && (
-          <div className="mb-6">
-            <h2 className="text-xl font-bold mb-4">גלריית תמונות</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {images.map((img, index) => (
-                <div 
-                  key={index}
-                  className="relative rounded-lg overflow-hidden aspect-video cursor-pointer hover:opacity-80 transition-opacity"
-                >
-                  <img 
-                    src={img} 
-                    alt={`תמונה ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-6">
           {/* Main Content */}
