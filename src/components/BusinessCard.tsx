@@ -55,7 +55,7 @@ const BusinessCard = ({
   };
 
   return (
-    <Link to={`/business/${id}`} onClick={handleClick}>
+    <Link to={`/businesses/${id}`} onClick={handleClick}>
       <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden border-2 hover:border-primary/50">
         {/* Image */}
         <div className="relative h-52 overflow-hidden bg-muted">
