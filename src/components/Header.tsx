@@ -629,22 +629,22 @@ const Header = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <div className="px-2 py-1.5 text-sm font-semibold">
+                  <div className="px-2 py-1.5 text-sm font-semibold text-right">
                     {user.email}
                   </div>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer" onClick={() => navigate("/dashboard")}>
-                    <LayoutDashboard className="ml-2 h-4 w-4" />
+                  <DropdownMenuItem className="cursor-pointer flex items-center justify-between" onClick={() => navigate("/dashboard")}>
                     <span>לוח הבקרה</span>
+                    <LayoutDashboard className="h-4 w-4" />
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">
-                    <Settings className="ml-2 h-4 w-4" />
+                  <DropdownMenuItem className="cursor-pointer flex items-center justify-between">
                     <span>הגדרות</span>
+                    <Settings className="h-4 w-4" />
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer text-destructive" onClick={signOut}>
-                    <LogOut className="ml-2 h-4 w-4" />
+                  <DropdownMenuItem className="cursor-pointer text-destructive flex items-center justify-between" onClick={signOut}>
                     <span>התנתק</span>
+                    <LogOut className="h-4 w-4" />
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
