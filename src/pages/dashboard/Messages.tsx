@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { ConversationsList } from "@/components/ConversationsList";
 import { FreelancerChat } from "@/components/FreelancerChat";
@@ -17,6 +18,7 @@ interface Conversation {
 
 export default function Messages() {
   const { user } = useAuth();
+  const location = useLocation();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<{
     conversationId: string;
@@ -25,6 +27,24 @@ export default function Messages() {
     freelancerAvatar: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Check if we were navigated here with a specific freelancer
+  useEffect(() => {
+    const state = location.state as {
+      freelancerId?: string;
+      freelancerName?: string;
+      freelancerAvatar?: string;
+    };
+
+    if (state?.freelancerId && user) {
+      // Initialize conversation with the specified freelancer
+      initializeSpecificConversation(
+        state.freelancerId,
+        state.freelancerName || "פרילנסר",
+        state.freelancerAvatar || null
+      );
+    }
+  }, [location.state, user]);
 
   useEffect(() => {
     if (user) {
@@ -160,6 +180,58 @@ export default function Messages() {
     return () => {
       supabase.removeChannel(channel);
     };
+  };
+
+  const initializeSpecificConversation = async (
+    freelancerId: string,
+    freelancerName: string,
+    freelancerAvatar: string | null
+  ) => {
+    if (!user) return;
+
+    try {
+      // Check if conversation exists
+      const { data: existingConv, error: convError } = await supabase
+        .from("conversations")
+        .select("id")
+        .eq("client_id", user.id)
+        .eq("freelancer_id", freelancerId)
+        .maybeSingle();
+
+      if (convError && convError.code !== "PGRST116") {
+        throw convError;
+      }
+
+      let conversationId = existingConv?.id;
+
+      if (!conversationId) {
+        // Create new conversation
+        const { data: newConv, error: createError } = await supabase
+          .from("conversations")
+          .insert({
+            client_id: user.id,
+            freelancer_id: freelancerId,
+          })
+          .select("id")
+          .single();
+
+        if (createError) throw createError;
+        conversationId = newConv.id;
+      }
+
+      // Set the selected conversation
+      setSelectedConversation({
+        conversationId,
+        freelancerId,
+        freelancerName,
+        freelancerAvatar,
+      });
+
+      // Reload conversations to show the new one in the list
+      loadConversations();
+    } catch (error) {
+      console.error("Error initializing specific conversation:", error);
+    }
   };
 
   const handleSelectConversation = (
