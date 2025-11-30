@@ -26,6 +26,8 @@ interface SecondhandCardProps {
     year_manufactured?: number;
     dimensions?: string;
     weight?: string;
+    user_id?: string;
+    seller_name?: string;
   };
 }
 
@@ -192,6 +194,21 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
             <MapPin className="h-3.5 w-3.5" />
             <span>{item.location}</span>
           </div>
+
+          {/* Seller Link */}
+          {item.user_id && item.seller_name && (
+            <div 
+              className="text-xs text-muted-foreground hover:text-primary transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              <Link to={`/seller/${item.user_id}`} className="flex items-center gap-1">
+                <span>מוכר: {item.seller_name}</span>
+              </Link>
+            </div>
+          )}
 
           {/* Price */}
           <div className="pt-2 border-t">
