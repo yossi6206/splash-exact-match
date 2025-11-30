@@ -1,0 +1,163 @@
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Building2, MapPin, TrendingUp, Users, Phone, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+
+interface BusinessCardProps {
+  id: string;
+  title: string;
+  description?: string;
+  business_type: string;
+  category: string;
+  price: number;
+  location: string;
+  annual_revenue?: number;
+  monthly_profit?: number;
+  years_operating?: number;
+  employees_count?: number;
+  images?: string[];
+  clicks_count?: number;
+}
+
+const BusinessCard = ({
+  id,
+  title,
+  description,
+  business_type,
+  category,
+  price,
+  location,
+  annual_revenue,
+  monthly_profit,
+  years_operating,
+  employees_count,
+  images,
+  clicks_count = 0,
+}: BusinessCardProps) => {
+  const handleClick = async () => {
+    try {
+      await supabase
+        .from("businesses")
+        .update({ clicks_count: clicks_count + 1 })
+        .eq("id", id);
+    } catch (error) {
+      console.error("Error updating clicks:", error);
+    }
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("he-IL", {
+      style: "currency",
+      currency: "ILS",
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  return (
+    <Link to={`/business/${id}`} onClick={handleClick}>
+      <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden border-2 hover:border-primary/50">
+        {/* Image */}
+        <div className="relative h-52 overflow-hidden bg-muted">
+          {images && images.length > 0 ? (
+            <img
+              src={images[0]}
+              alt={title}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Building2 className="w-16 h-16 text-muted-foreground/30" />
+            </div>
+          )}
+          <div className="absolute top-3 right-3">
+            <Badge className="bg-primary/90 backdrop-blur-sm">
+              {category}
+            </Badge>
+          </div>
+          {years_operating && (
+            <div className="absolute top-3 left-3">
+              <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">
+                {years_operating} שנים
+              </Badge>
+            </div>
+          )}
+        </div>
+
+        <CardContent className="p-5">
+          {/* Title & Type */}
+          <div className="space-y-2 mb-4">
+            <h3 className="text-xl font-bold text-foreground line-clamp-1 group-hover:text-primary transition-colors">
+              {title}
+            </h3>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Building2 className="w-4 h-4" />
+              <span>{business_type}</span>
+            </div>
+          </div>
+
+          {/* Description */}
+          {description && (
+            <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+              {description}
+            </p>
+          )}
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            {annual_revenue && (
+              <div className="flex items-center gap-2 text-sm">
+                <TrendingUp className="w-4 h-4 text-primary" />
+                <div>
+                  <div className="text-xs text-muted-foreground">מחזור שנתי</div>
+                  <div className="font-semibold">{formatPrice(annual_revenue)}</div>
+                </div>
+              </div>
+            )}
+            {monthly_profit && (
+              <div className="flex items-center gap-2 text-sm">
+                <TrendingUp className="w-4 h-4 text-green-500" />
+                <div>
+                  <div className="text-xs text-muted-foreground">רווח חודשי</div>
+                  <div className="font-semibold">{formatPrice(monthly_profit)}</div>
+                </div>
+              </div>
+            )}
+            {employees_count && (
+              <div className="flex items-center gap-2 text-sm">
+                <Users className="w-4 h-4 text-primary" />
+                <div>
+                  <div className="text-xs text-muted-foreground">עובדים</div>
+                  <div className="font-semibold">{employees_count}</div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Location */}
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+            <MapPin className="w-4 h-4" />
+            <span>{location}</span>
+          </div>
+        </CardContent>
+
+        <CardFooter className="p-5 pt-0 flex items-center justify-between border-t">
+          <div>
+            <div className="text-2xl font-bold text-primary">
+              {formatPrice(price)}
+            </div>
+            <div className="text-xs text-muted-foreground">מחיר מבוקש</div>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Eye className="w-4 h-4" />
+              <span>{clicks_count || 0}</span>
+            </div>
+          </div>
+        </CardFooter>
+      </Card>
+    </Link>
+  );
+};
+
+export default BusinessCard;
