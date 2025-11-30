@@ -59,9 +59,9 @@ const Statistics = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [dataType, setDataType] = useState<string>("all");
 
-  const { count: viewsCount, elementRef: viewsRef } = useCountUp({ end: totalViews, duration: 2000 });
-  const { count: clicksCount, elementRef: clicksRef } = useCountUp({ end: totalClicks, duration: 2000 });
-  const { count: contactsCount, elementRef: contactsRef } = useCountUp({ end: totalContacts, duration: 2000 });
+  const { count: viewsCount, elementRef: viewsRef } = useCountUp({ end: totalViews, duration: 2000, startOnView: false });
+  const { count: clicksCount, elementRef: clicksRef } = useCountUp({ end: totalClicks, duration: 2000, startOnView: false });
+  const { count: contactsCount, elementRef: contactsRef } = useCountUp({ end: totalContacts, duration: 2000, startOnView: false });
 
   useEffect(() => {
     if (user) {
