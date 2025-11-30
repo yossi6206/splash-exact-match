@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { Eye, MousePointer, Phone, TrendingUp, Car, Home, Laptop, Briefcase, Loader2, Calendar as CalendarIcon, Filter, X, Package, Users, Download } from "lucide-react";
+import { Eye, MousePointer, Phone, TrendingUp, Car, Home, Laptop, Briefcase, Loader2, Calendar as CalendarIcon, Filter, X, Package, Users, Download, Zap, BarChart as BarChartIcon, MessageSquare, MousePointerClick } from "lucide-react";
 import * as XLSX from 'xlsx';
 import { useAuth } from "@/contexts/AuthContext";
 import { useCountUp } from "@/hooks/useCountUp";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +26,8 @@ interface AdStats {
   contacts: number;
   conversion: number;
   created_at: string;
+  isPromoted?: boolean;
+  promotionImpressions?: number;
 }
 
 interface CategoryStats {
@@ -53,12 +56,15 @@ const Statistics = () => {
   const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
   const [topAds, setTopAds] = useState<AdStats[]>([]);
   const [timeSeriesData, setTimeSeriesData] = useState<TimeSeriesData[]>([]);
+  const [promotedAdsCount, setPromotedAdsCount] = useState(0);
+  const [totalPromotionImpressions, setTotalPromotionImpressions] = useState(0);
   
   // Filters
   const [dateFrom, setDateFrom] = useState<Date>();
   const [dateTo, setDateTo] = useState<Date>();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [dataType, setDataType] = useState<string>("all");
+  const [showPromotedOnly, setShowPromotedOnly] = useState<boolean>(false);
 
   const { count: viewsCount, elementRef: viewsRef } = useCountUp({ end: totalViews, duration: 2000, startOnView: false });
   const { count: clicksCount, elementRef: clicksRef } = useCountUp({ end: totalClicks, duration: 2000, startOnView: false });
@@ -68,7 +74,7 @@ const Statistics = () => {
     if (user) {
       fetchStatistics();
     }
-  }, [user, dateFrom, dateTo, selectedCategory, dataType]);
+  }, [user, dateFrom, dateTo, selectedCategory, dataType, showPromotedOnly]);
 
   const fetchStatistics = async () => {
     try {
@@ -77,37 +83,37 @@ const Statistics = () => {
       // Fetch cars data
       const { data: cars } = await supabase
         .from("cars")
-        .select("id, model, manufacturer, views_count, clicks_count, contacts_count, created_at")
+        .select("id, model, manufacturer, views_count, clicks_count, contacts_count, created_at, is_promoted, promotion_impressions")
         .eq("user_id", user?.id);
 
       // Fetch properties data
       const { data: properties } = await supabase
         .from("properties")
-        .select("id, title, views_count, clicks_count, contacts_count, created_at")
+        .select("id, title, views_count, clicks_count, contacts_count, created_at, is_promoted, promotion_impressions")
         .eq("user_id", user?.id);
 
       // Fetch laptops data
       const { data: laptops } = await supabase
         .from("laptops")
-        .select("id, model, brand, views_count, clicks_count, contacts_count, created_at")
+        .select("id, model, brand, views_count, clicks_count, contacts_count, created_at, is_promoted, promotion_impressions")
         .eq("user_id", user?.id);
 
       // Fetch jobs data
       const { data: jobs } = await supabase
         .from("jobs")
-        .select("id, title, views_count, clicks_count, contacts_count, created_at")
+        .select("id, title, views_count, clicks_count, contacts_count, created_at, is_promoted, promotion_impressions")
         .eq("user_id", user?.id);
 
       // Fetch secondhand items data
       const { data: secondhand } = await supabase
         .from("secondhand_items")
-        .select("id, title, views_count, clicks_count, contacts_count, created_at")
+        .select("id, title, views_count, clicks_count, contacts_count, created_at, is_promoted, promotion_impressions")
         .eq("user_id", user?.id);
 
       // Fetch freelancers data
       const { data: freelancers } = await supabase
         .from("freelancers")
-        .select("id, title, full_name, views_count, clicks_count, contacts_count, created_at")
+        .select("id, title, full_name, views_count, clicks_count, contacts_count, created_at, is_promoted, promotion_impressions")
         .eq("user_id", user?.id);
 
       console.log("Data fetched:", { 
@@ -129,7 +135,9 @@ const Statistics = () => {
           clicks: c.clicks_count || 0,
           contacts: c.contacts_count || 0,
           conversion: c.views_count ? ((c.contacts_count || 0) / c.views_count * 100) : 0,
-          created_at: c.created_at
+          created_at: c.created_at,
+          isPromoted: c.is_promoted || false,
+          promotionImpressions: c.promotion_impressions || 0
         })),
         ...(properties || []).map(p => ({
           id: p.id,
@@ -139,7 +147,9 @@ const Statistics = () => {
           clicks: p.clicks_count || 0,
           contacts: p.contacts_count || 0,
           conversion: p.views_count ? ((p.contacts_count || 0) / p.views_count * 100) : 0,
-          created_at: p.created_at
+          created_at: p.created_at,
+          isPromoted: p.is_promoted || false,
+          promotionImpressions: p.promotion_impressions || 0
         })),
         ...(laptops || []).map(l => ({
           id: l.id,
@@ -149,7 +159,9 @@ const Statistics = () => {
           clicks: l.clicks_count || 0,
           contacts: l.contacts_count || 0,
           conversion: l.views_count ? ((l.contacts_count || 0) / l.views_count * 100) : 0,
-          created_at: l.created_at
+          created_at: l.created_at,
+          isPromoted: l.is_promoted || false,
+          promotionImpressions: l.promotion_impressions || 0
         })),
         ...(jobs || []).map(j => ({
           id: j.id,
@@ -159,7 +171,9 @@ const Statistics = () => {
           clicks: j.clicks_count || 0,
           contacts: j.contacts_count || 0,
           conversion: j.views_count ? ((j.contacts_count || 0) / j.views_count * 100) : 0,
-          created_at: j.created_at
+          created_at: j.created_at,
+          isPromoted: j.is_promoted || false,
+          promotionImpressions: j.promotion_impressions || 0
         })),
         ...(secondhand || []).map(s => ({
           id: s.id,
@@ -169,7 +183,9 @@ const Statistics = () => {
           clicks: s.clicks_count || 0,
           contacts: s.contacts_count || 0,
           conversion: s.views_count ? ((s.contacts_count || 0) / s.views_count * 100) : 0,
-          created_at: s.created_at
+          created_at: s.created_at,
+          isPromoted: s.is_promoted || false,
+          promotionImpressions: s.promotion_impressions || 0
         })),
         ...(freelancers || []).map(f => ({
           id: f.id,
@@ -179,9 +195,16 @@ const Statistics = () => {
           clicks: f.clicks_count || 0,
           contacts: f.contacts_count || 0,
           conversion: f.views_count ? ((f.contacts_count || 0) / f.views_count * 100) : 0,
-          created_at: f.created_at
+          created_at: f.created_at,
+          isPromoted: f.is_promoted || false,
+          promotionImpressions: f.promotion_impressions || 0
         }))
       ];
+
+      // Calculate promoted ads statistics (before filters)
+      const promotedAds = allAds.filter(ad => ad.isPromoted);
+      setPromotedAdsCount(promotedAds.length);
+      setTotalPromotionImpressions(promotedAds.reduce((sum, ad) => sum + (ad.promotionImpressions || 0), 0));
 
       // Apply date filters
       if (dateFrom) {
@@ -194,6 +217,11 @@ const Statistics = () => {
       // Apply category filter
       if (selectedCategory !== "all") {
         allAds = allAds.filter(ad => ad.category === selectedCategory);
+      }
+
+      // Apply promoted filter
+      if (showPromotedOnly) {
+        allAds = allAds.filter(ad => ad.isPromoted);
       }
 
       // Calculate totals
@@ -284,6 +312,7 @@ const Statistics = () => {
     setDateTo(undefined);
     setSelectedCategory("all");
     setDataType("all");
+    setShowPromotedOnly(false);
   };
 
   const exportToExcel = () => {
@@ -363,7 +392,7 @@ const Statistics = () => {
     XLSX.writeFile(wb, fileName, { bookType: 'xlsx', type: 'binary' });
   };
 
-  const hasActiveFilters = dateFrom || dateTo || selectedCategory !== "all" || dataType !== "all";
+  const hasActiveFilters = dateFrom || dateTo || selectedCategory !== "all" || dataType !== "all" || showPromotedOnly;
 
   if (loading) {
     return (
@@ -498,6 +527,19 @@ const Statistics = () => {
             </div>
           </div>
 
+          {/* Promoted Ads Filter */}
+          <div className="flex items-center space-x-2 space-x-reverse pt-4 border-t">
+            <Switch
+              checked={showPromotedOnly}
+              onCheckedChange={setShowPromotedOnly}
+              id="promoted-filter"
+            />
+            <label htmlFor="promoted-filter" className="text-sm font-medium cursor-pointer flex items-center gap-2">
+              <Zap className="h-4 w-4 text-primary" />
+              הצג מודעות מקודמות בלבד
+            </label>
+          </div>
+
           {/* Active Filters Display */}
           {hasActiveFilters && (
             <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t">
@@ -520,10 +562,17 @@ const Statistics = () => {
                   <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedCategory("all")} />
                 </Badge>
               )}
-              {dataType !== "all" && (
+               {dataType !== "all" && (
                 <Badge variant="secondary" className="gap-1">
                   {dataType === "views" ? "צפיות" : dataType === "clicks" ? "לחיצות" : "פניות"}
                   <X className="h-3 w-3 cursor-pointer" onClick={() => setDataType("all")} />
+                </Badge>
+              )}
+              {showPromotedOnly && (
+                <Badge variant="secondary" className="gap-1 bg-primary/10 text-primary border-primary/30">
+                  <Zap className="h-3 w-3" />
+                  מודעות מקודמות
+                  <X className="h-3 w-3 cursor-pointer" onClick={() => setShowPromotedOnly(false)} />
                 </Badge>
               )}
             </div>
@@ -532,7 +581,7 @@ const Statistics = () => {
       </Card>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950 dark:to-blue-900/50 border-blue-200 dark:border-blue-800">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">סך צפיות</CardTitle>
@@ -545,8 +594,8 @@ const Statistics = () => {
 
         <Card className="bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950 dark:to-purple-900/50 border-purple-200 dark:border-purple-800">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">סך לחיצות</CardTitle>
-            <MousePointer className="h-5 w-5 text-purple-600" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">סך קליקים</CardTitle>
+            <MousePointerClick className="h-5 w-5 text-purple-600" />
           </CardHeader>
           <CardContent>
             <div ref={clicksRef} className="text-3xl font-bold text-foreground">{clicksCount.toLocaleString()}</div>
@@ -556,7 +605,7 @@ const Statistics = () => {
         <Card className="bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950 dark:to-green-900/50 border-green-200 dark:border-green-800">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">סך פניות</CardTitle>
-            <Phone className="h-5 w-5 text-green-600" />
+            <MessageSquare className="h-5 w-5 text-green-600" />
           </CardHeader>
           <CardContent>
             <div ref={contactsRef} className="text-3xl font-bold text-foreground">{contactsCount.toLocaleString()}</div>
@@ -570,6 +619,26 @@ const Statistics = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-foreground">{conversionRate.toFixed(1)}%</div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">מודעות מקודמות</CardTitle>
+            <Zap className="h-5 w-5 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-primary">{promotedAdsCount}</div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">חשיפות קידום</CardTitle>
+            <BarChartIcon className="h-5 w-5 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-primary">{totalPromotionImpressions.toLocaleString()}</div>
           </CardContent>
         </Card>
       </div>
