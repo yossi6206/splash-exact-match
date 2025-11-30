@@ -1,6 +1,6 @@
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package, Building2 } from "lucide-react";
+import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package, Building2, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavLink } from "@/components/NavLink";
@@ -13,6 +13,7 @@ import PostProperty from "./dashboard/PostProperty";
 import PostLaptop from "./dashboard/PostLaptop";
 import PostSecondhand from "./dashboard/PostSecondhand";
 import PostBusiness from "./dashboard/PostBusiness";
+import PostFreelancer from "./dashboard/PostFreelancer";
 import MyAds from "./dashboard/MyAds";
 import Statistics from "./dashboard/Statistics";
 
@@ -33,6 +34,7 @@ const Dashboard = () => {
     { title: "פרסם מחשב", icon: Plus, path: "/dashboard/post-laptop" },
     { title: "פרסם יד שנייה", icon: Plus, path: "/dashboard/post-secondhand" },
     { title: "פרסם עסק", icon: Plus, path: "/dashboard/post-business" },
+    { title: "פרסם פרופיל פרילנסר", icon: Plus, path: "/dashboard/post-freelancer" },
     { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile" },
     { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats" },
     { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved" },
@@ -239,6 +241,20 @@ const Dashboard = () => {
                           </div>
                         </Card>
                       </Link>
+                      
+                      <Link to="/dashboard/post-freelancer">
+                        <Card className="p-5 hover:shadow-lg transition-all cursor-pointer group hover:border-primary/50 bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 group-hover:scale-110 transition-transform shrink-0">
+                              <User className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="flex-1 text-right">
+                              <h4 className="font-bold text-foreground mb-1">פרסם פרופיל פרילנסר</h4>
+                              <p className="text-sm text-muted-foreground">הצג את כישוריך וקבל הצעות עבודה</p>
+                            </div>
+                          </div>
+                        </Card>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -291,6 +307,7 @@ const Dashboard = () => {
             <Route path="/post-laptop" element={<PostLaptop />} />
             <Route path="/post-secondhand" element={<PostSecondhand />} />
             <Route path="/post-business" element={<PostBusiness />} />
+            <Route path="/post-freelancer" element={<PostFreelancer />} />
             <Route path="/stats" element={<Statistics />} />
           </Routes>
         </main>

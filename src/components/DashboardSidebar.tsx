@@ -17,6 +17,7 @@ import {
 const menuItems = [
   { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
   { title: "הודעות", icon: MessageSquare, path: "/messages" },
+  { title: "פרסם פרופיל פרילנסר", icon: Edit3, path: "/dashboard/post-freelancer" },
   { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile" },
   { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats" },
   { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved" },
