@@ -1,9 +1,14 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Star, MapPin, Clock, Award } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Star, MapPin, Clock, Award, MessageCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import FreelancerChat from "./FreelancerChat";
+import { useOnlineStatus } from "@/hooks/useOnlineStatus";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface FreelancerCardProps {
   id: string;
@@ -17,6 +22,7 @@ interface FreelancerCardProps {
   total_reviews: number;
   location?: string;
   category: string;
+  user_id: string;
 }
 
 const FreelancerCard = ({
@@ -31,7 +37,14 @@ const FreelancerCard = ({
   total_reviews,
   location,
   category,
+  user_id,
 }: FreelancerCardProps) => {
+  const [chatOpen, setChatOpen] = useState(false);
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const { isOnline } = useOnlineStatus(user_id);
+
   const getInitials = (name: string) => {
     const parts = name.split(" ");
     return parts.length > 1
@@ -39,18 +52,45 @@ const FreelancerCard = ({
       : name.substring(0, 2).toUpperCase();
   };
 
+  const handleChatClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!user) {
+      toast({
+        title: "נדרשת התחברות",
+        description: "אנא התחבר כדי לשלוח הודעה לבעל המקצוע",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+
+    setChatOpen(true);
+  };
+
   return (
-    <Link to={`/freelancers/${id}`} className="block">
-      <Card className="h-full overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.01] border hover:border-primary/20 cursor-pointer">
-        <CardContent className="p-3.5">
-          {/* Header with Avatar and Basic Info */}
-          <div className="flex items-start gap-3 mb-3 pb-3 border-b">
-            <Avatar className="w-11 h-11 ring-2 ring-primary/10 shrink-0">
-              <AvatarImage src={avatar_url} alt={full_name} />
-              <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
-                {getInitials(full_name)}
-              </AvatarFallback>
-            </Avatar>
+    <>
+      <Link to={`/freelancers/${id}`} className="block">
+        <Card className="h-full overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.01] border hover:border-primary/20 cursor-pointer">
+          <CardContent className="p-3.5">
+            {/* Header with Avatar and Basic Info */}
+            <div className="flex items-start gap-3 mb-3 pb-3 border-b">
+              <div className="relative">
+                <Avatar className="w-11 h-11 ring-2 ring-primary/10 shrink-0">
+                  <AvatarImage src={avatar_url} alt={full_name} />
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
+                    {getInitials(full_name)}
+                  </AvatarFallback>
+                </Avatar>
+                {/* Online Status Indicator */}
+                <div
+                  className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background ${
+                    isOnline ? "bg-green-500" : "bg-gray-400"
+                  }`}
+                  title={isOnline ? "מחובר כעת" : "לא מחובר"}
+                />
+              </div>
             
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-base mb-0.5 truncate text-foreground">
@@ -124,15 +164,25 @@ const FreelancerCard = ({
             </div>
             <Button 
               size="sm" 
-              className="px-3 h-7 text-xs"
-              onClick={(e) => e.preventDefault()}
+              className="px-3 h-7 text-xs gap-1.5"
+              onClick={handleChatClick}
             >
-              צור קשר
+              <MessageCircle className="w-3.5 h-3.5" />
+              צ'אט
             </Button>
           </div>
         </CardContent>
       </Card>
     </Link>
+
+    <FreelancerChat
+      freelancerId={id}
+      freelancerName={full_name}
+      freelancerAvatar={avatar_url}
+      isOpen={chatOpen}
+      onClose={() => setChatOpen(false)}
+    />
+  </>
   );
 };
 
