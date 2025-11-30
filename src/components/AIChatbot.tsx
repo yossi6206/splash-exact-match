@@ -112,7 +112,7 @@ const AIChatbot = () => {
       {/* Chat Button */}
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 left-6 z-50 h-14 w-14 rounded-full shadow-lg"
+        className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full shadow-lg"
         size="icon"
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
@@ -120,7 +120,7 @@ const AIChatbot = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 left-6 z-50 w-96 h-[500px] bg-background border border-border rounded-lg shadow-2xl flex flex-col">
+        <div className="fixed bottom-24 right-6 z-50 w-96 h-[500px] bg-background border border-border rounded-lg shadow-2xl flex flex-col">
           {/* Header */}
           <div className="p-4 border-b border-border bg-primary/5">
             <h3 className="font-semibold text-lg">עוזר AI</h3>
