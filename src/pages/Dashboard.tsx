@@ -1,6 +1,6 @@
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package, Building2, User, PlusCircle } from "lucide-react";
+import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package, Building2, User, PlusCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavLink } from "@/components/NavLink";
@@ -88,6 +88,12 @@ const Dashboard = () => {
               </nav>
 
               <div className="space-y-2 pt-4 border-t">
+                <Link to="/">
+                  <Button variant="outline" className="w-full justify-between border-border hover:bg-muted">
+                    <span>חזרה לדף הבית</span>
+                    <Home className="h-4 w-4" />
+                  </Button>
+                </Link>
                 <Button variant="outline" className="w-full justify-between border-border hover:bg-muted">
                   <span>צור קשר</span>
                   <Phone className="h-4 w-4" />
@@ -100,13 +106,21 @@ const Dashboard = () => {
             </SheetContent>
           </Sheet>
 
-          <Link to="/" className="flex items-center">
-            <div className="flex h-10 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary">
-              <span className="text-xl font-extrabold text-primary-foreground">
-                yad2
-              </span>
-            </div>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link to="/" className="flex items-center">
+              <div className="flex h-10 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary">
+                <span className="text-xl font-extrabold text-primary-foreground">
+                  yad2
+                </span>
+              </div>
+            </Link>
+            <Link to="/">
+              <Button variant="ghost" size="sm" className="gap-1">
+                <ArrowRight className="h-4 w-4" />
+                <span className="text-sm">לדף הבית</span>
+              </Button>
+            </Link>
+          </div>
 
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon">
