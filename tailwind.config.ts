@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Rubik', 'Assistant', 'system-ui', 'sans-serif'],
-        display: ['Assistant', 'Rubik', 'sans-serif'],
+        sans: ['Rubik', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
+        display: ['Rubik', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
