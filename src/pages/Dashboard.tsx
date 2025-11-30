@@ -16,6 +16,7 @@ import PostBusiness from "./dashboard/PostBusiness";
 import PostFreelancer from "./dashboard/PostFreelancer";
 import MyAds from "./dashboard/MyAds";
 import Statistics from "./dashboard/Statistics";
+import PromoteAds from "./dashboard/PromoteAds";
 
 const Dashboard = () => {
   const stats = [
@@ -309,6 +310,7 @@ const Dashboard = () => {
             <Route path="/post-business" element={<PostBusiness />} />
             <Route path="/post-freelancer" element={<PostFreelancer />} />
             <Route path="/stats" element={<Statistics />} />
+            <Route path="/promote" element={<PromoteAds />} />
           </Routes>
         </main>
       </div>
