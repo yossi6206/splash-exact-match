@@ -109,6 +109,15 @@ const Statistics = () => {
         .select("id, title, full_name, total_reviews, created_at")
         .eq("user_id", user?.id);
 
+      console.log("Data fetched:", { 
+        cars: cars?.length, 
+        properties: properties?.length,
+        laptops: laptops?.length,
+        jobs: jobs?.length,
+        secondhand: secondhand?.length,
+        freelancers: freelancers?.length
+      });
+
       // Process all ads and apply filters
       let allAds: AdStats[] = [
         ...(cars || []).map(c => ({
@@ -190,6 +199,8 @@ const Statistics = () => {
       const views = allAds.reduce((sum, ad) => sum + ad.views, 0);
       const clicks = allAds.reduce((sum, ad) => sum + ad.clicks, 0);
       const contacts = allAds.reduce((sum, ad) => sum + ad.contacts, 0);
+      
+      console.log("Calculated totals:", { views, clicks, contacts, adsCount: allAds.length });
       
       setTotalViews(views);
       setTotalClicks(clicks);
