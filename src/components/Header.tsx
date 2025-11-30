@@ -266,6 +266,35 @@ const megaMenuData: MegaMenuData = {
         items: ["עריכת וידאו", "אנימציה", "עיבוד תמונות", "הקלטת אולפן", "מוזיקה"]
       }
     ]
+  },
+  "עסקים למכירה": {
+    columns: [
+      {
+        title: "מסעדות ובתי קפה",
+        icon: Building2,
+        items: ["מסעדות", "בתי קפה", "בר", "פאב", "מזון רחוב"]
+      },
+      {
+        title: "קמעונאות",
+        icon: Briefcase,
+        items: ["חנויות בגדים", "חנויות מזון", "סופרמרקט", "חנויות ספורט", "חנויות אלקטרוניקה"]
+      },
+      {
+        title: "שירותים",
+        icon: Settings2,
+        items: ["מספרות", "מכוני יופי", "חדר כושר", "מרכז רפואי", "שירותי ניקיון"]
+      },
+      {
+        title: "טכנולוגיה",
+        icon: Code,
+        items: ["חברות הייטק", "סטארטאפים", "חברות תוכנה", "עסקים דיגיטליים", "אי-קומרס"]
+      },
+      {
+        title: "תעשייה וייצור",
+        icon: Settings,
+        items: ["בתי מלאכה", "מפעלי ייצור", "חברות בנייה", "עסקי ייבוא", "עסקי יצוא"]
+      }
+    ]
   }
 };
 
@@ -550,9 +579,44 @@ const Header = () => {
                 )}
               </div>
 
-              <Button variant="ghost" className="text-sm font-medium" asChild>
-                <Link to="/businesses">עסקים למכירה</Link>
-              </Button>
+              <div 
+                className="relative"
+                onMouseEnter={() => setHoveredMenu("עסקים למכירה")}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <Button variant="ghost" className="text-sm font-medium" asChild>
+                  <Link to="/businesses">עסקים למכירה</Link>
+                </Button>
+                
+                {hoveredMenu === "עסקים למכירה" && megaMenuData["עסקים למכירה"] && (
+                  <div className="absolute top-full right-0 pt-2 z-50">
+                    <div className="bg-white border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)' }}>
+                      <div className="grid grid-cols-5 gap-6">
+                        {megaMenuData["עסקים למכירה"].columns.map((column, index) => (
+                          <div key={index}>
+                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20 group">
+                              <column.icon className="h-4 w-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
+                              <h3 className="transition-colors group-hover:text-primary/80 whitespace-nowrap">{column.title}</h3>
+                            </div>
+                            <ul className="space-y-1.5">
+                              {column.items.map((item, itemIndex) => (
+                                <li key={itemIndex}>
+                                  <a 
+                                    href="#" 
+                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
+                                  >
+                                    {item}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </nav>
           </div>
 
