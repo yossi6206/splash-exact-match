@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Package } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,12 +26,41 @@ const secondhandSchema = z.object({
 });
 
 const categories = {
-  "ריהוט": ["ספות וכורסאות", "שולחנות", "כיסאות", "ארונות", "מיטות"],
-  "מוצרי חשמל": ["מקררים", "מכונות כביסה", "תנורים", "מיקרוגלים", "מזגנים"],
-  "ספורט ופנאי": ["אופניים", "ציוד כושר", "משחקים", "ספרים", "כלי נגינה"],
-  "אופנה": ["בגדים", "נעליים", "תיקים", "אביזרים", "תכשיטים"],
-  "תינוקות וילדים": ["עגלות", "כיסאות אוכל", "מיטות", "צעצועים", "בגדי ילדים"],
+  "ריהוט": [
+    "ספות", "כורסאות", "שולחנות אוכל", "שולחנות סלון", "כיסאות",
+    "ארונות בגדים", "ארונות נעליים", "מיטות זוגיות", "מיטות יחיד",
+    "שידות", "מדפים", "מראות", "ארונות מטבח", "שולחנות עבודה"
+  ],
+  "מוצרי חשמל": [
+    "מקררים", "מקפיאים", "מכונות כביסה", "מייבשי כביסה",
+    "תנורים", "כיריים", "מיקרוגל", "מזגנים", "מאווררים",
+    "מדיחי כלים", "שואבי אבק", "מערכות סטריאו", "טלוויזיות"
+  ],
+  "ספורט ופנאי": [
+    "אופני כביש", "אופני הרים", "אופניים חשמליים", "קורקינטים",
+    "ציוד כושר ביתי", "משקולות", "הליכונים", "אופני כושר",
+    "משחקי קופסא", "משחקי וידאו", "ספרים", "גיטרות", "פסנתרים", "תופים"
+  ],
+  "אופנה": [
+    "חולצות", "מכנסיים", "שמלות", "חצאיות", "מעילים",
+    "נעלי ספורט", "נעלי עקב", "סנדלים", "מגפיים",
+    "תיקי יד", "תיקי גב", "שעונים", "תכשיטים", "משקפי שמש"
+  ],
+  "תינוקות וילדים": [
+    "עגלות", "טיולונים", "כיסאות אוכל", "מיטות תינוק", "עריסות",
+    "צעצועי התפתחות", "משחקי בנייה", "בגדי תינוקות (0-2)",
+    "בגדי ילדים (2-6)", "בגדי ילדים (6-12)", "אביזרי האכלה", "מוצצים ובקבוקים"
+  ]
 };
+
+const furnitureMaterials = ["עץ מלא", "עץ MDF", "מתכת", "פלסטיק", "זכוכית", "עור", "בד", "ראטן", "שילוב"];
+const furnitureSizes = ["קטן", "בינוני", "גדול", "ענק", "חד-מושבי", "דו-מושבי", "תלת-מושבי", "ארבע-מושבי"];
+const electronicsBrands = ["Samsung", "LG", "Bosch", "Siemens", "Electrolux", "Whirlpool", "Haier", "Beko", "Candy", "Ariston"];
+const sportsBrands = ["Nike", "Adidas", "Puma", "Giant", "Trek", "Specialized", "Decathlon", "Reebok", "Under Armour"];
+const fashionBrands = ["Zara", "H&M", "Mango", "Castro", "Fox", "TNT", "Golf", "American Eagle", "Banana Republic"];
+const fashionSizes = ["XS", "S", "M", "L", "XL", "XXL", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"];
+const babySizes = ["0-6 חודשים", "6-12 חודשים", "1-2 שנים", "2-4 שנים", "4-6 שנים", "6-8 שנים", "8-12 שנים"];
+const colors = ["לבן", "שחור", "אפור", "חום", "בז'", "כחול", "ירוק", "אדום", "ורוד", "סגול", "צהוב", "כתום", "כסוף", "זהב", "צבעוני"];
 
 const PostSecondhand = () => {
   const navigate = useNavigate();
@@ -50,6 +80,14 @@ const PostSecondhand = () => {
     material: "",
     age: "",
     description: "",
+    warranty: "",
+    delivery_available: false,
+    negotiable: true,
+    year_manufactured: "",
+    dimensions: "",
+    weight: "",
+    seller_name: "",
+    seller_phone: "",
   });
 
   const [availableSubcategories, setAvailableSubcategories] = useState<string[]>([]);
@@ -84,6 +122,8 @@ const PostSecondhand = () => {
         price: parseInt(formData.price),
         location: formData.location,
         description: formData.description,
+        seller_name: formData.seller_name,
+        seller_phone: formData.seller_phone,
       });
     } catch (validationError) {
       if (validationError instanceof z.ZodError) {
@@ -115,6 +155,14 @@ const PostSecondhand = () => {
         age: formData.age || null,
         description: formData.description,
         images: imageUrls,
+        warranty: formData.warranty || null,
+        delivery_available: formData.delivery_available,
+        negotiable: formData.negotiable,
+        year_manufactured: formData.year_manufactured ? parseInt(formData.year_manufactured) : null,
+        dimensions: formData.dimensions || null,
+        weight: formData.weight || null,
+        seller_name: formData.seller_name,
+        seller_phone: formData.seller_phone,
         status: "active",
       });
 
@@ -130,49 +178,95 @@ const PostSecondhand = () => {
     }
   };
 
-  const renderDynamicFields = () => {
-    const { category, subcategory } = formData;
+  const renderCategorySpecificFields = () => {
+    const { category } = formData;
 
-    // Fields for furniture
+    // Furniture fields
     if (category === "ריהוט") {
       return (
         <>
           <div className="space-y-2">
-            <Label htmlFor="material">חומר</Label>
-            <Input
-              id="material"
-              name="material"
-              value={formData.material}
-              onChange={handleInputChange}
-              placeholder="עץ מלא, מתכת, פלסטיק..."
-            />
+            <Label htmlFor="material">חומר *</Label>
+            <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר חומר" />
+              </SelectTrigger>
+              <SelectContent>
+                {furnitureMaterials.map(mat => (
+                  <SelectItem key={mat} value={mat}>{mat}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="size">גודל *</Label>
+            <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר גודל" />
+              </SelectTrigger>
+              <SelectContent>
+                {furnitureSizes.map(size => (
+                  <SelectItem key={size} value={size}>{size}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="color">צבע</Label>
+            <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר צבע" />
+              </SelectTrigger>
+              <SelectContent>
+                {colors.map(color => (
+                  <SelectItem key={color} value={color}>{color}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="dimensions">מידות (אורך x רוחב x גובה ס"מ)</Label>
             <Input
-              id="color"
-              name="color"
-              value={formData.color}
+              id="dimensions"
+              name="dimensions"
+              value={formData.dimensions}
               onChange={handleInputChange}
-              placeholder="חום, לבן, שחור..."
+              placeholder='לדוגמה: 200x100x80'
             />
           </div>
         </>
       );
     }
 
-    // Fields for electronics
+    // Electronics fields
     if (category === "מוצרי חשמל") {
       return (
         <>
           <div className="space-y-2">
-            <Label htmlFor="brand">מותג</Label>
+            <Label htmlFor="brand">מותג *</Label>
+            <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר מותג" />
+              </SelectTrigger>
+              <SelectContent>
+                {electronicsBrands.map(brand => (
+                  <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                ))}
+                <SelectItem value="אחר">אחר</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="year_manufactured">שנת ייצור</Label>
             <Input
-              id="brand"
-              name="brand"
-              value={formData.brand}
+              id="year_manufactured"
+              name="year_manufactured"
+              type="number"
+              value={formData.year_manufactured}
               onChange={handleInputChange}
-              placeholder="Samsung, LG, Bosch..."
+              placeholder="2020"
+              min="1990"
+              max={new Date().getFullYear()}
             />
           </div>
           <div className="space-y-2">
@@ -185,77 +279,124 @@ const PostSecondhand = () => {
               placeholder="2"
             />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="warranty">אחריות</Label>
+            <Input
+              id="warranty"
+              name="warranty"
+              value={formData.warranty}
+              onChange={handleInputChange}
+              placeholder="אחריות יבואן רשמי, 6 חודשים..."
+            />
+          </div>
         </>
       );
     }
 
-    // Fields for sports
+    // Sports fields
     if (category === "ספורט ופנאי") {
       return (
         <>
           <div className="space-y-2">
             <Label htmlFor="brand">מותג</Label>
-            <Input
-              id="brand"
-              name="brand"
-              value={formData.brand}
-              onChange={handleInputChange}
-              placeholder="Nike, Adidas, Giant..."
-            />
+            <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר מותג" />
+              </SelectTrigger>
+              <SelectContent>
+                {sportsBrands.map(brand => (
+                  <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                ))}
+                <SelectItem value="אחר">אחר</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="size">גודל</Label>
+            <Label htmlFor="size">גודל/מידה</Label>
             <Input
               id="size"
               name="size"
               value={formData.size}
               onChange={handleInputChange}
-              placeholder="M, L, 26 אינץ'..."
+              placeholder='M, L, 26", 27.5"...'
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="color">צבע</Label>
+            <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר צבע" />
+              </SelectTrigger>
+              <SelectContent>
+                {colors.map(color => (
+                  <SelectItem key={color} value={color}>{color}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="weight">משקל</Label>
+            <Input
+              id="weight"
+              name="weight"
+              value={formData.weight}
+              onChange={handleInputChange}
+              placeholder="10 ק״ג"
             />
           </div>
         </>
       );
     }
 
-    // Fields for fashion
+    // Fashion fields
     if (category === "אופנה") {
       return (
         <>
           <div className="space-y-2">
             <Label htmlFor="brand">מותג</Label>
-            <Input
-              id="brand"
-              name="brand"
-              value={formData.brand}
-              onChange={handleInputChange}
-              placeholder="Zara, H&M, Nike..."
-            />
+            <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר מותג" />
+              </SelectTrigger>
+              <SelectContent>
+                {fashionBrands.map(brand => (
+                  <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                ))}
+                <SelectItem value="אחר">אחר</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="size">מידה</Label>
-            <Input
-              id="size"
-              name="size"
-              value={formData.size}
-              onChange={handleInputChange}
-              placeholder="S, M, L, XL, 42..."
-            />
+            <Label htmlFor="size">מידה *</Label>
+            <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר מידה" />
+              </SelectTrigger>
+              <SelectContent>
+                {fashionSizes.map(size => (
+                  <SelectItem key={size} value={size}>{size}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="color">צבע</Label>
-            <Input
-              id="color"
-              name="color"
-              value={formData.color}
-              onChange={handleInputChange}
-              placeholder="שחור, לבן, כחול..."
-            />
+            <Label htmlFor="color">צבע *</Label>
+            <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר צבע" />
+              </SelectTrigger>
+              <SelectContent>
+                {colors.map(color => (
+                  <SelectItem key={color} value={color}>{color}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </>
       );
     }
 
-    // Fields for baby items
+    // Baby items fields
     if (category === "תינוקות וילדים") {
       return (
         <>
@@ -266,28 +407,34 @@ const PostSecondhand = () => {
               name="brand"
               value={formData.brand}
               onChange={handleInputChange}
-              placeholder="Bugaboo, Maxi-Cosi..."
+              placeholder="Bugaboo, Maxi-Cosi, Chicco..."
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="age">גיל מומלץ</Label>
-            <Input
-              id="age"
-              name="age"
-              value={formData.age}
-              onChange={handleInputChange}
-              placeholder="0-3 חודשים, 2-5 שנים..."
-            />
+            <Label htmlFor="age">גיל מומלץ *</Label>
+            <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר גיל" />
+              </SelectTrigger>
+              <SelectContent>
+                {babySizes.map(age => (
+                  <SelectItem key={age} value={age}>{age}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="color">צבע</Label>
-            <Input
-              id="color"
-              name="color"
-              value={formData.color}
-              onChange={handleInputChange}
-              placeholder="ורוד, כחול, צבעוני..."
-            />
+            <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר צבע" />
+              </SelectTrigger>
+              <SelectContent>
+                {colors.map(color => (
+                  <SelectItem key={color} value={color}>{color}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </>
       );
@@ -304,13 +451,15 @@ const PostSecondhand = () => {
           פרסם מוצר יד שנייה
         </h1>
         <p className="text-muted-foreground">
-          מלא את הפרטים למטה ופרסם מוצר יד שנייה באתר
+          מלא את הפרטים למטה ופרסם מוצר יד שנייה באתר - ככל שתוסיף פרטים מדויקים יותר, כך יהיה קל יותר למצוא את המוצר
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Images */}
         <Card className="p-6">
-          <h2 className="text-xl font-bold text-foreground mb-4">תמונות *</h2>
+          <h2 className="text-xl font-bold text-foreground mb-4">תמונות * (עד 8 תמונות)</h2>
+          <p className="text-sm text-muted-foreground mb-4">העלה תמונות ברורות ואיכותיות של המוצר מזוויות שונות</p>
           <ImageUpload
             onImagesChange={setImageUrls}
             maxImages={8}
@@ -318,9 +467,11 @@ const PostSecondhand = () => {
           />
         </Card>
 
+        {/* Product Details */}
         <Card className="p-6">
           <h2 className="text-xl font-bold text-foreground mb-4">פרטי המוצר</h2>
           <div className="space-y-4">
+            {/* Title */}
             <div className="space-y-2">
               <Label htmlFor="title">כותרת המודעה *</Label>
               <Input
@@ -329,46 +480,39 @@ const PostSecondhand = () => {
                 value={formData.title}
                 onChange={handleInputChange}
                 required
-                placeholder="ספה תלת מושבית במצב מעולה"
+                placeholder="לדוגמה: ספה תלת מושבית במצב מעולה"
+                maxLength={200}
               />
             </div>
 
+            {/* Category & Subcategory */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="category">קטגוריה *</Label>
-                <Select
-                  value={formData.category}
-                  onValueChange={handleCategoryChange}
-                >
+                <Select value={formData.category} onValueChange={handleCategoryChange}>
                   <SelectTrigger>
                     <SelectValue placeholder="בחר קטגוריה" />
                   </SelectTrigger>
                   <SelectContent>
                     {Object.keys(categories).map((cat) => (
-                      <SelectItem key={cat} value={cat}>
-                        {cat}
-                      </SelectItem>
+                      <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               {availableSubcategories.length > 0 && (
                 <div className="space-y-2">
-                  <Label htmlFor="subcategory">תת-קטגוריה</Label>
+                  <Label htmlFor="subcategory">תת-קטגוריה *</Label>
                   <Select
                     value={formData.subcategory}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, subcategory: value })
-                    }
+                    onValueChange={(value) => setFormData({ ...formData, subcategory: value })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="בחר תת-קטגוריה" />
                     </SelectTrigger>
                     <SelectContent>
                       {availableSubcategories.map((subcat) => (
-                        <SelectItem key={subcat} value={subcat}>
-                          {subcat}
-                        </SelectItem>
+                        <SelectItem key={subcat} value={subcat}>{subcat}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -376,18 +520,18 @@ const PostSecondhand = () => {
               )}
             </div>
 
+            {/* Category-specific fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {renderDynamicFields()}
+              {renderCategorySpecificFields()}
             </div>
 
+            {/* Condition & Price */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="condition">מצב המוצר *</Label>
                 <Select
                   value={formData.condition}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, condition: value })
-                  }
+                  onValueChange={(value) => setFormData({ ...formData, condition: value })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="בחר מצב" />
@@ -412,22 +556,26 @@ const PostSecondhand = () => {
                   onChange={handleInputChange}
                   required
                   placeholder="500"
+                  min="1"
+                  max="1000000"
                 />
               </div>
             </div>
 
+            {/* Location */}
             <div className="space-y-2">
-              <Label htmlFor="location">מיקום *</Label>
+              <Label htmlFor="location">עיר *</Label>
               <Input
                 id="location"
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
                 required
-                placeholder="תל אביב"
+                placeholder="תל אביב, חיפה, ירושלים..."
               />
             </div>
 
+            {/* Description */}
             <div className="space-y-2">
               <Label htmlFor="description">תיאור המוצר *</Label>
               <Textarea
@@ -437,18 +585,72 @@ const PostSecondhand = () => {
                 onChange={handleInputChange}
                 required
                 rows={6}
-                placeholder="תאר את המוצר, מצבו, סיבת המכירה וכל פרט רלוונטי אחר..."
+                placeholder="תאר את המוצר בפירוט - מצב, תכונות מיוחדות, סיבת המכירה, היסטוריית השימוש וכל פרט נוסף שחשוב למוכר לדעת..."
+                maxLength={10000}
+              />
+              <p className="text-xs text-muted-foreground">{formData.description.length}/10000 תווים</p>
+            </div>
+
+            {/* Additional Options */}
+            <div className="space-y-4 pt-4 border-t">
+              <h3 className="font-semibold text-foreground">אפשרויות נוספות</h3>
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  id="delivery_available"
+                  checked={formData.delivery_available}
+                  onCheckedChange={(checked) => setFormData({ ...formData, delivery_available: checked as boolean })}
+                />
+                <Label htmlFor="delivery_available" className="cursor-pointer">
+                  אני מוכן למשלוח (בתשלום)
+                </Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  id="negotiable"
+                  checked={formData.negotiable}
+                  onCheckedChange={(checked) => setFormData({ ...formData, negotiable: checked as boolean })}
+                />
+                <Label htmlFor="negotiable" className="cursor-pointer">
+                  המחיר ניתן למיקוח
+                </Label>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Seller Details */}
+        <Card className="p-6">
+          <h2 className="text-xl font-bold text-foreground mb-4">פרטי המוכר</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="seller_name">שם מלא *</Label>
+              <Input
+                id="seller_name"
+                name="seller_name"
+                value={formData.seller_name}
+                onChange={handleInputChange}
+                required
+                placeholder="שם פרטי ומשפחה"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="seller_phone">טלפון *</Label>
+              <Input
+                id="seller_phone"
+                name="seller_phone"
+                value={formData.seller_phone}
+                onChange={handleInputChange}
+                required
+                placeholder="05XXXXXXXX"
+                maxLength={10}
               />
             </div>
           </div>
         </Card>
 
+        {/* Submit Buttons */}
         <div className="flex gap-4">
-          <Button
-            type="submit"
-            disabled={loading}
-            className="flex-1"
-          >
+          <Button type="submit" disabled={loading} className="flex-1">
             {loading ? "מפרסם..." : "פרסם מוצר"}
           </Button>
           <Button

@@ -766,12 +766,15 @@ export type Database = {
           condition: string
           contacts_count: number | null
           created_at: string
+          delivery_available: boolean | null
           description: string | null
+          dimensions: string | null
           features: string[] | null
           id: string
           images: string[] | null
           location: string
           material: string | null
+          negotiable: boolean | null
           price: number
           seller_name: string | null
           seller_phone: string | null
@@ -782,6 +785,9 @@ export type Database = {
           updated_at: string
           user_id: string
           views_count: number | null
+          warranty: string | null
+          weight: string | null
+          year_manufactured: number | null
         }
         Insert: {
           age?: string | null
@@ -792,12 +798,15 @@ export type Database = {
           condition: string
           contacts_count?: number | null
           created_at?: string
+          delivery_available?: boolean | null
           description?: string | null
+          dimensions?: string | null
           features?: string[] | null
           id?: string
           images?: string[] | null
           location: string
           material?: string | null
+          negotiable?: boolean | null
           price: number
           seller_name?: string | null
           seller_phone?: string | null
@@ -808,6 +817,9 @@ export type Database = {
           updated_at?: string
           user_id: string
           views_count?: number | null
+          warranty?: string | null
+          weight?: string | null
+          year_manufactured?: number | null
         }
         Update: {
           age?: string | null
@@ -818,12 +830,15 @@ export type Database = {
           condition?: string
           contacts_count?: number | null
           created_at?: string
+          delivery_available?: boolean | null
           description?: string | null
+          dimensions?: string | null
           features?: string[] | null
           id?: string
           images?: string[] | null
           location?: string
           material?: string | null
+          negotiable?: boolean | null
           price?: number
           seller_name?: string | null
           seller_phone?: string | null
@@ -834,6 +849,9 @@ export type Database = {
           updated_at?: string
           user_id?: string
           views_count?: number | null
+          warranty?: string | null
+          weight?: string | null
+          year_manufactured?: number | null
         }
         Relationships: []
       }
