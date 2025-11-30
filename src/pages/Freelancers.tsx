@@ -25,7 +25,7 @@ type Freelancer = Tables<"freelancers">;
 const ITEMS_PER_PAGE = 12;
 
 const Freelancers = () => {
-  const [sortBy, setSortBy] = useState("rating");
+  const [sortBy, setSortBy] = useState("newest");
   const [searchQuery, setSearchQuery] = useState("");
   const [freelancers, setFreelancers] = useState<Freelancer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,7 +48,9 @@ const Freelancers = () => {
         .range(startIndex, startIndex + ITEMS_PER_PAGE - 1);
 
       // Apply sorting
-      if (sortBy === "rating") {
+      if (sortBy === "newest") {
+        query = query.order("created_at", { ascending: false });
+      } else if (sortBy === "rating") {
         query = query.order("rating", { ascending: false });
       } else if (sortBy === "rate-low") {
         query = query.order("hourly_rate", { ascending: true });
@@ -210,6 +212,7 @@ const Freelancers = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="newest">חדש ביותר</SelectItem>
                   <SelectItem value="rating">דירוג גבוה</SelectItem>
                   <SelectItem value="reviews">מספר ביקורות</SelectItem>
                   <SelectItem value="rate-low">תעריף נמוך-גבוה</SelectItem>
