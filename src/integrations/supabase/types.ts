@@ -370,6 +370,8 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           category: string
+          clicks_count: number | null
+          contacts_count: number | null
           created_at: string
           experience_years: number | null
           full_name: string
@@ -384,12 +386,15 @@ export type Database = {
           total_reviews: number | null
           updated_at: string
           user_id: string
+          views_count: number | null
         }
         Insert: {
           availability?: string | null
           avatar_url?: string | null
           bio?: string | null
           category: string
+          clicks_count?: number | null
+          contacts_count?: number | null
           created_at?: string
           experience_years?: number | null
           full_name: string
@@ -404,12 +409,15 @@ export type Database = {
           total_reviews?: number | null
           updated_at?: string
           user_id: string
+          views_count?: number | null
         }
         Update: {
           availability?: string | null
           avatar_url?: string | null
           bio?: string | null
           category?: string
+          clicks_count?: number | null
+          contacts_count?: number | null
           created_at?: string
           experience_years?: number | null
           full_name?: string
@@ -424,6 +432,7 @@ export type Database = {
           total_reviews?: number | null
           updated_at?: string
           user_id?: string
+          views_count?: number | null
         }
         Relationships: []
       }
