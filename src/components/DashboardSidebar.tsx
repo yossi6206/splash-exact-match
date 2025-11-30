@@ -44,11 +44,11 @@ export const DashboardSidebar = () => {
             <li key={item.path}>
               <NavLink
                 to={item.path}
-                className="flex items-center gap-4 px-6 py-4 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-all duration-200 group"
+                className="flex items-center gap-4 px-6 py-4 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-all duration-200 group text-right"
                 activeClassName="bg-primary/10 text-primary border-r-4 border-primary"
               >
+                <span className="font-medium flex-1">{item.title}</span>
                 <item.icon className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                <span className="font-medium">{item.title}</span>
               </NavLink>
             </li>
           ))}
@@ -59,17 +59,17 @@ export const DashboardSidebar = () => {
       <div className="p-6 border-t border-border space-y-3">
         <Button 
           variant="outline" 
-          className="w-full border-border hover:bg-muted"
+          className="w-full justify-between border-border hover:bg-muted"
         >
-          <Phone className="ml-2 h-4 w-4" />
-          צור קשר
+          <span>צור קשר</span>
+          <Phone className="h-4 w-4" />
         </Button>
         <Button 
           variant="outline" 
-          className="w-full border-primary/30 text-primary hover:bg-primary/10"
+          className="w-full justify-between border-primary/30 text-primary hover:bg-primary/10"
         >
-          <LogOut className="ml-2 h-4 w-4" />
-          התנתקות
+          <span>התנתקות</span>
+          <LogOut className="h-4 w-4" />
         </Button>
       </div>
     </aside>
