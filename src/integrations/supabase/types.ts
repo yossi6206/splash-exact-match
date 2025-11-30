@@ -14,6 +14,93 @@ export type Database = {
   }
   public: {
     Tables: {
+      businesses: {
+        Row: {
+          annual_revenue: number | null
+          business_type: string
+          category: string
+          clicks_count: number | null
+          contacts_count: number | null
+          created_at: string
+          description: string | null
+          employees_count: number | null
+          id: string
+          images: string[] | null
+          includes: string[] | null
+          lease_details: string | null
+          lease_expiry_date: string | null
+          lease_monthly_cost: number | null
+          location: string
+          monthly_profit: number | null
+          price: number
+          reasons_for_sale: string | null
+          seller_name: string | null
+          seller_phone: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+          views_count: number | null
+          years_operating: number | null
+        }
+        Insert: {
+          annual_revenue?: number | null
+          business_type: string
+          category: string
+          clicks_count?: number | null
+          contacts_count?: number | null
+          created_at?: string
+          description?: string | null
+          employees_count?: number | null
+          id?: string
+          images?: string[] | null
+          includes?: string[] | null
+          lease_details?: string | null
+          lease_expiry_date?: string | null
+          lease_monthly_cost?: number | null
+          location: string
+          monthly_profit?: number | null
+          price: number
+          reasons_for_sale?: string | null
+          seller_name?: string | null
+          seller_phone?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+          views_count?: number | null
+          years_operating?: number | null
+        }
+        Update: {
+          annual_revenue?: number | null
+          business_type?: string
+          category?: string
+          clicks_count?: number | null
+          contacts_count?: number | null
+          created_at?: string
+          description?: string | null
+          employees_count?: number | null
+          id?: string
+          images?: string[] | null
+          includes?: string[] | null
+          lease_details?: string | null
+          lease_expiry_date?: string | null
+          lease_monthly_cost?: number | null
+          location?: string
+          monthly_profit?: number | null
+          price?: number
+          reasons_for_sale?: string | null
+          seller_name?: string | null
+          seller_phone?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views_count?: number | null
+          years_operating?: number | null
+        }
+        Relationships: []
+      }
       cars: {
         Row: {
           category: string | null
