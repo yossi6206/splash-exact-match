@@ -70,23 +70,23 @@ const Dashboard = () => {
                   <NavLink
                     key={item.path}
                     to={item.path}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-all"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-all text-right"
                     activeClassName="bg-primary/10 text-primary border-r-4 border-primary"
                   >
+                    <span className="font-medium flex-1">{item.title}</span>
                     <item.icon className="h-5 w-5" />
-                    <span className="font-medium">{item.title}</span>
                   </NavLink>
                 ))}
               </nav>
 
               <div className="space-y-2 pt-4 border-t">
-                <Button variant="outline" className="w-full justify-start border-border hover:bg-muted">
-                  <Phone className="ml-2 h-4 w-4" />
-                  צור קשר
+                <Button variant="outline" className="w-full justify-between border-border hover:bg-muted">
+                  <span>צור קשר</span>
+                  <Phone className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" className="w-full justify-start border-primary/30 text-primary hover:bg-primary/10">
-                  <LogOut className="ml-2 h-4 w-4" />
-                  התנתקות
+                <Button variant="outline" className="w-full justify-between border-primary/30 text-primary hover:bg-primary/10">
+                  <span>התנתקות</span>
+                  <LogOut className="h-4 w-4" />
                 </Button>
               </div>
             </SheetContent>
