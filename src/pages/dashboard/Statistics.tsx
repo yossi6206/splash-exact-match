@@ -4,7 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { Eye, MousePointer, Phone, TrendingUp, Car, Home, Laptop, Briefcase, Loader2, Calendar as CalendarIcon, Filter, X, Package, Users } from "lucide-react";
+import { Eye, MousePointer, Phone, TrendingUp, Car, Home, Laptop, Briefcase, Loader2, Calendar as CalendarIcon, Filter, X, Package, Users, Download } from "lucide-react";
+import * as XLSX from 'xlsx';
 import { useAuth } from "@/contexts/AuthContext";
 import { useCountUp } from "@/hooks/useCountUp";
 import { Button } from "@/components/ui/button";
@@ -285,6 +286,83 @@ const Statistics = () => {
     setDataType("all");
   };
 
+  const exportToExcel = () => {
+    // Create workbook
+    const wb = XLSX.utils.book_new();
+    
+    // Summary sheet
+    const summaryData = [
+      ['סיכום סטטיסטיקות'],
+      [],
+      ['מדד', 'ערך'],
+      ['סך צפיות', totalViews],
+      ['סך לחיצות', totalClicks],
+      ['סך פניות', totalContacts],
+      ['אחוז המרה', `${conversionRate.toFixed(2)}%`],
+      [],
+      ['מסננים פעילים:'],
+      ['מתאריך', dateFrom ? format(dateFrom, 'dd/MM/yyyy') : 'לא הוגדר'],
+      ['עד תאריך', dateTo ? format(dateTo, 'dd/MM/yyyy') : 'לא הוגדר'],
+      ['קטגוריה', selectedCategory === 'all' ? 'כל הקטגוריות' : selectedCategory],
+      ['סוג נתונים', dataType === 'all' ? 'כל הנתונים' : dataType === 'views' ? 'צפיות' : dataType === 'clicks' ? 'לחיצות' : 'פניות'],
+    ];
+    const ws1 = XLSX.utils.aoa_to_sheet(summaryData);
+    XLSX.utils.book_append_sheet(wb, ws1, 'סיכום');
+
+    // Top ads sheet
+    const adsData = [
+      ['מודעות מובילות'],
+      [],
+      ['כותרת', 'קטגוריה', 'צפיות', 'לחיצות', 'פניות', 'אחוז המרה'],
+      ...topAds.map(ad => [
+        ad.title,
+        ad.category,
+        ad.views,
+        ad.clicks,
+        ad.contacts,
+        `${ad.conversion.toFixed(2)}%`
+      ])
+    ];
+    const ws2 = XLSX.utils.aoa_to_sheet(adsData);
+    XLSX.utils.book_append_sheet(wb, ws2, 'מודעות מובילות');
+
+    // Category stats sheet
+    const categoryData = [
+      ['סטטיסטיקות לפי קטגוריה'],
+      [],
+      ['קטגוריה', 'כמות מודעות', 'צפיות', 'פניות'],
+      ...categoryStats.map(cat => [
+        cat.category,
+        cat.count,
+        cat.views,
+        cat.contacts
+      ])
+    ];
+    const ws3 = XLSX.utils.aoa_to_sheet(categoryData);
+    XLSX.utils.book_append_sheet(wb, ws3, 'קטגוריות');
+
+    // Time series sheet
+    const timeData = [
+      ['מגמות לאורך זמן'],
+      [],
+      ['תאריך', 'צפיות', 'לחיצות', 'פניות'],
+      ...timeSeriesData.map(t => [
+        t.date,
+        t.views,
+        t.clicks,
+        t.contacts
+      ])
+    ];
+    const ws4 = XLSX.utils.aoa_to_sheet(timeData);
+    XLSX.utils.book_append_sheet(wb, ws4, 'מגמות');
+
+    // Generate file name with current date
+    const fileName = `סטטיסטיקות_${new Date().toLocaleDateString('he-IL').replace(/\./g, '-')}.xlsx`;
+    
+    // Write file
+    XLSX.writeFile(wb, fileName, { bookType: 'xlsx', type: 'binary' });
+  };
+
   const hasActiveFilters = dateFrom || dateTo || selectedCategory !== "all" || dataType !== "all";
 
   if (loading) {
@@ -297,9 +375,15 @@ const Statistics = () => {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">סטטיסטיקות וביצועים</h1>
-        <p className="text-muted-foreground">ניתוח מפורט של כל המודעות שלך</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground mb-2">סטטיסטיקות וביצועים</h1>
+          <p className="text-muted-foreground">ניתוח מפורט של כל המודעות שלך</p>
+        </div>
+        <Button onClick={exportToExcel} className="gap-2">
+          <Download className="h-4 w-4" />
+          ייצוא לאקסל
+        </Button>
       </div>
 
       {/* Filters Section */}
