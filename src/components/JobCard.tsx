@@ -16,6 +16,7 @@ interface JobCardProps {
   experience: string;
   postedDate: string;
   requirements: string[];
+  clicks_count?: number;
 }
 
 export const JobCard = ({
@@ -30,7 +31,20 @@ export const JobCard = ({
   experience,
   postedDate,
   requirements,
+  clicks_count,
 }: JobCardProps) => {
+  const handleClick = async () => {
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      await supabase
+        .from("jobs")
+        .update({ clicks_count: (clicks_count || 0) + 1 })
+        .eq("id", String(id));
+    } catch (error) {
+      console.error("Error updating clicks count:", error);
+    }
+  };
+  
   return (
     <Card className="p-6 hover:shadow-lg transition-shadow duration-300 bg-card">
       <div className="flex gap-4">
@@ -51,6 +65,7 @@ export const JobCard = ({
             <div>
               <Link
                 to={`/jobs/${id}`}
+                onClick={handleClick}
                 className="text-xl font-bold text-foreground hover:text-primary transition-colors mb-1 block"
               >
                 {title}
@@ -112,7 +127,7 @@ export const JobCard = ({
                 {postedDate}
               </span>
             </div>
-            <Link to={`/jobs/${id}`}>
+            <Link to={`/jobs/${id}`} onClick={handleClick}>
               <Button size="sm" className="rounded-full">
                 צפה במשרה
               </Button>

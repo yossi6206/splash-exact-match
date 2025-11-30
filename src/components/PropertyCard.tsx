@@ -19,13 +19,26 @@ interface PropertyCardProps {
     floor: number;
     year?: number;
     features: string[];
+    clicks_count?: number;
   };
 }
 
 const PropertyCard = ({ property }: PropertyCardProps) => {
+  const handleClick = async () => {
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      await supabase
+        .from("properties")
+        .update({ clicks_count: (property.clicks_count || 0) + 1 })
+        .eq("id", String(property.id));
+    } catch (error) {
+      console.error("Error updating clicks count:", error);
+    }
+  };
+  
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-white border-border">
-      <Link to={`/properties/${property.id}`}>
+      <Link to={`/properties/${property.id}`} onClick={handleClick}>
         <div className="flex flex-col sm:flex-row gap-4 p-4">
           {/* Image */}
           <div className="w-full sm:w-64 h-48 rounded-lg overflow-hidden flex-shrink-0">
