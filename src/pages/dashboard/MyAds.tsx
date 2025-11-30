@@ -197,9 +197,9 @@ const MyAds = () => {
 
   const renderListingCard = (listing: Listing) => (
     <Card key={listing.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_200px] gap-4">
         {/* Content */}
-        <div className="p-4 flex flex-col justify-between order-2 md:order-2">
+        <div className="p-4 flex flex-col justify-between order-2 md:order-1">
           <div>
             <div className="flex items-start justify-between gap-2 mb-2">
               <h3 className="text-lg font-bold text-foreground line-clamp-2">
@@ -291,7 +291,7 @@ const MyAds = () => {
         </div>
         
         {/* Image */}
-        <div className="relative aspect-video md:aspect-square bg-muted order-1 md:order-1">
+        <div className="relative aspect-video md:aspect-square bg-muted order-1 md:order-2">
           {listing.images && listing.images[0] ? (
             <img
               src={listing.images[0]}
