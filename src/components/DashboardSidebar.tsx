@@ -10,11 +10,13 @@ import {
   Lightbulb, 
   Settings,
   LogOut,
-  Phone
+  Phone,
+  MessageSquare
 } from "lucide-react";
 
 const menuItems = [
   { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
+  { title: "הודעות", icon: MessageSquare, path: "/dashboard/messages" },
   { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile" },
   { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats" },
   { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved" },

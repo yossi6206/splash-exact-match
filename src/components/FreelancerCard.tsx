@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star, MapPin, Clock, Award, MessageCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import FreelancerChat from "./FreelancerChat";
+import { FreelancerChat } from "./FreelancerChat";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -178,9 +178,9 @@ const FreelancerCard = ({
     <FreelancerChat
       freelancerId={id}
       freelancerName={full_name}
-      freelancerAvatar={avatar_url}
-      isOpen={chatOpen}
-      onClose={() => setChatOpen(false)}
+      freelancerAvatar={avatar_url || null}
+      open={chatOpen}
+      onOpenChange={setChatOpen}
     />
   </>
   );
