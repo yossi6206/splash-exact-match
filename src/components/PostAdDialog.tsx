@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Car, Home, Laptop, Package, Briefcase } from "lucide-react";
+import { Car, Home, Laptop, Package, Briefcase, Building2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
@@ -66,6 +66,13 @@ const PostAdDialog = ({ open, onOpenChange }: PostAdDialogProps) => {
       path: "/dashboard/post-job",
       color: "from-pink-500 to-pink-600",
     },
+    {
+      title: "פרסם עסק למכירה",
+      description: "מכור עסק פעיל עם נתונים פיננסיים",
+      icon: Building2,
+      path: "/dashboard/post-business",
+      color: "from-amber-500 to-amber-600",
+    },
   ];
 
   return (
@@ -76,7 +83,7 @@ const PostAdDialog = ({ open, onOpenChange }: PostAdDialogProps) => {
             מה תרצה לפרסם?
           </DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        <div className="grid grid-cols-2 gap-4 mt-6">
           {postOptions.map((option) => {
             const Icon = option.icon;
             return (
