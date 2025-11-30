@@ -78,9 +78,9 @@ const SecondhandCategory = () => {
   });
   const itemsPerPage = 12;
 
-  // Get category configuration
-  const config = category ? categoryConfig[category] : categoryConfig["furniture"];
-  const CategoryIcon = config.icon;
+  // Get category configuration with safe fallback
+  const config = (category && categoryConfig[category]) ? categoryConfig[category] : categoryConfig["furniture"];
+  const CategoryIcon = config?.icon || Sofa;
 
   const categoryMap: Record<string, string> = {
     "furniture": "ריהוט",
