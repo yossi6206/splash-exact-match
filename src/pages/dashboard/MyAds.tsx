@@ -197,27 +197,9 @@ const MyAds = () => {
 
   const renderListingCard = (listing: Listing) => (
     <Card key={listing.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4">
-        {/* Image */}
-        <div className="relative aspect-video md:aspect-square bg-muted">
-          {listing.images && listing.images[0] ? (
-            <img
-              src={listing.images[0]}
-              alt={listing.title || 'תמונה'}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-              {getTypeIcon(listing.type)}
-            </div>
-          )}
-          <Badge className="absolute top-2 right-2 bg-background/90 text-foreground">
-            {getTypeName(listing.type)}
-          </Badge>
-        </div>
-
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_200px] gap-4">
         {/* Content */}
-        <div className="p-4 flex flex-col justify-between">
+        <div className="p-4 flex flex-col justify-between order-2 md:order-1">
           <div>
             <div className="flex items-start justify-between gap-2 mb-2">
               <h3 className="text-lg font-bold text-foreground line-clamp-2">
@@ -250,8 +232,8 @@ const MyAds = () => {
             <div className="grid grid-cols-3 gap-3 p-3 bg-muted/30 rounded-lg">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
-                  <Eye className="h-3 w-3" />
                   <span>צפיות</span>
+                  <Eye className="h-3 w-3" />
                 </div>
                 <div className="text-lg font-bold text-foreground">
                   {listing.views_count || 0}
@@ -259,8 +241,8 @@ const MyAds = () => {
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
-                  <MousePointer className="h-3 w-3" />
                   <span>לחיצות</span>
+                  <MousePointer className="h-3 w-3" />
                 </div>
                 <div className="text-lg font-bold text-foreground">
                   {listing.clicks_count || 0}
@@ -268,8 +250,8 @@ const MyAds = () => {
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
-                  <Phone className="h-3 w-3" />
                   <span>{listing.type === 'job' ? 'מועמדים' : 'פניות'}</span>
+                  <Phone className="h-3 w-3" />
                 </div>
                 <div className="text-lg font-bold text-foreground">
                   {listing.type === 'job' ? (listing.applicants_count || 0) : (listing.contacts_count || 0)}
@@ -306,6 +288,24 @@ const MyAds = () => {
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
+        </div>
+        
+        {/* Image */}
+        <div className="relative aspect-video md:aspect-square bg-muted order-1 md:order-2">
+          {listing.images && listing.images[0] ? (
+            <img
+              src={listing.images[0]}
+              alt={listing.title || 'תמונה'}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+              {getTypeIcon(listing.type)}
+            </div>
+          )}
+          <Badge className="absolute top-2 left-2 bg-background/90 text-foreground">
+            {getTypeName(listing.type)}
+          </Badge>
         </div>
       </div>
     </Card>
