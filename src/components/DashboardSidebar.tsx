@@ -13,10 +13,13 @@ import {
   Phone,
   MessageSquare,
   Sparkles,
-  TrendingUp
+  TrendingUp,
+  Home,
+  LayoutDashboard
 } from "lucide-react";
 
 const menuItems = [
+  { title: "עמוד ראשי", icon: LayoutDashboard, path: "/dashboard" },
   { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
   { title: "קידום מודעות", icon: Sparkles, path: "/dashboard/promote" },
   { title: "ניתוח קידום מתקדם", icon: TrendingUp, path: "/dashboard/promotion-analytics" },
@@ -64,6 +67,15 @@ export const DashboardSidebar = () => {
 
       {/* Bottom Actions */}
       <div className="p-6 border-t border-border space-y-3">
+        <NavLink to="/">
+          <Button 
+            variant="outline" 
+            className="w-full justify-between border-border hover:bg-muted"
+          >
+            <span>דף הבית</span>
+            <Home className="h-4 w-4" />
+          </Button>
+        </NavLink>
         <Button 
           variant="outline" 
           className="w-full justify-between border-border hover:bg-muted"
