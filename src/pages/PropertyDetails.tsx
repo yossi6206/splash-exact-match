@@ -21,7 +21,6 @@ const PropertyDetails = () => {
   const [property, setProperty] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showPhone, setShowPhone] = useState(false);
-  const [mainImage, setMainImage] = useState<string>("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,10 +46,6 @@ const PropertyDetails = () => {
         });
       } else {
         setProperty(data);
-        
-        // Set main image when property loads
-        const images = data.images && data.images.length > 0 ? data.images : [property1];
-        setMainImage(images[0]);
         
         // Increment view count
         await supabase
@@ -130,11 +125,11 @@ const PropertyDetails = () => {
       <Header />
 
       <main className="container mx-auto px-4 py-6">
-        {/* Image Gallery */}
+        {/* Main Image */}
         <div className="mb-6">
-          <div className="relative rounded-2xl overflow-hidden mb-4 bg-muted">
+          <div className="relative rounded-2xl overflow-hidden bg-muted">
             <img 
-              src={mainImage || images[0]} 
+              src={images[0]} 
               alt={property.title}
               className="w-full h-[500px] object-cover"
             />
@@ -154,32 +149,29 @@ const PropertyDetails = () => {
                 <Share2 className="h-5 w-5" />
               </Button>
             </div>
-            <Badge className="absolute bottom-4 right-4 bg-foreground/80 text-background text-sm px-4 py-2">
-              תמונה {images.indexOf(mainImage) + 1} מתוך {images.length}
-            </Badge>
           </div>
-          
-          {/* Thumbnail Images */}
-          {images.length > 1 && (
-            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        </div>
+
+        {/* Image Gallery */}
+        {images.length > 1 && (
+          <div className="mb-6">
+            <h2 className="text-xl font-bold mb-4">גלריית תמונות</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {images.map((img, index) => (
                 <div 
                   key={index}
-                  onClick={() => setMainImage(img)}
-                  className={`relative rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity ${
-                    mainImage === img ? 'ring-2 ring-primary' : ''
-                  }`}
+                  className="relative rounded-lg overflow-hidden aspect-video cursor-pointer hover:opacity-80 transition-opacity"
                 >
                   <img 
                     src={img} 
                     alt={`תמונה ${index + 1}`}
-                    className="w-full h-24 object-cover"
+                    className="w-full h-full object-cover"
                   />
                 </div>
               ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-6">
           {/* Main Content */}
