@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
+import { useTypingIndicator } from "@/hooks/useTypingIndicator";
 
 interface Message {
   id: string;
@@ -43,6 +44,12 @@ export const FreelancerChat = ({
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const { isOtherUserTyping, startTyping, stopTyping } = useTypingIndicator(
+    conversationId,
+    user?.id,
+    freelancerName
+  );
 
   const getInitials = (name: string) => {
     const parts = name.split(" ");
@@ -155,6 +162,8 @@ export const FreelancerChat = ({
     if (!newMessage.trim() || !conversationId || !user) return;
 
     setLoading(true);
+    stopTyping(); // Stop typing indicator when sending
+    
     try {
       const { error } = await supabase.from("messages").insert({
         conversation_id: conversationId,
@@ -173,6 +182,17 @@ export const FreelancerChat = ({
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewMessage(e.target.value);
+    
+    // Trigger typing indicator
+    if (e.target.value.trim()) {
+      startTyping();
+    } else {
+      stopTyping();
     }
   };
 
@@ -231,6 +251,22 @@ export const FreelancerChat = ({
               </div>
             );
           })}
+          
+          {/* Typing Indicator */}
+          {isOtherUserTyping && (
+            <div className="flex justify-start">
+              <div className="bg-muted rounded-lg px-4 py-3 max-w-[70%]">
+                <div className="flex items-center gap-1">
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                  </div>
+                  <span className="text-xs text-muted-foreground mr-2">מקליד</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </ScrollArea>
 
@@ -238,8 +274,9 @@ export const FreelancerChat = ({
         <div className="flex gap-2">
           <Textarea
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={handleTextareaChange}
             onKeyPress={handleKeyPress}
+            onBlur={stopTyping}
             placeholder="כתוב הודעה..."
             className="min-h-[60px] resize-none"
             dir="auto"
