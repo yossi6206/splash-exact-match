@@ -68,7 +68,7 @@ const MyAds = () => {
   const [deleteId, setDeleteId] = useState<{ id: string; type: string } | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     if (!user) {
