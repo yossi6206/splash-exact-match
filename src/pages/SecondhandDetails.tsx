@@ -28,6 +28,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { SellerReviewsList } from "@/components/seller-reviews/SellerReviewsList";
 
 const SecondhandDetails = () => {
   const { id } = useParams();
@@ -390,6 +391,13 @@ const SecondhandDetails = () => {
             </Card>
           </div>
         </div>
+
+        {/* Seller Reviews Section */}
+        {item.user_id && (
+          <div className="mt-12">
+            <SellerReviewsList sellerId={item.user_id} />
+          </div>
+        )}
       </main>
 
       {/* Image Gallery Dialog */}
