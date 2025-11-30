@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send } from "lucide-react";
+import { Send, Paperclip, X, FileText, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -18,6 +18,9 @@ interface Message {
   sender_id: string;
   created_at: string;
   is_read: boolean;
+  attachment_url: string | null;
+  attachment_type: string | null;
+  attachment_name: string | null;
 }
 
 interface FreelancerChatProps {
@@ -43,7 +46,10 @@ export const FreelancerChat = ({
   const [newMessage, setNewMessage] = useState("");
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { isOtherUserTyping, startTyping, stopTyping } = useTypingIndicator(
     conversationId,
@@ -181,21 +187,104 @@ export const FreelancerChat = ({
     };
   };
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: "שגיאה",
+        description: "הקובץ גדול מדי. גודל מקסימלי: 10MB",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSelectedFile(file);
+
+    // Create preview for images
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFilePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFilePreview(null);
+    }
+  };
+
+  const removeSelectedFile = () => {
+    setSelectedFile(null);
+    setFilePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const uploadFile = async (file: File): Promise<string | null> => {
+    if (!user || !conversationId) return null;
+
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${user.id}/${conversationId}/${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("chat-attachments")
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("chat-attachments")
+        .getPublicUrl(fileName);
+
+      return publicUrl;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast({
+        title: "שגיאה",
+        description: "לא ניתן להעלות את הקובץ",
+        variant: "destructive",
+      });
+      return null;
+    }
+  };
+
   const sendMessage = async () => {
-    if (!newMessage.trim() || !conversationId || !user) return;
+    if ((!newMessage.trim() && !selectedFile) || !conversationId || !user) return;
 
     setLoading(true);
-    stopTyping(); // Stop typing indicator when sending
+    stopTyping();
     
     try {
+      let attachmentUrl = null;
+      let attachmentType = null;
+      let attachmentName = null;
+
+      if (selectedFile) {
+        attachmentUrl = await uploadFile(selectedFile);
+        if (!attachmentUrl) {
+          setLoading(false);
+          return;
+        }
+        attachmentType = selectedFile.type;
+        attachmentName = selectedFile.name;
+      }
+
       const { error } = await supabase.from("messages").insert({
         conversation_id: conversationId,
         sender_id: user.id,
-        content: newMessage.trim(),
+        content: newMessage.trim() || (selectedFile ? `שלח קובץ: ${selectedFile.name}` : ""),
+        attachment_url: attachmentUrl,
+        attachment_type: attachmentType,
+        attachment_name: attachmentName,
       });
 
       if (error) throw error;
       setNewMessage("");
+      removeSelectedFile();
     } catch (error) {
       console.error("Error sending message:", error);
       toast({
@@ -262,9 +351,38 @@ export const FreelancerChat = ({
                       : "bg-muted"
                   }`}
                 >
-                  <p className="text-sm whitespace-pre-wrap break-words">
-                    {message.content}
-                  </p>
+                  {message.attachment_url && (
+                    <div className="mb-2">
+                      {message.attachment_type?.startsWith("image/") ? (
+                        <img
+                          src={message.attachment_url}
+                          alt={message.attachment_name || "תמונה"}
+                          className="rounded-lg max-w-full max-h-64 object-cover cursor-pointer"
+                          onClick={() => window.open(message.attachment_url!, "_blank")}
+                        />
+                      ) : (
+                        <a
+                          href={message.attachment_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`flex items-center gap-2 p-2 rounded ${
+                            isOwn ? "bg-primary-foreground/10" : "bg-background"
+                          }`}
+                        >
+                          <FileText className="h-5 w-5" />
+                          <span className="text-sm truncate max-w-[200px]">
+                            {message.attachment_name || "קובץ"}
+                          </span>
+                          <Download className="h-4 w-4 ml-auto" />
+                        </a>
+                      )}
+                    </div>
+                  )}
+                  {message.content && (
+                    <p className="text-sm whitespace-pre-wrap break-words">
+                      {message.content}
+                    </p>
+                  )}
                   <span className="text-xs opacity-70 mt-1 block">
                     {format(new Date(message.created_at), "HH:mm", {
                       locale: he,
@@ -294,7 +412,50 @@ export const FreelancerChat = ({
       </ScrollArea>
 
       <div className="p-4 border-t">
+        {selectedFile && (
+          <div className="mb-3 p-3 bg-muted rounded-lg flex items-center gap-3">
+            {filePreview ? (
+              <img
+                src={filePreview}
+                alt="תצוגה מקדימה"
+                className="h-16 w-16 object-cover rounded"
+              />
+            ) : (
+              <FileText className="h-16 w-16 text-muted-foreground" />
+            )}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{selectedFile.name}</p>
+              <p className="text-xs text-muted-foreground">
+                {(selectedFile.size / 1024).toFixed(1)} KB
+              </p>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={removeSelectedFile}
+              className="flex-shrink-0"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
         <div className="flex gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handleFileSelect}
+            accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
+            className="hidden"
+          />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={loading}
+            className="h-[60px] w-[60px] flex-shrink-0"
+          >
+            <Paperclip className="h-5 w-5" />
+          </Button>
           <Textarea
             value={newMessage}
             onChange={handleTextareaChange}
@@ -306,7 +467,7 @@ export const FreelancerChat = ({
           />
           <Button
             onClick={sendMessage}
-            disabled={!newMessage.trim() || loading}
+            disabled={(!newMessage.trim() && !selectedFile) || loading}
             size="icon"
             className="h-[60px] w-[60px] flex-shrink-0"
           >
