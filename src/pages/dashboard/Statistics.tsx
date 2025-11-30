@@ -1,0 +1,416 @@
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { Eye, MousePointer, Phone, TrendingUp, Car, Home, Laptop, Briefcase, Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCountUp } from "@/hooks/useCountUp";
+
+interface AdStats {
+  id: string;
+  title: string;
+  category: string;
+  views: number;
+  clicks: number;
+  contacts: number;
+  conversion: number;
+  created_at: string;
+}
+
+interface CategoryStats {
+  category: string;
+  count: number;
+  views: number;
+  contacts: number;
+}
+
+interface TimeSeriesData {
+  date: string;
+  views: number;
+  contacts: number;
+  clicks: number;
+}
+
+const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444'];
+
+const Statistics = () => {
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [totalViews, setTotalViews] = useState(0);
+  const [totalClicks, setTotalClicks] = useState(0);
+  const [totalContacts, setTotalContacts] = useState(0);
+  const [conversionRate, setConversionRate] = useState(0);
+  const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
+  const [topAds, setTopAds] = useState<AdStats[]>([]);
+  const [timeSeriesData, setTimeSeriesData] = useState<TimeSeriesData[]>([]);
+
+  const { count: viewsCount, elementRef: viewsRef } = useCountUp({ end: totalViews, duration: 2000 });
+  const { count: clicksCount, elementRef: clicksRef } = useCountUp({ end: totalClicks, duration: 2000 });
+  const { count: contactsCount, elementRef: contactsRef } = useCountUp({ end: totalContacts, duration: 2000 });
+
+  useEffect(() => {
+    if (user) {
+      fetchStatistics();
+    }
+  }, [user]);
+
+  const fetchStatistics = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch cars data
+      const { data: cars } = await supabase
+        .from("cars")
+        .select("id, model, manufacturer, views_count, clicks_count, contacts_count, created_at")
+        .eq("user_id", user?.id);
+
+      // Fetch properties data
+      const { data: properties } = await supabase
+        .from("properties")
+        .select("id, title, views_count, clicks_count, contacts_count, created_at")
+        .eq("user_id", user?.id);
+
+      // Fetch laptops data
+      const { data: laptops } = await supabase
+        .from("laptops")
+        .select("id, model, brand, views_count, clicks_count, contacts_count, created_at")
+        .eq("user_id", user?.id);
+
+      // Fetch jobs data
+      const { data: jobs } = await supabase
+        .from("jobs")
+        .select("id, title, views_count, clicks_count, contacts_count, created_at")
+        .eq("user_id", user?.id);
+
+      // Process all ads
+      const allAds: AdStats[] = [
+        ...(cars || []).map(c => ({
+          id: c.id,
+          title: `${c.manufacturer} ${c.model}`,
+          category: "רכבים",
+          views: c.views_count || 0,
+          clicks: c.clicks_count || 0,
+          contacts: c.contacts_count || 0,
+          conversion: c.views_count ? ((c.contacts_count || 0) / c.views_count * 100) : 0,
+          created_at: c.created_at
+        })),
+        ...(properties || []).map(p => ({
+          id: p.id,
+          title: p.title,
+          category: "נדל״ן",
+          views: p.views_count || 0,
+          clicks: p.clicks_count || 0,
+          contacts: p.contacts_count || 0,
+          conversion: p.views_count ? ((p.contacts_count || 0) / p.views_count * 100) : 0,
+          created_at: p.created_at
+        })),
+        ...(laptops || []).map(l => ({
+          id: l.id,
+          title: `${l.brand} ${l.model}`,
+          category: "מחשבים",
+          views: l.views_count || 0,
+          clicks: l.clicks_count || 0,
+          contacts: l.contacts_count || 0,
+          conversion: l.views_count ? ((l.contacts_count || 0) / l.views_count * 100) : 0,
+          created_at: l.created_at
+        })),
+        ...(jobs || []).map(j => ({
+          id: j.id,
+          title: j.title,
+          category: "משרות",
+          views: j.views_count || 0,
+          clicks: j.clicks_count || 0,
+          contacts: j.contacts_count || 0,
+          conversion: j.views_count ? ((j.contacts_count || 0) / j.views_count * 100) : 0,
+          created_at: j.created_at
+        }))
+      ];
+
+      // Calculate totals
+      const views = allAds.reduce((sum, ad) => sum + ad.views, 0);
+      const clicks = allAds.reduce((sum, ad) => sum + ad.clicks, 0);
+      const contacts = allAds.reduce((sum, ad) => sum + ad.contacts, 0);
+      
+      setTotalViews(views);
+      setTotalClicks(clicks);
+      setTotalContacts(contacts);
+      setConversionRate(views > 0 ? (contacts / views * 100) : 0);
+
+      // Calculate category stats
+      const categoryMap = new Map<string, CategoryStats>();
+      allAds.forEach(ad => {
+        const existing = categoryMap.get(ad.category) || {
+          category: ad.category,
+          count: 0,
+          views: 0,
+          contacts: 0
+        };
+        categoryMap.set(ad.category, {
+          category: ad.category,
+          count: existing.count + 1,
+          views: existing.views + ad.views,
+          contacts: existing.contacts + ad.contacts
+        });
+      });
+      setCategoryStats(Array.from(categoryMap.values()));
+
+      // Get top performing ads
+      const sortedAds = [...allAds].sort((a, b) => b.views - a.views).slice(0, 10);
+      setTopAds(sortedAds);
+
+      // Generate time series data (last 30 days)
+      const last30Days = Array.from({ length: 30 }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - (29 - i));
+        return date.toISOString().split('T')[0];
+      });
+
+      const timeData: TimeSeriesData[] = last30Days.map(date => {
+        const dayAds = allAds.filter(ad => ad.created_at.startsWith(date));
+        return {
+          date: new Date(date).toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit' }),
+          views: dayAds.reduce((sum, ad) => sum + ad.views, 0),
+          contacts: dayAds.reduce((sum, ad) => sum + ad.contacts, 0),
+          clicks: dayAds.reduce((sum, ad) => sum + ad.clicks, 0)
+        };
+      });
+      setTimeSeriesData(timeData);
+
+    } catch (error) {
+      console.error("Error fetching statistics:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "רכבים": return Car;
+      case "נדל״ן": return Home;
+      case "מחשבים": return Laptop;
+      case "משרות": return Briefcase;
+      default: return Eye;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-foreground mb-2">סטטיסטיקות וביצועים</h1>
+        <p className="text-muted-foreground">ניתוח מפורט של כל המודעות שלך</p>
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950 dark:to-blue-900/50 border-blue-200 dark:border-blue-800">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">סך צפיות</CardTitle>
+            <Eye className="h-5 w-5 text-blue-600" />
+          </CardHeader>
+          <CardContent>
+            <div ref={viewsRef} className="text-3xl font-bold text-foreground">{viewsCount.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950 dark:to-purple-900/50 border-purple-200 dark:border-purple-800">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">סך לחיצות</CardTitle>
+            <MousePointer className="h-5 w-5 text-purple-600" />
+          </CardHeader>
+          <CardContent>
+            <div ref={clicksRef} className="text-3xl font-bold text-foreground">{clicksCount.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950 dark:to-green-900/50 border-green-200 dark:border-green-800">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">סך פניות</CardTitle>
+            <Phone className="h-5 w-5 text-green-600" />
+          </CardHeader>
+          <CardContent>
+            <div ref={contactsRef} className="text-3xl font-bold text-foreground">{contactsCount.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-orange-950 dark:to-orange-900/50 border-orange-200 dark:border-orange-800">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">שיעור המרה</CardTitle>
+            <TrendingUp className="h-5 w-5 text-orange-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-foreground">{conversionRate.toFixed(1)}%</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts */}
+      <Tabs defaultValue="timeline" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="timeline">ביצועים לאורך זמן</TabsTrigger>
+          <TabsTrigger value="categories">השוואה בין קטגוריות</TabsTrigger>
+          <TabsTrigger value="distribution">התפלגות</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="timeline" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>צפיות ופניות - 30 ימים אחרונים</CardTitle>
+            </CardHeader>
+            <CardContent className="h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={timeSeriesData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="views" stroke="#3b82f6" name="צפיות" strokeWidth={2} />
+                  <Line type="monotone" dataKey="contacts" stroke="#10b981" name="פניות" strokeWidth={2} />
+                  <Line type="monotone" dataKey="clicks" stroke="#8b5cf6" name="לחיצות" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="categories" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>ביצועים לפי קטגוריה</CardTitle>
+            </CardHeader>
+            <CardContent className="h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={categoryStats}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="category" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="views" fill="#3b82f6" name="צפיות" />
+                  <Bar dataKey="contacts" fill="#10b981" name="פניות" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="distribution" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>התפלגות מודעות לפי קטגוריה</CardTitle>
+              </CardHeader>
+              <CardContent className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={categoryStats}
+                      dataKey="count"
+                      nameKey="category"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      label
+                    >
+                      {categoryStats.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>סטטיסטיקות לפי קטגוריה</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {categoryStats.map((stat, index) => {
+                    const Icon = getCategoryIcon(stat.category);
+                    return (
+                      <div key={stat.category} className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="p-2 rounded-lg"
+                            style={{ backgroundColor: `${COLORS[index % COLORS.length]}20` }}
+                          >
+                            <Icon className="h-5 w-5" style={{ color: COLORS[index % COLORS.length] }} />
+                          </div>
+                          <div>
+                            <div className="font-semibold">{stat.category}</div>
+                            <div className="text-sm text-muted-foreground">{stat.count} מודעות</div>
+                          </div>
+                        </div>
+                        <div className="text-left">
+                          <div className="text-sm text-muted-foreground">צפיות</div>
+                          <div className="font-bold">{stat.views.toLocaleString()}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      {/* Top Performing Ads Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>המודעות המובילות</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-right">כותרת</TableHead>
+                <TableHead className="text-right">קטגוריה</TableHead>
+                <TableHead className="text-right">צפיות</TableHead>
+                <TableHead className="text-right">לחיצות</TableHead>
+                <TableHead className="text-right">פניות</TableHead>
+                <TableHead className="text-right">המרה</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {topAds.map((ad) => (
+                <TableRow key={ad.id}>
+                  <TableCell className="font-medium">{ad.title}</TableCell>
+                  <TableCell>
+                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-primary/10 text-primary">
+                      {ad.category}
+                    </span>
+                  </TableCell>
+                  <TableCell>{ad.views.toLocaleString()}</TableCell>
+                  <TableCell>{ad.clicks.toLocaleString()}</TableCell>
+                  <TableCell>{ad.contacts.toLocaleString()}</TableCell>
+                  <TableCell>
+                    <span className={`font-semibold ${ad.conversion > 5 ? 'text-green-600' : ad.conversion > 2 ? 'text-orange-600' : 'text-muted-foreground'}`}>
+                      {ad.conversion.toFixed(1)}%
+                    </span>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default Statistics;

@@ -13,6 +13,7 @@ import PostProperty from "./dashboard/PostProperty";
 import PostLaptop from "./dashboard/PostLaptop";
 import PostSecondhand from "./dashboard/PostSecondhand";
 import MyAds from "./dashboard/MyAds";
+import Statistics from "./dashboard/Statistics";
 
 const Dashboard = () => {
   const stats = [
@@ -223,6 +224,7 @@ const Dashboard = () => {
             <Route path="/post-property" element={<PostProperty />} />
             <Route path="/post-laptop" element={<PostLaptop />} />
             <Route path="/post-secondhand" element={<PostSecondhand />} />
+            <Route path="/stats" element={<Statistics />} />
           </Routes>
         </main>
       </div>
