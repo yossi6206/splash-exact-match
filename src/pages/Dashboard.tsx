@@ -1,6 +1,6 @@
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package, Building2, User } from "lucide-react";
+import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package, Building2, User, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavLink } from "@/components/NavLink";
@@ -28,6 +28,7 @@ const Dashboard = () => {
   ];
 
   const menuItems = [
+    { title: "עמוד ראשי", icon: LayoutGrid, path: "/dashboard" },
     { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
     { title: "המשרות שלי", icon: Briefcase, path: "/dashboard/my-jobs" },
     { title: "פרסם משרה", icon: Plus, path: "/dashboard/post-job" },
@@ -86,6 +87,12 @@ const Dashboard = () => {
               </nav>
 
               <div className="space-y-2 pt-4 border-t">
+                <Link to="/">
+                  <Button variant="outline" className="w-full justify-between border-border hover:bg-muted">
+                    <span>דף הבית</span>
+                    <Home className="h-4 w-4" />
+                  </Button>
+                </Link>
                 <Button variant="outline" className="w-full justify-between border-border hover:bg-muted">
                   <span>צור קשר</span>
                   <Phone className="h-4 w-4" />

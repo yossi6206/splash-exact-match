@@ -20,14 +20,6 @@ import {
   Phone,
   Users
 } from "lucide-react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -66,8 +58,6 @@ const MyAds = () => {
   const [listings, setListings] = useState<Listing[]>([]);
   const [deleteId, setDeleteId] = useState<{ id: string; type: string } | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 6;
 
   useEffect(() => {
     if (!user) {
@@ -225,51 +215,6 @@ const MyAds = () => {
     return listings.filter(l => l.type === type);
   };
 
-  const getPaginatedListings = (filteredListings: Listing[]) => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    return filteredListings.slice(startIndex, endIndex);
-  };
-
-  const getTotalPages = (filteredListings: Listing[]) => {
-    return Math.ceil(filteredListings.length / ITEMS_PER_PAGE);
-  };
-
-  const renderPagination = (filteredListings: Listing[]) => {
-    const totalPages = getTotalPages(filteredListings);
-    if (totalPages <= 1) return null;
-
-    return (
-      <Pagination className="mt-6">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious 
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-              className={currentPage === 1 ? "pointer-events-none opacity-50 cursor-not-allowed" : "cursor-pointer"}
-            />
-          </PaginationItem>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <PaginationItem key={page}>
-              <PaginationLink
-                onClick={() => setCurrentPage(page)}
-                isActive={currentPage === page}
-                className="cursor-pointer"
-              >
-                {page}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
-          <PaginationItem>
-            <PaginationNext 
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-              className={currentPage === totalPages ? "pointer-events-none opacity-50 cursor-not-allowed" : "cursor-pointer"}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    );
-  };
-
   const renderListingCard = (listing: Listing) => (
     <Card key={listing.id} className="overflow-hidden hover:shadow-lg transition-shadow">
       <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4">
@@ -405,11 +350,7 @@ const MyAds = () => {
         </p>
       </div>
 
-      <Tabs 
-        defaultValue="all" 
-        className="space-y-6"
-        onValueChange={() => setCurrentPage(1)}
-      >
+      <Tabs defaultValue="all" className="space-y-6">
         <TabsList className="grid grid-cols-3 md:grid-cols-7 w-full">
           <TabsTrigger value="all">
             הכל ({listings.length})
@@ -447,38 +388,75 @@ const MyAds = () => {
               <p className="text-muted-foreground text-sm mt-2">התחל לפרסם מודעות כדי לראות אותן כאן</p>
             </Card>
           ) : (
-            <>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {getPaginatedListings(listings).map(renderListingCard)}
-              </div>
-              {renderPagination(listings)}
-            </>
+            listings.map(renderListingCard)
           )}
         </TabsContent>
 
-        {['car', 'property', 'laptop', 'secondhand', 'job', 'freelancer'].map((type) => {
-          const Icon = getTypeIcon(type);
-          const typeName = getTypeName(type);
-          const filteredListings = filterByType(type);
-          
-          return (
-            <TabsContent key={type} value={type} className="space-y-4">
-              {filteredListings.length === 0 ? (
-                <Card className="p-12 text-center">
-                  <div className="flex justify-center mb-4">{Icon}</div>
-                  <p className="text-muted-foreground">אין לך מודעות {typeName}</p>
-                </Card>
-              ) : (
-                <>
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {getPaginatedListings(filteredListings).map(renderListingCard)}
-                  </div>
-                  {renderPagination(filteredListings)}
-                </>
-              )}
-            </TabsContent>
-          );
-        })}
+        <TabsContent value="car" className="space-y-4">
+          {filterByType('car').length === 0 ? (
+            <Card className="p-12 text-center">
+              <Car className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">אין לך מודעות רכב</p>
+            </Card>
+          ) : (
+            filterByType('car').map(renderListingCard)
+          )}
+        </TabsContent>
+
+        <TabsContent value="property" className="space-y-4">
+          {filterByType('property').length === 0 ? (
+            <Card className="p-12 text-center">
+              <Home className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">אין לך מודעות נדל״ן</p>
+            </Card>
+          ) : (
+            filterByType('property').map(renderListingCard)
+          )}
+        </TabsContent>
+
+        <TabsContent value="laptop" className="space-y-4">
+          {filterByType('laptop').length === 0 ? (
+            <Card className="p-12 text-center">
+              <Laptop className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">אין לך מודעות מחשבים</p>
+            </Card>
+          ) : (
+            filterByType('laptop').map(renderListingCard)
+          )}
+        </TabsContent>
+
+        <TabsContent value="secondhand" className="space-y-4">
+          {filterByType('secondhand').length === 0 ? (
+            <Card className="p-12 text-center">
+              <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">אין לך מודעות יד שנייה</p>
+            </Card>
+          ) : (
+            filterByType('secondhand').map(renderListingCard)
+          )}
+        </TabsContent>
+
+        <TabsContent value="job" className="space-y-4">
+          {filterByType('job').length === 0 ? (
+            <Card className="p-12 text-center">
+              <Briefcase className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">אין לך מודעות משרות</p>
+            </Card>
+          ) : (
+            filterByType('job').map(renderListingCard)
+          )}
+        </TabsContent>
+
+        <TabsContent value="freelancer" className="space-y-4">
+          {filterByType('freelancer').length === 0 ? (
+            <Card className="p-12 text-center">
+              <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">אין לך פרופילי פרילנסר</p>
+            </Card>
+          ) : (
+            filterByType('freelancer').map(renderListingCard)
+          )}
+        </TabsContent>
       </Tabs>
 
       {/* Delete Confirmation Dialog */}
