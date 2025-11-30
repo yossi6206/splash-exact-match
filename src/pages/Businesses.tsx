@@ -39,32 +39,59 @@ const Businesses = () => {
   const fetchBusinesses = async () => {
     try {
       setLoading(true);
-      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
       
-      let query = supabase
+      // Fetch promoted businesses
+      const { data: promotedData } = await supabase
+        .from("businesses")
+        .select("*")
+        .eq("status", "active")
+        .eq("is_promoted", true)
+        .gte("promotion_end_date", new Date().toISOString())
+        .order("last_top_position_at", { ascending: true, nullsFirst: true })
+        .order("promotion_impressions", { ascending: true })
+        .limit(3);
+
+      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+      let regularQuery = supabase
         .from("businesses")
         .select("*", { count: "exact" })
         .eq("status", "active")
+        .or(`is_promoted.is.null,is_promoted.eq.false,promotion_end_date.lt.${new Date().toISOString()}`)
         .range(startIndex, startIndex + ITEMS_PER_PAGE - 1);
 
       // Apply sorting
       if (sortBy === "newest") {
-        query = query.order("created_at", { ascending: false });
+        regularQuery = regularQuery.order("created_at", { ascending: false });
       } else if (sortBy === "price-low") {
-        query = query.order("price", { ascending: true });
+        regularQuery = regularQuery.order("price", { ascending: true });
       } else if (sortBy === "price-high") {
-        query = query.order("price", { ascending: false });
+        regularQuery = regularQuery.order("price", { ascending: false });
       } else if (sortBy === "revenue") {
-        query = query.order("annual_revenue", { ascending: false, nullsFirst: false });
+        regularQuery = regularQuery.order("annual_revenue", { ascending: false, nullsFirst: false });
       } else if (sortBy === "profit") {
-        query = query.order("monthly_profit", { ascending: false, nullsFirst: false });
+        regularQuery = regularQuery.order("monthly_profit", { ascending: false, nullsFirst: false });
       }
 
-      const { data, error, count } = await query;
+      const { data: regularData, error, count } = await regularQuery;
 
       if (error) throw error;
 
-      setBusinesses(data || []);
+      // Update impressions
+      if (promotedData && promotedData.length > 0) {
+        const updatePromises = promotedData.map(business =>
+          supabase
+            .from("businesses")
+            .update({
+              promotion_impressions: (business.promotion_impressions || 0) + 1,
+              last_top_position_at: new Date().toISOString()
+            })
+            .eq("id", business.id)
+        );
+        await Promise.all(updatePromises);
+      }
+
+      const allBusinesses = [...(promotedData || []), ...(regularData || [])];
+      setBusinesses(allBusinesses);
       setTotalCount(count || 0);
     } catch (error: any) {
       console.error("Error fetching businesses:", error);

@@ -65,16 +65,45 @@ const Cars = () => {
   useEffect(() => {
     const fetchCars = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      
+      // Fetch promoted cars with fair rotation
+      const { data: promotedData } = await supabase
         .from("cars")
         .select("*")
         .eq("status", "active")
+        .eq("is_promoted", true)
+        .gte("promotion_end_date", new Date().toISOString())
+        .order("last_top_position_at", { ascending: true, nullsFirst: true })
+        .order("promotion_impressions", { ascending: true })
+        .limit(3);
+
+      // Fetch regular cars
+      const { data: regularData, error } = await supabase
+        .from("cars")
+        .select("*")
+        .eq("status", "active")
+        .or(`is_promoted.is.null,is_promoted.eq.false,promotion_end_date.lt.${new Date().toISOString()}`)
         .order("created_at", { ascending: false });
 
       if (error) {
         console.error("Error fetching cars:", error);
       } else {
-        setCars(data || []);
+        // Update impressions for promoted cars
+        if (promotedData && promotedData.length > 0) {
+          const updatePromises = promotedData.map(car =>
+            supabase
+              .from("cars")
+              .update({
+                promotion_impressions: (car.promotion_impressions || 0) + 1,
+                last_top_position_at: new Date().toISOString()
+              })
+              .eq("id", car.id)
+          );
+          await Promise.all(updatePromises);
+        }
+
+        const allCars = [...(promotedData || []), ...(regularData || [])];
+        setCars(allCars);
       }
       setLoading(false);
     };

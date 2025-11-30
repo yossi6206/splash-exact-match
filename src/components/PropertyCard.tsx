@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart } from "lucide-react";
+import { Heart, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -20,10 +20,16 @@ interface PropertyCardProps {
     year?: number;
     features: string[];
     clicks_count?: number;
+    is_promoted?: boolean;
+    promotion_end_date?: string;
   };
 }
 
 const PropertyCard = ({ property }: PropertyCardProps) => {
+  const isPromoted = property.is_promoted && 
+    property.promotion_end_date && 
+    new Date(property.promotion_end_date) > new Date();
+
   const handleClick = async () => {
     try {
       const { supabase } = await import("@/integrations/supabase/client");
@@ -37,11 +43,21 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   };
   
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-white border-border">
+    <Card className={`overflow-hidden hover:shadow-lg transition-shadow bg-white border-border ${
+      isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
+    }`}>
       <Link to={`/properties/${property.id}`} onClick={handleClick}>
         <div className="flex flex-col sm:flex-row gap-4 p-4">
           {/* Image */}
-          <div className="w-full sm:w-64 h-48 rounded-lg overflow-hidden flex-shrink-0">
+          <div className="w-full sm:w-64 h-48 rounded-lg overflow-hidden flex-shrink-0 relative">
+            {isPromoted && (
+              <Badge 
+                className="absolute top-2 right-2 z-10 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg"
+              >
+                <Sparkles className="w-3 h-3 ml-1" />
+                מקודם
+              </Badge>
+            )}
             <img 
               src={property.image} 
               alt={property.title}
