@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 interface SecondhandCardProps {
   item: {
-    id: number;
+    id: string | number;
     image?: string;
     images?: string[];
     title: string;
@@ -28,15 +28,29 @@ interface SecondhandCardProps {
     weight?: string;
     user_id?: string;
     seller_name?: string;
+    clicks_count?: number;
   };
 }
 
 export const SecondhandCard = ({ item }: SecondhandCardProps) => {
   const displayImage = item.images && item.images.length > 0 ? item.images[0] : item.image;
   
+  const handleClick = async () => {
+    // Increment clicks count when user clicks on the card
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      await supabase
+        .from("secondhand_items")
+        .update({ clicks_count: (item.clicks_count || 0) + 1 })
+        .eq("id", String(item.id));
+    } catch (error) {
+      console.error("Error updating clicks count:", error);
+    }
+  };
+  
   return (
     <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border">
-      <Link to={`/secondhand/item/${item.id}`}>
+      <Link to={`/secondhand/item/${String(item.id)}`} onClick={handleClick}>
         <div className="relative">
           {/* Image */}
           <div className="aspect-[4/3] overflow-hidden bg-muted">
@@ -209,8 +223,6 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
               </Link>
             </div>
           )}
-
-          {/* Price */}
           <div className="pt-2 border-t">
             <div className="text-2xl font-bold text-foreground">
               ₪{item.price.toLocaleString()}
