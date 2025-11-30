@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Car, Home, Laptop, Package, Briefcase, Building2 } from "lucide-react";
+import { Car, Home, Laptop, Package, Briefcase, Building2, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
@@ -72,6 +72,13 @@ const PostAdDialog = ({ open, onOpenChange }: PostAdDialogProps) => {
       icon: Building2,
       path: "/dashboard/post-business",
       color: "from-amber-500 to-amber-600",
+    },
+    {
+      title: "פרסם פרופיל פרילנסר",
+      description: "הצג את כישוריך וקבל הצעות עבודה",
+      icon: User,
+      path: "/dashboard/post-freelancer",
+      color: "from-indigo-500 to-indigo-600",
     },
   ];
 
