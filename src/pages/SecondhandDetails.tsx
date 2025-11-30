@@ -16,7 +16,14 @@ import {
   ChevronLeft,
   ChevronRight,
   Maximize2,
-  Loader2
+  Loader2,
+  Truck,
+  HandshakeIcon,
+  Calendar,
+  Ruler,
+  Weight,
+  Shield,
+  Package
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -174,62 +181,133 @@ const SecondhandDetails = () => {
             {/* Item Details */}
             <Card className="p-6">
               <h2 className="text-2xl font-bold mb-4">פרטי המוצר</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <span className="text-muted-foreground">קטגוריה:</span>
-                  <p className="font-medium">{item.category}</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-sm text-muted-foreground">קטגוריה</span>
+                    <p className="font-medium text-lg">{item.category}</p>
+                  </div>
+                  {item.subcategory && (
+                    <div>
+                      <span className="text-sm text-muted-foreground">תת-קטגוריה</span>
+                      <p className="font-medium">{item.subcategory}</p>
+                    </div>
+                  )}
+                  <div>
+                    <span className="text-sm text-muted-foreground">מצב</span>
+                    <p className="font-medium">{item.condition}</p>
+                  </div>
+                  {item.brand && (
+                    <div>
+                      <span className="text-sm text-muted-foreground">מותג</span>
+                      <p className="font-medium">{item.brand}</p>
+                    </div>
+                  )}
                 </div>
-                {item.subcategory && (
-                  <div>
-                    <span className="text-muted-foreground">תת-קטגוריה:</span>
-                    <p className="font-medium">{item.subcategory}</p>
-                  </div>
-                )}
-                <div>
-                  <span className="text-muted-foreground">מצב:</span>
-                  <p className="font-medium">{item.condition}</p>
+
+                <div className="space-y-4">
+                  {item.size && (
+                    <div className="flex items-center gap-2">
+                      <Ruler className="h-4 w-4 text-muted-foreground" />
+                      <div>
+                        <span className="text-sm text-muted-foreground">גודל/מידה</span>
+                        <p className="font-medium">{item.size}</p>
+                      </div>
+                    </div>
+                  )}
+                  {item.color && (
+                    <div>
+                      <span className="text-sm text-muted-foreground">צבע</span>
+                      <p className="font-medium">{item.color}</p>
+                    </div>
+                  )}
+                  {item.material && (
+                    <div>
+                      <span className="text-sm text-muted-foreground">חומר</span>
+                      <p className="font-medium">{item.material}</p>
+                    </div>
+                  )}
+                  {item.age && (
+                    <div>
+                      <span className="text-sm text-muted-foreground">גיל/תקופת שימוש</span>
+                      <p className="font-medium">{item.age}</p>
+                    </div>
+                  )}
                 </div>
-                {item.brand && (
-                  <div>
-                    <span className="text-muted-foreground">מותג:</span>
-                    <p className="font-medium">{item.brand}</p>
+              </div>
+
+              <Separator className="my-6" />
+
+              {/* Additional specifications */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {item.year_manufactured && (
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <span className="text-sm text-muted-foreground">שנת ייצור</span>
+                      <p className="font-medium">{item.year_manufactured}</p>
+                    </div>
                   </div>
                 )}
-                {item.size && (
-                  <div>
-                    <span className="text-muted-foreground">גודל:</span>
-                    <p className="font-medium">{item.size}</p>
+                {item.dimensions && (
+                  <div className="flex items-center gap-2">
+                    <Package className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <span className="text-sm text-muted-foreground">מידות</span>
+                      <p className="font-medium">{item.dimensions}</p>
+                    </div>
                   </div>
                 )}
-                {item.color && (
-                  <div>
-                    <span className="text-muted-foreground">צבע:</span>
-                    <p className="font-medium">{item.color}</p>
+                {item.weight && (
+                  <div className="flex items-center gap-2">
+                    <Weight className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <span className="text-sm text-muted-foreground">משקל</span>
+                      <p className="font-medium">{item.weight}</p>
+                    </div>
                   </div>
                 )}
-                {item.material && (
-                  <div>
-                    <span className="text-muted-foreground">חומר:</span>
-                    <p className="font-medium">{item.material}</p>
-                  </div>
-                )}
-                {item.age && (
-                  <div>
-                    <span className="text-muted-foreground">גיל:</span>
-                    <p className="font-medium">{item.age}</p>
+                {item.warranty && (
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <span className="text-sm text-muted-foreground">אחריות</span>
+                      <p className="font-medium">{item.warranty}</p>
+                    </div>
                   </div>
                 )}
               </div>
 
+              {/* Delivery and Negotiable badges */}
+              {(item.delivery_available || item.negotiable) && (
+                <>
+                  <Separator className="my-6" />
+                  <div className="flex flex-wrap gap-3">
+                    {item.delivery_available && (
+                      <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100 border-green-300 dark:border-green-700 px-4 py-2">
+                        <Truck className="h-4 w-4 ml-2" />
+                        משלוח זמין
+                      </Badge>
+                    )}
+                    {item.negotiable && (
+                      <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100 border-blue-300 dark:border-blue-700 px-4 py-2">
+                        <HandshakeIcon className="h-4 w-4 ml-2" />
+                        ניתן למיקוח
+                      </Badge>
+                    )}
+                  </div>
+                </>
+              )}
+
               {item.features && item.features.length > 0 && (
                 <>
-                  <Separator className="my-4" />
+                  <Separator className="my-6" />
                   <div>
-                    <span className="text-muted-foreground mb-2 block">תכונות נוספות:</span>
+                    <span className="text-sm text-muted-foreground mb-2 block">תכונות נוספות</span>
                     <div className="flex flex-wrap gap-2">
                       {item.features.map((feature: string, index: number) => (
                         <Badge key={index} variant="secondary">
-                          {feature}
+                          ✓ {feature}
                         </Badge>
                       ))}
                     </div>
