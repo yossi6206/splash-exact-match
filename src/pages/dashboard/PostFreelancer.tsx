@@ -128,72 +128,69 @@ const PostFreelancer = () => {
     }
 
     try {
-      const validationData = {
+      setLoading(true);
+
+      // Validate form data
+      const validatedData = freelancerSchema.parse({
         full_name: formData.full_name,
         title: formData.title,
         category: formData.category,
-        hourly_rate: Number(formData.hourly_rate),
-        bio: formData.bio || "",
-        location: formData.location || "",
-        experience_years: formData.experience_years ? Number(formData.experience_years) : undefined,
-        portfolio_url: formData.portfolio_url || "",
+        hourly_rate: parseInt(formData.hourly_rate),
+        bio: formData.bio,
+        location: formData.location,
+        experience_years: formData.experience_years ? parseInt(formData.experience_years) : undefined,
+        portfolio_url: formData.portfolio_url,
         availability: formData.availability,
-      };
-
-      const validated = freelancerSchema.parse(validationData);
-      setLoading(true);
-
-      let avatarUrl = "";
-
-      // Upload avatar if selected
-      if (avatarFile) {
-        const fileExt = avatarFile.name.split(".").pop();
-        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-        const { error: uploadError, data } = await supabase.storage
-          .from("product-images")
-          .upload(fileName, avatarFile);
-
-        if (uploadError) {
-          toast.error("שגיאה בהעלאת תמונה: " + uploadError.message);
-          setLoading(false);
-          return;
-        }
-
-        const { data: urlData } = supabase.storage
-          .from("product-images")
-          .getPublicUrl(fileName);
-
-        avatarUrl = urlData.publicUrl;
-      }
-
-      const { error } = await supabase.from("freelancers").insert({
-        user_id: user.id,
-        full_name: validated.full_name,
-        title: validated.title,
-        category: validated.category,
-        hourly_rate: validated.hourly_rate,
-        bio: validated.bio || null,
-        location: validated.location || null,
-        experience_years: validated.experience_years || null,
-        portfolio_url: validated.portfolio_url || null,
-        availability: validated.availability,
-        skills: skills,
-        languages: languages.length > 0 ? languages : null,
-        avatar_url: avatarUrl || null,
       });
 
-      if (error) {
-        throw error;
+      // Upload avatar if exists
+      let avatarUrl = null;
+      if (avatarFile) {
+        const fileExt = avatarFile.name.split('.').pop();
+        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('product-images')
+          .upload(fileName, avatarFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(fileName);
+        
+        avatarUrl = publicUrl;
       }
 
-      toast.success("הפרופיל פורסם בהצלחה!");
-      navigate("/freelancers");
+      // Insert freelancer
+      const { error } = await supabase
+        .from("freelancers")
+        .insert({
+          user_id: user.id,
+          full_name: validatedData.full_name,
+          title: validatedData.title,
+          category: validatedData.category,
+          location: validatedData.location || null,
+          hourly_rate: validatedData.hourly_rate,
+          experience_years: validatedData.experience_years || null,
+          availability: validatedData.availability,
+          portfolio_url: validatedData.portfolio_url || null,
+          avatar_url: avatarUrl,
+          bio: validatedData.bio || null,
+          skills: skills,
+          languages: languages,
+        });
+
+      if (error) throw error;
+
+      toast.success("הפרופיל נפרסם בהצלחה!");
+      navigate("/dashboard/my-ads");
     } catch (error: any) {
+      console.error("Error posting freelancer:", error);
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0];
         toast.error(firstError.message);
       } else {
-        toast.error("שגיאה בפרסום הפרופיל: " + (error.message || "Unknown error"));
+        toast.error(error.message || "שגיאה בפרסום הפרופיל");
       }
     } finally {
       setLoading(false);
