@@ -48,6 +48,10 @@ const PropertyDetails = () => {
       } else {
         setProperty(data);
         
+        // Set main image when property loads
+        const propertyImages = data.images && data.images.length > 0 ? data.images : [property1];
+        setMainImage(propertyImages[0]);
+        
         // Increment view count
         await supabase
           .from("properties")
@@ -119,13 +123,6 @@ const PropertyDetails = () => {
   }
 
   const images = property.images && property.images.length > 0 ? property.images : [property1];
-
-  // Set main image when property loads
-  useEffect(() => {
-    if (images.length > 0) {
-      setMainImage(images[0]);
-    }
-  }, [property]);
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
