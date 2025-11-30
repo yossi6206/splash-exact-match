@@ -86,15 +86,25 @@ const FreelancerCard = ({
                   {getInitials(full_name)}
                 </AvatarFallback>
               </Avatar>
-              {isOnline && (
-                <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-card rounded-full" />
-              )}
+              <div className={`absolute bottom-0 right-0 w-3.5 h-3.5 border-2 border-card rounded-full ${
+                isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
+              }`} />
             </div>
             
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-lg text-foreground mb-1 group-hover:text-primary transition-colors truncate">
-                {full_name}
-              </h3>
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors truncate">
+                  {full_name}
+                </h3>
+                <Badge 
+                  variant={isOnline ? "default" : "secondary"} 
+                  className={`text-xs px-2 py-0.5 ${
+                    isOnline ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-400 text-white'
+                  }`}
+                >
+                  {isOnline ? 'מחובר' : 'לא מחובר'}
+                </Badge>
+              </div>
               <p className="text-sm text-muted-foreground mb-2 line-clamp-1">{title}</p>
               
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
