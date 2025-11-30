@@ -549,6 +549,10 @@ const Header = () => {
                   </div>
                 )}
               </div>
+
+              <Button variant="ghost" className="text-sm font-medium" asChild>
+                <Link to="/businesses">עסקים למכירה</Link>
+              </Button>
             </nav>
           </div>
 
