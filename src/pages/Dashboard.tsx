@@ -15,7 +15,6 @@ import PostSecondhand from "./dashboard/PostSecondhand";
 import PostBusiness from "./dashboard/PostBusiness";
 import MyAds from "./dashboard/MyAds";
 import Statistics from "./dashboard/Statistics";
-import Messages from "./dashboard/Messages";
 
 const Dashboard = () => {
   const stats = [
@@ -293,7 +292,6 @@ const Dashboard = () => {
             <Route path="/post-secondhand" element={<PostSecondhand />} />
             <Route path="/post-business" element={<PostBusiness />} />
             <Route path="/stats" element={<Statistics />} />
-            <Route path="/messages" element={<Messages />} />
           </Routes>
         </main>
       </div>
