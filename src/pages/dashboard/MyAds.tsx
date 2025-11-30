@@ -197,7 +197,7 @@ const MyAds = () => {
 
   const renderListingCard = (listing: Listing) => (
     <Card key={listing.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_200px] gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4">
         {/* Content */}
         <div className="p-4 flex flex-col justify-between order-2 md:order-1">
           <div>
