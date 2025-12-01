@@ -280,8 +280,9 @@ const Favorites = () => {
           <h1 className="text-3xl font-bold mb-6 text-center">מודעות שאהבתי</h1>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="mb-6">
-              <TabsTrigger value="all">הכל ({favorites.length})</TabsTrigger>
+            <div className="flex justify-center mb-6">
+              <TabsList>
+                <TabsTrigger value="all">הכל ({favorites.length})</TabsTrigger>
             <TabsTrigger value="car">
               רכב ({favorites.filter(f => f.item_type === 'car').length})
             </TabsTrigger>
@@ -300,10 +301,11 @@ const Favorites = () => {
             <TabsTrigger value="business">
               עסקים ({favorites.filter(f => f.item_type === 'business').length})
             </TabsTrigger>
-            <TabsTrigger value="secondhand">
-              יד שניה ({favorites.filter(f => f.item_type === 'secondhand').length})
-            </TabsTrigger>
-          </TabsList>
+              <TabsTrigger value="secondhand">
+                יד שניה ({favorites.filter(f => f.item_type === 'secondhand').length})
+              </TabsTrigger>
+            </TabsList>
+            </div>
 
             <TabsContent value={activeTab}>
               {filteredFavorites.length === 0 ? (
