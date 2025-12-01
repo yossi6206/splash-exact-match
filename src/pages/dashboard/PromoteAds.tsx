@@ -117,7 +117,13 @@ const PromoteAds = () => {
 
       if (error) throw error;
 
-      toast.success(`המודעה קודמה בהצלחה ל-${duration} ימים!`);
+      toast.success(
+        `המודעה קודמה בהצלחה ל-${duration} ימים! 🎉`,
+        { 
+          description: 'הקידום לא ניתן לביטול וימשיך עד תום התקופה ששולמה.',
+          duration: 6000 
+        }
+      );
       setSelectedAd(null);
       fetchUserAds();
     } catch (error) {
@@ -277,6 +283,24 @@ const PromoteAds = () => {
         </TabsContent>
 
         <TabsContent value="promoted" className="space-y-4 mt-6">
+          {/* Important Notice */}
+          <Card className="bg-blue-50 border-blue-200 dark:bg-blue-950/20 dark:border-blue-900">
+            <CardContent className="p-4">
+              <div className="flex gap-3">
+                <div className="text-blue-600 dark:text-blue-400 mt-0.5">ℹ️</div>
+                <div className="space-y-1">
+                  <h4 className="font-semibold text-blue-900 dark:text-blue-100">
+                    מדיניות קידום
+                  </h4>
+                  <p className="text-sm text-blue-800 dark:text-blue-200">
+                    קידום שרכשת <strong>לא ניתן לביטול</strong> וימשיך באופן אוטומטי עד תום התקופה ששולמה.
+                    תאריך סיום הקידום מוצג בכל מודעה מקודמת.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {promotedAds.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center">
@@ -368,11 +392,23 @@ const PromoteAds = () => {
             ))}
           </div>
 
-          <div className="mt-6 p-4 bg-muted rounded-lg">
-            <h4 className="font-semibold mb-2">💡 טיפ:</h4>
-            <p className="text-sm text-muted-foreground">
-              מודעות מקודמות מקבלות בממוצע פי 5 יותר צפיות ופי 3 יותר קליקים מאשר מודעות רגילות!
-            </p>
+          <div className="space-y-3 mt-6">
+            <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg dark:bg-amber-950/20 dark:border-amber-900">
+              <h4 className="font-semibold mb-2 text-amber-900 dark:text-amber-100 flex items-center gap-2">
+                ⚠️ חשוב לדעת
+              </h4>
+              <p className="text-sm text-amber-800 dark:text-amber-200">
+                לאחר רכישת הקידום, <strong>לא ניתן לבטל או להחזיר כסף</strong>. 
+                הקידום ימשיך באופן אוטומטי עד תום התקופה שנבחרה.
+              </p>
+            </div>
+            
+            <div className="p-4 bg-muted rounded-lg">
+              <h4 className="font-semibold mb-2">💡 טיפ:</h4>
+              <p className="text-sm text-muted-foreground">
+                מודעות מקודמות מקבלות בממוצע פי 5 יותר צפיות ופי 3 יותר קליקים מאשר מודעות רגילות!
+              </p>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
