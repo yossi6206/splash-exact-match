@@ -3,16 +3,142 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { Loader2, Heart } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CarCard } from "@/components/CarCard";
-import PropertyCard from "@/components/PropertyCard";
-import { LaptopCard } from "@/components/LaptopCard";
-import { JobCard } from "@/components/JobCard";
-import FreelancerCard from "@/components/FreelancerCard";
-import BusinessCard from "@/components/BusinessCard";
-import { SecondhandCard } from "@/components/SecondhandCard";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useFavorites } from "@/hooks/useFavorites";
+
+// Unified card component for all favorite types
+const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
+  const { isFavorite, toggleFavorite } = useFavorites(String(favorite.item_id), favorite.item_type);
+  
+  const getItemLink = () => {
+    const id = favorite.item_id;
+    switch (favorite.item_type) {
+      case 'car': return `/cars/${id}`;
+      case 'property': return `/properties/${id}`;
+      case 'laptop': return `/laptops/${id}`;
+      case 'job': return `/jobs/${id}`;
+      case 'freelancer': return `/freelancers/${id}`;
+      case 'business': return `/businesses/${id}`;
+      case 'secondhand': return `/secondhand/item/${id}`;
+      default: return '#';
+    }
+  };
+
+  const getTitle = () => {
+    const data = favorite.itemData;
+    switch (favorite.item_type) {
+      case 'car': return `${data.manufacturer || ''} ${data.model || ''}`.trim();
+      case 'property': return data.title;
+      case 'laptop': return `${data.brand} ${data.model}`;
+      case 'job': return data.title;
+      case 'freelancer': return data.full_name;
+      case 'business': return data.title;
+      case 'secondhand': return data.title;
+      default: return '';
+    }
+  };
+
+  const getSubtitle = () => {
+    const data = favorite.itemData;
+    switch (favorite.item_type) {
+      case 'car': return `שנה ${data.year} • יד ${data.hand}`;
+      case 'property': return `${data.rooms} חדרים • ${data.size} מ"ר • קומה ${data.floor}`;
+      case 'laptop': return `${data.condition} • ${data.location}`;
+      case 'job': return `${data.company_name} • ${data.location}`;
+      case 'freelancer': return data.title;
+      case 'business': return `${data.business_type} • ${data.location}`;
+      case 'secondhand': return `${data.condition} • ${data.location}`;
+      default: return '';
+    }
+  };
+
+  const getPrice = () => {
+    const data = favorite.itemData;
+    switch (favorite.item_type) {
+      case 'car': return data.price ? parseInt(data.price) : 0;
+      case 'property': return data.price;
+      case 'laptop': return data.price;
+      case 'job': return null; // Jobs don't always have prices
+      case 'freelancer': return data.hourly_rate;
+      case 'business': return data.price;
+      case 'secondhand': return data.price;
+      default: return null;
+    }
+  };
+
+  const getImage = () => {
+    const data = favorite.itemData;
+    if (data.images && data.images.length > 0) return data.images[0];
+    if (data.image) return data.image;
+    if (data.avatar_url) return data.avatar_url;
+    return '';
+  };
+
+  const price = getPrice();
+
+  return (
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-white border-border">
+      <Link to={getItemLink()}>
+        <div className="flex gap-4 p-4">
+          {/* Image */}
+          <div className="w-48 h-32 rounded-lg overflow-hidden flex-shrink-0 relative">
+            {getImage() ? (
+              <img 
+                src={getImage()} 
+                alt={getTitle()}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-muted flex items-center justify-center">
+                <span className="text-muted-foreground text-sm">אין תמונה</span>
+              </div>
+            )}
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 flex flex-col justify-between">
+            <div className="text-right">
+              <h3 className="text-lg font-bold text-foreground mb-1">
+                {getTitle()}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                {getSubtitle()}
+              </p>
+            </div>
+
+            {price !== null && (
+              <div className="text-right">
+                <div className="text-2xl font-bold text-foreground">
+                  ₪{typeof price === 'number' ? price.toLocaleString() : price}
+                  {favorite.item_type === 'freelancer' && <span className="text-sm font-normal text-muted-foreground"> לשעה</span>}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Heart Button */}
+          <div className="flex items-start">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-muted-foreground hover:text-red-500"
+              onClick={(e) => {
+                e.preventDefault();
+                toggleFavorite(e);
+              }}
+            >
+              <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+            </Button>
+          </div>
+        </div>
+      </Link>
+    </Card>
+  );
+};
 
 const Favorites = () => {
   const { user } = useAuth();
@@ -149,7 +275,7 @@ const Favorites = () => {
       <Header />
       
       <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-right">המודעות המועדפות שלי</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">מודעות שאהבתי</h1>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="mb-6">
@@ -183,167 +309,10 @@ const Favorites = () => {
                 <p className="text-muted-foreground">אין מודעות מועדפות</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredFavorites.map((fav) => {
-                  switch (fav.item_type) {
-                    case 'car':
-                      return (
-                        <CarCard
-                          key={fav.id}
-                          car={{
-                            id: fav.itemData.id,
-                            image: fav.itemData.images?.[0] || '',
-                            title: `${fav.itemData.manufacturer} ${fav.itemData.model}`,
-                            subtitle: fav.itemData.description || '',
-                            manufacturer: fav.itemData.manufacturer,
-                            model: fav.itemData.model,
-                            year: fav.itemData.year,
-                            hand: `יד ${fav.itemData.hand}`,
-                            km: fav.itemData.km,
-                            price: parseInt(fav.itemData.price || '0'),
-                            location: fav.itemData.location,
-                            features: fav.itemData.features || [],
-                            clicks_count: fav.itemData.clicks_count,
-                            is_promoted: fav.itemData.is_promoted,
-                            promotion_end_date: fav.itemData.promotion_end_date,
-                          }}
-                        />
-                      );
-                    case 'property':
-                      return (
-                        <PropertyCard
-                          key={fav.id}
-                          property={{
-                            id: fav.itemData.id,
-                            image: fav.itemData.images?.[0] || '',
-                            title: fav.itemData.title,
-                            subtitle: fav.itemData.description || '',
-                            propertyType: fav.itemData.property_type,
-                            condition: fav.itemData.condition || '',
-                            price: fav.itemData.price.toString(),
-                            location: fav.itemData.location,
-                            rooms: fav.itemData.rooms,
-                            size: fav.itemData.size,
-                            floor: fav.itemData.floor,
-                            year: fav.itemData.year,
-                            features: fav.itemData.features || [],
-                            clicks_count: fav.itemData.clicks_count,
-                            is_promoted: fav.itemData.is_promoted,
-                            promotion_end_date: fav.itemData.promotion_end_date,
-                            listing_type: fav.itemData.listing_type,
-                          }}
-                        />
-                      );
-                    case 'laptop':
-                      return (
-                        <LaptopCard
-                          key={fav.id}
-                          laptop={{
-                            id: fav.itemData.id,
-                            image: fav.itemData.images?.[0] || '',
-                            title: `${fav.itemData.brand} ${fav.itemData.model}`,
-                            subtitle: fav.itemData.description || '',
-                            price: fav.itemData.price,
-                            condition: fav.itemData.condition,
-                            location: fav.itemData.location,
-                            features: fav.itemData.features || [],
-                            clicks_count: fav.itemData.clicks_count,
-                          }}
-                        />
-                      );
-                    case 'job':
-                      return (
-                        <JobCard
-                          key={fav.id}
-                          id={fav.itemData.id}
-                          company={fav.itemData.company_name}
-                          title={fav.itemData.title}
-                          location={fav.itemData.location}
-                          type={fav.itemData.job_type}
-                          scope={fav.itemData.scope}
-                          salary={fav.itemData.salary_min && fav.itemData.salary_max 
-                            ? `₪${fav.itemData.salary_min.toLocaleString()}-${fav.itemData.salary_max.toLocaleString()}`
-                            : undefined
-                          }
-                          experience={`${fav.itemData.experience_min || 0}-${fav.itemData.experience_max || 0} שנות ניסיון`}
-                          postedDate={new Date(fav.itemData.created_at).toLocaleDateString('he-IL')}
-                          requirements={fav.itemData.requirements || []}
-                          clicks_count={fav.itemData.clicks_count}
-                        />
-                      );
-                    case 'freelancer':
-                      return (
-                        <FreelancerCard
-                          key={fav.id}
-                          id={fav.itemData.id}
-                          full_name={fav.itemData.full_name}
-                          avatar_url={fav.itemData.avatar_url}
-                          title={fav.itemData.title}
-                          bio={fav.itemData.bio}
-                          skills={fav.itemData.skills || []}
-                          hourly_rate={fav.itemData.hourly_rate}
-                          rating={fav.itemData.rating || 0}
-                          total_reviews={fav.itemData.total_reviews || 0}
-                          location={fav.itemData.location}
-                          category={fav.itemData.category}
-                          user_id={fav.itemData.user_id}
-                        />
-                      );
-                    case 'business':
-                      return (
-                        <BusinessCard
-                          key={fav.id}
-                          id={fav.itemData.id}
-                          title={fav.itemData.title}
-                          description={fav.itemData.description}
-                          business_type={fav.itemData.business_type}
-                          category={fav.itemData.category}
-                          price={fav.itemData.price}
-                          location={fav.itemData.location}
-                          annual_revenue={fav.itemData.annual_revenue}
-                          monthly_profit={fav.itemData.monthly_profit}
-                          years_operating={fav.itemData.years_operating}
-                          employees_count={fav.itemData.employees_count}
-                          images={fav.itemData.images}
-                          clicks_count={fav.itemData.clicks_count}
-                          is_promoted={fav.itemData.is_promoted}
-                          promotion_end_date={fav.itemData.promotion_end_date}
-                        />
-                      );
-                    case 'secondhand':
-                      return (
-                        <SecondhandCard
-                          key={fav.id}
-                          item={{
-                            id: fav.itemData.id,
-                            images: fav.itemData.images,
-                            title: fav.itemData.title,
-                            category: fav.itemData.category,
-                            subcategory: fav.itemData.subcategory,
-                            condition: fav.itemData.condition,
-                            price: fav.itemData.price,
-                            location: fav.itemData.location,
-                            brand: fav.itemData.brand,
-                            size: fav.itemData.size,
-                            color: fav.itemData.color,
-                            material: fav.itemData.material,
-                            age: fav.itemData.age,
-                            features: fav.itemData.features,
-                            delivery_available: fav.itemData.delivery_available,
-                            negotiable: fav.itemData.negotiable,
-                            year_manufactured: fav.itemData.year_manufactured,
-                            dimensions: fav.itemData.dimensions,
-                            weight: fav.itemData.weight,
-                            user_id: fav.itemData.user_id,
-                            seller_name: fav.itemData.seller_name,
-                            clicks_count: fav.itemData.clicks_count,
-                          }}
-                        />
-                      );
-                    default:
-                      return null;
-                  }
-                })}
+              <div className="space-y-4">
+                {filteredFavorites.map((fav) => (
+                  <UnifiedFavoriteCard key={fav.id} favorite={fav} />
+                ))}
               </div>
             )}
           </TabsContent>
