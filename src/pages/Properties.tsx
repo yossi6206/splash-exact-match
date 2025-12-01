@@ -62,18 +62,16 @@ const Properties = () => {
 
       if (promotedError || regularError) throw promotedError || regularError;
 
-      // Update impressions for promoted properties
+      // Update impressions only for the first promoted property (top position)
       if (promotedData && promotedData.length > 0) {
-        const updatePromises = promotedData.map(property =>
-          supabase
-            .from('properties')
-            .update({
-              promotion_impressions: (property.promotion_impressions || 0) + 1,
-              last_top_position_at: new Date().toISOString()
-            })
-            .eq('id', property.id)
-        );
-        await Promise.all(updatePromises);
+        const topProperty = promotedData[0];
+        await supabase
+          .from('properties')
+          .update({
+            promotion_impressions: (topProperty.promotion_impressions || 0) + 1,
+            last_top_position_at: new Date().toISOString()
+          })
+          .eq('id', topProperty.id);
       }
 
       // Combine promoted and regular properties
