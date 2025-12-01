@@ -82,28 +82,32 @@ export default function Messages() {
         .from("freelancers")
         .select("id")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       let freelancerConversations: any[] = [];
       if (freelancerProfile) {
-        const { data, error } = await supabase
+        const { data: conversations, error } = await supabase
           .from("conversations")
-          .select(
-            `
-            id,
-            client_id,
-            last_message_at,
-            profiles!conversations_client_id_fkey (
-              id,
-              full_name,
-              avatar_url
-            )
-          `
-          )
+          .select("id, client_id, last_message_at")
           .eq("freelancer_id", freelancerProfile.id)
           .order("last_message_at", { ascending: false, nullsFirst: false });
 
-        if (!error) freelancerConversations = data || [];
+        if (!error && conversations) {
+          // Get client profiles separately
+          const clientIds = conversations.map(c => c.client_id);
+          const { data: clientProfiles } = await supabase
+            .from("profiles")
+            .select("id, full_name, avatar_url")
+            .in("id", clientIds);
+
+          freelancerConversations = conversations.map((conv: any) => {
+            const profile = clientProfiles?.find(p => p.id === conv.client_id);
+            return {
+              ...conv,
+              profiles: profile || { id: conv.client_id, full_name: "לקוח", avatar_url: null }
+            };
+          });
+        }
       }
 
       // Get last message for each conversation
