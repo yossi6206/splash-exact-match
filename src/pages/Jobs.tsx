@@ -55,12 +55,26 @@ const Jobs = () => {
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      const startIndex = (currentPage - 1) * itemsPerPage;
       
+      // Fetch promoted jobs with fair rotation
+      const { data: promotedData } = await supabase
+        .from("jobs")
+        .select("*")
+        .eq("status", "active")
+        .eq("is_promoted", true)
+        .gte("promotion_end_date", new Date().toISOString())
+        .order("promotion_impressions", { ascending: true })
+        .order("last_top_position_at", { ascending: true, nullsFirst: true })
+        .order("id", { ascending: true })
+        .limit(3);
+
+      // Fetch regular jobs with pagination
+      const startIndex = (currentPage - 1) * itemsPerPage;
       let query = supabase
         .from("jobs")
         .select("*", { count: "exact" })
         .eq("status", "active")
+        .or(`is_promoted.is.null,is_promoted.eq.false,promotion_end_date.lt.${new Date().toISOString()}`)
         .range(startIndex, startIndex + itemsPerPage - 1);
 
       // Apply sorting
@@ -76,8 +90,23 @@ const Jobs = () => {
 
       if (error) throw error;
 
+      // Update impressions only for the first promoted job (top position)
+      if (promotedData && promotedData.length > 0) {
+        const topJob = promotedData[0];
+        await supabase
+          .from("jobs")
+          .update({
+            promotion_impressions: (topJob.promotion_impressions || 0) + 1,
+            last_top_position_at: new Date().toISOString()
+          })
+          .eq("id", topJob.id);
+      }
+
+      // Combine promoted and regular jobs
+      const allJobsData = [...(promotedData || []), ...(data || [])];
+
       // Transform data to match JobCard expectations
-      const transformedJobs = (data || []).map((job) => ({
+      const transformedJobs = allJobsData.map((job) => ({
         id: job.id,
         company: job.company_name,
         title: job.title,
