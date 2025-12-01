@@ -276,11 +276,12 @@ const Favorites = () => {
       <Header />
       
       <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">מודעות שאהבתי</h1>
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6 text-center">מודעות שאהבתי</h1>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mb-6">
-            <TabsTrigger value="all">הכל ({favorites.length})</TabsTrigger>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="mb-6">
+              <TabsTrigger value="all">הכל ({favorites.length})</TabsTrigger>
             <TabsTrigger value="car">
               רכב ({favorites.filter(f => f.item_type === 'car').length})
             </TabsTrigger>
@@ -304,20 +305,21 @@ const Favorites = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value={activeTab}>
-            {filteredFavorites.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">אין מודעות מועדפות</p>
-              </div>
-            ) : (
-              <div className="space-y-3 max-w-4xl mx-auto">
-                {filteredFavorites.map((fav) => (
-                  <UnifiedFavoriteCard key={fav.id} favorite={fav} />
-                ))}
-              </div>
-            )}
-          </TabsContent>
-        </Tabs>
+            <TabsContent value={activeTab}>
+              {filteredFavorites.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">אין מודעות מועדפות</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {filteredFavorites.map((fav) => (
+                    <UnifiedFavoriteCard key={fav.id} favorite={fav} />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
       </main>
 
       <Footer />
