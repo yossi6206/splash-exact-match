@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, MapPin, Truck, HandshakeIcon, Calendar, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useFavorites } from "@/hooks/useFavorites";
 
 interface SecondhandCardProps {
   item: {
@@ -34,6 +35,7 @@ interface SecondhandCardProps {
 
 export const SecondhandCard = ({ item }: SecondhandCardProps) => {
   const displayImage = item.images && item.images.length > 0 ? item.images[0] : item.image;
+  const { isFavorite, toggleFavorite } = useFavorites(String(item.id), 'secondhand');
   
   const handleClick = async () => {
     // Increment clicks count when user clicks on the card
@@ -72,12 +74,9 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
             variant="ghost" 
             size="icon"
             className="absolute top-3 left-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
+            onClick={toggleFavorite}
           >
-            <Heart className="h-4 w-4" />
+            <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
           </Button>
 
           {/* Badges - Top Right */}

@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useFavorites } from "@/hooks/useFavorites";
 
 interface PropertyCardProps {
   property: {
@@ -30,6 +31,8 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   const isPromoted = property.is_promoted && 
     property.promotion_end_date && 
     new Date(property.promotion_end_date) > new Date();
+
+  const { isFavorite, toggleFavorite } = useFavorites(property.id, 'property');
 
   const handleClick = async () => {
     try {
@@ -91,8 +94,13 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
                   )}
                 </div>
               </div>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-accent">
-                <Heart className="h-5 w-5" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-muted-foreground hover:text-accent"
+                onClick={toggleFavorite}
+              >
+                <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
               </Button>
             </div>
 

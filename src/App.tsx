@@ -27,6 +27,7 @@ import Businesses from "./pages/Businesses";
 import BusinessDetails from "./pages/BusinessDetails";
 import SellerProfile from "./pages/SellerProfile";
 import Messages from "./pages/Messages";
+import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
 import MobileNav from "./components/MobileNav";
 import TawkToChat from "./components/TawkToChat";
@@ -67,6 +68,7 @@ const AppContent = () => {
         <Route path="/tips" element={<TipsGuidesPage />} />
         <Route path="/tips/:id" element={<TipDetails />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/favorites" element={<Favorites />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="*" element={<NotFound />} />

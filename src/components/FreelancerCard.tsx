@@ -2,12 +2,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Star, MapPin, Clock, Award, MessageCircle } from "lucide-react";
+import { Star, MapPin, Clock, Award, MessageCircle, Heart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useFavorites } from "@/hooks/useFavorites";
 
 interface FreelancerCardProps {
   id: string;
@@ -42,6 +43,7 @@ const FreelancerCard = ({
   const { toast } = useToast();
   const navigate = useNavigate();
   const { isOnline } = useOnlineStatus(user_id);
+  const { isFavorite, toggleFavorite } = useFavorites(id, 'freelancer');
 
   const getInitials = (name: string) => {
     const parts = name.split(" ");
@@ -141,6 +143,15 @@ const FreelancerCard = ({
                 )}
               </div>
             </div>
+
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="text-muted-foreground hover:text-accent"
+              onClick={toggleFavorite}
+            >
+              <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+            </Button>
           </div>
 
           {/* Bio */}

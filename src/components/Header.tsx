@@ -698,7 +698,12 @@ const Header = () => {
                 )}
               </Button>
             )}
-            <Button variant="ghost" size="icon" className="hidden md:flex">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="hidden md:flex"
+              onClick={() => navigate("/favorites")}
+            >
               <Heart className="h-5 w-5" />
             </Button>
             
