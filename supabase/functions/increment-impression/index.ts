@@ -5,6 +5,24 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Helper to get geolocation from IP
+async function getGeolocation(ip: string) {
+  try {
+    const response = await fetch(`https://ipapi.co/${ip}/json/`)
+    if (response.ok) {
+      const data = await response.json()
+      return {
+        country: data.country_name || null,
+        city: data.city || null,
+        region: data.region || null,
+      }
+    }
+  } catch (error) {
+    console.log('Geolocation fetch error:', error)
+  }
+  return { country: null, city: null, region: null }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
@@ -12,6 +30,15 @@ Deno.serve(async (req) => {
 
   try {
     const { table, id } = await req.json()
+    
+    // Extract IP and User-Agent from request
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || 
+               req.headers.get('cf-connecting-ip') || 
+               'unknown'
+    const userAgent = req.headers.get('user-agent') || 'unknown'
+    
+    // Get geolocation data
+    const geo = await getGeolocation(ip)
 
     console.log(`Incrementing impression for ${table} with id ${id}`)
     
@@ -58,6 +85,24 @@ Deno.serve(async (req) => {
     if (updateError) {
       console.error('Error updating impression:', updateError)
       throw updateError
+    }
+
+    // Log detailed impression data
+    const { error: logError } = await supabase
+      .from('promotion_impressions_log')
+      .insert({
+        item_type: table,
+        item_id: id,
+        country: geo.country,
+        city: geo.city,
+        region: geo.region,
+        ip_address: ip,
+        user_agent: userAgent
+      })
+
+    if (logError) {
+      console.error('Error logging impression details:', logError)
+      // Don't fail the request if logging fails
     }
 
     console.log('Successfully incremented impression')
