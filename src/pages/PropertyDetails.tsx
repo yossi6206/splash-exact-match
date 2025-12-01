@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
+import SoldPropertiesInArea from "@/components/SoldPropertiesInArea";
 import { supabase } from "@/integrations/supabase/client";
 import property1 from "@/assets/property-1.jpg";
 
@@ -299,6 +300,12 @@ const PropertyDetails = () => {
                 </div>
               </Card>
             )}
+
+            {/* Sold Properties in Area */}
+            <SoldPropertiesInArea 
+              currentPropertyLocation={property.location}
+              currentPropertyId={property.id}
+            />
           </div>
 
           {/* Sidebar - Contact Card */}
