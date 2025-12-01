@@ -1,7 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { he } from "date-fns/locale";
+import { useState } from "react";
 
 interface ConversationItemProps {
   id: string;
@@ -13,9 +16,11 @@ interface ConversationItemProps {
   unreadCount?: number;
   isSelected: boolean;
   onClick: () => void;
+  onDelete?: (id: string) => void;
 }
 
 export const ConversationItem = ({
+  id,
   otherUserName,
   otherUserAvatar,
   lastMessage,
@@ -23,7 +28,9 @@ export const ConversationItem = ({
   unreadCount = 0,
   isSelected,
   onClick,
+  onDelete,
 }: ConversationItemProps) => {
+  const [isHovered, setIsHovered] = useState(false);
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -42,13 +49,32 @@ export const ConversationItem = ({
     }
   };
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onDelete) {
+      onDelete(id);
+    }
+  };
+
   return (
     <div
       onClick={onClick}
-      className={`flex items-start gap-3 p-4 cursor-pointer transition-colors hover:bg-accent/50 border-b ${
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`flex items-start gap-3 p-4 cursor-pointer transition-colors hover:bg-accent/50 border-b relative ${
         isSelected ? "bg-accent" : ""
       }`}
     >
+      {isHovered && onDelete && (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleDelete}
+          className="absolute left-2 top-2 h-8 w-8 hover:bg-destructive hover:text-destructive-foreground"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      )}
       <Avatar className="h-12 w-12 flex-shrink-0">
         <AvatarImage src={otherUserAvatar || ""} alt={otherUserName} />
         <AvatarFallback className="bg-primary/10 text-primary">
