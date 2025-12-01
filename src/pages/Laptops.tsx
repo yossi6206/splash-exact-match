@@ -122,13 +122,9 @@ const Laptops = () => {
       // Update impressions only for the first promoted laptop (top position)
       if (promotedData && promotedData.length > 0) {
         const topLaptop = promotedData[0];
-        await supabase
-          .from("laptops")
-          .update({
-            promotion_impressions: (topLaptop.promotion_impressions || 0) + 1,
-            last_top_position_at: new Date().toISOString()
-          })
-          .eq("id", topLaptop.id);
+        await supabase.functions.invoke('increment-impression', {
+          body: { table: 'laptops', id: topLaptop.id }
+        });
       }
 
       const allLaptops = [...(promotedData || []), ...(data || [])];

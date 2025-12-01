@@ -81,13 +81,9 @@ const Freelancers = () => {
       // Update impressions only for the first promoted freelancer (top position)
       if (promotedData && promotedData.length > 0) {
         const topFreelancer = promotedData[0];
-        await supabase
-          .from("freelancers")
-          .update({
-            promotion_impressions: (topFreelancer.promotion_impressions || 0) + 1,
-            last_top_position_at: new Date().toISOString()
-          })
-          .eq("id", topFreelancer.id);
+        await supabase.functions.invoke('increment-impression', {
+          body: { table: 'freelancers', id: topFreelancer.id }
+        });
       }
 
       // Combine promoted and regular freelancers

@@ -66,13 +66,9 @@ const Properties = () => {
       // Update impressions only for the first promoted property (top position)
       if (promotedData && promotedData.length > 0) {
         const topProperty = promotedData[0];
-        await supabase
-          .from('properties')
-          .update({
-            promotion_impressions: (topProperty.promotion_impressions || 0) + 1,
-            last_top_position_at: new Date().toISOString()
-          })
-          .eq('id', topProperty.id);
+        await supabase.functions.invoke('increment-impression', {
+          body: { table: 'properties', id: topProperty.id }
+        });
       }
 
       // Combine promoted and regular properties

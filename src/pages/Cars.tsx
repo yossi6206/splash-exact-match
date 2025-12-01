@@ -92,13 +92,9 @@ const Cars = () => {
         // Update impressions only for the first promoted car (top position)
         if (promotedData && promotedData.length > 0) {
           const topCar = promotedData[0];
-          await supabase
-            .from("cars")
-            .update({
-              promotion_impressions: (topCar.promotion_impressions || 0) + 1,
-              last_top_position_at: new Date().toISOString()
-            })
-            .eq("id", topCar.id);
+          await supabase.functions.invoke('increment-impression', {
+            body: { table: 'cars', id: topCar.id }
+          });
         }
 
         const allCars = [...(promotedData || []), ...(regularData || [])];

@@ -80,13 +80,9 @@ const Businesses = () => {
       // Update impressions only for the first promoted business (top position)
       if (promotedData && promotedData.length > 0) {
         const topBusiness = promotedData[0];
-        await supabase
-          .from("businesses")
-          .update({
-            promotion_impressions: (topBusiness.promotion_impressions || 0) + 1,
-            last_top_position_at: new Date().toISOString()
-          })
-          .eq("id", topBusiness.id);
+        await supabase.functions.invoke('increment-impression', {
+          body: { table: 'businesses', id: topBusiness.id }
+        });
       }
 
       const allBusinesses = [...(promotedData || []), ...(regularData || [])];
