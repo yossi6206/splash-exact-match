@@ -81,11 +81,11 @@ const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
   const price = getPrice();
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-white border-border">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-white border-border max-w-3xl">
       <Link to={getItemLink()}>
-        <div className="flex gap-4 p-4">
+        <div className="flex gap-3 p-3">
           {/* Image */}
-          <div className="w-48 h-32 rounded-lg overflow-hidden flex-shrink-0 relative">
+          <div className="w-32 h-24 rounded-lg overflow-hidden flex-shrink-0 relative">
             {getImage() ? (
               <img 
                 src={getImage()} 
@@ -100,21 +100,21 @@ const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
           </div>
 
           {/* Content */}
-          <div className="flex-1 flex flex-col justify-between">
+          <div className="flex-1 flex flex-col justify-between min-w-0">
             <div className="text-right">
-              <h3 className="text-lg font-bold text-foreground mb-1">
+              <h3 className="text-base font-bold text-foreground mb-1 line-clamp-1">
                 {getTitle()}
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs text-muted-foreground line-clamp-1">
                 {getSubtitle()}
               </p>
             </div>
 
             {price !== null && (
               <div className="text-right">
-                <div className="text-2xl font-bold text-foreground">
+                <div className="text-xl font-bold text-foreground">
                   ₪{typeof price === 'number' ? price.toLocaleString() : price}
-                  {favorite.item_type === 'freelancer' && <span className="text-sm font-normal text-muted-foreground"> לשעה</span>}
+                  {favorite.item_type === 'freelancer' && <span className="text-xs font-normal text-muted-foreground"> לשעה</span>}
                 </div>
               </div>
             )}
@@ -310,7 +310,7 @@ const Favorites = () => {
                 <p className="text-muted-foreground">אין מודעות מועדפות</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3 max-w-4xl mx-auto">
                 {filteredFavorites.map((fav) => (
                   <UnifiedFavoriteCard key={fav.id} favorite={fav} />
                 ))}
