@@ -76,18 +76,16 @@ const Businesses = () => {
 
       if (error) throw error;
 
-      // Update impressions
+      // Update impressions only for the first promoted business (top position)
       if (promotedData && promotedData.length > 0) {
-        const updatePromises = promotedData.map(business =>
-          supabase
-            .from("businesses")
-            .update({
-              promotion_impressions: (business.promotion_impressions || 0) + 1,
-              last_top_position_at: new Date().toISOString()
-            })
-            .eq("id", business.id)
-        );
-        await Promise.all(updatePromises);
+        const topBusiness = promotedData[0];
+        await supabase
+          .from("businesses")
+          .update({
+            promotion_impressions: (topBusiness.promotion_impressions || 0) + 1,
+            last_top_position_at: new Date().toISOString()
+          })
+          .eq("id", topBusiness.id);
       }
 
       const allBusinesses = [...(promotedData || []), ...(regularData || [])];
