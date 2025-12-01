@@ -179,26 +179,19 @@ const PromotionAnalytics = () => {
 
       setTimeSeriesData(timeData);
 
-      // Fetch geographic data from promotion_impressions_log
-      const userItemIds = allPromotedAds.map(ad => ad.id);
-      const { data: geoData } = await supabase
-        .from('promotion_impressions_log')
-        .select('city, country')
-        .in('item_id', userItemIds);
-
-      if (geoData) {
-        const locationCounts: { [key: string]: number } = {};
-        geoData.forEach((item: any) => {
-          const location = item.city || item.country || 'לא ידוע';
-          locationCounts[location] = (locationCounts[location] || 0) + 1;
-        });
-
-        const locationArray: LocationData[] = Object.entries(locationCounts)
-          .map(([location, impressions]) => ({ location, impressions: impressions as number }))
-          .sort((a, b) => b.impressions - a.impressions)
-          .slice(0, 10);
-
-        setLocationData(locationArray);
+      // Fetch geographic data using edge function
+      try {
+        const { data: geoResponse, error: geoError } = await supabase.functions.invoke('get-geo-analytics');
+        
+        if (!geoError && geoResponse?.locationData) {
+          setLocationData(geoResponse.locationData);
+        } else {
+          console.log('No geo data available yet:', geoError);
+          setLocationData([]);
+        }
+      } catch (geoErr) {
+        console.error('Error fetching geo data:', geoErr);
+        setLocationData([]);
       }
 
       // Calculate conversion rates by category
