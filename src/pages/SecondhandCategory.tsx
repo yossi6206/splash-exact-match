@@ -59,6 +59,8 @@ const SecondhandCategory = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const [items, setItems] = useState<any[]>([]);
   const [allItems, setAllItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -96,7 +98,21 @@ const SecondhandCategory = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [filters, allItems, sortBy, searchQuery]);
+  }, [filters, allItems, sortBy, debouncedSearchQuery]);
+
+  // Debounce search query for auto-filtering
+  useEffect(() => {
+    setIsSearching(true);
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setIsSearching(false);
+      setCurrentPage(1);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
 
   const fetchItems = async () => {
     setLoading(true);
@@ -158,8 +174,8 @@ const SecondhandCategory = () => {
     let filtered = [...allItems];
 
     // Search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
+    if (debouncedSearchQuery.trim()) {
+      const query = debouncedSearchQuery.toLowerCase();
       filtered = filtered.filter(item =>
         item.title?.toLowerCase().includes(query) ||
         item.description?.toLowerCase().includes(query) ||
@@ -350,7 +366,13 @@ const SecondhandCategory = () => {
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto">
               <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
-                <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
+                <div className="absolute right-4 h-5 w-5 text-muted-foreground">
+                  {isSearching ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <Search className="h-5 w-5" />
+                  )}
+                </div>
                 <Input
                   type="text"
                   placeholder="חפש לפי תיאור, מותג או מיקום..."
@@ -358,13 +380,13 @@ const SecondhandCategory = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
                 />
-                <Button
-                  className="ml-2 rounded-full px-8 h-10 font-bold"
-                  size="lg"
-                >
-                  חפש
-                </Button>
               </div>
+
+              {searchQuery && (
+                <p className="text-center text-sm text-white/80 mt-2">
+                  חיפוש אוטומטי מופעל - התוצאות מתעדכנות בזמן אמת
+                </p>
+              )}
             </div>
 
             {/* Quick Stats */}
