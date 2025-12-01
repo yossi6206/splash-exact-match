@@ -286,7 +286,7 @@ const PromoteAds = () => {
           {/* Important Notice */}
           <Card className="bg-blue-50 border-blue-200 dark:bg-blue-950/20 dark:border-blue-900">
             <CardContent className="p-4">
-              <div className="flex gap-3 flex-row-reverse">
+              <div className="flex gap-3">
                 <div className="text-blue-600 dark:text-blue-400 mt-0.5">ℹ️</div>
                 <div className="space-y-1">
                   <h4 className="font-semibold text-blue-900 dark:text-blue-100">
@@ -394,7 +394,7 @@ const PromoteAds = () => {
 
           <div className="space-y-3 mt-6">
             <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg dark:bg-amber-950/20 dark:border-amber-900">
-              <h4 className="font-semibold mb-2 text-amber-900 dark:text-amber-100 flex items-center gap-2 flex-row-reverse">
+              <h4 className="font-semibold mb-2 text-amber-900 dark:text-amber-100 flex items-center gap-2">
                 ⚠️ חשוב לדעת
               </h4>
               <p className="text-sm text-amber-800 dark:text-amber-200">
