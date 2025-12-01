@@ -81,22 +81,6 @@ const SoldPropertiesInArea = ({ currentPropertyLocation, currentPropertyId }: So
     setFilteredProperties(filtered);
   }, [roomsFilter, yearFilter, properties]);
 
-  if (loading) {
-    return (
-      <Card className="border-border">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (properties.length === 0) {
-    return null;
-  }
-
   return (
     <Card className="border-border">
       <CardContent className="p-6">
@@ -106,35 +90,50 @@ const SoldPropertiesInArea = ({ currentPropertyLocation, currentPropertyId }: So
             <h2 className="text-xl font-bold text-foreground">נכסים שנמכרו באזור</h2>
           </div>
           
-          <div className="flex gap-2">
-            <Select value={roomsFilter} onValueChange={setRoomsFilter}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="חדרים" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">כל החדרים</SelectItem>
-                <SelectItem value="3">3 חדרים</SelectItem>
-                <SelectItem value="4">4 חדרים</SelectItem>
-                <SelectItem value="5">5 חדרים</SelectItem>
-                <SelectItem value="6">6+ חדרים</SelectItem>
-              </SelectContent>
-            </Select>
+          {loading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary"></div>
+          ) : properties.length > 0 ? (
+            <div className="flex gap-2">
+              <Select value={roomsFilter} onValueChange={setRoomsFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="חדרים" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">כל החדרים</SelectItem>
+                  <SelectItem value="3">3 חדרים</SelectItem>
+                  <SelectItem value="4">4 חדרים</SelectItem>
+                  <SelectItem value="5">5 חדרים</SelectItem>
+                  <SelectItem value="6">6+ חדרים</SelectItem>
+                </SelectContent>
+              </Select>
 
-            <Select value={yearFilter} onValueChange={setYearFilter}>
-              <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="שנת עסקה" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">כל התקופה</SelectItem>
-                <SelectItem value="6">6 חודשים אחרונים</SelectItem>
-                <SelectItem value="12">שנה אחרונה</SelectItem>
-                <SelectItem value="24">שנתיים אחרונות</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+              <Select value={yearFilter} onValueChange={setYearFilter}>
+                <SelectTrigger className="w-[160px]">
+                  <SelectValue placeholder="שנת עסקה" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">כל התקופה</SelectItem>
+                  <SelectItem value="6">6 חודשים אחרונים</SelectItem>
+                  <SelectItem value="12">שנה אחרונה</SelectItem>
+                  <SelectItem value="24">שנתיים אחרונות</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          ) : null}
         </div>
 
-        <div className="overflow-x-auto">
+        {loading ? (
+          <div className="flex items-center justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        ) : properties.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            <Building2 className="h-12 w-12 mx-auto mb-3 opacity-50" />
+            <p className="font-medium">אין נכסים נוספים באזור זה כרגע</p>
+          </div>
+        ) : (
+          <>
+            <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-border">
@@ -171,13 +170,13 @@ const SoldPropertiesInArea = ({ currentPropertyLocation, currentPropertyId }: So
               ))}
             </tbody>
           </table>
-        </div>
 
-        {filteredProperties.length === 0 && properties.length > 0 && (
-          <div className="text-center py-8 text-muted-foreground">
-            לא נמצאו נכסים התואמים את הסינון
-          </div>
-        )}
+          {filteredProperties.length === 0 && (
+            <div className="text-center py-8 text-muted-foreground">
+              לא נמצאו נכסים התואמים את הסינון
+            </div>
+          )}
+        </div>
 
         {filteredProperties.length > 10 && (
           <div className="flex justify-center gap-1 mt-6">
@@ -188,6 +187,8 @@ const SoldPropertiesInArea = ({ currentPropertyLocation, currentPropertyId }: So
             <Button variant="ghost" size="sm">8</Button>
           </div>
         )}
+      </>
+      )}
       </CardContent>
     </Card>
   );
