@@ -88,18 +88,16 @@ const Cars = () => {
       if (error) {
         console.error("Error fetching cars:", error);
       } else {
-        // Update impressions for promoted cars
+        // Update impressions only for the first promoted car (top position)
         if (promotedData && promotedData.length > 0) {
-          const updatePromises = promotedData.map(car =>
-            supabase
-              .from("cars")
-              .update({
-                promotion_impressions: (car.promotion_impressions || 0) + 1,
-                last_top_position_at: new Date().toISOString()
-              })
-              .eq("id", car.id)
-          );
-          await Promise.all(updatePromises);
+          const topCar = promotedData[0];
+          await supabase
+            .from("cars")
+            .update({
+              promotion_impressions: (topCar.promotion_impressions || 0) + 1,
+              last_top_position_at: new Date().toISOString()
+            })
+            .eq("id", topCar.id);
         }
 
         const allCars = [...(promotedData || []), ...(regularData || [])];
