@@ -111,6 +111,7 @@ const PromoteAds = () => {
           is_promoted: true,
           promotion_start_date: startDate.toISOString(),
           promotion_end_date: endDate.toISOString(),
+          promotion_impressions: 0,
         })
         .eq('id', selectedAd.id);
 
