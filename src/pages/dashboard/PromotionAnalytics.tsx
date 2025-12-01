@@ -22,6 +22,7 @@ interface PromotedAd {
   contacts: number;
   daysRemaining: number;
   isActive: boolean;
+  currentPosition: number;
 }
 
 interface TimeSeriesData {
@@ -103,14 +104,38 @@ const PromotionAnalytics = () => {
               clicks: item.clicks_count || 0,
               contacts: item.contacts_count || 0,
               daysRemaining,
-              isActive: daysRemaining > 0
+              isActive: daysRemaining > 0,
+              currentPosition: 0 // Will be calculated later
             };
           });
           allPromotedAds = [...allPromotedAds, ...ads];
         }
       }
 
-      // Sort by promotion start date
+      // Calculate current position for each ad within its category
+      const adsByCategory = new Map<string, PromotedAd[]>();
+      allPromotedAds.forEach(ad => {
+        if (!adsByCategory.has(ad.category)) {
+          adsByCategory.set(ad.category, []);
+        }
+        adsByCategory.get(ad.category)!.push(ad);
+      });
+
+      // Sort each category by last_top_position_at (oldest first gets priority)
+      adsByCategory.forEach((ads, category) => {
+        ads.sort((a, b) => {
+          const aDate = new Date(a.promotionStartDate).getTime();
+          const bDate = new Date(b.promotionStartDate).getTime();
+          return aDate - bDate; // Oldest first
+        });
+        
+        // Assign positions
+        ads.forEach((ad, index) => {
+          ad.currentPosition = index + 1;
+        });
+      });
+
+      // Sort all ads by promotion start date for display
       allPromotedAds.sort((a, b) => 
         new Date(b.promotionStartDate).getTime() - new Date(a.promotionStartDate).getTime()
       );
@@ -416,6 +441,7 @@ const PromotionAnalytics = () => {
                 <TableRow>
                   <TableHead className="text-right">מודעה</TableHead>
                   <TableHead className="text-right">קטגוריה</TableHead>
+                  <TableHead className="text-right">מיקום</TableHead>
                   <TableHead className="text-right">סטטוס</TableHead>
                   <TableHead className="text-right">הצגות קידום</TableHead>
                   <TableHead className="text-right">צפיות</TableHead>
@@ -433,6 +459,20 @@ const PromotionAnalytics = () => {
                         {getCategoryIcon(ad.category)}
                         <span>{ad.category}</span>
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant="outline" 
+                        className={`font-bold ${
+                          ad.currentPosition === 1 
+                            ? 'bg-yellow-500/20 text-yellow-700 border-yellow-500/40' 
+                            : ad.currentPosition <= 3 
+                            ? 'bg-blue-500/20 text-blue-700 border-blue-500/40'
+                            : 'bg-muted'
+                        }`}
+                      >
+                        #{ad.currentPosition}
+                      </Badge>
                     </TableCell>
                     <TableCell>{getStatusBadge(ad.daysRemaining)}</TableCell>
                     <TableCell>
@@ -455,7 +495,7 @@ const PromotionAnalytics = () => {
                 ))}
                 {promotedAds.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
                       אין מודעות מקודמות להצגה
                     </TableCell>
                   </TableRow>
