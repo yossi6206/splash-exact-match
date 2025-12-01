@@ -81,7 +81,7 @@ const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
   const price = getPrice();
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-white border-border max-w-3xl">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-white border-border w-full">
       <Link to={getItemLink()}>
         <div className="flex gap-3 p-3">
           {/* Image */}
