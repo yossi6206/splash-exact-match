@@ -85,6 +85,8 @@ const Laptops = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const [laptops, setLaptops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 12;
@@ -92,6 +94,20 @@ const Laptops = () => {
   useEffect(() => {
     fetchLaptops();
   }, []);
+
+  // Debounce search query for auto-filtering
+  useEffect(() => {
+    setIsSearching(true);
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setIsSearching(false);
+      setCurrentPage(1);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
 
   const fetchLaptops = async () => {
     setLoading(true);
@@ -162,10 +178,26 @@ const Laptops = () => {
   const activeListings = useCountUp({ end: Math.floor(laptops.length * 0.85), duration: 2000, startOnView: false });
   const avgViews = useCountUp({ end: 245, duration: 1500, startOnView: false });
   
-  const totalPages = Math.ceil(laptops.length / itemsPerPage);
+  // Filter laptops based on search query
+  const filteredLaptops = useMemo(() => {
+    if (!debouncedSearchQuery) return laptops;
+    
+    const query = debouncedSearchQuery.toLowerCase();
+    return laptops.filter((laptop) => {
+      return (
+        laptop.brand?.toLowerCase().includes(query) ||
+        laptop.model?.toLowerCase().includes(query) ||
+        laptop.description?.toLowerCase().includes(query) ||
+        laptop.location?.toLowerCase().includes(query) ||
+        laptop.processor?.toLowerCase().includes(query)
+      );
+    });
+  }, [laptops, debouncedSearchQuery]);
+  
+  const totalPages = Math.ceil(filteredLaptops.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentLaptops = laptops.slice(startIndex, endIndex);
+  const currentLaptops = filteredLaptops.slice(startIndex, endIndex);
 
   return (
     <div className="min-h-screen bg-background">
@@ -188,7 +220,13 @@ const Laptops = () => {
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto">
               <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
-                <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
+                <div className="absolute right-4 h-5 w-5 text-muted-foreground">
+                  {isSearching ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <Search className="h-5 w-5" />
+                  )}
+                </div>
                 <Input
                   type="text"
                   placeholder="חפש לפי יצרן, דגם או תיאור..."
@@ -196,13 +234,13 @@ const Laptops = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
                 />
-                <Button
-                  className="ml-2 rounded-full px-8 h-10 font-bold"
-                  size="lg"
-                >
-                  חפש
-                </Button>
               </div>
+
+              {searchQuery && (
+                <p className="text-center text-sm text-white/80 mt-2">
+                  חיפוש אוטומטי מופעל - התוצאות מתעדכנות בזמן אמת
+                </p>
+              )}
             </div>
 
             {/* Quick Stats */}
@@ -263,7 +301,7 @@ const Laptops = () => {
               </SelectContent>
             </Select>
           </div>
-          <p className="text-muted-foreground">{laptops.length.toLocaleString()} תוצאות</p>
+          <p className="text-muted-foreground">{filteredLaptops.length.toLocaleString()} תוצאות</p>
         </div>
 
         {/* Main Content */}

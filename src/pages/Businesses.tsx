@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Building2 } from "lucide-react";
+import { Search, Building2, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { Tables } from "@/integrations/supabase/types";
@@ -27,6 +27,8 @@ const ITEMS_PER_PAGE = 12;
 const Businesses = () => {
   const [sortBy, setSortBy] = useState("newest");
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,6 +37,20 @@ const Businesses = () => {
   useEffect(() => {
     fetchBusinesses();
   }, [currentPage, sortBy]);
+
+  // Debounce search query for auto-filtering
+  useEffect(() => {
+    setIsSearching(true);
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setIsSearching(false);
+      setCurrentPage(1);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
 
   const fetchBusinesses = async () => {
     try {
@@ -86,8 +102,22 @@ const Businesses = () => {
       }
 
       const allBusinesses = [...(promotedData || []), ...(regularData || [])];
-      setBusinesses(allBusinesses);
-      setTotalCount(count || 0);
+      
+      // Apply search filter
+      const filteredBusinesses = allBusinesses.filter(business => {
+        if (!searchQuery) return true;
+        const query = searchQuery.toLowerCase();
+        return (
+          business.title?.toLowerCase().includes(query) ||
+          business.description?.toLowerCase().includes(query) ||
+          business.category?.toLowerCase().includes(query) ||
+          business.location?.toLowerCase().includes(query) ||
+          business.business_type?.toLowerCase().includes(query)
+        );
+      });
+      
+      setBusinesses(filteredBusinesses);
+      setTotalCount(filteredBusinesses.length);
     } catch (error: any) {
       console.error("Error fetching businesses:", error);
       toast.error("שגיאה בטעינת העסקים");
@@ -153,7 +183,13 @@ const Businesses = () => {
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto">
               <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
-                <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
+                <div className="absolute right-4 h-5 w-5 text-muted-foreground">
+                  {isSearching ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <Search className="h-5 w-5" />
+                  )}
+                </div>
                 <Input
                   type="text"
                   placeholder="סוג עסק, מיקום או קטגוריה..."
@@ -161,13 +197,13 @@ const Businesses = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
                 />
-                <Button
-                  className="ml-2 rounded-full px-8 h-10 font-bold"
-                  size="lg"
-                >
-                  חפש
-                </Button>
               </div>
+
+              {searchQuery && (
+                <p className="text-center text-sm text-white/80 mt-2">
+                  חיפוש אוטומטי מופעל - התוצאות מתעדכנות בזמן אמת
+                </p>
+              )}
             </div>
 
             {/* Quick Stats */}
