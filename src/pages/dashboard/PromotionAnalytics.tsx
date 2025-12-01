@@ -53,13 +53,6 @@ const PromotionAnalytics = () => {
   useEffect(() => {
     if (user) {
       fetchPromotionAnalytics();
-      
-      // Auto-refresh every 10 seconds
-      const interval = setInterval(() => {
-        fetchPromotionAnalytics();
-      }, 10000);
-      
-      return () => clearInterval(interval);
     }
   }, [user, selectedCategory]);
 
@@ -214,7 +207,7 @@ const PromotionAnalytics = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground mb-2">ניתוח קידום מתקדם</h1>
-          <p className="text-muted-foreground">מעקב והשוואה בין המודעות המקודמות שלך - מתעדכן אוטומטית כל 10 שניות</p>
+          <p className="text-muted-foreground">מעקב והשוואה בין המודעות המקודמות שלך</p>
         </div>
         <div className="flex items-center gap-3">
           <Button 
