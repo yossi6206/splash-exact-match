@@ -51,7 +51,7 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
   };
   
   return (
-    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border" dir="rtl">
+    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border relative" dir="rtl">
       <Link to={`/secondhand/item/${String(item.id)}`} onClick={handleClick}>
         <div className="relative">
           {/* Image */}
@@ -68,16 +68,6 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
               </div>
             )}
           </div>
-          
-          {/* Favorite Button */}
-          <Button 
-            variant="ghost" 
-            size="icon"
-            className="absolute top-3 right-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
-            onClick={toggleFavorite}
-          >
-            <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-          </Button>
 
           {/* Badges - Top Left */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
@@ -229,6 +219,20 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
           </div>
         </div>
       </Link>
+      
+      {/* Heart Button - Outside Link to prevent disappearing on hover */}
+      <Button 
+        variant="ghost" 
+        size="icon"
+        className="absolute top-3 right-3 z-20 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm text-muted-foreground hover:text-red-500"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleFavorite(e);
+        }}
+      >
+        <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+      </Button>
     </Card>
   );
 };

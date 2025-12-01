@@ -49,44 +49,31 @@ export const JobCard = ({
   };
   
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow duration-300 bg-card" dir="rtl">
-      <div className="flex gap-4">
-        {/* Company Logo */}
-        <div className="flex-shrink-0">
-          <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-            {logo ? (
-              <img src={logo} alt={company} className="w-12 h-12 object-contain" />
-            ) : (
-              <Building2 className="w-8 h-8 text-primary" />
-            )}
+    <Card className="p-6 hover:shadow-lg transition-shadow duration-300 bg-card relative" dir="rtl">
+      <Link to={`/jobs/${id}`} onClick={handleClick}>
+        <div className="flex gap-4">
+          {/* Company Logo */}
+          <div className="flex-shrink-0">
+            <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+              {logo ? (
+                <img src={logo} alt={company} className="w-12 h-12 object-contain" />
+              ) : (
+                <Building2 className="w-8 h-8 text-primary" />
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Job Details */}
-        <div className="flex-1">
-          <div className="flex items-start justify-between mb-3">
-            <div className="text-right">
-              <Link
-                to={`/jobs/${id}`}
-                onClick={handleClick}
-                className="text-xl font-bold text-foreground hover:text-primary transition-colors mb-1 block"
-              >
+          {/* Job Details */}
+          <div className="flex-1">
+            <div className="mb-3 text-right">
+              <h3 className="text-xl font-bold text-foreground hover:text-primary transition-colors mb-1">
                 {title}
-              </Link>
+              </h3>
               <p className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                 <Building2 className="w-4 h-4" />
                 {company}
               </p>
             </div>
-            <Button 
-              size="icon" 
-              variant="ghost" 
-              className="hover:bg-muted"
-              onClick={toggleFavorite}
-            >
-              <Heart className={`w-5 h-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-            </Button>
-          </div>
 
           {/* Info Tags */}
           <div className="flex flex-wrap gap-3 mb-4">
@@ -123,26 +110,39 @@ export const JobCard = ({
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="flex items-center justify-between pt-3 border-t border-border">
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Briefcase className="w-4 h-4" />
-                {experience}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock className="w-4 h-4" />
-                {postedDate}
-              </span>
-            </div>
-            <Link to={`/jobs/${id}`} onClick={handleClick}>
+            {/* Footer */}
+            <div className="flex items-center justify-between pt-3 border-t border-border">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Briefcase className="w-4 h-4" />
+                  {experience}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  {postedDate}
+                </span>
+              </div>
               <Button size="sm" className="rounded-full">
                 צפה במשרה
               </Button>
-            </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </Link>
+      
+      {/* Heart Button - Outside Link to prevent disappearing on hover */}
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        className="absolute top-6 left-6 z-10 text-muted-foreground hover:text-red-500 hover:bg-background/80 backdrop-blur-sm"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleFavorite(e);
+        }}
+      >
+        <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+      </Button>
     </Card>
   );
 };

@@ -104,8 +104,8 @@ const FreelancerCard = ({
   };
 
   return (
-    <Link to={`/freelancers/${id}`} className="block" onClick={handleClick}>
-      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-border bg-card group h-full" dir="rtl">
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-border bg-card group h-full relative" dir="rtl">
+      <Link to={`/freelancers/${id}`} className="block" onClick={handleClick}>
         <CardContent className="p-6 space-y-4">
           {/* Avatar and Online Status */}
           <div className="flex items-start gap-4">
@@ -143,15 +143,6 @@ const FreelancerCard = ({
                 )}
               </div>
             </div>
-
-            <Button 
-              variant="ghost" 
-              size="icon"
-              className="text-muted-foreground hover:text-accent"
-              onClick={toggleFavorite}
-            >
-              <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-            </Button>
           </div>
 
           {/* Bio */}
@@ -201,8 +192,22 @@ const FreelancerCard = ({
             </Button>
           </div>
         </CardContent>
-      </Card>
-    </Link>
+      </Link>
+      
+      {/* Heart Button - Outside Link to prevent disappearing on hover */}
+      <Button 
+        variant="ghost" 
+        size="icon"
+        className="absolute top-6 left-6 z-10 text-muted-foreground hover:text-red-500 hover:bg-background/80 backdrop-blur-sm"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleFavorite(e);
+        }}
+      >
+        <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+      </Button>
+    </Card>
   );
 };
 
