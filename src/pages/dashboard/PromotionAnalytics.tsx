@@ -4,10 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart } from "recharts";
-import { TrendingUp, Zap, Eye, MousePointer, Calendar, Loader2, Car, Home, Laptop, Briefcase, Package, Users, Building2, CheckCircle2 } from "lucide-react";
+import { TrendingUp, Zap, Eye, MousePointer, Calendar, Loader2, Car, Home, Laptop, Briefcase, Package, Users, Building2, CheckCircle2, RefreshCw } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 interface PromotedAd {
   id: string;
@@ -52,6 +53,13 @@ const PromotionAnalytics = () => {
   useEffect(() => {
     if (user) {
       fetchPromotionAnalytics();
+      
+      // Auto-refresh every 10 seconds
+      const interval = setInterval(() => {
+        fetchPromotionAnalytics();
+      }, 10000);
+      
+      return () => clearInterval(interval);
     }
   }, [user, selectedCategory]);
 
@@ -206,23 +214,35 @@ const PromotionAnalytics = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground mb-2">ניתוח קידום מתקדם</h1>
-          <p className="text-muted-foreground">מעקב והשוואה בין המודעות המקודמות שלך</p>
+          <p className="text-muted-foreground">מעקב והשוואה בין המודעות המקודמות שלך - מתעדכן אוטומטית כל 10 שניות</p>
         </div>
-        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="כל הקטגוריות" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">כל הקטגוריות</SelectItem>
-            <SelectItem value="רכבים">רכבים</SelectItem>
-            <SelectItem value="נדל״ן">נדל״ן</SelectItem>
-            <SelectItem value="מחשבים">מחשבים</SelectItem>
-            <SelectItem value="משרות">משרות</SelectItem>
-            <SelectItem value="יד שנייה">יד שנייה</SelectItem>
-            <SelectItem value="עסקים">עסקים</SelectItem>
-            <SelectItem value="פרילנסרים">פרילנסרים</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-3">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => fetchPromotionAnalytics()}
+            disabled={loading}
+            className="gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            רענן
+          </Button>
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="כל הקטגוריות" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">כל הקטגוריות</SelectItem>
+              <SelectItem value="רכבים">רכבים</SelectItem>
+              <SelectItem value="נדל״ן">נדל״ן</SelectItem>
+              <SelectItem value="מחשבים">מחשבים</SelectItem>
+              <SelectItem value="משרות">משרות</SelectItem>
+              <SelectItem value="יד שנייה">יד שנייה</SelectItem>
+              <SelectItem value="עסקים">עסקים</SelectItem>
+              <SelectItem value="פרילנסרים">פרילנסרים</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Stats Cards */}
