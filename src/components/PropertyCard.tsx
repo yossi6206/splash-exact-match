@@ -49,12 +49,12 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   return (
     <Card className={`overflow-hidden hover:shadow-lg transition-shadow bg-white border-border ${
       isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
-    }`}>
+    }`} dir="rtl">
       <Link to={`/properties/${property.id}`} onClick={handleClick}>
-        <div className="flex flex-col sm:flex-row gap-4 p-4">
+        <div className="flex flex-col sm:flex-row-reverse gap-4 p-4">
           {/* Image */}
           <div className="w-full sm:w-64 h-48 rounded-lg overflow-hidden flex-shrink-0 relative">
-            <div className="absolute top-2 right-2 z-10 flex gap-2">
+            <div className="absolute top-2 left-2 z-10 flex gap-2">
               {property.listing_type && (
                 <Badge className="bg-primary text-primary-foreground font-semibold">
                   {property.listing_type}
@@ -77,7 +77,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           {/* Content */}
           <div className="flex-1 flex flex-col">
             <div className="flex items-start justify-between mb-3">
-              <div>
+              <div className="text-right">
                 <h3 className="text-xl font-bold text-foreground mb-1">{property.title}</h3>
                 <p className="text-sm text-muted-foreground mb-2">{property.subtitle}</p>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
@@ -120,7 +120,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             </div>
 
             {/* Price */}
-            <div className="mt-auto">
+            <div className="mt-auto text-right">
               <div className="text-3xl font-bold text-foreground">
                 ₪{property.price}
               </div>

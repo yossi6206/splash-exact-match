@@ -35,7 +35,7 @@ export const LaptopCard = ({ laptop }: LaptopCardProps) => {
   };
   
   return (
-    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border">
+    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border" dir="rtl">
       <Link to={`/laptops/${laptop.id}`} onClick={handleClick}>
         <div className="relative">
           {/* Image */}
@@ -51,14 +51,14 @@ export const LaptopCard = ({ laptop }: LaptopCardProps) => {
           <Button 
             variant="ghost" 
             size="icon"
-            className="absolute top-3 left-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
+            className="absolute top-3 right-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
             onClick={toggleFavorite}
           >
             <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
           </Button>
 
           {/* Condition Badge */}
-          <div className="absolute top-3 right-3">
+          <div className="absolute top-3 left-3">
             <Badge className="bg-background/90 hover:bg-background text-foreground border backdrop-blur-sm">
               {laptop.condition}
             </Badge>
@@ -68,7 +68,7 @@ export const LaptopCard = ({ laptop }: LaptopCardProps) => {
         {/* Content */}
         <div className="p-4 space-y-3">
           {/* Title */}
-          <div>
+          <div className="text-right">
             <h3 className="font-bold text-lg text-foreground line-clamp-1 mb-1">
               {laptop.title}
             </h3>

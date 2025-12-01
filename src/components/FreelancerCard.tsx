@@ -105,7 +105,7 @@ const FreelancerCard = ({
 
   return (
     <Link to={`/freelancers/${id}`} className="block" onClick={handleClick}>
-      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-border bg-card group h-full">
+      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-border bg-card group h-full" dir="rtl">
         <CardContent className="p-6 space-y-4">
           {/* Avatar and Online Status */}
           <div className="flex items-start gap-4">
@@ -121,7 +121,7 @@ const FreelancerCard = ({
               }`} />
             </div>
             
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 text-right">
               <h3 className="font-bold text-lg text-foreground mb-1 group-hover:text-primary transition-colors truncate">
                 {full_name}
               </h3>
@@ -156,7 +156,7 @@ const FreelancerCard = ({
 
           {/* Bio */}
           {bio && (
-            <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+            <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed text-right">
               {bio}
             </p>
           )}
