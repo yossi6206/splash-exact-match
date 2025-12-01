@@ -47,7 +47,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   };
   
   return (
-    <Card className={`overflow-hidden hover:shadow-lg transition-shadow bg-white border-border ${
+    <Card className={`overflow-hidden hover:shadow-lg transition-shadow bg-white border-border relative ${
       isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
     }`} dir="rtl">
       <Link to={`/properties/${property.id}`} onClick={handleClick}>
@@ -76,32 +76,22 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
           {/* Content */}
           <div className="flex-1 flex flex-col">
-            <div className="flex items-start justify-between mb-3">
-              <div className="text-right">
-                <h3 className="text-xl font-bold text-foreground mb-1">{property.title}</h3>
-                <p className="text-sm text-muted-foreground mb-2">{property.subtitle}</p>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
-                  <span>{property.propertyType}</span>
-                  <span>•</span>
-                  <span>{property.condition}</span>
-                  <span>•</span>
-                  <span>קומה {property.floor}</span>
-                  {property.year && (
-                    <>
-                      <span>•</span>
-                      <span>נבנה {property.year}</span>
-                    </>
-                  )}
-                </div>
+            <div className="mb-3 text-right">
+              <h3 className="text-xl font-bold text-foreground mb-1">{property.title}</h3>
+              <p className="text-sm text-muted-foreground mb-2">{property.subtitle}</p>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+                <span>{property.propertyType}</span>
+                <span>•</span>
+                <span>{property.condition}</span>
+                <span>•</span>
+                <span>קומה {property.floor}</span>
+                {property.year && (
+                  <>
+                    <span>•</span>
+                    <span>נבנה {property.year}</span>
+                  </>
+                )}
               </div>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="text-muted-foreground hover:text-accent"
-                onClick={toggleFavorite}
-              >
-                <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-              </Button>
             </div>
 
             {/* Features */}
@@ -129,6 +119,20 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
         </div>
       </Link>
+      
+      {/* Heart Button - Outside Link to prevent disappearing on hover */}
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        className="absolute top-4 right-4 z-10 text-muted-foreground hover:text-red-500 hover:bg-background/80 backdrop-blur-sm"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleFavorite(e);
+        }}
+      >
+        <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+      </Button>
     </Card>
   );
 };

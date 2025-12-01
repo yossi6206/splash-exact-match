@@ -49,7 +49,7 @@ export const CarCard = ({ car }: CarCardProps) => {
   };
   
   return (
-    <Card className={`overflow-hidden hover:shadow-lg transition-shadow bg-white border-border ${
+    <Card className={`overflow-hidden hover:shadow-lg transition-shadow bg-white border-border relative ${
       isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
     }`} dir="rtl">
       <Link to={`/cars/${carId}`} onClick={handleClick}>
@@ -73,36 +73,26 @@ export const CarCard = ({ car }: CarCardProps) => {
 
           {/* Content */}
           <div className="flex-1 flex flex-col">
-            <div className="flex items-start justify-between mb-3">
-              <div className="text-right">
-                <h3 className="text-xl font-bold text-foreground mb-1">{car.title}</h3>
-                <p className="text-sm text-muted-foreground mb-2">{car.subtitle}</p>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
-                  <span>{car.year}</span>
-                  <span>•</span>
-                  <span>{car.hand}</span>
-                  {car.km && (
-                    <>
-                      <span>•</span>
-                      <span>{car.km.toLocaleString()} ק״מ</span>
-                    </>
-                  )}
-                  {car.location && (
-                    <>
-                      <span>•</span>
-                      <span>{car.location}</span>
-                    </>
-                  )}
-                </div>
+            <div className="mb-3 text-right">
+              <h3 className="text-xl font-bold text-foreground mb-1">{car.title}</h3>
+              <p className="text-sm text-muted-foreground mb-2">{car.subtitle}</p>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+                <span>{car.year}</span>
+                <span>•</span>
+                <span>{car.hand}</span>
+                {car.km && (
+                  <>
+                    <span>•</span>
+                    <span>{car.km.toLocaleString()} ק״מ</span>
+                  </>
+                )}
+                {car.location && (
+                  <>
+                    <span>•</span>
+                    <span>{car.location}</span>
+                  </>
+                )}
               </div>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="text-muted-foreground hover:text-accent"
-                onClick={toggleFavorite}
-              >
-                <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-              </Button>
             </div>
 
             {/* Features */}
@@ -123,6 +113,16 @@ export const CarCard = ({ car }: CarCardProps) => {
           </div>
         </div>
       </Link>
+      
+      {/* Heart Button - Outside Link to prevent disappearing on hover */}
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        className="absolute top-4 left-4 z-10 text-muted-foreground hover:text-red-500 hover:bg-background/80 backdrop-blur-sm"
+        onClick={toggleFavorite}
+      >
+        <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+      </Button>
     </Card>
   );
 };

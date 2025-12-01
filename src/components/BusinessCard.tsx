@@ -67,10 +67,10 @@ const BusinessCard = ({
   };
 
   return (
-    <Link to={`/businesses/${id}`} onClick={handleClick}>
-      <Card className={`group hover:shadow-xl transition-all duration-300 overflow-hidden border-2 hover:border-primary/50 ${
-        isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
-      }`} dir="rtl">
+    <Card className={`group hover:shadow-xl transition-all duration-300 overflow-hidden border-2 hover:border-primary/50 relative ${
+      isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
+    }`} dir="rtl">
+      <Link to={`/businesses/${id}`} onClick={handleClick}>
         {/* Image */}
         <div className="relative h-52 overflow-hidden bg-muted">
           {isPromoted && (
@@ -97,14 +97,6 @@ const BusinessCard = ({
               {category}
             </Badge>
           </div>
-          <Button 
-            variant="ghost" 
-            size="icon"
-            className="absolute top-3 right-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
-            onClick={toggleFavorite}
-          >
-            <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-          </Button>
           {years_operating && (
             <div className="absolute bottom-3 left-3">
               <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">
@@ -185,8 +177,22 @@ const BusinessCard = ({
             </div>
           </div>
         </CardFooter>
-      </Card>
-    </Link>
+      </Link>
+      
+      {/* Heart Button - Outside Link to prevent disappearing on hover */}
+      <Button 
+        variant="ghost" 
+        size="icon"
+        className="absolute top-3 right-3 z-20 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm text-muted-foreground hover:text-red-500"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleFavorite(e);
+        }}
+      >
+        <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+      </Button>
+    </Card>
   );
 };
 
