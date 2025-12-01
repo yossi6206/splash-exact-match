@@ -8,12 +8,13 @@ import { MessageSquare } from "lucide-react";
 
 interface Conversation {
   id: string;
-  freelancer_id: string;
-  freelancer_name: string;
-  freelancer_avatar: string | null;
+  other_user_id: string;
+  other_user_name: string;
+  other_user_avatar: string | null;
   last_message: string | null;
   last_message_at: string | null;
   unread_count?: number;
+  is_freelancer_view?: boolean;
 }
 
 export default function Messages() {
@@ -22,9 +23,10 @@ export default function Messages() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<{
     conversationId: string;
-    freelancerId: string;
-    freelancerName: string;
-    freelancerAvatar: string | null;
+    otherUserId: string;
+    otherUserName: string;
+    otherUserAvatar: string | null;
+    isFreelancerView: boolean;
   } | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -110,21 +112,23 @@ export default function Messages() {
         }
       }
 
-      // Get last message for each conversation
+      // Combine conversations
       const allConversations = [
         ...(clientConversations || []).map((conv: any) => ({
           id: conv.id,
-          freelancer_id: conv.freelancer_id,
-          freelancer_name: conv.freelancers?.full_name || "פרילנסר",
-          freelancer_avatar: conv.freelancers?.avatar_url || null,
+          other_user_id: conv.freelancer_id,
+          other_user_name: conv.freelancers?.full_name || "פרילנסר",
+          other_user_avatar: conv.freelancers?.avatar_url || null,
           last_message_at: conv.last_message_at,
+          is_freelancer_view: false,
         })),
         ...freelancerConversations.map((conv: any) => ({
           id: conv.id,
-          freelancer_id: conv.client_id,
-          freelancer_name: conv.profiles?.full_name || "לקוח",
-          freelancer_avatar: conv.profiles?.avatar_url || null,
+          other_user_id: conv.client_id,
+          other_user_name: conv.profiles?.full_name || "לקוח",
+          other_user_avatar: conv.profiles?.avatar_url || null,
           last_message_at: conv.last_message_at,
+          is_freelancer_view: true,
         })),
       ];
 
@@ -226,9 +230,10 @@ export default function Messages() {
       // Set the selected conversation
       setSelectedConversation({
         conversationId,
-        freelancerId,
-        freelancerName,
-        freelancerAvatar,
+        otherUserId: freelancerId,
+        otherUserName: freelancerName,
+        otherUserAvatar: freelancerAvatar,
+        isFreelancerView: false,
       });
 
       // Reload conversations to show the new one in the list
@@ -240,15 +245,17 @@ export default function Messages() {
 
   const handleSelectConversation = (
     conversationId: string,
-    freelancerId: string,
-    freelancerName: string,
-    freelancerAvatar: string | null
+    otherUserId: string,
+    otherUserName: string,
+    otherUserAvatar: string | null,
+    isFreelancerView: boolean
   ) => {
     setSelectedConversation({
       conversationId,
-      freelancerId,
-      freelancerName,
-      freelancerAvatar,
+      otherUserId,
+      otherUserName,
+      otherUserAvatar,
+      isFreelancerView,
     });
   };
 
@@ -274,9 +281,11 @@ export default function Messages() {
         {selectedConversation ? (
           <div className="w-full h-full">
             <FreelancerChat
-              freelancerId={selectedConversation.freelancerId}
-              freelancerName={selectedConversation.freelancerName}
-              freelancerAvatar={selectedConversation.freelancerAvatar}
+              conversationId={selectedConversation.conversationId}
+              otherUserId={selectedConversation.otherUserId}
+              otherUserName={selectedConversation.otherUserName}
+              otherUserAvatar={selectedConversation.otherUserAvatar}
+              isFreelancerView={selectedConversation.isFreelancerView}
               open={true}
               onOpenChange={() => setSelectedConversation(null)}
               embedded={true}

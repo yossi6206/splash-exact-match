@@ -5,9 +5,9 @@ import { he } from "date-fns/locale";
 
 interface ConversationItemProps {
   id: string;
-  freelancerId: string;
-  freelancerName: string;
-  freelancerAvatar: string | null;
+  otherUserId: string;
+  otherUserName: string;
+  otherUserAvatar: string | null;
   lastMessage: string | null;
   lastMessageAt: string | null;
   unreadCount?: number;
@@ -16,8 +16,8 @@ interface ConversationItemProps {
 }
 
 export const ConversationItem = ({
-  freelancerName,
-  freelancerAvatar,
+  otherUserName,
+  otherUserAvatar,
   lastMessage,
   lastMessageAt,
   unreadCount = 0,
@@ -50,15 +50,15 @@ export const ConversationItem = ({
       }`}
     >
       <Avatar className="h-12 w-12 flex-shrink-0">
-        <AvatarImage src={freelancerAvatar || ""} alt={freelancerName} />
+        <AvatarImage src={otherUserAvatar || ""} alt={otherUserName} />
         <AvatarFallback className="bg-primary/10 text-primary">
-          {getInitials(freelancerName)}
+          {getInitials(otherUserName)}
         </AvatarFallback>
       </Avatar>
       
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2 mb-1">
-          <h3 className="font-semibold text-sm truncate">{freelancerName}</h3>
+          <h3 className="font-semibold text-sm truncate">{otherUserName}</h3>
           {lastMessageAt && (
             <span className="text-xs text-muted-foreground flex-shrink-0">
               {formatTime(lastMessageAt)}

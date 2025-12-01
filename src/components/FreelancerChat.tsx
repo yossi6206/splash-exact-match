@@ -24,37 +24,54 @@ interface Message {
 }
 
 interface FreelancerChatProps {
-  freelancerId: string;
-  freelancerName: string;
-  freelancerAvatar: string | null;
+  conversationId?: string;
+  otherUserId?: string;
+  otherUserName?: string;
+  otherUserAvatar?: string | null;
+  isFreelancerView?: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   embedded?: boolean;
+  // Legacy props for backward compatibility
+  freelancerId?: string;
+  freelancerName?: string;
+  freelancerAvatar?: string | null;
 }
 
 export const FreelancerChat = ({
-  freelancerId,
-  freelancerName,
-  freelancerAvatar,
+  conversationId: propConversationId,
+  otherUserId,
+  otherUserName,
+  otherUserAvatar,
+  isFreelancerView = false,
   open,
   onOpenChange,
   embedded = false,
+  // Legacy props
+  freelancerId,
+  freelancerName,
+  freelancerAvatar,
 }: FreelancerChatProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<string | null>(propConversationId || null);
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Use new props or fall back to legacy props
+  const displayName = otherUserName || freelancerName || "משתמש";
+  const displayAvatar = otherUserAvatar || freelancerAvatar || null;
+  const displayUserId = otherUserId || freelancerId || "";
+
   const { isOtherUserTyping, startTyping, stopTyping } = useTypingIndicator(
     conversationId,
     user?.id,
-    freelancerName
+    displayName
   );
 
   const getInitials = (name: string) => {
@@ -65,10 +82,12 @@ export const FreelancerChat = ({
   };
 
   useEffect(() => {
-    if (open && user) {
+    if (open && user && !propConversationId) {
       initializeConversation();
+    } else if (propConversationId) {
+      setConversationId(propConversationId);
     }
-  }, [open, user, freelancerId]);
+  }, [open, user, displayUserId, propConversationId]);
 
   useEffect(() => {
     if (conversationId) {
@@ -82,16 +101,38 @@ export const FreelancerChat = ({
   }, [messages]);
 
   const initializeConversation = async () => {
-    if (!user) return;
+    if (!user || !displayUserId) return;
 
     try {
-      // Check if conversation exists
-      const { data: existingConv, error: convError } = await supabase
-        .from("conversations")
-        .select("id")
-        .eq("client_id", user.id)
-        .eq("freelancer_id", freelancerId)
-        .maybeSingle();
+      let query;
+      
+      if (isFreelancerView) {
+        // When freelancer is viewing: client_id is the other user, freelancer is current user
+        const { data: myFreelancerProfile } = await supabase
+          .from("freelancers")
+          .select("id")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (!myFreelancerProfile) {
+          throw new Error("Freelancer profile not found");
+        }
+
+        query = supabase
+          .from("conversations")
+          .select("id")
+          .eq("client_id", displayUserId)
+          .eq("freelancer_id", myFreelancerProfile.id);
+      } else {
+        // When client is viewing: client is current user, freelancer_id is the other user
+        query = supabase
+          .from("conversations")
+          .select("id")
+          .eq("client_id", user.id)
+          .eq("freelancer_id", displayUserId);
+      }
+
+      const { data: existingConv, error: convError } = await query.maybeSingle();
 
       if (convError && convError.code !== "PGRST116") {
         throw convError;
@@ -99,13 +140,13 @@ export const FreelancerChat = ({
 
       if (existingConv) {
         setConversationId(existingConv.id);
-      } else {
-        // Create new conversation
+      } else if (!isFreelancerView) {
+        // Only allow creating new conversations when user is a client
         const { data: newConv, error: createError } = await supabase
           .from("conversations")
           .insert({
             client_id: user.id,
-            freelancer_id: freelancerId,
+            freelancer_id: displayUserId,
           })
           .select("id")
           .single();
@@ -325,13 +366,13 @@ export const FreelancerChat = ({
     <>
       <div className="p-4 border-b flex items-center gap-3">
         <Avatar className="h-10 w-10">
-          <AvatarImage src={freelancerAvatar || ""} alt={freelancerName} />
+          <AvatarImage src={displayAvatar || ""} alt={displayName} />
           <AvatarFallback className="bg-primary/10 text-primary">
-            {getInitials(freelancerName)}
+            {getInitials(displayName)}
           </AvatarFallback>
         </Avatar>
         <div>
-          <h3 className="font-semibold">{freelancerName}</h3>
+          <h3 className="font-semibold">{displayName}</h3>
         </div>
       </div>
 
