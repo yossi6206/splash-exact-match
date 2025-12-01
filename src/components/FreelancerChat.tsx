@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Paperclip, X, FileText, Download } from "lucide-react";
+import { Send, Paperclip, X, FileText, Download, MoreVertical, Edit2, Trash2, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -21,6 +21,7 @@ interface Message {
   attachment_url: string | null;
   attachment_type: string | null;
   attachment_name: string | null;
+  edited_at: string | null;
 }
 
 interface FreelancerChatProps {
@@ -60,6 +61,8 @@ export const FreelancerChat = ({
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editedContent, setEditedContent] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -374,6 +377,82 @@ export const FreelancerChat = ({
     }
   };
 
+  const startEditMessage = (message: Message) => {
+    setEditingMessageId(message.id);
+    setEditedContent(message.content);
+  };
+
+  const cancelEdit = () => {
+    setEditingMessageId(null);
+    setEditedContent("");
+  };
+
+  const saveEditedMessage = async (messageId: string) => {
+    if (!editedContent.trim()) return;
+
+    try {
+      const { error } = await supabase
+        .from("messages")
+        .update({
+          content: editedContent,
+          edited_at: new Date().toISOString(),
+        })
+        .eq("id", messageId);
+
+      if (error) throw error;
+
+      // Update local state
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === messageId
+            ? { ...msg, content: editedContent, edited_at: new Date().toISOString() }
+            : msg
+        )
+      );
+
+      cancelEdit();
+      toast({
+        title: "הודעה עודכנה",
+        description: "ההודעה נערכה בהצלחה",
+      });
+    } catch (error) {
+      console.error("Error editing message:", error);
+      toast({
+        title: "שגיאה",
+        description: "לא ניתן לערוך את ההודעה",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const deleteMessage = async (messageId: string) => {
+    if (!confirm("האם אתה בטוח שברצונך למחוק הודעה זו?")) return;
+
+    try {
+      const { error } = await supabase
+        .from("messages")
+        .delete()
+        .eq("id", messageId);
+
+      if (error) throw error;
+
+      // Update local state
+      setMessages((prev) => prev.filter((msg) => msg.id !== messageId));
+
+      toast({
+        title: "הודעה נמחקה",
+        description: "ההודעה נמחקה בהצלחה",
+      });
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      toast({
+        title: "שגיאה",
+        description: "לא ניתן למחוק את ההודעה",
+        variant: "destructive",
+      });
+    }
+  };
+
   const chatContent = (
     <>
       <div className="p-4 border-b flex items-center gap-3">
@@ -392,18 +471,44 @@ export const FreelancerChat = ({
         <div ref={scrollRef} className="space-y-4">
           {messages.map((message) => {
             const isOwn = message.sender_id === user?.id;
+            const isEditing = editingMessageId === message.id;
+            
             return (
               <div
                 key={message.id}
-                className={`flex ${isOwn ? "justify-end" : "justify-start"}`}
+                className={`flex ${isOwn ? "justify-end" : "justify-start"} group`}
               >
                 <div
-                  className={`max-w-[70%] rounded-lg px-4 py-2 ${
+                  className={`max-w-[70%] rounded-lg px-4 py-2 relative ${
                     isOwn
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted"
                   }`}
                 >
+                  {/* Message Actions - Only for own messages */}
+                  {isOwn && !isEditing && (
+                    <div className="absolute -top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex gap-1 bg-background border rounded-lg shadow-lg p-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6"
+                          onClick={() => startEditMessage(message)}
+                        >
+                          <Edit2 className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 text-destructive hover:text-destructive"
+                          onClick={() => deleteMessage(message.id)}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
                   {message.attachment_url && (
                     <div className="mb-2">
                       {message.attachment_type?.startsWith("image/") ? (
@@ -431,16 +536,57 @@ export const FreelancerChat = ({
                       )}
                     </div>
                   )}
-                  {message.content && (
-                    <p className="text-sm whitespace-pre-wrap break-words">
-                      {message.content}
-                    </p>
+                  
+                  {isEditing ? (
+                    <div className="space-y-2">
+                      <Textarea
+                        value={editedContent}
+                        onChange={(e) => setEditedContent(e.target.value)}
+                        className={`min-h-[60px] text-sm ${
+                          isOwn ? "bg-primary-foreground/10" : "bg-background"
+                        }`}
+                        autoFocus
+                      />
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={cancelEdit}
+                          className="h-7 text-xs"
+                        >
+                          ביטול
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => saveEditedMessage(message.id)}
+                          className="h-7 text-xs"
+                        >
+                          <Check className="h-3 w-3 ml-1" />
+                          שמור
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {message.content && (
+                        <p className="text-sm whitespace-pre-wrap break-words">
+                          {message.content}
+                        </p>
+                      )}
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs opacity-70">
+                          {format(new Date(message.created_at), "HH:mm", {
+                            locale: he,
+                          })}
+                        </span>
+                        {message.edited_at && (
+                          <span className="text-xs opacity-50 italic">
+                            (נערך)
+                          </span>
+                        )}
+                      </div>
+                    </>
                   )}
-                  <span className="text-xs opacity-70 mt-1 block">
-                    {format(new Date(message.created_at), "HH:mm", {
-                      locale: he,
-                    })}
-                  </span>
                 </div>
               </div>
             );
