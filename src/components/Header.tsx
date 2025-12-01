@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import PostAdDialog from "@/components/PostAdDialog";
 import { 
   MessageSquare, 
@@ -44,6 +45,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 import {
   Command,
   CommandEmpty,
@@ -305,6 +307,7 @@ const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [postDialogOpen, setPostDialogOpen] = useState(false);
+  const unreadCount = useUnreadMessages(user?.id);
 
   // Search suggestions based on mega menu data
   const searchSuggestions = [
@@ -677,9 +680,24 @@ const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="hidden md:flex">
-              <MessageSquare className="h-5 w-5" />
-            </Button>
+            {user && (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="hidden md:flex relative"
+                onClick={() => navigate("/dashboard/messages")}
+              >
+                <MessageSquare className="h-5 w-5" />
+                {unreadCount > 0 && (
+                  <Badge 
+                    variant="destructive" 
+                    className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center p-0 text-xs"
+                  >
+                    {unreadCount}
+                  </Badge>
+                )}
+              </Button>
+            )}
             <Button variant="ghost" size="icon" className="hidden md:flex">
               <Heart className="h-5 w-5" />
             </Button>
