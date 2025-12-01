@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useFavorites } from "@/hooks/useFavorites";
 
 interface LaptopCardProps {
   laptop: {
@@ -19,6 +20,8 @@ interface LaptopCardProps {
 }
 
 export const LaptopCard = ({ laptop }: LaptopCardProps) => {
+  const { isFavorite, toggleFavorite } = useFavorites(laptop.id, 'laptop');
+  
   const handleClick = async () => {
     try {
       const { supabase } = await import("@/integrations/supabase/client");
@@ -49,12 +52,9 @@ export const LaptopCard = ({ laptop }: LaptopCardProps) => {
             variant="ghost" 
             size="icon"
             className="absolute top-3 left-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
+            onClick={toggleFavorite}
           >
-            <Heart className="h-4 w-4" />
+            <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
           </Button>
 
           {/* Condition Badge */}

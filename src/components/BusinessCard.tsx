@@ -1,8 +1,10 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Building2, MapPin, TrendingUp, Users, Phone, Eye, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Building2, MapPin, TrendingUp, Users, Phone, Eye, Sparkles, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useFavorites } from "@/hooks/useFavorites";
 
 interface BusinessCardProps {
   id: string;
@@ -42,6 +44,9 @@ const BusinessCard = ({
   const isPromoted = is_promoted && 
     promotion_end_date && 
     new Date(promotion_end_date) > new Date();
+  
+  const { isFavorite, toggleFavorite } = useFavorites(id, 'business');
+  
   const handleClick = async () => {
     try {
       await supabase
@@ -87,11 +92,19 @@ const BusinessCard = ({
               <Building2 className="w-16 h-16 text-muted-foreground/30" />
             </div>
           )}
-          <div className="absolute top-3 right-3">
+          <div className="absolute top-3 right-3 flex gap-2">
             <Badge className="bg-primary/90 backdrop-blur-sm">
               {category}
             </Badge>
           </div>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="absolute top-3 left-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
+            onClick={toggleFavorite}
+          >
+            <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+          </Button>
           {years_operating && (
             <div className="absolute top-3 left-3">
               <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">

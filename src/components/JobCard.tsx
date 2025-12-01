@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useFavorites } from "@/hooks/useFavorites";
 
 interface JobCardProps {
   id: number;
@@ -33,6 +34,8 @@ export const JobCard = ({
   requirements,
   clicks_count,
 }: JobCardProps) => {
+  const { isFavorite, toggleFavorite } = useFavorites(id, 'job');
+  
   const handleClick = async () => {
     try {
       const { supabase } = await import("@/integrations/supabase/client");
@@ -75,8 +78,13 @@ export const JobCard = ({
                 {company}
               </p>
             </div>
-            <Button size="icon" variant="ghost" className="hover:bg-muted">
-              <Heart className="w-5 h-5" />
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="hover:bg-muted"
+              onClick={toggleFavorite}
+            >
+              <Heart className={`w-5 h-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
             </Button>
           </div>
 
