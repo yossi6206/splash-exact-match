@@ -6,18 +6,25 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Conversation {
   id: string;
-  freelancer_id: string;
-  freelancer_name: string;
-  freelancer_avatar: string | null;
+  other_user_id: string;
+  other_user_name: string;
+  other_user_avatar: string | null;
   last_message: string | null;
   last_message_at: string | null;
   unread_count?: number;
+  is_freelancer_view?: boolean;
 }
 
 interface ConversationsListProps {
   conversations: Conversation[];
   selectedConversationId: string | null;
-  onSelectConversation: (conversationId: string, freelancerId: string, freelancerName: string, freelancerAvatar: string | null) => void;
+  onSelectConversation: (
+    conversationId: string,
+    otherUserId: string,
+    otherUserName: string,
+    otherUserAvatar: string | null,
+    isFreelancerView: boolean
+  ) => void;
 }
 
 export const ConversationsList = ({
@@ -28,7 +35,7 @@ export const ConversationsList = ({
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredConversations = conversations.filter((conv) =>
-    conv.freelancer_name.toLowerCase().includes(searchQuery.toLowerCase())
+    conv.other_user_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -58,9 +65,9 @@ export const ConversationsList = ({
               <ConversationItem
                 key={conversation.id}
                 id={conversation.id}
-                freelancerId={conversation.freelancer_id}
-                freelancerName={conversation.freelancer_name}
-                freelancerAvatar={conversation.freelancer_avatar}
+                otherUserId={conversation.other_user_id}
+                otherUserName={conversation.other_user_name}
+                otherUserAvatar={conversation.other_user_avatar}
                 lastMessage={conversation.last_message}
                 lastMessageAt={conversation.last_message_at}
                 unreadCount={conversation.unread_count}
@@ -68,9 +75,10 @@ export const ConversationsList = ({
                 onClick={() =>
                   onSelectConversation(
                     conversation.id,
-                    conversation.freelancer_id,
-                    conversation.freelancer_name,
-                    conversation.freelancer_avatar
+                    conversation.other_user_id,
+                    conversation.other_user_name,
+                    conversation.other_user_avatar,
+                    conversation.is_freelancer_view || false
                   )
                 }
               />
