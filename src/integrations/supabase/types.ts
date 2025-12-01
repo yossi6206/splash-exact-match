@@ -872,42 +872,6 @@ export type Database = {
         }
         Relationships: []
       }
-      promotion_impressions_log: {
-        Row: {
-          city: string | null
-          country: string | null
-          created_at: string
-          id: string
-          ip_address: string | null
-          item_id: string
-          item_type: string
-          region: string | null
-          user_agent: string | null
-        }
-        Insert: {
-          city?: string | null
-          country?: string | null
-          created_at?: string
-          id?: string
-          ip_address?: string | null
-          item_id: string
-          item_type: string
-          region?: string | null
-          user_agent?: string | null
-        }
-        Update: {
-          city?: string | null
-          country?: string | null
-          created_at?: string
-          id?: string
-          ip_address?: string | null
-          item_id?: string
-          item_type?: string
-          region?: string | null
-          user_agent?: string | null
-        }
-        Relationships: []
-      }
       properties: {
         Row: {
           accessible: boolean | null

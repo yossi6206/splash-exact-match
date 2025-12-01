@@ -8,6 +8,3 @@ verify_jwt = true
 
 [functions.increment-impression]
 verify_jwt = false
-
-[functions.get-geo-analytics]
-verify_jwt = true

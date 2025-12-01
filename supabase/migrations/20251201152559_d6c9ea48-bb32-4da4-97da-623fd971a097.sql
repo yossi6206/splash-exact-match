@@ -1,1 +1,0 @@
-ALTER TABLE public.promotion_impressions_log ENABLE ROW LEVEL SECURITY
