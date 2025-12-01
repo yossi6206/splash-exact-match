@@ -67,6 +67,21 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
                 </Badge>
               )}
             </div>
+            
+            {/* Heart Button on Image */}
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="absolute top-2 right-2 z-20 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm text-muted-foreground hover:text-red-500"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleFavorite(e);
+              }}
+            >
+              <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+            </Button>
+            
             <img 
               src={property.image} 
               alt={property.title}
@@ -119,20 +134,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
         </div>
       </Link>
-      
-      {/* Heart Button - Outside Link to prevent disappearing on hover */}
-      <Button 
-        variant="ghost" 
-        size="icon"
-        className="absolute top-3 right-3 z-20 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm text-muted-foreground hover:text-red-500"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          toggleFavorite(e);
-        }}
-      >
-        <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-      </Button>
     </Card>
   );
 };
