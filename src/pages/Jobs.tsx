@@ -93,13 +93,9 @@ const Jobs = () => {
       // Update impressions only for the first promoted job (top position)
       if (promotedData && promotedData.length > 0) {
         const topJob = promotedData[0];
-        await supabase
-          .from("jobs")
-          .update({
-            promotion_impressions: (topJob.promotion_impressions || 0) + 1,
-            last_top_position_at: new Date().toISOString()
-          })
-          .eq("id", topJob.id);
+        await supabase.functions.invoke('increment-impression', {
+          body: { table: 'jobs', id: topJob.id }
+        });
       }
 
       // Combine promoted and regular jobs

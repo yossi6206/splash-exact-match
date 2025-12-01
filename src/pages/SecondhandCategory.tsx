@@ -142,13 +142,9 @@ const SecondhandCategory = () => {
       // Update impressions only for the first promoted item (top position)
       if (promotedData && promotedData.length > 0) {
         const topItem = promotedData[0];
-        await supabase
-          .from("secondhand_items")
-          .update({
-            promotion_impressions: (topItem.promotion_impressions || 0) + 1,
-            last_top_position_at: new Date().toISOString()
-          })
-          .eq("id", topItem.id);
+        await supabase.functions.invoke('increment-impression', {
+          body: { table: 'secondhand_items', id: topItem.id }
+        });
       }
 
       const allItemsData = [...(promotedData || []), ...(data || [])];
