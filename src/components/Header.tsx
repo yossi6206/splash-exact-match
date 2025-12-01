@@ -685,7 +685,7 @@ const Header = () => {
                 variant="ghost" 
                 size="icon" 
                 className="hidden md:flex relative"
-                onClick={() => navigate("/dashboard/messages")}
+                onClick={() => navigate("/messages")}
               >
                 <MessageSquare className="h-5 w-5" />
                 {unreadCount > 0 && (
