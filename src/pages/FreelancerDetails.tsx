@@ -31,6 +31,7 @@ import FreelancerReviewStats from "@/components/freelancer-reviews/FreelancerRev
 import FreelancerReviewsList from "@/components/freelancer-reviews/FreelancerReviewsList";
 import FreelancerReviewForm from "@/components/freelancer-reviews/FreelancerReviewForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FreelancerChat } from "@/components/FreelancerChat";
 
 type Freelancer = Tables<"freelancers">;
 
@@ -57,6 +58,7 @@ const FreelancerDetails = () => {
   const [freelancer, setFreelancer] = useState<Freelancer | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | undefined>();
+  const [chatOpen, setChatOpen] = useState(false);
   const [reviewStats, setReviewStats] = useState({
     averageRating: 0,
     totalReviews: 0,
@@ -322,7 +324,7 @@ const FreelancerDetails = () => {
               )}
 
               <div className="flex flex-wrap gap-3">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2" onClick={() => setChatOpen(true)}>
                   <Mail className="w-5 h-5" />
                   צור קשר עכשיו
                 </Button>
@@ -575,6 +577,17 @@ const FreelancerDetails = () => {
       </div>
 
       <Footer />
+      
+      {/* Chat Dialog */}
+      {freelancer && (
+        <FreelancerChat
+          freelancerId={freelancer.id}
+          freelancerName={freelancer.full_name}
+          freelancerAvatar={freelancer.avatar_url}
+          open={chatOpen}
+          onOpenChange={setChatOpen}
+        />
+      )}
     </div>
   );
 };
