@@ -3,8 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart } from "recharts";
-import { TrendingUp, Zap, Eye, MousePointer, Calendar, Loader2, Car, Home, Laptop, Briefcase, Package, Users, Building2, CheckCircle2, RefreshCw } from "lucide-react";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart, PieChart, Pie, Cell } from "recharts";
+import { TrendingUp, Zap, Eye, MousePointer, Calendar, Loader2, Car, Home, Laptop, Briefcase, Package, Users, Building2, CheckCircle2, RefreshCw, MapPin, Globe } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -31,6 +31,18 @@ interface TimeSeriesData {
   contacts: number;
 }
 
+interface LocationData {
+  location: string;
+  impressions: number;
+}
+
+interface ConversionData {
+  category: string;
+  conversionRate: number;
+  impressions: number;
+  contacts: number;
+}
+
 const COLORS = {
   primary: '#10b981',
   secondary: '#3b82f6',
@@ -38,6 +50,8 @@ const COLORS = {
   warning: '#f59e0b',
   danger: '#ef4444'
 };
+
+const PIE_COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899', '#14b8a6'];
 
 const PromotionAnalytics = () => {
   const { user } = useAuth();
@@ -49,6 +63,8 @@ const PromotionAnalytics = () => {
   const [avgDailyImpressions, setAvgDailyImpressions] = useState(0);
   const [totalROI, setTotalROI] = useState(0);
   const [activePromotions, setActivePromotions] = useState(0);
+  const [locationData, setLocationData] = useState<LocationData[]>([]);
+  const [conversionByCategory, setConversionByCategory] = useState<ConversionData[]>([]);
 
   useEffect(() => {
     if (user) {
@@ -162,6 +178,49 @@ const PromotionAnalytics = () => {
       }
 
       setTimeSeriesData(timeData);
+
+      // Fetch geographic data from promotion_impressions_log
+      const userItemIds = allPromotedAds.map(ad => ad.id);
+      const { data: geoData } = await supabase
+        .from('promotion_impressions_log')
+        .select('city, country')
+        .in('item_id', userItemIds);
+
+      if (geoData) {
+        const locationCounts: { [key: string]: number } = {};
+        geoData.forEach((item: any) => {
+          const location = item.city || item.country || 'לא ידוע';
+          locationCounts[location] = (locationCounts[location] || 0) + 1;
+        });
+
+        const locationArray: LocationData[] = Object.entries(locationCounts)
+          .map(([location, impressions]) => ({ location, impressions: impressions as number }))
+          .sort((a, b) => b.impressions - a.impressions)
+          .slice(0, 10);
+
+        setLocationData(locationArray);
+      }
+
+      // Calculate conversion rates by category
+      const categoryStats: { [key: string]: { impressions: number, contacts: number } } = {};
+      allPromotedAds.forEach(ad => {
+        if (!categoryStats[ad.category]) {
+          categoryStats[ad.category] = { impressions: 0, contacts: 0 };
+        }
+        categoryStats[ad.category].impressions += ad.promotionImpressions;
+        categoryStats[ad.category].contacts += ad.contacts;
+      });
+
+      const conversionArray: ConversionData[] = Object.entries(categoryStats)
+        .map(([category, stats]) => ({
+          category,
+          impressions: stats.impressions,
+          contacts: stats.contacts,
+          conversionRate: stats.impressions > 0 ? (stats.contacts / stats.impressions) * 100 : 0
+        }))
+        .sort((a, b) => b.conversionRate - a.conversionRate);
+
+      setConversionByCategory(conversionArray);
 
     } catch (error) {
       console.error("Error fetching promotion analytics:", error);
@@ -365,6 +424,91 @@ const PromotionAnalytics = () => {
           </ResponsiveContainer>
         </CardContent>
       </Card>
+
+      {/* Geographic Distribution */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-primary" />
+              התפלגות גיאוגרפית של צופים
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {locationData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={350}>
+                <PieChart>
+                  <Pie
+                    data={locationData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ location, percent }) => `${location} (${(percent * 100).toFixed(0)}%)`}
+                    outerRadius={100}
+                    fill="#8884d8"
+                    dataKey="impressions"
+                  >
+                    {locationData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'white', 
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      padding: '12px'
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-[350px] flex items-center justify-center text-muted-foreground">
+                אין נתוני מיקום זמינים
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              שיעורי המרה לפי קטגוריה
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={conversionByCategory} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis type="number" stroke="#6b7280" style={{ fontSize: '12px' }} />
+                <YAxis 
+                  dataKey="category" 
+                  type="category" 
+                  stroke="#6b7280" 
+                  style={{ fontSize: '12px' }}
+                  width={100}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'white', 
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                    padding: '12px'
+                  }}
+                  formatter={(value: any) => `${value.toFixed(2)}%`}
+                />
+                <Bar 
+                  dataKey="conversionRate" 
+                  fill={COLORS.primary} 
+                  name="שיעור המרה" 
+                  radius={[0, 8, 8, 0]} 
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Comparison Chart */}
       <Card>
