@@ -128,25 +128,6 @@ const PromoteAds = () => {
     }
   };
 
-  const handleStopPromotion = async (ad: AdItem) => {
-    try {
-      const { error } = await supabase
-        .from(ad.table_name as any)
-        .update({
-          is_promoted: false,
-          promotion_end_date: new Date().toISOString(),
-        })
-        .eq('id', ad.id);
-
-      if (error) throw error;
-
-      toast.success('הקידום הופסק בהצלחה');
-      fetchUserAds();
-    } catch (error) {
-      console.error('Error stopping promotion:', error);
-      toast.error('שגיאה בהפסקת הקידום');
-    }
-  };
 
   const getDaysRemaining = (endDate: string) => {
     const end = new Date(endDate);
@@ -351,13 +332,9 @@ const PromoteAds = () => {
                           </div>
                         </div>
 
-                        <Button 
-                          onClick={() => handleStopPromotion(ad)}
-                          className="w-full mt-2"
-                          variant="outline"
-                        >
-                          הפסק קידום
-                        </Button>
+                        <div className="text-xs text-muted-foreground text-center mt-2 p-2 bg-muted rounded-lg">
+                          הקידום יסתיים אוטומטית ב-{new Date(ad.promotion_end_date!).toLocaleDateString('he-IL')}
+                        </div>
                       </div>
                     </div>
                   </CardContent>
