@@ -6,12 +6,19 @@ import heroLaptop from "@/assets/hero-laptop.jpg";
 import heroCar from "@/assets/hero-car.jpg";
 import heroApartment from "@/assets/hero-apartment.jpg";
 import heroWatch from "@/assets/hero-watch.jpg";
-
 const HeroSection = () => {
-  const activeAds = useCountUp({ end: 350000, duration: 2500 });
-  const registeredUsers = useCountUp({ end: 1200000, duration: 2500 });
-  const completedDeals = useCountUp({ end: 500000, duration: 2500 });
-
+  const activeAds = useCountUp({
+    end: 350000,
+    duration: 2500
+  });
+  const registeredUsers = useCountUp({
+    end: 1200000,
+    duration: 2500
+  });
+  const completedDeals = useCountUp({
+    end: 500000,
+    duration: 2500
+  });
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + "M";
@@ -21,9 +28,7 @@ const HeroSection = () => {
     }
     return num.toString();
   };
-
-  return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted min-h-[700px] md:min-h-[800px] lg:min-h-[900px]">
+  return <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted min-h-[700px] md:min-h-[800px] lg:min-h-[900px]">
       {/* Modern gradient background with multiple layers */}
       <div className="absolute inset-0 -z-10">
         {/* Primary gradient layer */}
@@ -36,27 +41,21 @@ const HeroSection = () => {
         <div className="absolute bottom-32 right-64 w-80 h-80 bg-gradient-to-br from-accent/30 to-primary/20 rounded-full blur-3xl animate-pulse delay-700"></div>
         
         {/* Organic SVG shapes */}
-        <svg
-          className="absolute inset-0 h-full w-full opacity-10"
-          viewBox="0 0 1200 600"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="none"
-        >
+        <svg className="absolute inset-0 h-full w-full opacity-10" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
           <defs>
             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style={{ stopColor: 'hsl(var(--primary))', stopOpacity: 0.6 }} />
-              <stop offset="100%" style={{ stopColor: 'hsl(var(--secondary))', stopOpacity: 0.4 }} />
+              <stop offset="0%" style={{
+              stopColor: 'hsl(var(--primary))',
+              stopOpacity: 0.6
+            }} />
+              <stop offset="100%" style={{
+              stopColor: 'hsl(var(--secondary))',
+              stopOpacity: 0.4
+            }} />
             </linearGradient>
           </defs>
-          <path
-            d="M0,200 Q300,100 600,200 T1200,200 L1200,0 L0,0 Z"
-            fill="url(#grad1)"
-          />
-          <path
-            d="M0,450 Q400,300 800,450 T1200,450 L1200,600 L0,600 Z"
-            fill="white"
-            opacity="0.15"
-          />
+          <path d="M0,200 Q300,100 600,200 T1200,200 L1200,0 L0,0 Z" fill="url(#grad1)" />
+          <path d="M0,450 Q400,300 800,450 T1200,450 L1200,600 L0,600 Z" fill="white" opacity="0.15" />
         </svg>
       </div>
 
@@ -64,9 +63,7 @@ const HeroSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Content */}
           <div className="order-2 md:order-1 flex flex-col items-end text-right">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-foreground mb-6 leading-tight">
-              פתוח עומס, יותר רווח
-            </h1>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-foreground mb-6 leading-tight">פחות עומס, יותר רווח</h1>
             <p className="text-2xl md:text-3xl lg:text-4xl text-foreground/80 mb-10 font-medium">
               למכור ביד2 ולהרוויח בקלות
             </p>
@@ -81,11 +78,7 @@ const HeroSection = () => {
               {/* Phone */}
               <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-500 group cursor-pointer">
                 <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-2xl">
-                  <img
-                    src={heroPhone}
-                    alt="טלפון למכירה"
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
+                  <img src={heroPhone} alt="טלפון למכירה" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg transition-transform duration-300 group-hover:scale-110">
                   ₪ 2,500
@@ -95,11 +88,7 @@ const HeroSection = () => {
               {/* Laptop */}
               <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 group cursor-pointer">
                 <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 group-hover:shadow-2xl">
-                  <img
-                    src={heroLaptop}
-                    alt="מחשב נייד למכירה"
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
+                  <img src={heroLaptop} alt="מחשב נייד למכירה" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg transition-transform duration-300 group-hover:scale-110">
                   ₪ 3,800
@@ -109,11 +98,7 @@ const HeroSection = () => {
               {/* Car */}
               <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 group cursor-pointer">
                 <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-2xl">
-                  <img
-                    src={heroCar}
-                    alt="רכב למכירה"
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
+                  <img src={heroCar} alt="רכב למכירה" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg transition-transform duration-300 group-hover:scale-110">
                   ₪ 150,000
@@ -123,11 +108,7 @@ const HeroSection = () => {
               {/* Watch */}
               <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 group cursor-pointer">
                 <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 group-hover:shadow-2xl">
-                  <img
-                    src={heroWatch}
-                    alt="שעון למכירה"
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
+                  <img src={heroWatch} alt="שעון למכירה" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg transition-transform duration-300 group-hover:scale-110">
                   ₪ 8,500
@@ -138,11 +119,7 @@ const HeroSection = () => {
             {/* Center apartment image */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 animate-in fade-in scale-in duration-700 delay-700 group cursor-pointer">
               <div className="w-40 h-40 md:w-52 md:h-52 lg:w-64 lg:h-64 rounded-full overflow-hidden shadow-2xl border-8 border-white/30 bg-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-3xl">
-                <img
-                  src={heroApartment}
-                  alt="דירה למכירה"
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
-                />
+                <img src={heroApartment} alt="דירה למכירה" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
               </div>
               <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-xl transition-transform duration-300 group-hover:scale-110">
                 ₪ 1,850,000
@@ -154,10 +131,7 @@ const HeroSection = () => {
         {/* Statistics Section */}
         <div className="mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Active Ads */}
-          <div 
-            ref={activeAds.elementRef}
-            className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
-          >
+          <div ref={activeAds.elementRef} className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20">
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary/20 flex items-center justify-center">
                 <FileText className="w-8 h-8 md:w-10 md:h-10 text-primary" />
@@ -172,10 +146,7 @@ const HeroSection = () => {
           </div>
 
           {/* Registered Users */}
-          <div 
-            ref={registeredUsers.elementRef}
-            className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
-          >
+          <div ref={registeredUsers.elementRef} className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20">
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-secondary/20 flex items-center justify-center">
                 <Users className="w-8 h-8 md:w-10 md:h-10 text-secondary" />
@@ -190,10 +161,7 @@ const HeroSection = () => {
           </div>
 
           {/* Completed Deals */}
-          <div 
-            ref={completedDeals.elementRef}
-            className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
-          >
+          <div ref={completedDeals.elementRef} className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20">
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-accent/20 flex items-center justify-center">
                 <CheckCircle className="w-8 h-8 md:w-10 md:h-10 text-accent" />
@@ -208,8 +176,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
