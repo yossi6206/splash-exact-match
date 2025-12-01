@@ -64,6 +64,17 @@ export const CarCard = ({ car }: CarCardProps) => {
                 מקודם
               </Badge>
             )}
+            
+            {/* Heart Button on Image */}
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="absolute top-2 right-2 z-20 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm text-muted-foreground hover:text-red-500"
+              onClick={toggleFavorite}
+            >
+              <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+            </Button>
+            
             <img 
               src={car.image} 
               alt={car.title}
@@ -113,16 +124,6 @@ export const CarCard = ({ car }: CarCardProps) => {
           </div>
         </div>
       </Link>
-      
-      {/* Heart Button - Outside Link to prevent disappearing on hover */}
-      <Button 
-        variant="ghost" 
-        size="icon"
-        className="absolute top-3 left-3 z-20 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm text-muted-foreground hover:text-red-500"
-        onClick={toggleFavorite}
-      >
-        <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-      </Button>
     </Card>
   );
 };
