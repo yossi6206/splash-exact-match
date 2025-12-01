@@ -74,6 +74,78 @@ export const useFavorites = (itemId: string | number, itemType: ItemType) => {
           description: "המודעה הוסרה מרשימת המועדפים שלך",
         });
       } else {
+        // Get current price based on item type
+        let currentPrice: number | null = null;
+        try {
+          switch (itemType) {
+            case 'car': {
+              const { data } = await supabase
+                .from('cars')
+                .select('price')
+                .eq('id', String(itemId))
+                .maybeSingle();
+              if (data?.price) currentPrice = parseInt(data.price);
+              break;
+            }
+            case 'property': {
+              const { data } = await supabase
+                .from('properties')
+                .select('price')
+                .eq('id', String(itemId))
+                .maybeSingle();
+              if (data) currentPrice = data.price;
+              break;
+            }
+            case 'laptop': {
+              const { data } = await supabase
+                .from('laptops')
+                .select('price')
+                .eq('id', String(itemId))
+                .maybeSingle();
+              if (data) currentPrice = data.price;
+              break;
+            }
+            case 'business': {
+              const { data } = await supabase
+                .from('businesses')
+                .select('price')
+                .eq('id', String(itemId))
+                .maybeSingle();
+              if (data) currentPrice = data.price;
+              break;
+            }
+            case 'secondhand': {
+              const { data } = await supabase
+                .from('secondhand_items')
+                .select('price')
+                .eq('id', String(itemId))
+                .maybeSingle();
+              if (data) currentPrice = data.price;
+              break;
+            }
+            case 'freelancer': {
+              const { data } = await supabase
+                .from('freelancers')
+                .select('hourly_rate')
+                .eq('id', String(itemId))
+                .maybeSingle();
+              if (data) currentPrice = data.hourly_rate;
+              break;
+            }
+            case 'job': {
+              const { data } = await supabase
+                .from('jobs')
+                .select('salary_min')
+                .eq('id', String(itemId))
+                .maybeSingle();
+              if (data) currentPrice = data.salary_min;
+              break;
+            }
+          }
+        } catch (priceError) {
+          console.error("Error fetching price:", priceError);
+        }
+
         // Add to favorites
         const { error } = await supabase
           .from("favorites")
@@ -81,6 +153,7 @@ export const useFavorites = (itemId: string | number, itemType: ItemType) => {
             user_id: user.id,
             item_id: String(itemId),
             item_type: itemType,
+            original_price: currentPrice,
           });
 
         if (error) throw error;
@@ -104,4 +177,18 @@ export const useFavorites = (itemId: string | number, itemType: ItemType) => {
   };
 
   return { isFavorite, isLoading, toggleFavorite };
+};
+
+// Helper function to get table name from item type
+const getTableName = (itemType: ItemType): string => {
+  switch (itemType) {
+    case 'car': return 'cars';
+    case 'property': return 'properties';
+    case 'laptop': return 'laptops';
+    case 'job': return 'jobs';
+    case 'freelancer': return 'freelancers';
+    case 'business': return 'businesses';
+    case 'secondhand': return 'secondhand_items';
+    default: return '';
+  }
 };

@@ -306,6 +306,7 @@ export type Database = {
           id: string
           item_id: string
           item_type: string
+          original_price: number | null
           user_id: string
         }
         Insert: {
@@ -313,6 +314,7 @@ export type Database = {
           id?: string
           item_id: string
           item_type: string
+          original_price?: number | null
           user_id: string
         }
         Update: {
@@ -320,6 +322,7 @@ export type Database = {
           id?: string
           item_id?: string
           item_type?: string
+          original_price?: number | null
           user_id?: string
         }
         Relationships: []

@@ -79,6 +79,22 @@ const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
   };
 
   const price = getPrice();
+  const originalPrice = favorite.original_price;
+  
+  // Calculate price drop
+  const getPriceDrop = () => {
+    if (!price || !originalPrice || price >= originalPrice) return null;
+    
+    const dropAmount = originalPrice - price;
+    const dropPercentage = ((dropAmount / originalPrice) * 100).toFixed(0);
+    
+    return {
+      amount: dropAmount,
+      percentage: dropPercentage
+    };
+  };
+
+  const priceDrop = getPriceDrop();
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-white border-border w-full">
@@ -116,6 +132,13 @@ const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
                   ₪{typeof price === 'number' ? price.toLocaleString() : price}
                   {favorite.item_type === 'freelancer' && <span className="text-xs font-normal text-muted-foreground"> לשעה</span>}
                 </div>
+                {priceDrop && (
+                  <div className="mt-1 inline-flex items-center gap-1 bg-green-50 text-green-700 px-2 py-0.5 rounded text-xs font-semibold border border-green-200">
+                    <span>↓</span>
+                    <span>₪{priceDrop.amount.toLocaleString()}</span>
+                    <span>({priceDrop.percentage}%)</span>
+                  </div>
+                )}
               </div>
             )}
           </div>
