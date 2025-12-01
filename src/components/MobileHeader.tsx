@@ -1,6 +1,9 @@
 import { Menu, Bell, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 import {
   Sheet,
   SheetContent,
@@ -10,6 +13,10 @@ import {
 } from "@/components/ui/sheet";
 
 const MobileHeader = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const unreadCount = useUnreadMessages(user?.id);
+
   return (
     <header className="md:hidden sticky top-0 z-50 w-full bg-background border-b border-border safe-area-top">
       <div className="flex items-center justify-between px-4 py-3">
@@ -70,9 +77,24 @@ const MobileHeader = () => {
           <Button variant="ghost" size="icon">
             <Bell className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon">
-            <MessageSquare className="h-5 w-5" />
-          </Button>
+          {user && (
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => navigate("/dashboard/messages")}
+              className="relative"
+            >
+              <MessageSquare className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <Badge 
+                  variant="destructive" 
+                  className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center p-0 text-xs"
+                >
+                  {unreadCount}
+                </Badge>
+              )}
+            </Button>
+          )}
         </div>
       </div>
     </header>
