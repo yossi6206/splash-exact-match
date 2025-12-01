@@ -39,12 +39,26 @@ const Freelancers = () => {
   const fetchFreelancers = async () => {
     try {
       setLoading(true);
-      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
       
+      // Fetch promoted freelancers with fair rotation
+      const { data: promotedData } = await supabase
+        .from("freelancers")
+        .select("*")
+        .eq("availability", "available")
+        .eq("is_promoted", true)
+        .gte("promotion_end_date", new Date().toISOString())
+        .order("promotion_impressions", { ascending: true })
+        .order("last_top_position_at", { ascending: true, nullsFirst: true })
+        .order("id", { ascending: true })
+        .limit(3);
+
+      // Fetch regular freelancers with pagination
+      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
       let query = supabase
         .from("freelancers")
         .select("*", { count: "exact" })
         .eq("availability", "available")
+        .or(`is_promoted.is.null,is_promoted.eq.false,promotion_end_date.lt.${new Date().toISOString()}`)
         .range(startIndex, startIndex + ITEMS_PER_PAGE - 1);
 
       // Apply sorting
@@ -64,7 +78,21 @@ const Freelancers = () => {
 
       if (error) throw error;
 
-      setFreelancers(data || []);
+      // Update impressions only for the first promoted freelancer (top position)
+      if (promotedData && promotedData.length > 0) {
+        const topFreelancer = promotedData[0];
+        await supabase
+          .from("freelancers")
+          .update({
+            promotion_impressions: (topFreelancer.promotion_impressions || 0) + 1,
+            last_top_position_at: new Date().toISOString()
+          })
+          .eq("id", topFreelancer.id);
+      }
+
+      // Combine promoted and regular freelancers
+      const allFreelancers = [...(promotedData || []), ...(data || [])];
+      setFreelancers(allFreelancers);
       setTotalCount(count || 0);
     } catch (error: any) {
       console.error("Error fetching freelancers:", error);

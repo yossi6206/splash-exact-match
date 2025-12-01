@@ -95,16 +95,44 @@ const Laptops = () => {
 
   const fetchLaptops = async () => {
     setLoading(true);
+    
+    // Fetch promoted laptops with fair rotation
+    const { data: promotedData } = await supabase
+      .from("laptops")
+      .select("*")
+      .eq("status", "active")
+      .eq("is_promoted", true)
+      .gte("promotion_end_date", new Date().toISOString())
+      .order("promotion_impressions", { ascending: true })
+      .order("last_top_position_at", { ascending: true, nullsFirst: true })
+      .order("id", { ascending: true })
+      .limit(3);
+
+    // Fetch regular laptops
     const { data, error } = await supabase
       .from("laptops")
       .select("*")
       .eq("status", "active")
+      .or(`is_promoted.is.null,is_promoted.eq.false,promotion_end_date.lt.${new Date().toISOString()}`)
       .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching laptops:", error);
     } else {
-      setLaptops(data || []);
+      // Update impressions only for the first promoted laptop (top position)
+      if (promotedData && promotedData.length > 0) {
+        const topLaptop = promotedData[0];
+        await supabase
+          .from("laptops")
+          .update({
+            promotion_impressions: (topLaptop.promotion_impressions || 0) + 1,
+            last_top_position_at: new Date().toISOString()
+          })
+          .eq("id", topLaptop.id);
+      }
+
+      const allLaptops = [...(promotedData || []), ...(data || [])];
+      setLaptops(allLaptops);
     }
     setLoading(false);
   };

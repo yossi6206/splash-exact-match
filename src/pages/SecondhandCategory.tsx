@@ -100,10 +100,32 @@ const SecondhandCategory = () => {
 
   const fetchItems = async () => {
     setLoading(true);
+    
+    // Fetch promoted items with fair rotation
+    let promotedQuery = supabase
+      .from("secondhand_items")
+      .select("*")
+      .eq("status", "active")
+      .eq("is_promoted", true)
+      .gte("promotion_end_date", new Date().toISOString())
+      .order("promotion_impressions", { ascending: true })
+      .order("last_top_position_at", { ascending: true, nullsFirst: true })
+      .order("id", { ascending: true })
+      .limit(3);
+
+    // Filter by category if specified
+    if (category) {
+      promotedQuery = promotedQuery.eq("category", categoryMap[category]);
+    }
+
+    const { data: promotedData } = await promotedQuery;
+
+    // Fetch regular items
     let query = supabase
       .from("secondhand_items")
       .select("*")
-      .eq("status", "active");
+      .eq("status", "active")
+      .or(`is_promoted.is.null,is_promoted.eq.false,promotion_end_date.lt.${new Date().toISOString()}`);
 
     // Filter by category if specified
     if (category) {
@@ -117,8 +139,21 @@ const SecondhandCategory = () => {
     if (error) {
       console.error("Error fetching items:", error);
     } else {
-      setAllItems(data || []);
-      setItems(data || []);
+      // Update impressions only for the first promoted item (top position)
+      if (promotedData && promotedData.length > 0) {
+        const topItem = promotedData[0];
+        await supabase
+          .from("secondhand_items")
+          .update({
+            promotion_impressions: (topItem.promotion_impressions || 0) + 1,
+            last_top_position_at: new Date().toISOString()
+          })
+          .eq("id", topItem.id);
+      }
+
+      const allItemsData = [...(promotedData || []), ...(data || [])];
+      setAllItems(allItemsData);
+      setItems(allItemsData);
     }
     setLoading(false);
   };
