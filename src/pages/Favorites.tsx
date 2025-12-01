@@ -121,13 +121,14 @@ const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
           </div>
 
           {/* Heart Button */}
-          <div className="flex items-start">
+          <div className="flex items-start relative z-10">
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-muted-foreground hover:text-red-500"
+              className="text-muted-foreground hover:text-red-500 hover:bg-muted/50"
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 toggleFavorite(e);
               }}
             >
