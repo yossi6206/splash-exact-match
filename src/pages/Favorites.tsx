@@ -145,11 +145,11 @@ const Favorites = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background" dir="rtl">
       <Header />
       
       <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">המודעות המועדפות שלי</h1>
+        <h1 className="text-3xl font-bold mb-6 text-right">המודעות המועדפות שלי</h1>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="mb-6">

@@ -51,7 +51,7 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
   };
   
   return (
-    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border">
+    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border" dir="rtl">
       <Link to={`/secondhand/item/${String(item.id)}`} onClick={handleClick}>
         <div className="relative">
           {/* Image */}
@@ -73,14 +73,14 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
           <Button 
             variant="ghost" 
             size="icon"
-            className="absolute top-3 left-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
+            className="absolute top-3 right-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
             onClick={toggleFavorite}
           >
             <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
           </Button>
 
-          {/* Badges - Top Right */}
-          <div className="absolute top-3 right-3 flex flex-col gap-2">
+          {/* Badges - Top Left */}
+          <div className="absolute top-3 left-3 flex flex-col gap-2">
             <Badge className="bg-background/90 hover:bg-background text-foreground border backdrop-blur-sm">
               {item.condition}
             </Badge>
@@ -98,8 +98,8 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
             )}
           </div>
 
-          {/* Category Badge - Bottom Right */}
-          <div className="absolute bottom-3 right-3">
+          {/* Category Badge - Bottom Left */}
+          <div className="absolute bottom-3 left-3">
             <Badge className="bg-primary/90 text-primary-foreground backdrop-blur-sm">
               {item.category}
             </Badge>
@@ -109,7 +109,7 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
         {/* Content */}
         <div className="p-4 space-y-3">
           {/* Title */}
-          <div>
+          <div className="text-right">
             <h3 className="font-bold text-lg text-foreground line-clamp-2 mb-1">
               {item.title}
             </h3>

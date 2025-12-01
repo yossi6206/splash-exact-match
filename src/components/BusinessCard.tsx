@@ -70,7 +70,7 @@ const BusinessCard = ({
     <Link to={`/businesses/${id}`} onClick={handleClick}>
       <Card className={`group hover:shadow-xl transition-all duration-300 overflow-hidden border-2 hover:border-primary/50 ${
         isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
-      }`}>
+      }`} dir="rtl">
         {/* Image */}
         <div className="relative h-52 overflow-hidden bg-muted">
           {isPromoted && (
@@ -92,7 +92,7 @@ const BusinessCard = ({
               <Building2 className="w-16 h-16 text-muted-foreground/30" />
             </div>
           )}
-          <div className="absolute top-3 right-3 flex gap-2">
+          <div className="absolute top-3 left-3 flex gap-2">
             <Badge className="bg-primary/90 backdrop-blur-sm">
               {category}
             </Badge>
@@ -100,13 +100,13 @@ const BusinessCard = ({
           <Button 
             variant="ghost" 
             size="icon"
-            className="absolute top-3 left-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
+            className="absolute top-3 right-3 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm"
             onClick={toggleFavorite}
           >
             <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
           </Button>
           {years_operating && (
-            <div className="absolute top-3 left-3">
+            <div className="absolute bottom-3 left-3">
               <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">
                 {years_operating} שנים
               </Badge>
@@ -116,7 +116,7 @@ const BusinessCard = ({
 
         <CardContent className="p-5">
           {/* Title & Type */}
-          <div className="space-y-2 mb-4">
+          <div className="space-y-2 mb-4 text-right">
             <h3 className="text-xl font-bold text-foreground line-clamp-1 group-hover:text-primary transition-colors">
               {title}
             </h3>
@@ -128,7 +128,7 @@ const BusinessCard = ({
 
           {/* Description */}
           {description && (
-            <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+            <p className="text-sm text-muted-foreground line-clamp-2 mb-4 text-right">
               {description}
             </p>
           )}

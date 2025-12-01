@@ -51,14 +51,14 @@ export const CarCard = ({ car }: CarCardProps) => {
   return (
     <Card className={`overflow-hidden hover:shadow-lg transition-shadow bg-white border-border ${
       isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
-    }`}>
+    }`} dir="rtl">
       <Link to={`/cars/${carId}`} onClick={handleClick}>
-        <div className="flex flex-col sm:flex-row gap-4 p-4">
+        <div className="flex flex-col sm:flex-row-reverse gap-4 p-4">
           {/* Image */}
           <div className="w-full sm:w-64 h-48 rounded-lg overflow-hidden flex-shrink-0 relative">
             {isPromoted && (
               <Badge 
-                className="absolute top-2 right-2 z-10 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg"
+                className="absolute top-2 left-2 z-10 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg"
               >
                 <Sparkles className="w-3 h-3 ml-1" />
                 מקודם
@@ -74,7 +74,7 @@ export const CarCard = ({ car }: CarCardProps) => {
           {/* Content */}
           <div className="flex-1 flex flex-col">
             <div className="flex items-start justify-between mb-3">
-              <div>
+              <div className="text-right">
                 <h3 className="text-xl font-bold text-foreground mb-1">{car.title}</h3>
                 <p className="text-sm text-muted-foreground mb-2">{car.subtitle}</p>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
@@ -115,9 +115,9 @@ export const CarCard = ({ car }: CarCardProps) => {
             </div>
 
             {/* Price */}
-            <div className="mt-auto">
+            <div className="mt-auto text-right">
               <div className="text-3xl font-bold text-foreground">
-                {car.price.toLocaleString()} ₪
+                ₪{car.price.toLocaleString()}
               </div>
             </div>
           </div>

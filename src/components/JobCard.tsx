@@ -49,7 +49,7 @@ export const JobCard = ({
   };
   
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow duration-300 bg-card">
+    <Card className="p-6 hover:shadow-lg transition-shadow duration-300 bg-card" dir="rtl">
       <div className="flex gap-4">
         {/* Company Logo */}
         <div className="flex-shrink-0">
@@ -65,7 +65,7 @@ export const JobCard = ({
         {/* Job Details */}
         <div className="flex-1">
           <div className="flex items-start justify-between mb-3">
-            <div>
+            <div className="text-right">
               <Link
                 to={`/jobs/${id}`}
                 onClick={handleClick}
