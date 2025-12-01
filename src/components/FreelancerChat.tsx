@@ -210,14 +210,18 @@ export const FreelancerChat = ({
         },
         async (payload) => {
           const newMessage = payload.new as Message;
-          setMessages((prev) => [...prev, newMessage]);
           
-          // Mark as read if message is from other user
-          if (user && newMessage.sender_id !== user.id && !newMessage.is_read) {
-            await supabase
-              .from("messages")
-              .update({ is_read: true })
-              .eq("id", newMessage.id);
+          // Only add message if it's from another user (to avoid duplicates)
+          if (user && newMessage.sender_id !== user.id) {
+            setMessages((prev) => [...prev, newMessage]);
+            
+            // Mark as read
+            if (!newMessage.is_read) {
+              await supabase
+                .from("messages")
+                .update({ is_read: true })
+                .eq("id", newMessage.id);
+            }
           }
         }
       )
@@ -314,16 +318,24 @@ export const FreelancerChat = ({
         attachmentName = selectedFile.name;
       }
 
-      const { error } = await supabase.from("messages").insert({
+      const messageContent = newMessage.trim() || (selectedFile ? `שלח קובץ: ${selectedFile.name}` : "");
+
+      const { data, error } = await supabase.from("messages").insert({
         conversation_id: conversationId,
         sender_id: user.id,
-        content: newMessage.trim() || (selectedFile ? `שלח קובץ: ${selectedFile.name}` : ""),
+        content: messageContent,
         attachment_url: attachmentUrl,
         attachment_type: attachmentType,
         attachment_name: attachmentName,
-      });
+      }).select().single();
 
       if (error) throw error;
+
+      // Add message to state immediately
+      if (data) {
+        setMessages((prev) => [...prev, data as Message]);
+      }
+
       setNewMessage("");
       removeSelectedFile();
     } catch (error) {
