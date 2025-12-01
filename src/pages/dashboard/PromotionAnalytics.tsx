@@ -22,8 +22,6 @@ interface PromotedAd {
   contacts: number;
   daysRemaining: number;
   isActive: boolean;
-  currentPosition: number;
-  lastTopPositionAt: string | null;
 }
 
 interface TimeSeriesData {
@@ -55,6 +53,13 @@ const PromotionAnalytics = () => {
   useEffect(() => {
     if (user) {
       fetchPromotionAnalytics();
+      
+      // Auto-refresh every 10 seconds
+      const interval = setInterval(() => {
+        fetchPromotionAnalytics();
+      }, 10000);
+      
+      return () => clearInterval(interval);
     }
   }, [user, selectedCategory]);
 
@@ -105,46 +110,14 @@ const PromotionAnalytics = () => {
               clicks: item.clicks_count || 0,
               contacts: item.contacts_count || 0,
               daysRemaining,
-              isActive: daysRemaining > 0,
-              currentPosition: 0, // Will be calculated later
-              lastTopPositionAt: item.last_top_position_at || null
+              isActive: daysRemaining > 0
             };
           });
           allPromotedAds = [...allPromotedAds, ...ads];
         }
       }
 
-      // Calculate current position for each ad within its category
-      const adsByCategory = new Map<string, PromotedAd[]>();
-      allPromotedAds.forEach(ad => {
-        if (!adsByCategory.has(ad.category)) {
-          adsByCategory.set(ad.category, []);
-        }
-        adsByCategory.get(ad.category)!.push(ad);
-      });
-
-      // Sort each category by last_top_position_at for fair rotation
-      adsByCategory.forEach((ads, category) => {
-        ads.sort((a, b) => {
-          // Ads that were never at top position get priority (null last_top_position_at)
-          if (a.lastTopPositionAt === null && b.lastTopPositionAt !== null) return -1;
-          if (a.lastTopPositionAt !== null && b.lastTopPositionAt === null) return 1;
-          
-          // If both null or both have dates, sort by the oldest last_top_position_at
-          // (or promotion_start_date if both null)
-          const aDate = a.lastTopPositionAt ? new Date(a.lastTopPositionAt) : new Date(a.promotionStartDate);
-          const bDate = b.lastTopPositionAt ? new Date(b.lastTopPositionAt) : new Date(b.promotionStartDate);
-          
-          return aDate.getTime() - bDate.getTime();
-        });
-        
-        // Assign positions based on sorted order
-        ads.forEach((ad, index) => {
-          ad.currentPosition = index + 1;
-        });
-      });
-
-      // Sort all ads by promotion start date for display
+      // Sort by promotion start date
       allPromotedAds.sort((a, b) => 
         new Date(b.promotionStartDate).getTime() - new Date(a.promotionStartDate).getTime()
       );
@@ -241,7 +214,7 @@ const PromotionAnalytics = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground mb-2">ניתוח קידום מתקדם</h1>
-          <p className="text-muted-foreground">מעקב והשוואה בין המודעות המקודמות שלך</p>
+          <p className="text-muted-foreground">מעקב והשוואה בין המודעות המקודמות שלך - מתעדכן אוטומטית כל 10 שניות</p>
         </div>
         <div className="flex items-center gap-3">
           <Button 
@@ -450,7 +423,6 @@ const PromotionAnalytics = () => {
                 <TableRow>
                   <TableHead className="text-right">מודעה</TableHead>
                   <TableHead className="text-right">קטגוריה</TableHead>
-                  <TableHead className="text-right">מיקום</TableHead>
                   <TableHead className="text-right">סטטוס</TableHead>
                   <TableHead className="text-right">הצגות קידום</TableHead>
                   <TableHead className="text-right">צפיות</TableHead>
@@ -468,20 +440,6 @@ const PromotionAnalytics = () => {
                         {getCategoryIcon(ad.category)}
                         <span>{ad.category}</span>
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge 
-                        variant="outline" 
-                        className={`font-bold ${
-                          ad.currentPosition === 1 
-                            ? 'bg-yellow-500/20 text-yellow-700 border-yellow-500/40' 
-                            : ad.currentPosition <= 3 
-                            ? 'bg-blue-500/20 text-blue-700 border-blue-500/40'
-                            : 'bg-muted'
-                        }`}
-                      >
-                        #{ad.currentPosition}
-                      </Badge>
                     </TableCell>
                     <TableCell>{getStatusBadge(ad.daysRemaining)}</TableCell>
                     <TableCell>
@@ -504,7 +462,7 @@ const PromotionAnalytics = () => {
                 ))}
                 {promotedAds.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                       אין מודעות מקודמות להצגה
                     </TableCell>
                   </TableRow>
