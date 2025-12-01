@@ -19,7 +19,7 @@ interface PropertyCardProps {
     size: number;
     floor: number;
     year?: number;
-    features: string[];
+    features: string[] | null;
     clicks_count?: number;
     is_promoted?: boolean;
     promotion_end_date?: string;
@@ -102,7 +102,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
               <Badge variant="secondary" className="bg-muted text-foreground">
                 {property.size} מ"ר
               </Badge>
-              {property.features.map((feature, index) => (
+              {property.features && property.features.map((feature, index) => (
                 <Badge key={index} variant="secondary" className="bg-muted text-foreground">
                   {feature}
                 </Badge>
