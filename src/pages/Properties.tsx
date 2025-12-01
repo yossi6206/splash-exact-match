@@ -48,8 +48,9 @@ const Properties = () => {
         .eq('status', 'active')
         .eq('is_promoted', true)
         .gte('promotion_end_date', new Date().toISOString())
-        .order('last_top_position_at', { ascending: true, nullsFirst: true })
         .order('promotion_impressions', { ascending: true })
+        .order('last_top_position_at', { ascending: true, nullsFirst: true })
+        .order('id', { ascending: true })
         .limit(3);
 
       // Fetch regular properties
