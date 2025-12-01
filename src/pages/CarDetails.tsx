@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import carImage1 from "@/assets/item-car.jpg";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
+import FinanceCalculator from "@/components/FinanceCalculator";
 
 interface CarData {
   id: string;
@@ -432,6 +433,15 @@ const CarDetails = () => {
                 )}
               </CardContent>
             </Card>
+
+            {/* Finance Calculator */}
+            {carDetails.price && carDetails.price !== "לא ציין מחיר" && (
+              <div className="mb-6">
+                <FinanceCalculator 
+                  carPrice={parseFloat(carDetails.price.replace(/,/g, ""))} 
+                />
+              </div>
+            )}
 
             {/* AI Report */}
             <AIReport itemType="car" itemData={carDetails} />
