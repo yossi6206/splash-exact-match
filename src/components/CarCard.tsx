@@ -117,11 +117,11 @@ export const CarCard = ({ car }: CarCardProps) => {
       {/* Heart Button - Outside Link to prevent disappearing on hover */}
       <Button 
         variant="ghost" 
-        size="icon" 
-        className="absolute top-4 left-4 z-10 text-muted-foreground hover:text-red-500 hover:bg-background/80 backdrop-blur-sm"
+        size="icon"
+        className="absolute top-3 left-3 z-20 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm text-muted-foreground hover:text-red-500"
         onClick={toggleFavorite}
       >
-        <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+        <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
       </Button>
     </Card>
   );
