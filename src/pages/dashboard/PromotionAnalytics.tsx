@@ -23,6 +23,7 @@ interface PromotedAd {
   daysRemaining: number;
   isActive: boolean;
   currentPosition: number;
+  lastTopPositionAt: string | null;
 }
 
 interface TimeSeriesData {
@@ -105,7 +106,8 @@ const PromotionAnalytics = () => {
               contacts: item.contacts_count || 0,
               daysRemaining,
               isActive: daysRemaining > 0,
-              currentPosition: 0 // Will be calculated later
+              currentPosition: 0, // Will be calculated later
+              lastTopPositionAt: item.last_top_position_at || null
             };
           });
           allPromotedAds = [...allPromotedAds, ...ads];
@@ -121,15 +123,22 @@ const PromotionAnalytics = () => {
         adsByCategory.get(ad.category)!.push(ad);
       });
 
-      // Sort each category by last_top_position_at (oldest first gets priority)
+      // Sort each category by last_top_position_at for fair rotation
       adsByCategory.forEach((ads, category) => {
         ads.sort((a, b) => {
-          const aDate = new Date(a.promotionStartDate).getTime();
-          const bDate = new Date(b.promotionStartDate).getTime();
-          return aDate - bDate; // Oldest first
+          // Ads that were never at top position get priority (null last_top_position_at)
+          if (a.lastTopPositionAt === null && b.lastTopPositionAt !== null) return -1;
+          if (a.lastTopPositionAt !== null && b.lastTopPositionAt === null) return 1;
+          
+          // If both null or both have dates, sort by the oldest last_top_position_at
+          // (or promotion_start_date if both null)
+          const aDate = a.lastTopPositionAt ? new Date(a.lastTopPositionAt) : new Date(a.promotionStartDate);
+          const bDate = b.lastTopPositionAt ? new Date(b.lastTopPositionAt) : new Date(b.promotionStartDate);
+          
+          return aDate.getTime() - bDate.getTime();
         });
         
-        // Assign positions
+        // Assign positions based on sorted order
         ads.forEach((ad, index) => {
           ad.currentPosition = index + 1;
         });
