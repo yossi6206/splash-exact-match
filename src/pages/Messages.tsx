@@ -290,6 +290,10 @@ export default function Messages() {
             conversations={conversations}
             selectedConversationId={selectedConversation?.conversationId || null}
             onSelectConversation={handleSelectConversation}
+            onConversationDeleted={() => {
+              loadConversations();
+              setSelectedConversation(null);
+            }}
           />
         </div>
 

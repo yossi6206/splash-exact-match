@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { ConversationItem } from "./ConversationItem";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface Conversation {
   id: string;
@@ -25,14 +27,46 @@ interface ConversationsListProps {
     otherUserAvatar: string | null,
     isFreelancerView: boolean
   ) => void;
+  onConversationDeleted?: () => void;
 }
 
 export const ConversationsList = ({
   conversations,
   selectedConversationId,
   onSelectConversation,
+  onConversationDeleted,
 }: ConversationsListProps) => {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const handleDeleteConversation = async (conversationId: string) => {
+    try {
+      // First delete all messages in the conversation
+      const { error: messagesError } = await supabase
+        .from("messages")
+        .delete()
+        .eq("conversation_id", conversationId);
+
+      if (messagesError) throw messagesError;
+
+      // Then delete the conversation
+      const { error: conversationError } = await supabase
+        .from("conversations")
+        .delete()
+        .eq("id", conversationId);
+
+      if (conversationError) throw conversationError;
+
+      toast.success("השיחה נמחקה בהצלחה");
+      
+      // Notify parent to refresh conversations
+      if (onConversationDeleted) {
+        onConversationDeleted();
+      }
+    } catch (error) {
+      console.error("Error deleting conversation:", error);
+      toast.error("שגיאה במחיקת השיחה");
+    }
+  };
 
   const filteredConversations = conversations.filter((conv) =>
     conv.other_user_name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -81,6 +115,7 @@ export const ConversationsList = ({
                     conversation.is_freelancer_view || false
                   )
                 }
+                onDelete={handleDeleteConversation}
               />
             ))}
           </div>
