@@ -18,6 +18,9 @@ import {
   PlusCircle,
   Home
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const menuItems = [
   { title: "פרסום מודעה חדשה", icon: PlusCircle, path: "/dashboard/post-wizard" },
@@ -35,17 +38,37 @@ const menuItems = [
 ];
 
 export const DashboardSidebar = () => {
+  const { user, signOut } = useAuth();
+
+  const { data: profile } = useQuery({
+    queryKey: ['profile', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const { data } = await supabase
+        .from('profiles')
+        .select('full_name, avatar_url')
+        .eq('id', user.id)
+        .single();
+      return data;
+    },
+    enabled: !!user?.id,
+  });
+
+  const displayName = profile?.full_name || user?.email?.split('@')[0] || 'משתמש';
+  const displayEmail = user?.email || '';
+  const initials = displayName.charAt(0).toUpperCase();
+
   return (
     <aside className="hidden md:flex w-80 bg-white border-l border-border flex-col shadow-sm">
       {/* User Profile Section */}
       <div className="p-8 text-center border-b border-border">
         <Avatar className="w-24 h-24 mx-auto mb-4 ring-4 ring-primary/10">
           <AvatarFallback className="bg-gradient-to-br from-primary/30 to-secondary/30 text-primary text-2xl font-bold">
-            y
+            {initials}
           </AvatarFallback>
         </Avatar>
-        <h2 className="text-xl font-bold text-foreground mb-1">yossi cohen</h2>
-        <p className="text-sm text-muted-foreground">yossi6206@gmail.com</p>
+        <h2 className="text-xl font-bold text-foreground mb-1">{displayName}</h2>
+        <p className="text-sm text-muted-foreground">{displayEmail}</p>
       </div>
 
       {/* Menu Items */}
@@ -87,6 +110,7 @@ export const DashboardSidebar = () => {
         <Button 
           variant="outline" 
           className="w-full justify-between border-primary/30 text-primary hover:bg-primary/10"
+          onClick={signOut}
         >
           <span>התנתקות</span>
           <LogOut className="h-4 w-4" />
