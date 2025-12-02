@@ -6,12 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Share2, MapPin, Calendar, Users, TrendingUp, Building2, Phone, MessageSquare, Loader2, Maximize2, ChevronLeft, ChevronRight, DollarSign, Clock, FileText } from "lucide-react";
+import { Heart, MapPin, Calendar, Users, TrendingUp, Building2, Phone, MessageSquare, Loader2, Maximize2, ChevronLeft, ChevronRight, DollarSign, Clock, FileText } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
+import { ShareMenu } from "@/components/ShareMenu";
 import { supabase } from "@/integrations/supabase/client";
 
 const BusinessDetails = () => {
@@ -255,9 +256,10 @@ const BusinessDetails = () => {
                 >
                   <Heart className={`h-5 w-5 ${isFavorite ? 'fill-primary text-primary' : ''}`} />
                 </Button>
-                <Button variant="outline" size="icon">
-                  <Share2 className="h-5 w-5" />
-                </Button>
+                <ShareMenu 
+                  title={business.title}
+                  variant="outline"
+                />
                 <ReportListingDialog itemId={id!} itemType="business" />
               </div>
             </div>

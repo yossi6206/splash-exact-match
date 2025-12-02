@@ -33,6 +33,7 @@ import FreelancerReviewForm from "@/components/freelancer-reviews/FreelancerRevi
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FreelancerChat } from "@/components/FreelancerChat";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
+import { ShareMenu } from "@/components/ShareMenu";
 
 type Freelancer = Tables<"freelancers">;
 
@@ -285,12 +286,18 @@ const FreelancerDetails = () => {
             </Avatar>
 
             <div className="flex-1">
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between mb-2">
                 <div>
                   <h1 className="text-4xl font-bold mb-2">{freelancer.full_name}</h1>
                   <p className="text-xl text-primary font-semibold mb-4">{freelancer.title}</p>
                 </div>
-                <ReportListingDialog itemId={id!} itemType="freelancer" />
+                <div className="flex gap-2">
+                  <ShareMenu 
+                    title={`${freelancer.full_name} - ${freelancer.title}`}
+                    variant="outline"
+                  />
+                  <ReportListingDialog itemId={id!} itemType="freelancer" />
+                </div>
               </div>
               
               <div className="flex flex-wrap gap-4 mb-4">

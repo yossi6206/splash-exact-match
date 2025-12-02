@@ -19,7 +19,6 @@ import {
   DollarSign,
   Users,
   Calendar,
-  Share2,
   Heart,
   CheckCircle2,
   FileText,
@@ -30,6 +29,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
+import { ShareMenu } from "@/components/ShareMenu";
 import { z } from "zod";
 
 
@@ -305,9 +305,10 @@ const JobDetails = () => {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="icon" variant="outline">
-                    <Share2 className="w-5 h-5" />
-                  </Button>
+                  <ShareMenu 
+                    title={jobData.title}
+                    variant="outline"
+                  />
                   <Button size="icon" variant="outline">
                     <Heart className="w-5 h-5" />
                   </Button>

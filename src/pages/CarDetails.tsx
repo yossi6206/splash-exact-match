@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Heart, Share2, Phone, MessageSquare, MapPin, Calendar, Gauge, Hand, Sparkles, Loader2 } from "lucide-react";
+import { Heart, Phone, MessageSquare, MapPin, Calendar, Gauge, Hand, Sparkles, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,6 +15,7 @@ import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 import FinanceCalculator from "@/components/FinanceCalculator";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
+import { ShareMenu } from "@/components/ShareMenu";
 
 interface CarData {
   id: string;
@@ -224,12 +225,6 @@ const CarDetails = () => {
                 >
                   <Heart className="h-5 w-5" />
                 </Button>
-                  <Button 
-                    size="icon" 
-                    className="bg-white/90 hover:bg-white text-foreground rounded-full"
-                  >
-                    <Share2 className="h-5 w-5" />
-                  </Button>
                 </div>
                 <Badge className="absolute bottom-4 right-4 bg-foreground/80 text-background text-sm px-4 py-2">
                   תמונה 1 מתוך {images.length}
@@ -284,9 +279,10 @@ const CarDetails = () => {
                     >
                       <Heart className="h-5 w-5" />
                     </Button>
-                    <Button variant="outline" size="icon">
-                      <Share2 className="h-5 w-5" />
-                    </Button>
+                    <ShareMenu 
+                      title={`${carDetails.manufacturer} ${carDetails.model}`}
+                      variant="outline"
+                    />
                     <ReportListingDialog itemId={id!} itemType="car" />
                   </div>
                 </div>
