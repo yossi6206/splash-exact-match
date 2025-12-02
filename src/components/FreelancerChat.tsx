@@ -659,7 +659,6 @@ export const FreelancerChat = ({
             value={newMessage}
             onChange={handleTextareaChange}
             onKeyPress={handleKeyPress}
-            onBlur={stopTyping}
             placeholder="כתוב הודעה..."
             className="min-h-[60px] resize-none"
             dir="auto"
