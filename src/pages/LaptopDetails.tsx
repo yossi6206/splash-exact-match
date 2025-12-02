@@ -385,14 +385,40 @@ const LaptopDetails = () => {
 
                   {/* Contact Buttons */}
                   <div className="space-y-2">
-                    <Button className="w-full" size="lg" onClick={handleContactClick}>
-                      <Phone className="ml-2 h-4 w-4" />
-                      צור קשר טלפוני
-                    </Button>
-                    <Button variant="outline" className="w-full" size="lg" onClick={handleContactClick}>
-                      <MessageSquare className="ml-2 h-4 w-4" />
-                      שלח הודעה
-                    </Button>
+                    {!showPhone ? (
+                      <Button className="w-full" size="lg" onClick={handleShowPhone}>
+                        <Phone className="ml-2 h-4 w-4" />
+                        הצג מספר טלפון
+                      </Button>
+                    ) : (
+                      <div className="space-y-2">
+                        <Button 
+                          className="w-full" 
+                          size="lg"
+                          asChild
+                        >
+                          <a href={`tel:${laptop.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
+                            <Phone className="h-4 w-4 ml-2" />
+                            <span className="font-bold">{laptop.seller_phone}</span>
+                          </a>
+                        </Button>
+                        <Button 
+                          className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                          size="lg"
+                          asChild
+                        >
+                          <a 
+                            href={`https://wa.me/972${laptop.seller_phone.replace(/^0/, '').replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2"
+                          >
+                            <MessageSquare className="h-4 w-4 ml-2" />
+                            שלח הודעה בוואטסאפ
+                          </a>
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
@@ -417,44 +443,16 @@ const LaptopDetails = () => {
                         </div>
                       </div>
                     )}
-                    {laptop.seller_phone && (
-                      <div className="pt-3 border-t border-border space-y-3">
-                        {!showPhone ? (
-                          <Button 
-                            variant="outline" 
-                            className="w-full"
-                            onClick={handleShowPhone}
-                          >
-                            <Phone className="h-4 w-4 ml-2" />
-                            הצג מספר טלפון
-                          </Button>
-                        ) : (
-                          <>
-                            <Button 
-                              variant="outline" 
-                              className="w-full"
-                              asChild
-                            >
-                              <a href={`tel:${laptop.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
-                                <Phone className="h-4 w-4 ml-2" />
-                                <span className="font-bold">{laptop.seller_phone}</span>
-                              </a>
-                            </Button>
-                            <Button 
-                              className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
-                              asChild
-                            >
-                              <a 
-                                href={`https://wa.me/972${laptop.seller_phone.replace(/^0/, '').replace(/\D/g, '')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <MessageSquare className="h-4 w-4 ml-2" />
-                                שלח הודעה בוואטסאפ
-                              </a>
-                            </Button>
-                          </>
-                        )}
+                    {laptop.seller_phone && showPhone && (
+                      <div className="pt-3 border-t border-border">
+                        <div className="text-sm text-muted-foreground mb-1">טלפון</div>
+                        <a 
+                          href={`tel:${laptop.seller_phone}`}
+                          className="text-lg font-bold text-foreground hover:text-primary transition-colors"
+                          dir="ltr"
+                        >
+                          {laptop.seller_phone}
+                        </a>
                       </div>
                     )}
                 {laptop.seller_name && (
