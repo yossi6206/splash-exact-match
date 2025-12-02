@@ -22,6 +22,7 @@ import PostWizard from "./dashboard/PostWizard";
 import RecentSearches from "./dashboard/RecentSearches";
 import DashboardTips from "./dashboard/DashboardTips";
 import DashboardSaved from "./dashboard/DashboardSaved";
+import DashboardProfile from "./dashboard/DashboardProfile";
 
 const Dashboard = () => {
   const stats = [
@@ -202,6 +203,7 @@ const Dashboard = () => {
             <Route path="/searches" element={<RecentSearches />} />
             <Route path="/tips" element={<DashboardTips />} />
             <Route path="/saved" element={<DashboardSaved />} />
+            <Route path="/profile" element={<DashboardProfile />} />
           </Routes>
         </main>
       </div>
