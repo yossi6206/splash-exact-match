@@ -27,8 +27,7 @@ import {
   MessageSquare,
   Users,
   Eye,
-  FileCheck,
-  ShieldCheck
+  FileCheck
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -48,7 +47,6 @@ const SecondhandDetails = () => {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showPhone, setShowPhone] = useState(false);
-  const [sellerProfile, setSellerProfile] = useState<any>(null);
 
   useEffect(() => {
     if (id) {
@@ -91,19 +89,6 @@ const SecondhandDetails = () => {
       toast.error("שגיאה בטעינת הפרטים");
     } else {
       setItem(data);
-      
-      // Fetch seller profile
-      if (data.user_id) {
-        const { data: profileData } = await supabase
-          .from("profiles")
-          .select("full_name, verified_seller")
-          .eq("id", data.user_id)
-          .single();
-        
-        if (profileData) {
-          setSellerProfile(profileData);
-        }
-      }
     }
     setLoading(false);
   };
@@ -489,15 +474,7 @@ const SecondhandDetails = () => {
 
                 {/* Seller Info */}
                 <div className="mt-6 pt-6 border-t">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-right">פרטי המפרסם</h3>
-                    {sellerProfile?.verified_seller && (
-                      <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0 shadow-md">
-                        <ShieldCheck className="h-3 w-3 ml-1" />
-                        מוכר מאומת
-                      </Badge>
-                    )}
-                  </div>
+                  <h3 className="font-semibold mb-3 text-right">פרטי המפרסם</h3>
                   {item.seller_name ? (
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -509,7 +486,9 @@ const SecondhandDetails = () => {
                       </div>
                     </div>
                   ) : (
-                    <p className="text-muted-foreground text-sm text-right">פרטי המוכר לא זמינים</p>
+                    <div className="text-sm text-muted-foreground text-right">
+                      צור קשר דרך הכפתורים למעלה
+                    </div>
                   )}
                 </div>
               </CardContent>

@@ -1,11 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MapPin, Truck, HandshakeIcon, Calendar, Ruler, ShieldCheck } from "lucide-react";
+import { Heart, MapPin, Truck, HandshakeIcon, Calendar, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/hooks/useFavorites";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 
 interface SecondhandCardProps {
   item: {
@@ -38,25 +36,6 @@ interface SecondhandCardProps {
 export const SecondhandCard = ({ item }: SecondhandCardProps) => {
   const displayImage = item.images && item.images.length > 0 ? item.images[0] : item.image;
   const { isFavorite, toggleFavorite } = useFavorites(String(item.id), 'secondhand');
-  const [isVerifiedSeller, setIsVerifiedSeller] = useState(false);
-
-  useEffect(() => {
-    const fetchSellerVerification = async () => {
-      if (item.user_id) {
-        const { data } = await supabase
-          .from("profiles")
-          .select("verified_seller")
-          .eq("id", item.user_id)
-          .single();
-        
-        if (data?.verified_seller) {
-          setIsVerifiedSeller(true);
-        }
-      }
-    };
-    
-    fetchSellerVerification();
-  }, [item.user_id]);
   
   const handleClick = async () => {
     // Increment clicks count when user clicks on the card
@@ -230,12 +209,6 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
             >
               <Link to={`/seller/${item.user_id}`} className="flex items-center gap-1">
                 <span>מוכר: {item.seller_name}</span>
-                {isVerifiedSeller && (
-                  <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0 shadow-sm text-[10px] px-1.5 py-0 h-4">
-                    <ShieldCheck className="h-2.5 w-2.5 ml-0.5" />
-                    מאומת
-                  </Badge>
-                )}
               </Link>
             </div>
           )}
