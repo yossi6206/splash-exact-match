@@ -420,13 +420,26 @@ const CarDetails = () => {
                         </div>
                       </div>
                     )}
-                    {carData.seller_phone && showPhone && (
-                      <div className="pt-3 border-t border-border">
+                     {carData.seller_phone && showPhone && (
+                      <div className="pt-3 border-t border-border space-y-3">
                         <div className="text-center" dir="ltr">
                           <a href={`tel:${carData.seller_phone}`} className="text-lg font-bold text-primary hover:underline">
                             {carData.seller_phone}
                           </a>
                         </div>
+                        <Button 
+                          className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white h-12 text-lg font-semibold gap-2"
+                          asChild
+                        >
+                          <a 
+                            href={`https://wa.me/972${carData.seller_phone.replace(/^0/, '').replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <MessageSquare className="h-5 w-5" />
+                            שלח הודעה בוואטסאפ
+                          </a>
+                        </Button>
                       </div>
                     )}
                   </div>
