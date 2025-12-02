@@ -121,24 +121,29 @@ const Auth = () => {
     }
 
     setResetLoading(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    setResetLoading(false);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('request-password-reset', {
+        body: { email: resetEmail }
+      });
 
-    if (error) {
+      if (error) throw error;
+
+      toast({
+        title: "הצלחה!",
+        description: "נשלח אליך מייל מעוצב לאיפוס סיסמה",
+      });
+      setShowResetDialog(false);
+      setResetEmail("");
+    } catch (error: any) {
+      console.error('Password reset error:', error);
       toast({
         title: "שגיאה",
         description: "אירעה שגיאה בשליחת המייל. אנא נסה שוב.",
         variant: "destructive"
       });
-    } else {
-      toast({
-        title: "הצלחה!",
-        description: "נשלח אליך קישור לאיפוס סיסמה למייל",
-      });
-      setShowResetDialog(false);
-      setResetEmail("");
+    } finally {
+      setResetLoading(false);
     }
   };
 
