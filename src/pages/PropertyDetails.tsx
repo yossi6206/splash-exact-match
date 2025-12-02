@@ -342,7 +342,7 @@ const PropertyDetails = () => {
           </div>
 
           {/* Sidebar - Contact Card */}
-          <div className="lg:sticky lg:top-6 h-fit">
+          <div className="lg:sticky lg:top-6 h-fit space-y-6">
             <Card className="p-6">
               <div className="mb-6">
                 <div className="text-3xl font-bold text-foreground mb-1">
