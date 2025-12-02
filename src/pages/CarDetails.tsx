@@ -167,7 +167,8 @@ const CarDetails = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background pb-20 md:pb-0">
+        <MobileHeader />
         <Header />
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -179,7 +180,8 @@ const CarDetails = () => {
 
   if (!carData || !carDetails) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background pb-20 md:pb-0">
+        <MobileHeader />
         <Header />
         <div className="container mx-auto px-4 py-20 text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">הרכב לא נמצא</h1>
@@ -191,7 +193,8 @@ const CarDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
+      <MobileHeader />
       <Header />
       
       <main className="container mx-auto px-4 py-8">

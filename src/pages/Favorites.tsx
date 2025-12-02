@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
+import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -285,6 +286,7 @@ const Favorites = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
+        <MobileHeader />
         <Header />
         <div className="flex-1 flex items-center justify-center">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -296,6 +298,7 @@ const Favorites = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background" dir="rtl">
+      <MobileHeader />
       <Header />
       
       <main className="flex-1 container mx-auto px-4 py-8">
