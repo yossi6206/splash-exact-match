@@ -205,7 +205,7 @@ const CarDetails = () => {
                   alt="רכב"
                   className="w-full h-[500px] object-cover"
                 />
-                <div className="absolute top-4 left-4 flex gap-2">
+                 <div className="absolute top-4 left-4 flex gap-2">
                 <Button 
                   variant="outline"
                   size="icon" 
@@ -230,9 +230,6 @@ const CarDetails = () => {
                   >
                     <Share2 className="h-5 w-5" />
                   </Button>
-                </div>
-                <div className="absolute top-4 right-4">
-                  <ReportListingDialog itemId={id!} itemType="car" />
                 </div>
                 <Badge className="absolute bottom-4 right-4 bg-foreground/80 text-background text-sm px-4 py-2">
                   תמונה 1 מתוך {images.length}
@@ -260,15 +257,42 @@ const CarDetails = () => {
             {/* Car Details */}
             <Card className="mb-6 border-border">
               <CardContent className="p-6">
-                <h1 className="text-3xl font-bold text-foreground mb-2">
-                  {carDetails.manufacturer} {carDetails.model}
-                </h1>
-                <p className="text-lg text-muted-foreground mb-6">
-                  {carDetails.description}
-                </p>
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h1 className="text-3xl font-bold text-foreground mb-2">
+                      {carDetails.manufacturer} {carDetails.model}
+                    </h1>
+                    <p className="text-lg text-muted-foreground">
+                      {carDetails.description}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline"
+                      size="icon"
+                      onClick={async () => {
+                        if (!user) {
+                          toast({
+                            title: "נדרשת התחברות",
+                            description: "יש להתחבר כדי לסמן רכבים כמועדפים",
+                            variant: "destructive"
+                          });
+                          return;
+                        }
+                        // TODO: Implement favorite toggle
+                      }}
+                    >
+                      <Heart className="h-5 w-5" />
+                    </Button>
+                    <Button variant="outline" size="icon">
+                      <Share2 className="h-5 w-5" />
+                    </Button>
+                    <ReportListingDialog itemId={id!} itemType="car" />
+                  </div>
+                </div>
 
                 {/* Key Stats */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 mb-6">
                   <div className="flex items-center gap-3 p-4 rounded-lg bg-muted">
                     <Gauge className="h-5 w-5 text-primary" />
                     <div>
