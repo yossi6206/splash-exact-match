@@ -19,6 +19,7 @@ import Statistics from "./dashboard/Statistics";
 import PromoteAds from "./dashboard/PromoteAds";
 import PromotionAnalytics from "./dashboard/PromotionAnalytics";
 import PostWizard from "./dashboard/PostWizard";
+import RecentSearches from "./dashboard/RecentSearches";
 
 const Dashboard = () => {
   const stats = [
@@ -196,6 +197,7 @@ const Dashboard = () => {
             <Route path="/promote" element={<PromoteAds />} />
             <Route path="/promotion-analytics" element={<PromotionAnalytics />} />
             <Route path="/post-wizard" element={<PostWizard />} />
+            <Route path="/searches" element={<RecentSearches />} />
           </Routes>
         </main>
       </div>
