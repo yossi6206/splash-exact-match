@@ -29,6 +29,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { z } from "zod";
 
 
@@ -310,6 +311,7 @@ const JobDetails = () => {
                   <Button size="icon" variant="outline">
                     <Heart className="w-5 h-5" />
                   </Button>
+                  <ReportListingDialog itemId={id!} itemType="job" />
                 </div>
               </div>
 

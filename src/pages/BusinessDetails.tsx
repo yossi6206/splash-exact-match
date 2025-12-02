@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
+import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { supabase } from "@/integrations/supabase/client";
 
 const BusinessDetails = () => {
@@ -257,6 +258,7 @@ const BusinessDetails = () => {
                 <Button variant="outline" size="icon">
                   <Share2 className="h-5 w-5" />
                 </Button>
+                <ReportListingDialog itemId={id!} itemType="business" />
               </div>
             </div>
 

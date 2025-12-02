@@ -32,6 +32,7 @@ import FreelancerReviewsList from "@/components/freelancer-reviews/FreelancerRev
 import FreelancerReviewForm from "@/components/freelancer-reviews/FreelancerReviewForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FreelancerChat } from "@/components/FreelancerChat";
+import { ReportListingDialog } from "@/components/ReportListingDialog";
 
 type Freelancer = Tables<"freelancers">;
 
@@ -284,8 +285,13 @@ const FreelancerDetails = () => {
             </Avatar>
 
             <div className="flex-1">
-              <h1 className="text-4xl font-bold mb-2">{freelancer.full_name}</h1>
-              <p className="text-xl text-primary font-semibold mb-4">{freelancer.title}</p>
+              <div className="flex items-start justify-between">
+                <div>
+                  <h1 className="text-4xl font-bold mb-2">{freelancer.full_name}</h1>
+                  <p className="text-xl text-primary font-semibold mb-4">{freelancer.title}</p>
+                </div>
+                <ReportListingDialog itemId={id!} itemType="freelancer" />
+              </div>
               
               <div className="flex flex-wrap gap-4 mb-4">
                 <div className="flex items-center gap-1.5">
