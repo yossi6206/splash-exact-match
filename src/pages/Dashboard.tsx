@@ -112,9 +112,9 @@ const Dashboard = () => {
 
           <div className="flex items-center gap-2">
             <Link to="/" className="flex items-center">
-              <div className="flex h-10 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary">
-                <span className="text-xl font-extrabold text-primary-foreground">
-                  yad2
+              <div className="flex h-10 w-auto items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary px-3">
+                <span className="text-xs font-extrabold text-primary-foreground whitespace-nowrap">
+                  SecondHandPro
                 </span>
               </div>
             </Link>

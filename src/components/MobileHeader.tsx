@@ -66,9 +66,9 @@ const MobileHeader = () => {
         </Sheet>
 
         <Link to="/" className="flex items-center">
-          <div className="flex h-10 w-24 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary px-2">
-            <span className="text-sm font-extrabold text-primary-foreground whitespace-nowrap">
-              שוק יד שנייה
+          <div className="flex h-10 w-auto items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary px-3">
+            <span className="text-xs font-extrabold text-primary-foreground whitespace-nowrap">
+              SecondHandPro
             </span>
           </div>
         </Link>
