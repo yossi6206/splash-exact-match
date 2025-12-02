@@ -177,7 +177,7 @@ serve(async (req) => {
     // Send the email via Resend
     console.log("Sending email via Resend...");
     const { data: emailData, error: emailError } = await resend.emails.send({
-      from: "yad2 <onboarding@resend.dev>",
+      from: "yad2 <noreply@secondhandpro.co.il>",
       to: [email],
       subject: "איפוס סיסמה - yad2",
       html,
