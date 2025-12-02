@@ -346,23 +346,24 @@ const PropertyDetails = () => {
                     )}
                     {property.seller_phone && (
                       <div className="pt-3 border-t border-border">
-                        {!showPhone ? (
-                          <Button 
-                            variant="outline" 
-                            className="w-full"
-                            onClick={handleShowPhone}
-                          >
-                            <Phone className="h-4 w-4 ml-2" />
-                            הצג מספר טלפון
-                          </Button>
-                        ) : (
-                          <>
-                            <div className="text-sm text-muted-foreground mb-1">טלפון</div>
-                            <a href={`tel:${property.seller_phone}`} className="text-lg font-bold text-primary hover:underline" dir="ltr">
-                              {property.seller_phone}
+                        <Button 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={handleShowPhone}
+                          asChild={showPhone}
+                        >
+                          {showPhone ? (
+                            <a href={`tel:${property.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
+                              <Phone className="h-4 w-4 ml-2" />
+                              <span className="font-bold">{property.seller_phone}</span>
                             </a>
-                          </>
-                        )}
+                          ) : (
+                            <>
+                              <Phone className="h-4 w-4 ml-2" />
+                              הצג מספר טלפון
+                            </>
+                          )}
+                        </Button>
                       </div>
                     )}
                   </div>
