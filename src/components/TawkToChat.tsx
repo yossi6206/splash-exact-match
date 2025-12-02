@@ -6,46 +6,49 @@ const TawkToChat = () => {
     const BASE_URL = "https://chat.yositsupport.com";
 
     // בדוק אם הסקריפט כבר נטען
-    if (document.getElementById('chatwoot-script')) {
+    if ((window as any).$chatwoot) {
       return;
     }
+
+    // הגדר את chatwootSettings לפני טעינת הסקריפט
+    (window as any).chatwootSettings = {
+      hideMessageBubble: false,
+      position: "right",
+      locale: "he",
+      type: "standard"
+    };
 
     const script = document.createElement('script');
     script.id = 'chatwoot-script';
     script.src = BASE_URL + "/packs/js/sdk.js";
     script.async = true;
+    script.defer = true;
     
     script.onload = function() {
-      (window as any).chatwootSDK.run({
-        websiteToken: 'B6cssDX4aH4BqGvV6PjFCwCE',
-        baseUrl: BASE_URL
-      });
+      if ((window as any).chatwootSDK) {
+        (window as any).chatwootSDK.run({
+          websiteToken: 'B6cssDX4aH4BqGvV6PjFCwCE',
+          baseUrl: BASE_URL
+        });
+      }
+    };
+
+    script.onerror = function() {
+      console.error('Failed to load Chatwoot script');
     };
     
-    document.body.appendChild(script);
+    document.head.appendChild(script);
 
     return () => {
-      // ניקוי הסקריפט בעת unmount
+      // ניקוי בעת unmount
       const existingScript = document.getElementById('chatwoot-script');
       if (existingScript) {
         existingScript.remove();
       }
-      // הסר את הצ'אט widget
-      const chatwootWidget = document.querySelector('.woot-widget-bubble');
-      if (chatwootWidget) {
-        chatwootWidget.remove();
-      }
-      const chatwootHolder = document.querySelector('.woot-widget-holder');
-      if (chatwootHolder) {
-        chatwootHolder.remove();
-      }
-      // נקה את chatwootSDK
-      delete (window as any).chatwootSDK;
-      delete (window as any).$chatwoot;
     };
   }, []);
 
-  return null; // הקומפוננטה לא מרנדרת כלום - הצ'אט מוסף באופן אוטומטי
+  return null;
 };
 
 export default TawkToChat;
