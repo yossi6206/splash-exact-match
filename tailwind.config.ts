@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Rubik', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: ['Danidin', 'Rubik', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
         display: ['Danidin', 'Rubik', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         danidin: ['Danidin', 'Rubik', 'sans-serif'],
       },
