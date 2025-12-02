@@ -17,7 +17,7 @@ function generateResetEmailHTML(resetLink: string, userEmail: string): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>איפוס סיסמה - שוק יד שנייה</title>
+  <title>איפוס סיסמה - secondhandpro</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f6f9fc;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f6f9fc; padding: 40px 20px;">
@@ -29,7 +29,7 @@ function generateResetEmailHTML(resetLink: string, userEmail: string): string {
           <tr>
             <td align="center" style="padding-bottom: 32px;">
               <div style="display: inline-block; font-size: 32px; font-weight: 900; color: #ffffff; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 24px; border-radius: 8px; letter-spacing: -1px;">
-                שוק יד שנייה
+                secondhandpro
               </div>
             </td>
           </tr>
@@ -99,7 +99,7 @@ function generateResetEmailHTML(resetLink: string, userEmail: string): string {
           <tr>
             <td align="center" style="padding-bottom: 8px;">
               <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 20px;">
-                <strong>שוק יד שנייה</strong> - לקנות מהר, למכור מהר<br/>
+                <strong>secondhandpro</strong> - לקנות מהר, למכור מהר<br/>
                 המקום שבו עסקאות קורות
               </p>
             </td>
@@ -177,9 +177,9 @@ serve(async (req) => {
     // Send the email via Resend
     console.log("Sending email via Resend...");
     const { data: emailData, error: emailError } = await resend.emails.send({
-      from: "שוק יד שנייה <noreply@secondhandpro.co.il>",
+      from: "secondhandpro <noreply@secondhandpro.co.il>",
       to: [email],
-      subject: "איפוס סיסמה - שוק יד שנייה",
+      subject: "איפוס סיסמה - secondhandpro",
       html,
     });
 
