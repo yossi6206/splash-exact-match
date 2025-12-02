@@ -32,13 +32,20 @@ export default function Messages() {
   } | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Check if we were navigated here with a specific freelancer
+  // Check if we were navigated here with a specific seller or freelancer
   useEffect(() => {
     const state = location.state as {
       freelancerId?: string;
       freelancerName?: string;
       freelancerAvatar?: string;
+      sellerId?: string;
+      sellerName?: string;
+      itemId?: string;
     };
+
+    const searchParams = new URLSearchParams(location.search);
+    const sellerIdFromUrl = searchParams.get("seller");
+    const itemIdFromUrl = searchParams.get("item");
 
     if (state?.freelancerId && user) {
       // Initialize conversation with the specified freelancer
@@ -47,8 +54,12 @@ export default function Messages() {
         state.freelancerName || "פרילנסר",
         state.freelancerAvatar || null
       );
+    } else if ((state?.sellerId || sellerIdFromUrl) && user) {
+      // Initialize conversation with a seller
+      const sellerId = state?.sellerId || sellerIdFromUrl;
+      initializeSellerConversation(sellerId!, itemIdFromUrl || undefined);
     }
-  }, [location.state, user]);
+  }, [location.state, location.search, user]);
 
   useEffect(() => {
     if (user) {
@@ -242,6 +253,80 @@ export default function Messages() {
       loadConversations();
     } catch (error) {
       console.error("Error initializing specific conversation:", error);
+    }
+  };
+
+  const initializeSellerConversation = async (sellerId: string, itemId?: string) => {
+    if (!user) return;
+
+    try {
+      // Get seller profile info
+      const { data: sellerProfile } = await supabase
+        .from("profiles")
+        .select("full_name, avatar_url")
+        .eq("id", sellerId)
+        .single();
+
+      // Check if seller is a freelancer
+      const { data: freelancerProfile } = await supabase
+        .from("freelancers")
+        .select("id")
+        .eq("user_id", sellerId)
+        .maybeSingle();
+
+      if (freelancerProfile) {
+        // If seller is a freelancer, use freelancer conversation system
+        initializeSpecificConversation(
+          freelancerProfile.id,
+          sellerProfile?.full_name || "מוכר",
+          sellerProfile?.avatar_url || null
+        );
+      } else {
+        // For non-freelancer sellers, we need to create a direct user-to-user conversation
+        // Check existing conversations where both users are involved
+        const { data: existingConversations } = await supabase
+          .from("conversations")
+          .select("id, client_id, freelancer_id, freelancers(user_id)")
+          .or(`client_id.eq.${user.id},client_id.eq.${sellerId}`)
+          .order("last_message_at", { ascending: false, nullsFirst: false });
+
+        // Find if there's any conversation between these two users
+        let conversationId = null;
+        let isFreelancerView = false;
+
+        if (existingConversations) {
+          for (const conv of existingConversations as any[]) {
+            const freelancerUserId = conv.freelancers?.user_id;
+            if (
+              (conv.client_id === user.id && freelancerUserId === sellerId) ||
+              (conv.client_id === sellerId && freelancerUserId === user.id)
+            ) {
+              conversationId = conv.id;
+              isFreelancerView = freelancerUserId === user.id;
+              break;
+            }
+          }
+        }
+
+        // If no conversation exists, we can't create one without a freelancer profile
+        // Show a message to the user
+        if (!conversationId) {
+          alert("לא ניתן לשלוח הודעה למשתמש זה. המוכר צריך להיות רשום כפרילנסר כדי לקבל הודעות.");
+          return;
+        }
+
+        setSelectedConversation({
+          conversationId,
+          otherUserId: sellerId,
+          otherUserName: sellerProfile?.full_name || "מוכר",
+          otherUserAvatar: sellerProfile?.avatar_url || null,
+          isFreelancerView,
+        });
+
+        loadConversations();
+      }
+    } catch (error) {
+      console.error("Error initializing seller conversation:", error);
     }
   };
 

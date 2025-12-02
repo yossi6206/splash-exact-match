@@ -411,6 +411,14 @@ const CarDetails = () => {
                         });
                         return;
                       }
+                      if (carData.user_id === user.id) {
+                        toast({
+                          title: "שגיאה",
+                          description: "לא ניתן לשלוח הודעה לעצמך",
+                          variant: "destructive"
+                        });
+                        return;
+                      }
                       window.location.href = `/messages?seller=${carData.user_id}&item=${carData.id}`;
                     }}
                   >

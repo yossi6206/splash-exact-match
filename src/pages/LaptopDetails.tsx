@@ -434,6 +434,14 @@ const LaptopDetails = () => {
                         });
                         return;
                       }
+                      if (laptop.user_id === user.id) {
+                        toast({
+                          title: "שגיאה",
+                          description: "לא ניתן לשלוח הודעה לעצמך",
+                          variant: "destructive"
+                        });
+                        return;
+                      }
                       window.location.href = `/messages?seller=${laptop.user_id}&item=${laptop.id}`;
                     }}
                   >

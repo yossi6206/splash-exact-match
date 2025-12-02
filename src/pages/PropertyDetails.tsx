@@ -360,7 +360,7 @@ const PropertyDetails = () => {
                   </div>
                 )}
                 
-                <Button 
+                <Button
                   className="w-full"
                   size="lg"
                   variant="outline"
@@ -369,6 +369,14 @@ const PropertyDetails = () => {
                       toast({
                         title: "נדרשת התחברות",
                         description: "יש להתחבר כדי לשלוח הודעות",
+                        variant: "destructive"
+                      });
+                      return;
+                    }
+                    if (property.user_id === user.id) {
+                      toast({
+                        title: "שגיאה",
+                        description: "לא ניתן לשלוח הודעה לעצמך",
                         variant: "destructive"
                       });
                       return;

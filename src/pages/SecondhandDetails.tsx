@@ -430,6 +430,10 @@ const SecondhandDetails = () => {
                         toast.error("יש להתחבר כדי לשלוח הודעות");
                         return;
                       }
+                      if (item.user_id === user.id) {
+                        toast.error("לא ניתן לשלוח הודעה לעצמך");
+                        return;
+                      }
                       window.location.href = `/messages?seller=${item.user_id}&item=${item.id}`;
                     }}
                   >
