@@ -250,7 +250,7 @@ const Secondhand = () => {
           <div className="max-w-4xl mx-auto text-center space-y-8">
             {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-danidin font-black text-white leading-tight drop-shadow-lg">
                 קל יותר למכור, לקנות ולשמור על הסביבה
               </h1>
               <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
