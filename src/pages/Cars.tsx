@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
 import { Search, Loader2, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useSaveSearch } from "@/hooks/useSaveSearch";
 import carImage1 from "@/assets/item-car.jpg";
 
 interface Car {
@@ -43,6 +44,7 @@ const Cars = () => {
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  const { saveSearch } = useSaveSearch();
   const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>({
     manufacturers: [],
     yearFrom: "",
@@ -196,6 +198,17 @@ const Cars = () => {
       clearTimeout(handler);
     };
   }, [searchQuery]);
+
+  // Save search to history
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      saveSearch({
+        searchQuery: debouncedSearchQuery,
+        category: "cars",
+        resultsCount: filteredCars.length
+      });
+    }
+  }, [debouncedSearchQuery]);
 
   // Handle click outside to close suggestions
   useEffect(() => {

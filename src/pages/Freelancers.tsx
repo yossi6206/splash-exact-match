@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Search, Users, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useSaveSearch } from "@/hooks/useSaveSearch";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Freelancer = Tables<"freelancers">;
@@ -33,6 +34,7 @@ const Freelancers = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const { saveSearch } = useSaveSearch();
 
   useEffect(() => {
     fetchFreelancers();
@@ -51,6 +53,17 @@ const Freelancers = () => {
       clearTimeout(handler);
     };
   }, [searchQuery]);
+
+  // Save search to history
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      saveSearch({
+        searchQuery: debouncedSearchQuery,
+        category: "freelancers",
+        resultsCount: freelancers.length
+      });
+    }
+  }, [debouncedSearchQuery]);
 
   const fetchFreelancers = async () => {
     try {

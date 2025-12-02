@@ -13,6 +13,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { useCountUp } from "@/hooks/useCountUp";
 import { supabase } from "@/integrations/supabase/client";
+import { useSaveSearch } from "@/hooks/useSaveSearch";
 
 // Category configurations
 const categoryConfig: Record<string, {
@@ -64,6 +65,7 @@ const SecondhandCategory = () => {
   const [items, setItems] = useState<any[]>([]);
   const [allItems, setAllItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { saveSearch } = useSaveSearch();
   const [filters, setFilters] = useState<SecondhandFilters>({
     categories: [],
     subcategories: [],
@@ -113,6 +115,17 @@ const SecondhandCategory = () => {
       clearTimeout(handler);
     };
   }, [searchQuery]);
+
+  // Save search to history
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      saveSearch({
+        searchQuery: debouncedSearchQuery,
+        category: "secondhand",
+        resultsCount: items.length
+      });
+    }
+  }, [debouncedSearchQuery]);
 
   const fetchItems = async () => {
     setLoading(true);
