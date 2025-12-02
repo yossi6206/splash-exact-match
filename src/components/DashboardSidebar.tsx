@@ -22,17 +22,17 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 const menuItems = [
-  { title: "פרסום מודעה חדשה", icon: PlusCircle, path: "/dashboard/post-wizard", color: "text-emerald-600", bgColor: "bg-gradient-to-br from-emerald-100 to-emerald-200" },
-  { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads", color: "text-blue-600", bgColor: "bg-gradient-to-br from-blue-100 to-blue-200" },
-  { title: "קידום מודעות", icon: Sparkles, path: "/dashboard/promote", color: "text-amber-600", bgColor: "bg-gradient-to-br from-amber-100 to-amber-200" },
-  { title: "ניתוח קידום מתקדם", icon: TrendingUp, path: "/dashboard/promotion-analytics", color: "text-violet-600", bgColor: "bg-gradient-to-br from-violet-100 to-violet-200" },
-  { title: "הודעות", icon: MessageSquare, path: "/messages", color: "text-sky-600", bgColor: "bg-gradient-to-br from-sky-100 to-sky-200" },
-  { title: "פרסם פרופיל פרילנסר", icon: Edit3, path: "/dashboard/post-freelancer", color: "text-orange-600", bgColor: "bg-gradient-to-br from-orange-100 to-orange-200" },
-  { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile", color: "text-slate-600", bgColor: "bg-gradient-to-br from-slate-100 to-slate-200" },
-  { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats", color: "text-indigo-600", bgColor: "bg-gradient-to-br from-indigo-100 to-indigo-200" },
-  { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved", color: "text-rose-600", bgColor: "bg-gradient-to-br from-rose-100 to-rose-200" },
-  { title: "חיפושים אחרונים", icon: Search, path: "/dashboard/searches", color: "text-teal-600", bgColor: "bg-gradient-to-br from-teal-100 to-teal-200" },
-  { title: "טיפים ומידע", icon: Lightbulb, path: "/dashboard/tips", color: "text-yellow-600", bgColor: "bg-gradient-to-br from-yellow-100 to-yellow-200" },
+  { title: "פרסום מודעה חדשה", icon: PlusCircle, path: "/dashboard/post-wizard" },
+  { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
+  { title: "קידום מודעות", icon: Sparkles, path: "/dashboard/promote" },
+  { title: "ניתוח קידום מתקדם", icon: TrendingUp, path: "/dashboard/promotion-analytics" },
+  { title: "הודעות", icon: MessageSquare, path: "/messages" },
+  { title: "פרסם פרופיל פרילנסר", icon: Edit3, path: "/dashboard/post-freelancer" },
+  { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile" },
+  { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats" },
+  { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved" },
+  { title: "חיפושים אחרונים", icon: Search, path: "/dashboard/searches" },
+  { title: "טיפים ומידע", icon: Lightbulb, path: "/dashboard/tips" },
 ];
 
 export const DashboardSidebar = () => {
@@ -83,8 +83,8 @@ export const DashboardSidebar = () => {
                 activeClassName="bg-primary/10 text-primary shadow-sm border-r-4 border-primary"
               >
                 <span className="font-medium flex-1 text-sm">{item.title}</span>
-                <div className={`w-10 h-10 rounded-xl ${item.bgColor} flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-200`}>
-                  <item.icon className={`h-5 w-5 ${item.color}`} />
+                <div className="w-9 h-9 rounded-lg bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                  <item.icon className="h-4 w-4 group-hover:scale-110 transition-transform" />
                 </div>
               </NavLink>
             </li>
@@ -97,32 +97,26 @@ export const DashboardSidebar = () => {
         <Link to="/">
           <Button 
             variant="secondary" 
-            className="w-full justify-between h-11 text-sm"
+            className="w-full justify-between h-10 text-sm"
           >
             <span>חזרה לדף הבית</span>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center shadow-sm">
-              <Home className="h-4 w-4 text-blue-600" />
-            </div>
+            <Home className="h-4 w-4" />
           </Button>
         </Link>
         <Button 
           variant="secondary" 
-          className="w-full justify-between h-11 text-sm"
+          className="w-full justify-between h-10 text-sm"
         >
           <span>צור קשר</span>
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center shadow-sm">
-            <Phone className="h-4 w-4 text-emerald-600" />
-          </div>
+          <Phone className="h-4 w-4" />
         </Button>
         <Button 
           variant="ghost" 
-          className="w-full justify-between text-destructive hover:bg-destructive/10 hover:text-destructive h-11 text-sm"
+          className="w-full justify-between text-destructive hover:bg-destructive/10 hover:text-destructive h-10 text-sm"
           onClick={signOut}
         >
           <span>התנתקות</span>
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center shadow-sm">
-            <LogOut className="h-4 w-4 text-red-600" />
-          </div>
+          <LogOut className="h-4 w-4" />
         </Button>
       </div>
     </aside>
