@@ -371,52 +371,50 @@ export const FreelancerChat = ({
         setMessages((prev) => [...prev, data as Message]);
       }
 
-      // Send email notification to recipient
-      if (conversationId) {
-        try {
-          // Get conversation details to find recipient
-          const { data: conversation } = await supabase
-            .from("conversations")
-            .select("client_id, freelancer_id, freelancers(user_id)")
-            .eq("id", conversationId)
-            .single();
-
-          if (conversation) {
-            // Determine recipient user_id (not freelancer_id)
-            let recipientUserId: string;
-            if (user.id === conversation.client_id) {
-              // Current user is client, recipient is freelancer
-              recipientUserId = (conversation.freelancers as any)?.user_id;
-            } else {
-              // Current user is freelancer, recipient is client
-              recipientUserId = conversation.client_id;
-            }
-
-            if (recipientUserId) {
-              // Get sender name
-              const { data: senderProfile } = await supabase
-                .from("profiles")
-                .select("full_name")
-                .eq("id", user.id)
-                .single();
-
-              await supabase.functions.invoke("send-message-notification", {
-                body: {
-                  recipientId: recipientUserId,
-                  senderName: senderProfile?.full_name || "משתמש",
-                  messagePreview: messageContent.substring(0, 100),
-                },
-              });
-            }
-          }
-        } catch (notificationError) {
-          console.error("Error sending notification:", notificationError);
-          // Don't show error to user - notification failure shouldn't block messaging
-        }
-      }
-
+      // Clear input immediately for faster UX
       setNewMessage("");
       removeSelectedFile();
+
+      // Send email notification asynchronously (don't wait for it)
+      if (conversationId) {
+        // Fire and forget - don't await
+        (async () => {
+          try {
+            const { data: conversation } = await supabase
+              .from("conversations")
+              .select("client_id, freelancer_id, freelancers(user_id)")
+              .eq("id", conversationId)
+              .single();
+
+            if (conversation) {
+              let recipientUserId: string;
+              if (user.id === conversation.client_id) {
+                recipientUserId = (conversation.freelancers as any)?.user_id;
+              } else {
+                recipientUserId = conversation.client_id;
+              }
+
+              if (recipientUserId) {
+                const { data: senderProfile } = await supabase
+                  .from("profiles")
+                  .select("full_name")
+                  .eq("id", user.id)
+                  .single();
+
+                await supabase.functions.invoke("send-message-notification", {
+                  body: {
+                    recipientId: recipientUserId,
+                    senderName: senderProfile?.full_name || "משתמש",
+                    messagePreview: messageContent.substring(0, 100),
+                  },
+                });
+              }
+            }
+          } catch (notificationError) {
+            console.error("Error sending notification:", notificationError);
+          }
+        })();
+      }
     } catch (error) {
       console.error("Error sending message:", error);
       toast({
@@ -552,15 +550,20 @@ export const FreelancerChat = ({
             return (
               <div
                 key={message.id}
-                className={`flex ${isOwn ? "justify-end" : "justify-start"} group`}
+                className={`flex ${isOwn ? "justify-end" : "justify-start"} group w-full`}
               >
                 <div
-                  className={`max-w-[70%] rounded-lg px-4 py-2 relative ${
+                  className={`max-w-[70%] rounded-lg px-4 py-2 relative break-words ${
                     isOwn
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted"
                   }`}
-                  style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+                  style={{ 
+                    wordBreak: 'break-word', 
+                    overflowWrap: 'break-word',
+                    wordWrap: 'break-word',
+                    hyphens: 'auto'
+                  }}
                 >
                   {/* Message Actions - Only for own messages */}
                   {isOwn && !isEditing && (
@@ -646,7 +649,15 @@ export const FreelancerChat = ({
                   ) : (
                     <>
                       {message.content && (
-                        <p className="text-sm whitespace-pre-wrap" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                        <p 
+                          className="text-sm whitespace-pre-wrap break-words" 
+                          style={{ 
+                            wordBreak: 'break-word', 
+                            overflowWrap: 'anywhere',
+                            wordWrap: 'break-word',
+                            maxWidth: '100%'
+                          }}
+                        >
                           {message.content}
                         </p>
                       )}
