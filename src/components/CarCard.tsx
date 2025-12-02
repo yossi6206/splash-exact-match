@@ -1,9 +1,11 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Sparkles } from "lucide-react";
+import { Heart, Sparkles, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/hooks/useFavorites";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CarCardProps {
   car: {
@@ -25,6 +27,7 @@ interface CarCardProps {
     clicks_count?: number;
     is_promoted?: boolean;
     promotion_end_date?: string;
+    user_id?: string;
   };
 }
 
@@ -35,6 +38,25 @@ export const CarCard = ({ car }: CarCardProps) => {
     new Date(car.promotion_end_date) > new Date();
   
   const { isFavorite, toggleFavorite } = useFavorites(carId, 'car');
+  const [isVerifiedSeller, setIsVerifiedSeller] = useState(false);
+
+  useEffect(() => {
+    const fetchSellerVerification = async () => {
+      if (car.user_id) {
+        const { data } = await supabase
+          .from("profiles")
+          .select("verified_seller")
+          .eq("id", car.user_id)
+          .single();
+        
+        if (data?.verified_seller) {
+          setIsVerifiedSeller(true);
+        }
+      }
+    };
+    
+    fetchSellerVerification();
+  }, [car.user_id]);
   
   const handleClick = async () => {
     try {
@@ -85,7 +107,15 @@ export const CarCard = ({ car }: CarCardProps) => {
           {/* Content */}
           <div className="flex-1 flex flex-col">
             <div className="mb-3 text-right">
-              <h3 className="text-xl font-bold text-foreground mb-1">{car.title}</h3>
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-xl font-bold text-foreground">{car.title}</h3>
+                {isVerifiedSeller && (
+                  <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0 shadow-sm text-xs px-2 py-0.5">
+                    <ShieldCheck className="h-3 w-3 ml-1" />
+                    מוכר מאומת
+                  </Badge>
+                )}
+              </div>
               <p className="text-sm text-muted-foreground mb-2">{car.subtitle}</p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
                 <span>{car.year}</span>

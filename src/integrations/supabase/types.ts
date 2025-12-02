@@ -878,6 +878,7 @@ export type Database = {
           phone: string | null
           updated_at: string
           user_type: string | null
+          verified_seller: boolean | null
         }
         Insert: {
           avatar_url?: string | null
@@ -887,6 +888,7 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_type?: string | null
+          verified_seller?: boolean | null
         }
         Update: {
           avatar_url?: string | null
@@ -896,6 +898,7 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_type?: string | null
+          verified_seller?: boolean | null
         }
         Relationships: []
       }
