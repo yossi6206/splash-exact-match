@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, Share2, MapPin, Calendar, Shield, Package, Truck, Phone, Mail, MessageSquare, Loader2, Monitor, Keyboard, Cpu, Camera, Fingerprint, HardDrive, Wifi, Cable, Calculator, Bluetooth, Check } from "lucide-react";
+import { Heart, Share2, MapPin, Calendar, Shield, Package, Truck, Phone, Mail, MessageSquare, Loader2, Monitor, Keyboard, Cpu, Camera, Fingerprint, HardDrive, Wifi, Cable, Calculator, Bluetooth, Check, Users, Eye, FileCheck, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -547,30 +547,40 @@ const LaptopDetails = () => {
             </Card>
 
             {/* Safety Tips */}
-            <Card className="bg-muted/30">
+            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-primary" />
+                <CardTitle className="text-lg flex items-center gap-2 text-right">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Shield className="h-4 w-4 text-primary" />
+                  </div>
                   טיפים לעסקה בטוחה
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    <span>פגשו במקום ציבורי ובטוח</span>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <Users className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">פגשו במקום ציבורי ובטוח</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    <span>בדקו את המוצר לפני התשלום</span>
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <Eye className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">בדקו את המוצר לפני התשלום</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    <span>אל תשלמו מראש ללא בדיקה</span>
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <AlertCircle className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">אל תשלמו מראש ללא בדיקה</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    <span>דרשו אישור עסקה בכתב</span>
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <FileCheck className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">דרשו אישור עסקה בכתב</span>
                   </li>
                 </ul>
               </CardContent>
