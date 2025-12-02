@@ -22,19 +22,43 @@ const ResetPassword = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if we have a valid password reset session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        setIsValidSession(true);
-      } else {
-        toast({
-          title: "שגיאה",
-          description: "הקישור לאיפוס סיסמה אינו תקף או פג תוקפו",
-          variant: "destructive"
-        });
-        setTimeout(() => navigate("/auth"), 2000);
-      }
-    });
+    // Get token from URL parameters
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const type = params.get('type');
+
+    if (token && type === 'recovery') {
+      // Verify the token with Supabase
+      supabase.auth.verifyOtp({
+        token_hash: token,
+        type: 'recovery'
+      }).then(({ data, error }) => {
+        if (error) {
+          toast({
+            title: "שגיאה",
+            description: "הקישור לאיפוס סיסמה אינו תקף או פג תוקפו",
+            variant: "destructive"
+          });
+          setTimeout(() => navigate("/auth"), 2000);
+        } else {
+          setIsValidSession(true);
+        }
+      });
+    } else {
+      // Fallback to checking existing session
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+          setIsValidSession(true);
+        } else {
+          toast({
+            title: "שגיאה",
+            description: "הקישור לאיפוס סיסמה אינו תקף או פג תוקפו",
+            variant: "destructive"
+          });
+          setTimeout(() => navigate("/auth"), 2000);
+        }
+      });
+    }
   }, [navigate, toast]);
 
   const handleResetPassword = async (e: React.FormEvent) => {
