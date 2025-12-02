@@ -156,7 +156,7 @@ serve(async (req) => {
       type: 'recovery',
       email: email,
       options: {
-        redirectTo: `${Deno.env.get("SUPABASE_URL")}/auth/v1/verify`
+        redirectTo: `https://secondhandpro.co.il/reset-password`
       }
     });
 
