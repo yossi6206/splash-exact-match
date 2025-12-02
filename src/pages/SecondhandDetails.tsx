@@ -36,6 +36,8 @@ import { SellerReviewsList } from "@/components/seller-reviews/SellerReviewsList
 import { useAuth } from "@/contexts/AuthContext";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
+import AIReport from "@/components/AIReport";
+import { CardContent } from "@/components/ui/card";
 
 const SecondhandDetails = () => {
   const { id } = useParams();
@@ -349,16 +351,21 @@ const SecondhandDetails = () => {
             </Card>
           </div>
 
-          {/* Right Column - Seller Info and Actions */}
+          {/* Right Column - Sidebar */}
           <div className="space-y-6">
-            {/* Title and Actions */}
-            <div className="space-y-4">
+            {/* Title and Location */}
+            <div className="space-y-3">
               <h1 className="text-2xl font-bold text-right">{item.title}</h1>
-              <div className="flex items-center gap-2 text-muted-foreground text-right">
-                <MapPin className="h-4 w-4" />
-                <span>{item.location}</span>
+              <div className="flex items-center gap-2 text-muted-foreground justify-end">
+                <span className="text-right">{item.location}</span>
+                <MapPin className="h-4 w-4 flex-shrink-0" />
               </div>
               <div className="flex gap-2 justify-end">
+                <ReportListingDialog itemId={id!} itemType="secondhand" />
+                <ShareMenu 
+                  title={item.title}
+                  variant="outline"
+                />
                 <Button 
                   variant="outline"
                   size="icon"
@@ -372,27 +379,24 @@ const SecondhandDetails = () => {
                 >
                   <Heart className="h-5 w-5" />
                 </Button>
-                <ShareMenu 
-                  title={item.title}
-                  variant="outline"
-                />
-                <ReportListingDialog itemId={id!} itemType="secondhand" />
               </div>
             </div>
 
             {/* Price and Contact Card */}
-            <Card className="p-6 sticky top-20">
-              <div className="space-y-4">
+            <Card>
+              <CardContent className="p-6">
                 {/* Price */}
-                <div className="text-center py-4">
-                  <div className="text-4xl font-bold text-foreground mb-1">
+                <div className="text-center mb-6">
+                  <div className="text-4xl font-bold text-foreground mb-2">
                     ₪{item.price.toLocaleString()}
                   </div>
                   <div className="text-sm text-muted-foreground">מחיר מבוקש</div>
                 </div>
 
+                <Separator className="mb-6" />
+
                 {/* Contact Buttons */}
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {!showPhone ? (
                     <Button 
                       className="w-full" 
@@ -468,10 +472,8 @@ const SecondhandDetails = () => {
                   </Button>
                 </div>
 
-                <Separator />
-
                 {/* Seller Info */}
-                <div>
+                <div className="mt-6 pt-6 border-t">
                   <h3 className="font-semibold mb-3 text-right">פרטי המפרסם</h3>
                   {item.seller_name ? (
                     <div className="flex items-center gap-3">
@@ -489,8 +491,11 @@ const SecondhandDetails = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              </CardContent>
             </Card>
+
+            {/* AI Report */}
+            <AIReport itemType="secondhand" itemData={item} />
 
             {/* Safety Tips */}
             <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">

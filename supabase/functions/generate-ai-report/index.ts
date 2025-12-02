@@ -70,6 +70,23 @@ serve(async (req) => {
 4. המלצה ברורה - האם כדאי לרכוש?
 
 תן תשובה מקצועית בעברית, תמציתית וברורה.`;
+    } else if (itemType === "secondhand") {
+      prompt = `נתח את המוצר יד שנייה הבא ותן המלצה מקצועית:
+כותרת: ${itemData.title}
+קטגוריה: ${itemData.category}${itemData.subcategory ? ` - ${itemData.subcategory}` : ""}
+מצב: ${itemData.condition}
+מותג: ${itemData.brand || "לא צוין"}
+מחיר: ₪${itemData.price?.toLocaleString()}
+מיקום: ${itemData.location}
+תיאור: ${itemData.description || "אין תיאור"}
+
+אנא ספק:
+1. ניתוח מקצועי של המוצר על בסיס הנתונים
+2. האם המחיר הוגן? השווה למחירי שוק למוצרים דומים
+3. נקודות חשובות לבדוק לפני הרכישה
+4. המלצה ברורה - האם כדאי לרכוש?
+
+תן תשובה מקצועית בעברית, תמציתית וברורה.`;
     }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
