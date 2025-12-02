@@ -357,50 +357,39 @@ const CarDetails = () => {
                 </div>
 
                 <div className="space-y-3">
-                  {carData.seller_phone ? (
-                    !showPhone ? (
-                      <Button 
-                        className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-12 text-lg font-semibold gap-2"
-                        onClick={handleShowPhone}
-                      >
-                        <Phone className="h-5 w-5" />
-                        הצג מספר טלפון
-                      </Button>
-                    ) : (
-                      <div className="space-y-2">
-                        <Button 
-                          className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-12 text-lg font-semibold"
-                          asChild
-                        >
-                          <a href={`tel:${carData.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
-                            <Phone className="h-5 w-5" />
-                            <span className="font-bold">{carData.seller_phone}</span>
-                          </a>
-                        </Button>
-                        <Button 
-                          className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white h-12 text-lg font-semibold"
-                          asChild
-                        >
-                          <a 
-                            href={`https://wa.me/972${(carData.seller_phone || '').replace(/^0/, '').replace(/\D/g, '')}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-2"
-                          >
-                            <MessageSquare className="h-5 w-5" />
-                            שלח הודעה בוואטסאפ
-                          </a>
-                        </Button>
-                      </div>
-                    )
-                  ) : (
-                    <Button 
-                      className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-12 text-lg font-semibold gap-2"
-                      onClick={handleContactClick}
-                    >
-                      <Phone className="h-5 w-5" />
-                      צור קשר
+                  {!showPhone ? (
+                    <Button className="w-full" size="lg" onClick={handleShowPhone}>
+                      <Phone className="ml-2 h-4 w-4" />
+                      הצג מספר טלפון
                     </Button>
+                  ) : (
+                    <div className="space-y-2">
+                      <Button 
+                        className="w-full" 
+                        size="lg"
+                        asChild
+                      >
+                        <a href={`tel:${carData.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
+                          <Phone className="h-4 w-4 ml-2" />
+                          <span className="font-bold">{carData.seller_phone}</span>
+                        </a>
+                      </Button>
+                      <Button 
+                        className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                        size="lg"
+                        asChild
+                      >
+                        <a 
+                          href={`https://wa.me/972${(carData.seller_phone || '').replace(/^0/, '').replace(/\D/g, '')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <MessageSquare className="h-4 w-4 ml-2" />
+                          שלח הודעה בוואטסאפ
+                        </a>
+                      </Button>
+                    </div>
                   )}
                 </div>
 
