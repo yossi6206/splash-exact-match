@@ -427,54 +427,40 @@ const CarDetails = () => {
                   </Button>
                 </div>
 
-                <div className="mt-6 pt-6 border-t border-border text-center text-sm text-muted-foreground">
-                  <p>פורסם ב {new Date(carData.created_at).toLocaleDateString('he-IL')}</p>
-                  <p>מזהה מודעה: {carData.id.substring(0, 8)}</p>
+                <div className="mt-6 pt-6 border-t">
+                  <h3 className="font-semibold mb-3">פרטי המפרסם</h3>
+                  {carData.seller_name || carData.seller_phone ? (
+                    <div className="space-y-3">
+                      {carData.seller_name && (
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                            <span className="font-bold text-primary">{carData.seller_name.charAt(0)}</span>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-foreground">{carData.seller_name}</div>
+                            <div className="text-sm text-muted-foreground">מפרסם פרטי</div>
+                          </div>
+                        </div>
+                      )}
+                      {carData.seller_phone && showPhone && (
+                        <div className="pt-3 border-t border-border">
+                          <div className="text-sm text-muted-foreground mb-1">טלפון</div>
+                          <a 
+                            href={`tel:${carData.seller_phone}`}
+                            className="text-lg font-bold text-foreground hover:text-primary transition-colors"
+                            dir="ltr"
+                          >
+                            {carData.seller_phone}
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-muted-foreground">
+                      צור קשר דרך הכפתורים למעלה
+                    </div>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Seller Info */}
-            <Card className="border-border mb-6">
-              <CardContent className="p-6">
-                <h3 className="font-bold text-foreground mb-4">פרטי המוכר</h3>
-                {carData.seller_name || carData.seller_phone ? (
-                  <div className="space-y-3">
-                    {carData.seller_name && (
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                          <span className="font-bold text-primary">{carData.seller_name.charAt(0)}</span>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-foreground">{carData.seller_name}</div>
-                          <div className="text-sm text-muted-foreground">מוכר פרטי</div>
-                        </div>
-                      </div>
-                    )}
-                     {carData.seller_phone && showPhone && (
-                      <div className="pt-3 border-t border-border">
-                        <div className="text-sm text-muted-foreground mb-1">טלפון</div>
-                        <a 
-                          href={`tel:${carData.seller_phone}`}
-                          className="text-lg font-bold text-foreground hover:text-primary transition-colors"
-                          dir="ltr"
-                        >
-                          {carData.seller_phone}
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                      <span className="font-bold text-primary">M</span>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-foreground">מוכר פרטי</div>
-                      <div className="text-sm text-muted-foreground">צור קשר דרך הטופס</div>
-                    </div>
-                  </div>
-                )}
               </CardContent>
             </Card>
 
