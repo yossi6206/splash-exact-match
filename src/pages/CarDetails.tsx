@@ -397,6 +397,26 @@ const CarDetails = () => {
                       <p className="text-sm text-muted-foreground">המוכר לא השאיר מספר טלפון</p>
                     </div>
                   )}
+                  
+                  <Button 
+                    className="w-full"
+                    size="lg"
+                    variant="outline"
+                    onClick={() => {
+                      if (!user) {
+                        toast({
+                          title: "נדרשת התחברות",
+                          description: "יש להתחבר כדי לשלוח הודעות",
+                          variant: "destructive"
+                        });
+                        return;
+                      }
+                      window.location.href = `/messages?seller=${carData.user_id}&item=${carData.id}`;
+                    }}
+                  >
+                    <MessageSquare className="h-4 w-4 ml-2" />
+                    שלח הודעה דרך המערכת
+                  </Button>
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-border text-center text-sm text-muted-foreground">

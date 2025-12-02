@@ -30,9 +30,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { SellerReviewsList } from "@/components/seller-reviews/SellerReviewsList";
+import { useAuth } from "@/contexts/AuthContext";
 
 const SecondhandDetails = () => {
   const { id } = useParams();
+  const { user } = useAuth();
   const [item, setItem] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -418,6 +420,23 @@ const SecondhandDetails = () => {
                       </Button>
                     </div>
                   )}
+                  
+                  <Button 
+                    className="w-full"
+                    size="lg"
+                    variant="outline"
+                    onClick={() => {
+                      if (!user) {
+                        toast.error("יש להתחבר כדי לשלוח הודעות");
+                        return;
+                      }
+                      window.location.href = `/messages?seller=${item.user_id}&item=${item.id}`;
+                    }}
+                  >
+                    <MessageSquare className="h-4 w-4 ml-2" />
+                    שלח הודעה דרך המערכת
+                  </Button>
+                  
                   <div className="grid grid-cols-2 gap-2">
                     <Button variant="outline" size="lg">
                       <Heart className="ml-2 h-5 w-5" />

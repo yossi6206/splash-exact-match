@@ -420,6 +420,26 @@ const LaptopDetails = () => {
                       </div>
                     )}
                   </div>
+                  
+                  <Button 
+                    className="w-full"
+                    size="lg"
+                    variant="outline"
+                    onClick={() => {
+                      if (!user) {
+                        toast({
+                          title: "נדרשת התחברות",
+                          description: "יש להתחבר כדי לשלוח הודעות",
+                          variant: "destructive"
+                        });
+                        return;
+                      }
+                      window.location.href = `/messages?seller=${laptop.user_id}&item=${laptop.id}`;
+                    }}
+                  >
+                    <MessageSquare className="h-4 w-4 ml-2" />
+                    שלח הודעה דרך המערכת
+                  </Button>
                 </div>
               </CardContent>
             </Card>

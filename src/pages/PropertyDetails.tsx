@@ -319,40 +319,66 @@ const PropertyDetails = () => {
               </div>
 
               <div className="space-y-3">
-                {!showPhone ? (
-                  <Button className="w-full" size="lg" onClick={handleShowPhone}>
-                    <Phone className="ml-2 h-4 w-4" />
-                    הצג מספר טלפון
-                  </Button>
-                ) : (
-                  <div className="space-y-2">
-                    <Button 
-                      className="w-full" 
-                      size="lg"
-                      asChild
-                    >
-                      <a href={`tel:${property.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
-                        <Phone className="h-4 w-4 ml-2" />
-                        <span className="font-bold">{property.seller_phone}</span>
-                      </a>
+                {property.seller_phone ? (
+                  !showPhone ? (
+                    <Button className="w-full" size="lg" onClick={handleShowPhone}>
+                      <Phone className="ml-2 h-4 w-4" />
+                      הצג מספר טלפון
                     </Button>
-                    <Button 
-                      className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
-                      size="lg"
-                      asChild
-                    >
-                      <a 
-                        href={`https://wa.me/972${(property.seller_phone || '').replace(/^0/, '').replace(/\D/g, '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2"
+                  ) : (
+                    <div className="space-y-2">
+                      <Button 
+                        className="w-full" 
+                        size="lg"
+                        asChild
                       >
-                        <MessageSquare className="h-4 w-4 ml-2" />
-                        שלח הודעה בוואטסאפ
-                      </a>
-                    </Button>
+                        <a href={`tel:${property.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
+                          <Phone className="h-4 w-4 ml-2" />
+                          <span className="font-bold">{property.seller_phone}</span>
+                        </a>
+                      </Button>
+                      <Button 
+                        className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                        size="lg"
+                        asChild
+                      >
+                        <a 
+                          href={`https://wa.me/972${property.seller_phone.replace(/^0/, '').replace(/\D/g, '')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <MessageSquare className="h-4 w-4 ml-2" />
+                          שלח הודעה בוואטסאפ
+                        </a>
+                      </Button>
+                    </div>
+                  )
+                ) : (
+                  <div className="text-center p-4 bg-muted rounded-lg">
+                    <p className="text-sm text-muted-foreground">המוכר לא השאיר מספר טלפון</p>
                   </div>
                 )}
+                
+                <Button 
+                  className="w-full"
+                  size="lg"
+                  variant="outline"
+                  onClick={() => {
+                    if (!user) {
+                      toast({
+                        title: "נדרשת התחברות",
+                        description: "יש להתחבר כדי לשלוח הודעות",
+                        variant: "destructive"
+                      });
+                      return;
+                    }
+                    window.location.href = `/messages?seller=${property.user_id}&item=${property.id}`;
+                  }}
+                >
+                  <MessageSquare className="h-4 w-4 ml-2" />
+                  שלח הודעה דרך המערכת
+                </Button>
               </div>
 
               <div className="mt-6 pt-6 border-t">
