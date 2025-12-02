@@ -296,10 +296,10 @@ const MyAds = () => {
 
   const renderListingCard = (listing: Listing) => (
     <Card key={listing.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-      {/* Mobile Layout - Horizontal compact card */}
-      <div className="md:hidden flex gap-3 p-2">
-        {/* Mobile Image - small square thumbnail */}
-        <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
+      {/* Mobile Layout - Ultra compact horizontal card */}
+      <div className="md:hidden flex gap-2 p-1.5">
+        {/* Mobile Image - tiny square thumbnail */}
+        <div className="relative w-14 h-14 flex-shrink-0 rounded-md overflow-hidden bg-muted">
           {listing.images && listing.images[0] ? (
             <img
               src={listing.images[0]}
@@ -311,64 +311,53 @@ const MyAds = () => {
               {getTypeIcon(listing.type)}
             </div>
           )}
-          <Badge 
-            variant={listing.status === 'active' ? 'default' : 'secondary'}
-            className="absolute top-1 right-1 text-[9px] px-1 py-0 h-4"
-          >
-            {listing.status === 'active' ? 'פעיל' : ''}
-          </Badge>
         </div>
         
-        {/* Mobile Content - compact */}
-        <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
-          <div>
-            <h3 className="text-sm font-bold text-foreground line-clamp-1 mb-0.5">
-              {listing.title || 'ללא כותרת'}
-            </h3>
-            <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground mb-1">
-              <span className="truncate">{listing.location}</span>
-              <span>•</span>
-              <span className="whitespace-nowrap">{new Date(listing.created_at).toLocaleDateString('he-IL')}</span>
-            </div>
-            <div className="text-sm font-bold text-primary">
-              ₪{typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}
-            </div>
+        {/* Mobile Content - ultra compact */}
+        <div className="flex-1 min-w-0 flex flex-col justify-center">
+          <h3 className="text-xs font-bold text-foreground line-clamp-1">
+            {listing.title || 'ללא כותרת'}
+          </h3>
+          <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
+            <span className="truncate max-w-[80px]">{listing.location}</span>
+            <span>•</span>
+            <span>{new Date(listing.created_at).toLocaleDateString('he-IL')}</span>
           </div>
-
-          {/* Mobile Stats - single row compact */}
-          <div className="flex items-center gap-2 text-[9px] text-muted-foreground">
-            <span className="flex items-center gap-0.5">
-              <Eye className="h-2.5 w-2.5" />
-              {listing.views_count || 0}
+          <div className="flex items-center justify-between mt-0.5">
+            <span className="text-xs font-bold text-primary">
+              ₪{typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}
             </span>
-            <span className="flex items-center gap-0.5">
-              <MousePointer className="h-2.5 w-2.5" />
-              {listing.clicks_count || 0}
-            </span>
-            <span className="flex items-center gap-0.5">
-              <Phone className="h-2.5 w-2.5" />
-              {listing.type === 'job' ? (listing.applicants_count || 0) : (listing.contacts_count || 0)}
-            </span>
+            <div className="flex items-center gap-1.5 text-[8px] text-muted-foreground">
+              <span className="flex items-center gap-0.5">
+                <Eye className="h-2 w-2" />{listing.views_count || 0}
+              </span>
+              <span className="flex items-center gap-0.5">
+                <MousePointer className="h-2 w-2" />{listing.clicks_count || 0}
+              </span>
+              <span className="flex items-center gap-0.5">
+                <Phone className="h-2 w-2" />{listing.type === 'job' ? (listing.applicants_count || 0) : (listing.contacts_count || 0)}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Mobile Actions - vertical icons */}
-        <div className="flex flex-col gap-0.5 flex-shrink-0 justify-center">
+        {/* Mobile Actions - tiny icons */}
+        <div className="flex flex-col gap-0 flex-shrink-0 justify-center">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => navigate(getViewUrl(listing))}
-            className="h-6 w-6"
+            className="h-5 w-5"
           >
-            <Eye className="h-3 w-3" />
+            <Eye className="h-2.5 w-2.5" />
           </Button>
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setDeleteId({ id: listing.id, type: listing.type })}
-            className="h-6 w-6 text-destructive hover:text-destructive"
+            className="h-5 w-5 text-destructive hover:text-destructive"
           >
-            <Trash2 className="h-3 w-3" />
+            <Trash2 className="h-2.5 w-2.5" />
           </Button>
         </div>
       </div>
