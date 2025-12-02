@@ -15,42 +15,36 @@ import { useCountUp } from "@/hooks/useCountUp";
 import { supabase } from "@/integrations/supabase/client";
 import { useSaveSearch } from "@/hooks/useSaveSearch";
 
-// Category configurations
+// Category configurations - all using same gradient as Properties/Cars/Laptops
 const categoryConfig: Record<string, {
   title: string;
   description: string;
   icon: any;
-  heroGradient: string;
 }> = {
   "furniture": {
     title: "ריהוט",
     description: "מבחר ענק של ריהוט יד שנייה במחירים מעולים - ספות, שולחנות, כיסאות ועוד",
-    icon: Sofa,
-    heroGradient: "from-amber-500 via-orange-500 to-red-500"
+    icon: Sofa
   },
   "electronics": {
     title: "מוצרי חשמל",
     description: "מוצרי חשמל יד שנייה באיכות גבוהה - מקררים, מכונות כביסה, תנורים ועוד",
-    icon: Zap,
-    heroGradient: "from-blue-500 via-cyan-500 to-teal-500"
+    icon: Zap
   },
   "sports": {
     title: "ספורט ופנאי",
     description: "ציוד ספורט ופנאי יד שנייה - אופניים, ציוד כושר, משחקים וכלי נגינה",
-    icon: Dumbbell,
-    heroGradient: "from-green-500 via-emerald-500 to-teal-500"
+    icon: Dumbbell
   },
   "fashion": {
     title: "אופנה",
     description: "בגדים ואביזרים יד שנייה במצב מעולה - בגדים, נעליים, תיקים ותכשיטים",
-    icon: Shirt,
-    heroGradient: "from-pink-500 via-purple-500 to-indigo-500"
+    icon: Shirt
   },
   "kids": {
     title: "תינוקות וילדים",
     description: "ציוד לתינוקות וילדים יד שנייה - עגלות, כיסאות אוכל, מיטות וצעצועים",
-    icon: Baby,
-    heroGradient: "from-yellow-500 via-orange-500 to-pink-500"
+    icon: Baby
   }
 };
 
@@ -359,8 +353,8 @@ const SecondhandCategory = () => {
       <MobileHeader />
       <Header />
 
-      {/* Hero Banner Section */}
-      <section className={`relative overflow-hidden bg-gradient-to-br ${config.heroGradient} py-8 md:py-12`}>
+      {/* Hero Banner Section - Same gradient as Properties/Cars/Laptops */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-accent py-8 md:py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             {/* Main Heading */}
