@@ -97,7 +97,7 @@ export const DashboardSidebar = () => {
         <Link to="/">
           <Button 
             variant="ghost" 
-            className="w-full justify-between hover:bg-background/80 h-10 text-sm"
+            className="w-full justify-between hover:bg-muted h-10 text-sm text-foreground"
           >
             <span>חזרה לדף הבית</span>
             <Home className="h-4 w-4" />
@@ -105,7 +105,7 @@ export const DashboardSidebar = () => {
         </Link>
         <Button 
           variant="ghost" 
-          className="w-full justify-between hover:bg-background/80 h-10 text-sm"
+          className="w-full justify-between hover:bg-muted h-10 text-sm text-foreground"
         >
           <span>צור קשר</span>
           <Phone className="h-4 w-4" />
