@@ -18,6 +18,7 @@ import { ReviewForm } from "@/components/reviews/ReviewForm";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
+import { ShareMenu } from "@/components/ShareMenu";
 
 const LaptopDetails = () => {
   const { id } = useParams();
@@ -220,7 +221,30 @@ const LaptopDetails = () => {
                   </div>
                 </div>
               </div>
-              <ReportListingDialog itemId={id!} itemType="laptop" />
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline"
+                  size="icon"
+                  onClick={async () => {
+                    if (!user) {
+                      toast({
+                        title: "נדרשת התחברות",
+                        description: "יש להתחבר כדי לסמן מחשבים כמועדפים",
+                        variant: "destructive"
+                      });
+                      return;
+                    }
+                    // TODO: Implement favorite toggle
+                  }}
+                >
+                  <Heart className="h-5 w-5" />
+                </Button>
+                <ShareMenu 
+                  title={`${laptop.brand} ${laptop.model}`}
+                  variant="outline"
+                />
+                <ReportListingDialog itemId={id!} itemType="laptop" />
+              </div>
             </div>
 
             {/* Features */}

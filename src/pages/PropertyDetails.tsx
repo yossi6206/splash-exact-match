@@ -5,13 +5,14 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Heart, Share2, Home, MapPin, Bed, Square, Calendar, Shield, Phone, MessageSquare, Loader2, Maximize2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Heart, Home, MapPin, Bed, Square, Calendar, Shield, Phone, MessageSquare, Loader2, Maximize2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 import SoldPropertiesInArea from "@/components/SoldPropertiesInArea";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
+import { ShareMenu } from "@/components/ShareMenu";
 import { supabase } from "@/integrations/supabase/client";
 import property1 from "@/assets/property-1.jpg";
 
@@ -233,9 +234,10 @@ const PropertyDetails = () => {
                 >
                   <Heart className={`h-5 w-5 ${isFavorite ? 'fill-primary text-primary' : ''}`} />
                 </Button>
-                <Button variant="outline" size="icon">
-                  <Share2 className="h-5 w-5" />
-                </Button>
+                <ShareMenu 
+                  title={property.title}
+                  variant="outline"
+                />
                 <ReportListingDialog itemId={id!} itemType="property" />
               </div>
             </div>

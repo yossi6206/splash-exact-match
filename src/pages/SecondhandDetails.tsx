@@ -32,6 +32,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { SellerReviewsList } from "@/components/seller-reviews/SellerReviewsList";
 import { useAuth } from "@/contexts/AuthContext";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
+import { ShareMenu } from "@/components/ShareMenu";
 
 const SecondhandDetails = () => {
   const { id } = useParams();
@@ -356,7 +357,26 @@ const SecondhandDetails = () => {
                     <MapPin className="h-4 w-4" />
                     <span>{item.location}</span>
                   </div>
-                  <ReportListingDialog itemId={id!} itemType="secondhand" />
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline"
+                      size="icon"
+                      onClick={async () => {
+                        if (!user) {
+                          toast.error("יש להתחבר כדי לסמן מוצרים כמועדפים");
+                          return;
+                        }
+                        // TODO: Implement favorite toggle
+                      }}
+                    >
+                      <Heart className="h-5 w-5" />
+                    </Button>
+                    <ShareMenu 
+                      title={item.title}
+                      variant="outline"
+                    />
+                    <ReportListingDialog itemId={id!} itemType="secondhand" />
+                  </div>
                 </div>
 
                 <div className="bg-primary/10 rounded-lg p-4">
