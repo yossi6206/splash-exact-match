@@ -82,7 +82,7 @@ export const ConversationItem = ({
         </AvatarFallback>
       </Avatar>
       
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 overflow-hidden">
         <div className="flex items-start justify-between gap-2 mb-1">
           <h3 className="font-semibold text-sm truncate">{otherUserName}</h3>
           {lastMessageAt && (
@@ -92,15 +92,15 @@ export const ConversationItem = ({
           )}
         </div>
         
-        <div className="flex items-start gap-2 min-w-0">
+        <div className="flex items-start gap-2">
           <p 
-            className="text-sm text-muted-foreground flex-1 break-words overflow-hidden"
+            className="text-sm text-muted-foreground flex-1 overflow-hidden"
             style={{
               display: '-webkit-box',
-              WebkitLineClamp: 2,
+              WebkitLineClamp: 1,
               WebkitBoxOrient: 'vertical',
-              wordBreak: 'break-word',
-              overflowWrap: 'break-word'
+              maxHeight: '1.5em',
+              lineHeight: '1.5em'
             }}
           >
             {lastMessage || "אין הודעות עדיין"}
