@@ -371,7 +371,7 @@ const Cars = () => {
           <div className="max-w-4xl mx-auto text-center space-y-8">
             {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-danidin font-black text-white leading-tight drop-shadow-lg">
                 מצא את הרכב המושלם שלך
               </h1>
               <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
@@ -480,7 +480,7 @@ const Cars = () => {
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6 mt-8">
           <div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">רכבים למכירה</h2>
+            <h2 className="text-2xl font-danidin font-black text-foreground mb-1">רכבים למכירה</h2>
             <p className="text-muted-foreground">{filteredCars.length.toLocaleString()} תוצאות</p>
           </div>
           
