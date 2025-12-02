@@ -296,9 +296,139 @@ const MyAds = () => {
 
   const renderListingCard = (listing: Listing) => (
     <Card key={listing.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4">
-        {/* Content */}
-        <div className="p-4 flex flex-col justify-between order-2 md:order-2">
+      {/* Mobile Layout */}
+      <div className="md:hidden">
+        {/* Mobile Image - smaller height */}
+        <div className="relative h-40 bg-muted">
+          {listing.images && listing.images[0] ? (
+            <img
+              src={listing.images[0]}
+              alt={listing.title || 'תמונה'}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+              {getTypeIcon(listing.type)}
+            </div>
+          )}
+          <Badge className="absolute top-2 right-2 bg-background/90 text-foreground text-xs">
+            {getTypeName(listing.type)}
+          </Badge>
+          <Badge 
+            variant={listing.status === 'active' ? 'default' : 'secondary'}
+            className="absolute top-2 left-2 text-xs"
+          >
+            {listing.status === 'active' ? 'פעיל' : 'לא פעיל'}
+          </Badge>
+        </div>
+        
+        {/* Mobile Content */}
+        <div className="p-3 space-y-3">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="text-base font-bold text-foreground line-clamp-1 flex-1">
+              {listing.title || 'ללא כותרת'}
+            </h3>
+            <div className="text-lg font-bold text-primary whitespace-nowrap">
+              ₪{typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <MapPin className="h-3 w-3" />
+              <span className="truncate max-w-[100px]">{listing.location}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Calendar className="h-3 w-3" />
+              <span>{new Date(listing.created_at).toLocaleDateString('he-IL')}</span>
+            </div>
+          </div>
+
+          {/* Mobile Statistics - compact */}
+          <div className="grid grid-cols-3 gap-2 py-2 border-y border-border">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
+                <Eye className="h-3 w-3" />
+                <span>צפיות</span>
+              </div>
+              <div className="text-sm font-bold text-foreground">
+                {listing.views_count || 0}
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
+                <MousePointer className="h-3 w-3" />
+                <span>לחיצות</span>
+              </div>
+              <div className="text-sm font-bold text-foreground">
+                {listing.clicks_count || 0}
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
+                <Phone className="h-3 w-3" />
+                <span>פניות</span>
+              </div>
+              <div className="text-sm font-bold text-foreground">
+                {listing.type === 'job' ? (listing.applicants_count || 0) : (listing.contacts_count || 0)}
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Actions - compact */}
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate(getViewUrl(listing))}
+              className="flex-1 h-9 text-xs"
+            >
+              <Eye className="h-3.5 w-3.5 ml-1" />
+              צפייה
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1 h-9 text-xs"
+              disabled
+            >
+              <Edit className="h-3.5 w-3.5 ml-1" />
+              עריכה
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setDeleteId({ id: listing.id, type: listing.type })}
+              className="h-9 px-3"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:grid md:grid-cols-[200px_1fr] gap-4">
+        {/* Desktop Image */}
+        <div className="relative aspect-square bg-muted">
+          {listing.images && listing.images[0] ? (
+            <img
+              src={listing.images[0]}
+              alt={listing.title || 'תמונה'}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+              {getTypeIcon(listing.type)}
+            </div>
+          )}
+          <Badge className="absolute top-2 left-2 bg-background/90 text-foreground">
+            {getTypeName(listing.type)}
+          </Badge>
+        </div>
+        
+        {/* Desktop Content */}
+        <div className="p-4 flex flex-col justify-between">
           <div>
             <div className="flex items-start justify-between gap-2 mb-2">
               <h3 className="text-lg font-bold text-foreground line-clamp-2">
@@ -389,24 +519,6 @@ const MyAds = () => {
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
-        </div>
-        
-        {/* Image */}
-        <div className="relative aspect-video md:aspect-square bg-muted order-1 md:order-1">
-          {listing.images && listing.images[0] ? (
-            <img
-              src={listing.images[0]}
-              alt={listing.title || 'תמונה'}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-              {getTypeIcon(listing.type)}
-            </div>
-          )}
-          <Badge className="absolute top-2 left-2 bg-background/90 text-foreground">
-            {getTypeName(listing.type)}
-          </Badge>
         </div>
       </div>
     </Card>
