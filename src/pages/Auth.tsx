@@ -149,26 +149,14 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header className="w-full bg-background border-b border-border/30 py-4 px-6">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
-              <span className="text-lg font-extrabold text-primary-foreground">yad2</span>
-            </div>
-          </Link>
-          
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-            <Link to="/properties" className="hover:text-foreground transition-colors">נדל"ן</Link>
-            <Link to="/cars" className="hover:text-foreground transition-colors">רכב</Link>
-            <Link to="/laptops" className="hover:text-foreground transition-colors">מחשבים</Link>
-            <Link to="/secondhand" className="hover:text-foreground transition-colors">יד שנייה</Link>
-            <Link to="/jobs" className="hover:text-foreground transition-colors">דרושים</Link>
-            <Link to="/freelancers" className="hover:text-foreground transition-colors">בעלי מקצוע</Link>
-            <Link to="/businesses" className="hover:text-foreground transition-colors">עסקים למכירה</Link>
-          </nav>
-        </div>
-      </header>
+      {/* Logo */}
+      <div className="absolute top-6 right-6">
+        <Link to="/" className="flex items-center gap-2">
+          <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
+            <span className="text-lg font-extrabold text-primary-foreground">yad2</span>
+          </div>
+        </Link>
+      </div>
 
       <div className="flex-1 flex items-center justify-center p-4 md:p-8">
 
