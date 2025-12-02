@@ -96,16 +96,16 @@ export const DashboardSidebar = () => {
       <div className="p-4 border-t border-border/50 space-y-2 bg-muted/20">
         <Link to="/">
           <Button 
-            variant="ghost" 
-            className="w-full justify-between hover:bg-muted h-10 text-sm text-foreground"
+            variant="secondary" 
+            className="w-full justify-between h-10 text-sm"
           >
             <span>חזרה לדף הבית</span>
             <Home className="h-4 w-4" />
           </Button>
         </Link>
         <Button 
-          variant="ghost" 
-          className="w-full justify-between hover:bg-muted h-10 text-sm text-foreground"
+          variant="secondary" 
+          className="w-full justify-between h-10 text-sm"
         >
           <span>צור קשר</span>
           <Phone className="h-4 w-4" />
