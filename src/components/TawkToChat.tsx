@@ -2,54 +2,46 @@ import { useEffect } from 'react';
 
 const TawkToChat = () => {
   useEffect(() => {
-    // Tawk.to Live Chat Widget
-    const TAWK_PROPERTY_ID = '6764a682af5bfec1dbde8516';
-    const TAWK_WIDGET_ID = '1ifgiks1e';
+    // Chatwoot Live Chat Widget
+    const BASE_URL = "https://chat.yositsupport.com";
 
     // בדוק אם הסקריפט כבר נטען
-    if (document.getElementById('tawk-to-script')) {
+    if (document.getElementById('chatwoot-script')) {
       return;
     }
 
-    // הגדר את Tawk_API לפני טעינת הסקריפט
-    (window as any).Tawk_API = (window as any).Tawk_API || {};
-    (window as any).Tawk_API.customStyle = {
-      visibility: {
-        desktop: {
-          position: 'bl', // bottom-left
-          xOffset: 20,
-          yOffset: 20
-        },
-        mobile: {
-          position: 'bl',
-          xOffset: 10,
-          yOffset: 10
-        }
-      }
-    };
-
     const script = document.createElement('script');
-    script.id = 'tawk-to-script';
+    script.id = 'chatwoot-script';
+    script.src = BASE_URL + "/packs/js/sdk.js";
     script.async = true;
-    script.src = `https://embed.tawk.to/${TAWK_PROPERTY_ID}/${TAWK_WIDGET_ID}`;
-    script.charset = 'UTF-8';
-    script.setAttribute('crossorigin', '*');
+    
+    script.onload = function() {
+      (window as any).chatwootSDK.run({
+        websiteToken: 'B6cssDX4aH4BqGvV6PjFCwCE',
+        baseUrl: BASE_URL
+      });
+    };
     
     document.body.appendChild(script);
 
     return () => {
       // ניקוי הסקריפט בעת unmount
-      const existingScript = document.getElementById('tawk-to-script');
+      const existingScript = document.getElementById('chatwoot-script');
       if (existingScript) {
         existingScript.remove();
       }
       // הסר את הצ'אט widget
-      const tawkWidget = document.getElementById('tawk-widget-container');
-      if (tawkWidget) {
-        tawkWidget.remove();
+      const chatwootWidget = document.querySelector('.woot-widget-bubble');
+      if (chatwootWidget) {
+        chatwootWidget.remove();
       }
-      // נקה את Tawk_API
-      delete (window as any).Tawk_API;
+      const chatwootHolder = document.querySelector('.woot-widget-holder');
+      if (chatwootHolder) {
+        chatwootHolder.remove();
+      }
+      // נקה את chatwootSDK
+      delete (window as any).chatwootSDK;
+      delete (window as any).$chatwoot;
     };
   }, []);
 
