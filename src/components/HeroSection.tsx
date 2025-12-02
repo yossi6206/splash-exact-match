@@ -63,7 +63,7 @@ const HeroSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Content */}
           <div className="order-2 md:order-1 flex flex-col items-end text-right">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-foreground mb-6 leading-tight">פחות עומס, יותר רווח</h1>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-danidin font-black text-foreground mb-6 leading-tight">פחות עומס, יותר רווח</h1>
             <p className="text-2xl md:text-3xl lg:text-4xl text-foreground/80 mb-10 font-medium">
               למכור ביד2 ולהרוויח בקלות
             </p>

@@ -31,7 +31,7 @@ const TipsGuides = () => {
   return (
     <section className="py-8 md:py-12 px-4 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6 md:mb-8">
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">טיפים ומדריכים</h2>
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-danidin font-black">טיפים ומדריכים</h2>
         <a 
           href="/tips" 
           className="text-sm md:text-base font-semibold text-primary hover:text-primary/80 transition-colors duration-200 flex items-center gap-2"

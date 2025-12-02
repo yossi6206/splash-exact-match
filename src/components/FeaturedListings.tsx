@@ -81,7 +81,7 @@ const FeaturedListings = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 md:mb-6 gap-3">
           <div className="flex items-center gap-2 md:gap-3">
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-danidin font-black text-foreground">
               חדש סביבך
             </h2>
             <div className="flex items-center gap-1 text-primary">
