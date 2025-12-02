@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, Share2, MapPin, Calendar, Shield, Package, Truck, Phone, Mail, MessageSquare, Loader2 } from "lucide-react";
+import { Heart, Share2, MapPin, Calendar, Shield, Package, Truck, Phone, Mail, MessageSquare, Loader2, Monitor, Keyboard, Cpu, Camera, Fingerprint, HardDrive, Wifi, Cable, Calculator, Bluetooth, Check } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -255,15 +255,46 @@ const LaptopDetails = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {laptop.features.map((feature: string, index: number) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg"
-                      >
-                        <Shield className="h-4 w-4 text-primary flex-shrink-0" />
-                        <span className="text-sm font-medium">{feature}</span>
-                      </div>
-                    ))}
+                    {laptop.features.map((feature: string, index: number) => {
+                      const featureLower = feature.toLowerCase();
+                      let Icon = Check;
+                      
+                      if (featureLower.includes('מסך מגע') || featureLower.includes('מגע')) {
+                        Icon = Monitor;
+                      } else if (featureLower.includes('מקלדת') || featureLower.includes('תאור') || featureLower.includes('נומר')) {
+                        Icon = Keyboard;
+                      } else if (featureLower.includes('מעבד') || featureLower.includes('intel') || featureLower.includes('amd') || featureLower.includes('processor')) {
+                        Icon = Cpu;
+                      } else if (featureLower.includes('מצלמ') || featureLower.includes('webcam') || featureLower.includes('camera')) {
+                        Icon = Camera;
+                      } else if (featureLower.includes('טביע') || featureLower.includes('fingerprint')) {
+                        Icon = Fingerprint;
+                      } else if (featureLower.includes('hdd') || featureLower.includes('כונן')) {
+                        Icon = HardDrive;
+                      } else if (featureLower.includes('גרפיק') || featureLower.includes('graphics') || featureLower.includes('nvidia') || featureLower.includes('amd')) {
+                        Icon = Monitor;
+                      } else if (featureLower.includes('hdmi')) {
+                        Icon = Monitor;
+                      } else if (featureLower.includes('bluetooth')) {
+                        Icon = Bluetooth;
+                      } else if (featureLower.includes('wifi') || featureLower.includes('wi-fi')) {
+                        Icon = Wifi;
+                      } else if (featureLower.includes('usb')) {
+                        Icon = Cable;
+                      }
+                      
+                      return (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
+                        >
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <Icon className="h-4 w-4 text-primary" />
+                          </div>
+                          <span className="text-sm font-medium text-right">{feature}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>
