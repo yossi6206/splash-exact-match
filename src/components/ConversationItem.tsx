@@ -93,11 +93,11 @@ export const ConversationItem = ({
         </div>
         
         <div className="flex items-center justify-between gap-2">
-          <p className="text-sm text-muted-foreground truncate">
+          <p className="text-sm text-muted-foreground line-clamp-2 flex-1">
             {lastMessage || "אין הודעות עדיין"}
           </p>
           {unreadCount > 0 && (
-            <Badge variant="default" className="h-5 min-w-5 flex items-center justify-center text-xs">
+            <Badge variant="default" className="h-5 min-w-5 flex items-center justify-center text-xs flex-shrink-0">
               {unreadCount}
             </Badge>
           )}
