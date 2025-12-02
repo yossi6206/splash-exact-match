@@ -92,8 +92,17 @@ export const ConversationItem = ({
           )}
         </div>
         
-        <div className="flex items-center justify-between gap-2">
-          <p className="text-sm text-muted-foreground line-clamp-2 flex-1">
+        <div className="flex items-start gap-2 min-w-0">
+          <p 
+            className="text-sm text-muted-foreground flex-1 break-words overflow-hidden"
+            style={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word'
+            }}
+          >
             {lastMessage || "אין הודעות עדיין"}
           </p>
           {unreadCount > 0 && (
