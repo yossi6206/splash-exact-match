@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
 interface AIReportProps {
-  itemType: "car" | "property" | "laptop" | "business";
+  itemType: "car" | "property" | "laptop" | "business" | "secondhand";
   itemData: any;
 }
 
