@@ -9,7 +9,6 @@ import {
   Heart, 
   Search, 
   Lightbulb, 
-  Settings,
   LogOut,
   Phone,
   MessageSquare,
@@ -34,7 +33,6 @@ const menuItems = [
   { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved" },
   { title: "חיפושים אחרונים", icon: Search, path: "/dashboard/searches" },
   { title: "טיפים ומידע", icon: Lightbulb, path: "/dashboard/tips" },
-  { title: "הגדרות", icon: Settings, path: "/dashboard/settings" },
 ];
 
 export const DashboardSidebar = () => {
