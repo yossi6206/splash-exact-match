@@ -246,6 +246,13 @@ const PropertyDetails = () => {
             <Card className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="flex items-center gap-3">
+                  <MapPin className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <div className="text-sm text-muted-foreground">עיר</div>
+                    <div className="font-semibold">{property.location}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
                   <Bed className="h-5 w-5 text-muted-foreground" />
                   <div>
                     <div className="text-sm text-muted-foreground">חדרים</div>
