@@ -246,13 +246,6 @@ const PropertyDetails = () => {
             <Card className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="flex items-center gap-3">
-                  <MapPin className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">עיר</div>
-                    <div className="font-semibold">{property.location}</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
                   <Bed className="h-5 w-5 text-muted-foreground" />
                   <div>
                     <div className="text-sm text-muted-foreground">חדרים</div>
@@ -438,13 +431,17 @@ const PropertyDetails = () => {
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
                           <span className="font-bold text-primary">{property.seller_name.charAt(0)}</span>
                         </div>
-                        <div>
-                          <div className="font-semibold text-foreground">{property.seller_name}</div>
-                          <div className="text-sm text-muted-foreground">מפרסם פרטי</div>
-                        </div>
+                      <div>
+                        <div className="font-semibold text-foreground">{property.seller_name}</div>
+                        <div className="text-sm text-muted-foreground">מפרסם פרטי</div>
                       </div>
-                    )}
-                    {property.seller_phone && showPhone && (
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <MapPin className="h-4 w-4" />
+                    <span>{property.location}</span>
+                  </div>
+                  {property.seller_phone && showPhone && (
                       <div className="pt-3 border-t border-border">
                         <div className="text-sm text-muted-foreground mb-1">טלפון</div>
                         <a 
