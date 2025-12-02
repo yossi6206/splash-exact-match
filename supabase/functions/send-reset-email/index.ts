@@ -124,11 +124,11 @@ function generateResetEmailHTML(resetLink: string, userEmail: string): string {
 
 serve(async (req) => {
   // Handle CORS preflight requests
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return new Response("Method not allowed", { 
       status: 405,
       headers: corsHeaders 
@@ -138,38 +138,42 @@ serve(async (req) => {
   try {
     console.log("Received password reset email request");
 
-    // Parse the webhook payload from Supabase Auth
+    // Parse the request - can be either webhook or direct call
     const payload = await req.json();
-    console.log("Payload received for user:", payload.user?.email);
+    console.log("Payload received:", JSON.stringify(payload));
 
-    // Extract user email and token information
-    const { user, email_data } = payload;
-    
-    if (!user?.email) {
-      throw new Error("User email not found in payload");
+    // Direct call format: { email, resetLink }
+    // Webhook format: { user: { email }, email_data: { token_hash, ... } }
+    let userEmail: string;
+    let resetLink: string;
+
+    if (payload.email && payload.resetLink) {
+      // Direct call from application
+      userEmail = payload.email;
+      resetLink = payload.resetLink;
+      console.log("Direct call - Email:", userEmail);
+    } else if (payload.user?.email && payload.email_data) {
+      // Webhook from Supabase Auth
+      userEmail = payload.user.email;
+      const { token_hash, redirect_to, email_action_type } = payload.email_data;
+      const supabaseUrl = Deno.env.get("SUPABASE_URL");
+      resetLink = `${supabaseUrl}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`;
+      console.log("Webhook call - Email:", userEmail);
+    } else {
+      throw new Error("Invalid payload format");
     }
-
-    if (!email_data) {
-      throw new Error("Email data not found in payload");
-    }
-
-    const { token_hash, redirect_to, email_action_type } = email_data;
-
-    // Construct the reset link
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const resetLink = `${supabaseUrl}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`;
 
     console.log("Generating custom branded email...");
 
     // Generate the HTML email
-    const html = generateResetEmailHTML(resetLink, user.email);
+    const html = generateResetEmailHTML(resetLink, userEmail);
 
     console.log("Sending email via Resend...");
 
     // Send the email via Resend
     const { data, error } = await resend.emails.send({
       from: "yad2 <onboarding@resend.dev>",
-      to: [user.email],
+      to: [userEmail],
       subject: "איפוס סיסמה - yad2",
       html,
     });
