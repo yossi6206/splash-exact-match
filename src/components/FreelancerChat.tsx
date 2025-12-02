@@ -345,29 +345,37 @@ export const FreelancerChat = ({
           // Get conversation details to find recipient
           const { data: conversation } = await supabase
             .from("conversations")
-            .select("client_id, freelancer_id")
+            .select("client_id, freelancer_id, freelancers(user_id)")
             .eq("id", conversationId)
             .single();
 
           if (conversation) {
-            const recipientId = user.id === conversation.client_id 
-              ? conversation.freelancer_id 
-              : conversation.client_id;
+            // Determine recipient user_id (not freelancer_id)
+            let recipientUserId: string;
+            if (user.id === conversation.client_id) {
+              // Current user is client, recipient is freelancer
+              recipientUserId = (conversation.freelancers as any)?.user_id;
+            } else {
+              // Current user is freelancer, recipient is client
+              recipientUserId = conversation.client_id;
+            }
 
-            // Get sender name
-            const { data: senderProfile } = await supabase
-              .from("profiles")
-              .select("full_name")
-              .eq("id", user.id)
-              .single();
+            if (recipientUserId) {
+              // Get sender name
+              const { data: senderProfile } = await supabase
+                .from("profiles")
+                .select("full_name")
+                .eq("id", user.id)
+                .single();
 
-            await supabase.functions.invoke("send-message-notification", {
-              body: {
-                recipientId,
-                senderName: senderProfile?.full_name || "משתמש",
-                messagePreview: messageContent.substring(0, 100),
-              },
-            });
+              await supabase.functions.invoke("send-message-notification", {
+                body: {
+                  recipientId: recipientUserId,
+                  senderName: senderProfile?.full_name || "משתמש",
+                  messagePreview: messageContent.substring(0, 100),
+                },
+              });
+            }
           }
         } catch (notificationError) {
           console.error("Error sending notification:", notificationError);
