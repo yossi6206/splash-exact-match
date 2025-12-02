@@ -75,20 +75,20 @@ const handler = async (req: Request): Promise<Response> => {
               <p style="color: #666; margin: 5px 0 0 0;">הפלטפורמה המובילה למכירה ורכישה</p>
             </div>
             
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #7c5fdc 100%); padding: 20px; border-radius: 8px; margin-bottom: 25px;">
               <h2 style="color: white; margin: 0; font-size: 22px;">שלום ${recipientName},</h2>
             </div>
 
             <div style="padding: 20px 0;">
               <p style="font-size: 16px; margin-bottom: 15px;">קיבלת הודעה חדשה מ<strong>${senderName}</strong>:</p>
               
-              <div style="background-color: #f8f9fa; padding: 15px; border-right: 4px solid #2563eb; border-radius: 4px; margin: 20px 0;">
+              <div style="background-color: #f8f9fa; padding: 15px; border-right: 4px solid #7c5fdc; border-radius: 4px; margin: 20px 0;">
                 <p style="margin: 0; color: #555; font-style: italic;">"${messagePreview}"</p>
               </div>
 
               <div style="text-align: center; margin: 30px 0;">
                 <a href="https://secondhandpro.co.il/messages" 
-                   style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 14px 35px; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);">
+                   style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #7c5fdc 100%); color: white; padding: 14px 35px; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(124, 95, 220, 0.3);">
                   צפה בהודעה
                 </a>
               </div>
@@ -105,7 +105,7 @@ const handler = async (req: Request): Promise<Response> => {
                 © 2024 secondhandpro. כל הזכויות שמורות.
               </p>
               <p style="color: #999; font-size: 13px; margin: 5px 0;">
-                <a href="https://secondhandpro.co.il" style="color: #2563eb; text-decoration: none;">secondhandpro.co.il</a>
+                <a href="https://secondhandpro.co.il" style="color: #7c5fdc; text-decoration: none;">secondhandpro.co.il</a>
               </p>
             </div>
           </div>

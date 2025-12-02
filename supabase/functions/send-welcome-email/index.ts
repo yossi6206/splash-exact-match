@@ -27,7 +27,7 @@ function generateWelcomeEmailHTML(userName: string, userEmail: string): string {
           <!-- Logo Section -->
           <tr>
             <td align="center" style="padding-bottom: 32px;">
-              <div style="display: inline-block; font-size: 32px; font-weight: 900; color: #ffffff; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 24px; border-radius: 8px; letter-spacing: -1px;">
+              <div style="display: inline-block; font-size: 32px; font-weight: 900; color: #ffffff; background: linear-gradient(135deg, #667eea 0%, #7c5fdc 100%); padding: 12px 24px; border-radius: 8px; letter-spacing: -1px;">
                 secondhandpro
               </div>
             </td>
@@ -67,7 +67,7 @@ function generateWelcomeEmailHTML(userName: string, userEmail: string): string {
                 <tr>
                   <td style="padding: 16px; background-color: #f9fafb; border-radius: 8px; margin-bottom: 12px;">
                     <p style="margin: 0; color: #374151; font-size: 15px; line-height: 22px; text-align: right;">
-                      <strong style="color: #667eea;">✨ פרסם מודעות בחינם</strong><br/>
+                      <strong style="color: #7c5fdc;">✨ פרסם מודעות בחינם</strong><br/>
                       העלה תמונות, תאר את המוצר ופרסם בקלות
                     </p>
                   </td>
@@ -75,7 +75,7 @@ function generateWelcomeEmailHTML(userName: string, userEmail: string): string {
                 <tr>
                   <td style="padding: 16px; background-color: #f9fafb; border-radius: 8px; margin-bottom: 12px;">
                     <p style="margin: 0; color: #374151; font-size: 15px; line-height: 22px; text-align: right;">
-                      <strong style="color: #667eea;">💬 תקשורת ישירה</strong><br/>
+                      <strong style="color: #7c5fdc;">💬 תקשורת ישירה</strong><br/>
                       שלח הודעות למוכרים וקונים דרך המערכת
                     </p>
                   </td>
@@ -83,7 +83,7 @@ function generateWelcomeEmailHTML(userName: string, userEmail: string): string {
                 <tr>
                   <td style="padding: 16px; background-color: #f9fafb; border-radius: 8px;">
                     <p style="margin: 0; color: #374151; font-size: 15px; line-height: 22px; text-align: right;">
-                      <strong style="color: #667eea;">⭐ שמור מועדפים</strong><br/>
+                      <strong style="color: #7c5fdc;">⭐ שמור מועדפים</strong><br/>
                       סמן מוצרים מעניינים ועקוב אחרי עדכונים
                     </p>
                   </td>
@@ -95,7 +95,7 @@ function generateWelcomeEmailHTML(userName: string, userEmail: string): string {
           <!-- CTA Button -->
           <tr>
             <td align="center" style="padding: 32px 0;">
-              <a href="https://secondhandpro.co.il" style="display: inline-block; background-color: #667eea; color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 6px; font-size: 16px; font-weight: 600;">
+              <a href="https://secondhandpro.co.il" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #7c5fdc 100%); color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 6px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(124, 95, 220, 0.3);">
                 התחל עכשיו
               </a>
             </td>
@@ -138,7 +138,7 @@ function generateWelcomeEmailHTML(userName: string, userEmail: string): string {
             <td align="center" style="padding-bottom: 16px;">
               <p style="margin: 0; color: #9ca3af; font-size: 13px; line-height: 18px;">
                 יש לך שאלות? אנחנו כאן לעזור!<br/>
-                צור קשר: <a href="mailto:support@secondhandpro.co.il" style="color: #667eea; text-decoration: none;">support@secondhandpro.co.il</a>
+                צור קשר: <a href="mailto:support@secondhandpro.co.il" style="color: #7c5fdc; text-decoration: none;">support@secondhandpro.co.il</a>
               </p>
             </td>
           </tr>
