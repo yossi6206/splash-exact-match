@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import Header from "@/components/Header";
+import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
 import { PropertySidebarFilter, PropertyFilters as PropertySidebarFilters } from "@/components/PropertySidebarFilter";
@@ -249,6 +250,7 @@ const Properties = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <MobileHeader />
       <Header />
       
       {/* Hero Section with Search */}

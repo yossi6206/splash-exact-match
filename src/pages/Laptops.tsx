@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import Header from "@/components/Header";
+import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
 import { LaptopSidebarFilter } from "@/components/LaptopSidebarFilter";
 import { LaptopCard } from "@/components/LaptopCard";
@@ -214,6 +215,7 @@ const Laptops = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <MobileHeader />
       <Header />
       
       {/* Hero Banner Section */}

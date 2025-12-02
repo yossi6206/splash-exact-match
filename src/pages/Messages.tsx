@@ -4,6 +4,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { ConversationsList } from "@/components/ConversationsList";
 import { FreelancerChat } from "@/components/FreelancerChat";
+import MobileHeader from "@/components/MobileHeader";
 import { MessageSquare, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -356,8 +357,11 @@ export default function Messages() {
 
   return (
     <div className="h-screen flex flex-col bg-background">
-      {/* Header */}
-      <header className="h-16 border-b flex items-center justify-between px-6 bg-card">
+      {/* Mobile Header */}
+      <MobileHeader />
+      
+      {/* Desktop Header */}
+      <header className="hidden md:flex h-16 border-b items-center justify-between px-6 bg-card">
         <div className="flex items-center gap-4">
           <Link to="/">
             <Button variant="ghost" size="icon">
@@ -369,8 +373,9 @@ export default function Messages() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
-        <div className="w-96 flex-shrink-0 border-l">
+      <div className="flex-1 flex overflow-hidden flex-col md:flex-row">
+        {/* Conversations List - Full width on mobile when no conversation selected */}
+        <div className={`${selectedConversation ? 'hidden md:block' : 'block'} w-full md:w-96 flex-shrink-0 md:border-l h-full`}>
           <ConversationsList
             conversations={conversations}
             selectedConversationId={selectedConversation?.conversationId || null}
@@ -382,19 +387,33 @@ export default function Messages() {
           />
         </div>
 
-        <div className="flex-1 flex items-center justify-center">
+        {/* Chat Area - Full width on mobile when conversation selected */}
+        <div className={`${!selectedConversation ? 'hidden md:flex' : 'flex'} flex-1 items-center justify-center`}>
           {selectedConversation ? (
-            <div className="w-full h-full">
-              <FreelancerChat
-                conversationId={selectedConversation.conversationId}
-                otherUserId={selectedConversation.otherUserId}
-                otherUserName={selectedConversation.otherUserName}
-                otherUserAvatar={selectedConversation.otherUserAvatar}
-                isFreelancerView={selectedConversation.isFreelancerView}
-                open={true}
-                onOpenChange={() => setSelectedConversation(null)}
-                embedded={true}
-              />
+            <div className="w-full h-full flex flex-col">
+              {/* Mobile Back Button */}
+              <div className="md:hidden flex items-center gap-2 p-3 border-b bg-background">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setSelectedConversation(null)}
+                >
+                  <ArrowRight className="h-5 w-5" />
+                </Button>
+                <span className="font-medium">{selectedConversation.otherUserName}</span>
+              </div>
+              <div className="flex-1">
+                <FreelancerChat
+                  conversationId={selectedConversation.conversationId}
+                  otherUserId={selectedConversation.otherUserId}
+                  otherUserName={selectedConversation.otherUserName}
+                  otherUserAvatar={selectedConversation.otherUserAvatar}
+                  isFreelancerView={selectedConversation.isFreelancerView}
+                  open={true}
+                  onOpenChange={() => setSelectedConversation(null)}
+                  embedded={true}
+                />
+              </div>
             </div>
           ) : (
             <div className="text-center space-y-4 p-8">
