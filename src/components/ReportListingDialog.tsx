@@ -74,48 +74,49 @@ export const ReportListingDialog = ({ itemId, itemType }: ReportListingDialogPro
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
-          <Flag className="h-4 w-4 ml-2" />
+          <Flag className="h-4 w-4 mr-2" />
           דווח על מודעה
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]" dir="rtl">
-        <DialogHeader>
-          <DialogTitle>דווח על מודעה</DialogTitle>
-          <DialogDescription>
+        <DialogHeader className="text-right">
+          <DialogTitle className="text-right">דווח על מודעה</DialogTitle>
+          <DialogDescription className="text-right">
             אם מצאת בעיה במודעה זו, נשמח לשמוע על כך. הדיווח שלך יישאר אנונימי.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-3">
-            <Label>סיבת הדיווח</Label>
-            <RadioGroup value={reason} onValueChange={setReason}>
+            <Label className="text-right block">סיבת הדיווח</Label>
+            <RadioGroup value={reason} onValueChange={setReason} className="space-y-2">
               {reportReasons.map((reportReason) => (
-                <div key={reportReason.value} className="flex items-center space-x-2 space-x-reverse">
-                  <RadioGroupItem value={reportReason.value} id={reportReason.value} />
-                  <Label htmlFor={reportReason.value} className="cursor-pointer font-normal">
+                <div key={reportReason.value} className="flex items-center gap-2 flex-row-reverse justify-end">
+                  <Label htmlFor={reportReason.value} className="cursor-pointer font-normal text-right flex-1">
                     {reportReason.label}
                   </Label>
+                  <RadioGroupItem value={reportReason.value} id={reportReason.value} />
                 </div>
               ))}
             </RadioGroup>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="details">פרטים נוספים (אופציונלי)</Label>
+            <Label htmlFor="details" className="text-right block">פרטים נוספים (אופציונלי)</Label>
             <Textarea
               id="details"
               placeholder="ספר לנו עוד על הבעיה שמצאת..."
               value={details}
               onChange={(e) => setDetails(e.target.value)}
               rows={4}
+              className="text-right"
             />
           </div>
         </div>
-        <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={() => setOpen(false)} disabled={loading}>
-            ביטול
-          </Button>
+        <div className="flex justify-start gap-2">
           <Button onClick={handleSubmit} disabled={loading}>
             {loading ? "שולח..." : "שלח דיווח"}
+          </Button>
+          <Button variant="outline" onClick={() => setOpen(false)} disabled={loading}>
+            ביטול
           </Button>
         </div>
       </DialogContent>
