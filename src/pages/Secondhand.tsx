@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
+import MobileNav from "@/components/MobileNav";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -240,20 +241,20 @@ const Secondhand = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
       <MobileHeader />
       <Header />
       
       {/* Hero Section with Search */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-accent py-8 md:py-12">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-accent py-6 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
+          <div className="max-w-4xl mx-auto text-center space-y-4 md:space-y-8">
             {/* Main Heading */}
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
+            <div className="space-y-2 md:space-y-4">
+              <h1 className="text-2xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
                 קל יותר למכור, לקנות ולשמור על הסביבה
               </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+              <p className="text-sm md:text-xl text-white/90 max-w-2xl mx-auto">
                 אלפי מוצרי יד שנייה איכוותיים במחירים הכי טובים
               </p>
             </div>
@@ -261,16 +262,16 @@ const Secondhand = () => {
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto">
               <div className="relative flex items-center bg-white rounded-full shadow-2xl overflow-hidden">
-                <Search className="absolute right-4 h-5 w-5 text-muted-foreground" />
+                <Search className="absolute right-3 md:right-4 h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
                 <Input
                   type="text"
                   placeholder="מה תרצו לחפש?"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="border-0 pr-12 pl-4 h-14 text-lg rounded-full focus-visible:ring-0"
+                  className="border-0 pr-10 md:pr-12 pl-2 md:pl-4 h-12 md:h-14 text-base md:text-lg rounded-full focus-visible:ring-0"
                 />
                 <Button
-                  className="ml-2 rounded-full px-8 h-10 font-bold"
+                  className="ml-1 md:ml-2 rounded-full px-4 md:px-8 h-9 md:h-10 font-bold text-sm md:text-base"
                   size="lg"
                 >
                   חפש
@@ -278,8 +279,8 @@ const Secondhand = () => {
               </div>
             </div>
 
-            {/* Quick Stats */}
-            <div className="flex items-center justify-center gap-8 pt-4">
+            {/* Quick Stats - Hidden on mobile, shown on desktop */}
+            <div className="hidden md:flex items-center justify-center gap-8 pt-4">
               <div className="text-center">
                 <div className="text-3xl font-bold text-white">50,000+</div>
                 <div className="text-sm text-white/80">מוצרים פעילים</div>
@@ -295,22 +296,40 @@ const Secondhand = () => {
                 <div className="text-sm text-white/80">שביעות רצון</div>
               </div>
             </div>
+
+            {/* Mobile Stats - Compact version */}
+            <div className="flex md:hidden items-center justify-center gap-4 pt-2">
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">50K+</div>
+                <div className="text-xs text-white/80">מוצרים</div>
+              </div>
+              <div className="w-px h-8 bg-white/30" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">15K+</div>
+                <div className="text-xs text-white/80">מוכרים</div>
+              </div>
+              <div className="w-px h-8 bg-white/30" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">95%</div>
+                <div className="text-xs text-white/80">שביעות רצון</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Promo Banner */}
-      <section className="py-12 bg-gradient-to-l from-accent via-secondary to-primary">
+      <section className="py-6 md:py-12 bg-gradient-to-l from-accent via-secondary to-primary">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 max-w-5xl mx-auto">
             <div className="text-center md:text-right">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+              <h2 className="text-xl md:text-4xl font-bold text-white mb-1 md:mb-2">
                 הסייל הכי משתלם קורא אצלך בבית!
               </h2>
             </div>
             <Button
               size="lg"
-              className="bg-white text-primary hover:bg-white/90 rounded-full px-8 font-bold text-lg shadow-lg"
+              className="bg-white text-primary hover:bg-white/90 rounded-full px-6 md:px-8 font-bold text-base md:text-lg shadow-lg"
             >
               למכירת פריטים
             </Button>
@@ -319,42 +338,42 @@ const Secondhand = () => {
       </section>
 
       {/* Categories Section */}
-      <section className="py-12 md:py-16 bg-white dark:bg-background">
+      <section className="py-8 md:py-16 bg-white dark:bg-background">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8 md:mb-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground">קטגוריות פופולריות</h2>
+          <div className="flex items-center justify-between mb-6 md:mb-10">
+            <h2 className="text-xl md:text-3xl font-bold text-foreground">קטגוריות פופולריות</h2>
             <Link 
               to="/secondhand/all" 
-              className="text-sm md:text-base font-semibold text-primary hover:text-primary/80 transition-colors duration-200 flex items-center gap-2"
+              className="text-sm md:text-base font-semibold text-primary hover:text-primary/80 transition-colors duration-200 flex items-center gap-1 md:gap-2"
             >
               צפה בכל
-              <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 md:w-4 md:h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6 md:gap-8 lg:gap-12 max-w-7xl mx-auto">
+          <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-8 gap-3 md:gap-8 lg:gap-12 max-w-7xl mx-auto">
             {categories.map((category) => (
               <Link
                 key={category.id}
                 to={category.link}
-                className="flex flex-col items-center gap-3 md:gap-4 group cursor-pointer transition-all duration-300"
+                className="flex flex-col items-center gap-2 md:gap-4 group cursor-pointer transition-all duration-300"
               >
-                <div className="w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:scale-105 overflow-hidden relative">
+                <div className="w-16 h-16 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:scale-105 overflow-hidden relative">
                   <img 
                     src={category.image} 
                     alt={category.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-primary/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
+                  {/* Hover overlay - Hidden on mobile */}
+                  <div className="hidden md:flex absolute inset-0 bg-primary/90 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
                     <div className="text-center text-white">
                       <div className="text-lg md:text-2xl lg:text-3xl font-bold">✨</div>
                       <div className="text-[10px] md:text-xs lg:text-sm font-medium mt-1">לחץ לצפייה</div>
                     </div>
                   </div>
                 </div>
-                <span className="text-xs md:text-sm lg:text-base font-semibold text-foreground text-center max-w-[100px] md:max-w-none group-hover:text-primary transition-colors duration-300">
+                <span className="text-[10px] md:text-sm lg:text-base font-semibold text-foreground text-center max-w-[70px] md:max-w-none group-hover:text-primary transition-colors duration-300 line-clamp-2">
                   {category.name}
                 </span>
               </Link>
@@ -364,19 +383,19 @@ const Secondhand = () => {
       </section>
 
       {/* Most Viewed Section */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-8 md:py-16 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">הכי נצפים</h2>
+          <div className="flex justify-between items-center mb-6 md:mb-8">
+            <h2 className="text-xl md:text-4xl font-bold text-foreground">הכי נצפים</h2>
             <Link
               to="/secondhand?filter=most-viewed"
-              className="text-primary hover:text-primary/80 font-medium flex items-center gap-2 transition-colors"
+              className="text-primary hover:text-primary/80 font-medium flex items-center gap-1 md:gap-2 transition-colors text-sm md:text-base"
             >
               <span>כל המומרים</span>
               <span>←</span>
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {mostViewedItems.map((item) => (
               <RecommendedCard
                 key={item.id}
@@ -434,6 +453,7 @@ const Secondhand = () => {
       </section>
 
       <Footer />
+      <MobileNav />
     </div>
   );
 };
