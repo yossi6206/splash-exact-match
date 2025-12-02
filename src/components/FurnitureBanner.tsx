@@ -4,39 +4,39 @@ import officeFurnitureHero from "@/assets/office-furniture-hero.jpg";
 
 const FurnitureBanner = () => {
   return (
-    <section className="py-8 px-4 md:px-6 max-w-7xl mx-auto">
-      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-l from-[#5B7CFF] to-[#7C5FDC] min-h-[180px] md:min-h-[200px] flex items-stretch shadow-2xl">
-        {/* Image Section - Left Side */}
-        <div className="hidden md:block w-1/2 relative">
-          <img
-            src={officeFurnitureHero}
-            alt="ריהוט משרדי איכותי"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        
-        {/* Content Section - Right Side */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-12 text-white">
-          <div className="inline-block self-start bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold mb-5">
+    <section className="py-6 md:py-8 bg-background">
+      <div className="container mx-auto px-4">
+        <div className="relative overflow-hidden rounded-xl md:rounded-2xl bg-gradient-to-l from-[#5B7CFF] to-[#7C5FDC] shadow-xl">
+          {/* Special Badge */}
+          <div className="absolute top-0 left-0 bg-white/20 backdrop-blur-sm text-white px-4 py-1.5 md:px-6 md:py-2 text-sm md:text-lg font-bold rounded-br-xl md:rounded-br-2xl z-10">
             מבצע מיוחד
           </div>
-          
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-            ריהוט איכותי במחירים שווים
-          </h2>
-          
-          <p className="text-lg md:text-xl mb-8 text-white/95 leading-relaxed">
-            עדכנו את הבית בסגנון חדש עם מגוון רהיטי יד שנייה
-          </p>
-          
-          <Link to="/secondhand?category=ריהוט">
-            <Button 
-              size="lg" 
-              className="bg-white text-[#5B7CFF] hover:bg-white/95 font-semibold text-lg px-8 py-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-            >
-              למגוון ריהוט
-            </Button>
-          </Link>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 items-center min-h-[180px] md:min-h-[200px]">
+            {/* Content */}
+            <div className="order-2 md:order-1 p-6 md:p-8 md:pr-4 text-right">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 md:mb-2">
+                ריהוט איכותי במחירים שווים
+              </h2>
+              <p className="text-lg md:text-xl lg:text-2xl text-white/90 mb-4 md:mb-6 font-medium">
+                עדכנו את הבית בסגנון חדש עם מגוון רהיטי יד שנייה
+              </p>
+              <Link to="/secondhand?category=ריהוט">
+                <Button className="bg-white text-[#5B7CFF] hover:bg-white/95 font-bold text-sm md:text-base lg:text-lg px-6 py-4 md:px-8 md:py-6 rounded-full w-full md:w-auto">
+                  למגוון ריהוט
+                </Button>
+              </Link>
+            </div>
+
+            {/* Image */}
+            <div className="order-1 md:order-2 relative h-full min-h-[150px] md:min-h-[200px]">
+              <img
+                src={officeFurnitureHero}
+                alt="ריהוט משרדי איכותי"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>
