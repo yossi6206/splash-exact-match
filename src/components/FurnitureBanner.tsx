@@ -8,7 +8,7 @@ const FurnitureBanner = () => {
       <div className="container mx-auto px-4">
         <div className="relative overflow-hidden rounded-xl md:rounded-2xl bg-gradient-to-l from-[#5B7CFF] to-[#7C5FDC] shadow-xl">
           {/* Special Badge */}
-          <div className="absolute top-0 left-0 bg-white/20 backdrop-blur-sm text-white px-4 py-1.5 md:px-6 md:py-2 text-sm md:text-lg font-bold rounded-br-xl md:rounded-br-2xl z-10">
+          <div className="absolute top-0 left-0 bg-accent text-accent-foreground px-4 py-1.5 md:px-6 md:py-2 text-sm md:text-lg font-bold rounded-br-xl md:rounded-br-2xl z-20 shadow-lg">
             מבצע מיוחד
           </div>
 
