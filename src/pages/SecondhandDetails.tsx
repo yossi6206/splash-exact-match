@@ -440,83 +440,41 @@ const SecondhandDetails = () => {
                     <MessageSquare className="h-4 w-4 ml-2" />
                     שלח הודעה למוכר
                   </Button>
-                  
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button variant="outline" size="lg">
-                      <Heart className="ml-2 h-5 w-5" />
-                      שמור
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="lg"
-                      onClick={async () => {
-                        try {
-                          await navigator.share({
-                            title: item.title,
-                            text: `${item.title} - ₪${item.price.toLocaleString()}`,
-                            url: window.location.href,
-                          });
-                          
-                          // Increment clicks count for share
-                          await supabase
-                            .from("secondhand_items")
-                            .update({ clicks_count: (item.clicks_count || 0) + 1 })
-                            .eq("id", id);
-                        } catch (error) {
-                          // Fallback for browsers that don't support share
-                          navigator.clipboard.writeText(window.location.href);
-                          toast.success("הקישור הועתק ללוח");
-                        }
-                      }}
-                    >
-                      <Share2 className="ml-2 h-5 w-5" />
-                      שתף
-                    </Button>
-                  </div>
                 </div>
 
-                <Separator />
-
-                {/* Seller Info */}
-                <div className="space-y-2">
-                  <h3 className="font-semibold">פרטי המוכר</h3>
-                  <div className="text-sm space-y-1">
-                    {item.seller_name && (
-                      <p>
-                        <span className="text-muted-foreground">שם:</span>{" "}
-                        {item.seller_name}
-                      </p>
-                    )}
-                    {item.seller_phone && showPhone && (
-                      <p>
-                        <span className="text-muted-foreground">טלפון:</span>{" "}
-                        <a 
-                          href={`tel:${item.seller_phone}`}
-                          className="font-bold text-foreground hover:text-primary transition-colors"
-                          dir="ltr"
-                        >
-                          {item.seller_phone}
-                        </a>
-                      </p>
-                    )}
-                  </div>
-                  {item.user_id && (
-                    <Link to={`/seller/${item.user_id}`}>
-                      <Button variant="outline" size="sm" className="w-full mt-2">
-                        צפה בפרופיל המוכר
-                      </Button>
-                    </Link>
-                  )}
-                </div>
-
-                <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
-                  <div className="flex gap-2">
-                    <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-                    <div className="text-sm text-amber-800 dark:text-amber-200">
-                      <p className="font-semibold mb-1">טיפ בטיחות</p>
-                      <p>תמיד פגשו במקום ציבורי ובדקו את המוצר לפני התשלום</p>
+                <div className="mt-6 pt-6 border-t">
+                  <h3 className="font-semibold mb-3">פרטי המפרסם</h3>
+                  {item.seller_name || item.seller_phone ? (
+                    <div className="space-y-3">
+                      {item.seller_name && (
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                            <span className="font-bold text-primary">{item.seller_name.charAt(0)}</span>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-foreground">{item.seller_name}</div>
+                            <div className="text-sm text-muted-foreground">מפרסם פרטי</div>
+                          </div>
+                        </div>
+                      )}
+                      {item.seller_phone && showPhone && (
+                        <div className="pt-3 border-t border-border">
+                          <div className="text-sm text-muted-foreground mb-1">טלפון</div>
+                          <a 
+                            href={`tel:${item.seller_phone}`}
+                            className="text-lg font-bold text-foreground hover:text-primary transition-colors"
+                            dir="ltr"
+                          >
+                            {item.seller_phone}
+                          </a>
+                        </div>
+                      )}
                     </div>
-                  </div>
+                  ) : (
+                    <div className="text-sm text-muted-foreground">
+                      צור קשר דרך הכפתורים למעלה
+                    </div>
+                  )}
                 </div>
               </div>
             </Card>

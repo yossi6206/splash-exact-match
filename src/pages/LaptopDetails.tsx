@@ -449,65 +449,43 @@ const LaptopDetails = () => {
                     שלח הודעה למוכר
                   </Button>
                 </div>
+
+                <div className="mt-6 pt-6 border-t">
+                  <h3 className="font-semibold mb-3">פרטי המפרסם</h3>
+                  {laptop.seller_name || laptop.seller_phone ? (
+                    <div className="space-y-3">
+                      {laptop.seller_name && (
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                            <span className="font-bold text-primary">{laptop.seller_name.charAt(0)}</span>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-foreground">{laptop.seller_name}</div>
+                            <div className="text-sm text-muted-foreground">מפרסם פרטי</div>
+                          </div>
+                        </div>
+                      )}
+                      {laptop.seller_phone && showPhone && (
+                        <div className="pt-3 border-t border-border">
+                          <div className="text-sm text-muted-foreground mb-1">טלפון</div>
+                          <a 
+                            href={`tel:${laptop.seller_phone}`}
+                            className="text-lg font-bold text-foreground hover:text-primary transition-colors"
+                            dir="ltr"
+                          >
+                            {laptop.seller_phone}
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-muted-foreground">
+                      צור קשר דרך הכפתורים למעלה
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
-
-            {/* Seller Info */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">פרטי המוכר</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {laptop.seller_name || laptop.seller_phone ? (
-                  <div className="space-y-3">
-                    {laptop.seller_name && (
-                      <div className="flex items-start gap-3">
-                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
-                          {laptop.seller_name.charAt(0)}
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-semibold">{laptop.seller_name}</div>
-                          <div className="text-sm text-muted-foreground">מוכר פרטי</div>
-                        </div>
-                      </div>
-                    )}
-                    {laptop.seller_phone && showPhone && (
-                      <div className="pt-3 border-t border-border">
-                        <div className="text-sm text-muted-foreground mb-1">טלפון</div>
-                        <a 
-                          href={`tel:${laptop.seller_phone}`}
-                          className="text-lg font-bold text-foreground hover:text-primary transition-colors"
-                          dir="ltr"
-                        >
-                          {laptop.seller_phone}
-                        </a>
-                      </div>
-                    )}
-                {laptop.seller_name && (
-                  <>
-                    <Separator />
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">חבר מאז</span>
-                        <span className="font-semibold">{new Date(laptop.created_at).getFullYear()}</span>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-start gap-3">
-                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
-                  M
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold">מוכר פרטי</div>
-                  <div className="text-sm text-muted-foreground">צור קשר דרך הטופס</div>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
 
             {/* Safety Tips */}
             <Card className="bg-muted/30">
