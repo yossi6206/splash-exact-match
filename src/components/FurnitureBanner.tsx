@@ -5,7 +5,7 @@ import officeFurnitureHero from "@/assets/office-furniture-hero.jpg";
 const FurnitureBanner = () => {
   return (
     <section className="py-8 px-4 md:px-6 max-w-7xl mx-auto">
-      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-l from-[#5B7CFF] to-[#7C5FDC] min-h-[320px] md:min-h-[380px] flex items-stretch shadow-2xl">
+      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-l from-[#5B7CFF] to-[#7C5FDC] min-h-[180px] md:min-h-[200px] flex items-stretch shadow-2xl">
         {/* Image Section - Left Side */}
         <div className="hidden md:block w-1/2 relative">
           <img
