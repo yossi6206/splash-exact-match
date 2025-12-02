@@ -711,7 +711,7 @@ const Header = () => {
               <Button 
                 variant="ghost" 
                 className="hidden md:flex items-center gap-2"
-                onClick={() => navigate("/dashboard/profile")}
+                onClick={() => navigate("/dashboard/post-wizard")}
               >
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary/10 text-sm">
