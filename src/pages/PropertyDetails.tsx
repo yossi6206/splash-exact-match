@@ -345,7 +345,7 @@ const PropertyDetails = () => {
                       </div>
                     )}
                     {property.seller_phone && (
-                      <div className="pt-3 border-t border-border">
+                      <div className="pt-3 border-t border-border space-y-3">
                         {!showPhone ? (
                           <Button 
                             variant="outline" 
@@ -356,16 +356,31 @@ const PropertyDetails = () => {
                             הצג מספר טלפון
                           </Button>
                         ) : (
-                          <Button 
-                            variant="outline" 
-                            className="w-full"
-                            asChild
-                          >
-                            <a href={`tel:${property.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
-                              <Phone className="h-4 w-4 ml-2" />
-                              <span className="font-bold">{property.seller_phone}</span>
-                            </a>
-                          </Button>
+                          <>
+                            <Button 
+                              variant="outline" 
+                              className="w-full"
+                              asChild
+                            >
+                              <a href={`tel:${property.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
+                                <Phone className="h-4 w-4 ml-2" />
+                                <span className="font-bold">{property.seller_phone}</span>
+                              </a>
+                            </Button>
+                            <Button 
+                              className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                              asChild
+                            >
+                              <a 
+                                href={`https://wa.me/972${property.seller_phone.replace(/^0/, '').replace(/\D/g, '')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <MessageSquare className="h-4 w-4 ml-2" />
+                                שלח הודעה בוואטסאפ
+                              </a>
+                            </Button>
+                          </>
                         )}
                       </div>
                     )}
