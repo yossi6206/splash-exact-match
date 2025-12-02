@@ -1,13 +1,16 @@
 import { useState, useEffect, useMemo } from "react";
 import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
+import MobileNav from "@/components/MobileNav";
 import Footer from "@/components/Footer";
 import PropertyCard from "@/components/PropertyCard";
 import { PropertySidebarFilter, PropertyFilters as PropertySidebarFilters } from "@/components/PropertySidebarFilter";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, Filter, Home } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useSaveSearch } from "@/hooks/useSaveSearch";
@@ -249,7 +252,7 @@ const Properties = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
       <MobileHeader />
       <Header />
       
@@ -293,8 +296,8 @@ const Properties = () => {
               )}
             </div>
 
-            {/* Quick Stats */}
-            <div className="flex items-center justify-center gap-8 pt-4">
+            {/* Quick Stats - Desktop */}
+            <div className="hidden md:flex items-center justify-center gap-8 pt-4">
               <div className="text-center">
                 <div className="text-3xl font-bold text-white">{properties.length}+</div>
                 <div className="text-sm text-white/80">נכסים זמינים</div>
@@ -310,25 +313,64 @@ const Properties = () => {
                 <div className="text-sm text-white/80">תוצאות</div>
               </div>
             </div>
+
+            {/* Quick Stats - Mobile */}
+            <div className="flex md:hidden items-center justify-center gap-4 pt-2">
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">{properties.length}+</div>
+                <div className="text-xs text-white/80">נכסים</div>
+              </div>
+              <div className="w-px h-8 bg-white/30" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">{Object.keys(filterCounts.cities).length}+</div>
+                <div className="text-xs text-white/80">ערים</div>
+              </div>
+              <div className="w-px h-8 bg-white/30" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">{filteredProperties.length}</div>
+                <div className="text-xs text-white/80">תוצאות</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <main className="container mx-auto px-4 py-6">
+      <main className="container mx-auto px-4 py-4 md:py-6">
         {/* Category Tabs - Hidden since we now have filter tags in hero */}
         
         {/* Results Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0 mb-4 md:mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">נכסים למכירה</h2>
-            <p className="text-muted-foreground">{filteredProperties.length.toLocaleString()} תוצאות</p>
+            <h2 className="text-lg md:text-2xl font-bold text-foreground mb-1 flex items-center gap-2">
+              <Home className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+              נכסים למכירה
+            </h2>
+            <p className="text-sm md:text-base text-muted-foreground">{filteredProperties.length.toLocaleString()} תוצאות</p>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Mobile Filter Button */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="lg:hidden">
+                  <Filter className="w-4 h-4 ml-2" />
+                  סינון
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle>סינון נכסים</SheetTitle>
+                </SheetHeader>
+                <div className="mt-4">
+                  <PropertySidebarFilter onFilterChange={handleSidebarFilterChange} counts={filterCounts} />
+                </div>
+              </SheetContent>
+            </Sheet>
+
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">מיון לפי</span>
+              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">מיון לפי</span>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-40 bg-background">
+                <SelectTrigger className="w-32 md:w-40 bg-background text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -344,8 +386,10 @@ const Properties = () => {
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
-          {/* Sidebar - Right side for RTL */}
-          <PropertySidebarFilter onFilterChange={handleSidebarFilterChange} counts={filterCounts} />
+          {/* Sidebar - Hidden on mobile, shown in sheet */}
+          <div className="hidden lg:block">
+            <PropertySidebarFilter onFilterChange={handleSidebarFilterChange} counts={filterCounts} />
+          </div>
           
           {/* Properties List */}
           <div className="space-y-4">
@@ -408,6 +452,7 @@ const Properties = () => {
       </main>
 
       <Footer />
+      <MobileNav />
     </div>
   );
 };
