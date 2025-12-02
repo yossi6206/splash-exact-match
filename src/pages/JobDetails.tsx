@@ -24,6 +24,10 @@ import {
   FileText,
   Upload,
   ArrowRight,
+  Shield,
+  Eye,
+  FileCheck,
+  AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -589,6 +593,44 @@ const JobDetails = () => {
               <Button variant="outline" className="w-full" asChild>
                 <Link to={`/company/${id}`}>עוד משרות בחברה</Link>
               </Button>
+            </Card>
+
+            {/* Safety Tips */}
+            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+              <div className="p-6">
+                <div className="flex items-center gap-2 mb-4 text-right">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Shield className="h-4 w-4 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-lg">טיפים לעסקה בטוחה</h3>
+                </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <Users className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">וודאו את אמינות המעסיק</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <Eye className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">קראו היטב את תנאי המשרה</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <AlertCircle className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">היזהרו מהצעות מפוקפקות</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <FileCheck className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">דרשו חוזה עבודה מפורט</span>
+                  </li>
+                </ul>
+              </div>
             </Card>
           </div>
         </div>

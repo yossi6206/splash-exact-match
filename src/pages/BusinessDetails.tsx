@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MapPin, Calendar, Users, TrendingUp, Building2, Phone, MessageSquare, Loader2, Maximize2, ChevronLeft, ChevronRight, DollarSign, Clock, FileText } from "lucide-react";
+import { Heart, MapPin, Calendar, Users, TrendingUp, Building2, Phone, MessageSquare, Loader2, Maximize2, ChevronLeft, ChevronRight, DollarSign, Clock, FileText, Shield, Eye, FileCheck, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
@@ -493,6 +493,44 @@ const BusinessDetails = () => {
                   <div className="text-xl font-bold text-foreground">{business.contacts_count || 0}</div>
                   <div className="text-xs text-muted-foreground">יצירות קשר</div>
                 </div>
+              </div>
+            </Card>
+
+            {/* Safety Tips */}
+            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+              <div className="p-6">
+                <div className="flex items-center gap-2 mb-4 text-right">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Shield className="h-4 w-4 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-lg">טיפים לעסקה בטוחה</h3>
+                </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <Users className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">פגשו במקום ציבורי ובטוח</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <Eye className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">בדקו את העסק לפני התשלום</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <AlertCircle className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">אל תשלמו מראש ללא בדיקה</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                      <FileCheck className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">דרשו אישור עסקה בכתב</span>
+                  </li>
+                </ul>
               </div>
             </Card>
 

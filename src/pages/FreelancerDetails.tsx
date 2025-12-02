@@ -24,7 +24,12 @@ import {
   Phone,
   Globe,
   ArrowRight,
-  ChevronRight
+  ChevronRight,
+  Shield,
+  Users,
+  Eye,
+  FileCheck,
+  AlertCircle
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import FreelancerReviewStats from "@/components/freelancer-reviews/FreelancerReviewStats";
@@ -587,6 +592,46 @@ const FreelancerDetails = () => {
             </div>
           </div>
         </section>
+      </div>
+
+      {/* Safety Tips */}
+      <div className="container mx-auto px-4 pb-12">
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 max-w-4xl mx-auto">
+          <div className="p-6">
+            <div className="flex items-center gap-2 mb-4 text-right">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                <Shield className="h-4 w-4 text-primary" />
+              </div>
+              <h3 className="font-semibold text-lg">טיפים לשיתוף פעולה בטוח</h3>
+            </div>
+            <ul className="space-y-3">
+              <li className="flex items-start gap-3 text-sm">
+                <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                  <Users className="h-3.5 w-3.5 text-primary" />
+                </div>
+                <span className="text-foreground/80 text-right leading-relaxed">קיימו פגישת הכרות ראשונית</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm">
+                <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                  <Eye className="h-3.5 w-3.5 text-primary" />
+                </div>
+                <span className="text-foreground/80 text-right leading-relaxed">בדקו עבודות קודמות ולקוחות מרוצים</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm">
+                <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                  <AlertCircle className="h-3.5 w-3.5 text-primary" />
+                </div>
+                <span className="text-foreground/80 text-right leading-relaxed">הסכימו על תנאים וסכום מראש</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm">
+                <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
+                  <FileCheck className="h-3.5 w-3.5 text-primary" />
+                </div>
+                <span className="text-foreground/80 text-right leading-relaxed">חתמו על הסכם שירות מפורט</span>
+              </li>
+            </ul>
+          </div>
+        </Card>
       </div>
 
       <Footer />
