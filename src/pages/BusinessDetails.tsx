@@ -411,6 +411,26 @@ const BusinessDetails = () => {
                   </div>
                 )}
               </div>
+              
+              <Button 
+                className="w-full"
+                size="lg"
+                variant="outline"
+                onClick={() => {
+                  if (!user) {
+                    toast({
+                      title: "נדרשת התחברות",
+                      description: "יש להתחבר כדי לשלוח הודעות",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+                  window.location.href = `/messages?seller=${business.user_id}&item=${business.id}`;
+                }}
+              >
+                <MessageSquare className="h-4 w-4 ml-2" />
+                שלח הודעה דרך המערכת
+              </Button>
 
               <div className="mt-6 pt-6 border-t">
                 <h3 className="font-semibold mb-3">פרטי המפרסם</h3>
