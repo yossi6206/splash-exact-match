@@ -22,17 +22,17 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 const menuItems = [
-  { title: "פרסום מודעה חדשה", icon: PlusCircle, path: "/dashboard/post-wizard", color: "text-green-500", bgColor: "bg-green-100" },
-  { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads", color: "text-blue-500", bgColor: "bg-blue-100" },
-  { title: "קידום מודעות", icon: Sparkles, path: "/dashboard/promote", color: "text-amber-500", bgColor: "bg-amber-100" },
-  { title: "ניתוח קידום מתקדם", icon: TrendingUp, path: "/dashboard/promotion-analytics", color: "text-purple-500", bgColor: "bg-purple-100" },
-  { title: "הודעות", icon: MessageSquare, path: "/messages", color: "text-cyan-500", bgColor: "bg-cyan-100" },
-  { title: "פרסם פרופיל פרילנסר", icon: Edit3, path: "/dashboard/post-freelancer", color: "text-orange-500", bgColor: "bg-orange-100" },
-  { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile", color: "text-slate-500", bgColor: "bg-slate-100" },
-  { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats", color: "text-indigo-500", bgColor: "bg-indigo-100" },
-  { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved", color: "text-rose-500", bgColor: "bg-rose-100" },
-  { title: "חיפושים אחרונים", icon: Search, path: "/dashboard/searches", color: "text-teal-500", bgColor: "bg-teal-100" },
-  { title: "טיפים ומידע", icon: Lightbulb, path: "/dashboard/tips", color: "text-yellow-500", bgColor: "bg-yellow-100" },
+  { title: "פרסום מודעה חדשה", icon: PlusCircle, path: "/dashboard/post-wizard", color: "text-emerald-600", bgColor: "bg-gradient-to-br from-emerald-100 to-emerald-200" },
+  { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads", color: "text-blue-600", bgColor: "bg-gradient-to-br from-blue-100 to-blue-200" },
+  { title: "קידום מודעות", icon: Sparkles, path: "/dashboard/promote", color: "text-amber-600", bgColor: "bg-gradient-to-br from-amber-100 to-amber-200" },
+  { title: "ניתוח קידום מתקדם", icon: TrendingUp, path: "/dashboard/promotion-analytics", color: "text-violet-600", bgColor: "bg-gradient-to-br from-violet-100 to-violet-200" },
+  { title: "הודעות", icon: MessageSquare, path: "/messages", color: "text-sky-600", bgColor: "bg-gradient-to-br from-sky-100 to-sky-200" },
+  { title: "פרסם פרופיל פרילנסר", icon: Edit3, path: "/dashboard/post-freelancer", color: "text-orange-600", bgColor: "bg-gradient-to-br from-orange-100 to-orange-200" },
+  { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile", color: "text-slate-600", bgColor: "bg-gradient-to-br from-slate-100 to-slate-200" },
+  { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats", color: "text-indigo-600", bgColor: "bg-gradient-to-br from-indigo-100 to-indigo-200" },
+  { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved", color: "text-rose-600", bgColor: "bg-gradient-to-br from-rose-100 to-rose-200" },
+  { title: "חיפושים אחרונים", icon: Search, path: "/dashboard/searches", color: "text-teal-600", bgColor: "bg-gradient-to-br from-teal-100 to-teal-200" },
+  { title: "טיפים ומידע", icon: Lightbulb, path: "/dashboard/tips", color: "text-yellow-600", bgColor: "bg-gradient-to-br from-yellow-100 to-yellow-200" },
 ];
 
 export const DashboardSidebar = () => {
@@ -83,8 +83,8 @@ export const DashboardSidebar = () => {
                 activeClassName="bg-primary/10 text-primary shadow-sm border-r-4 border-primary"
               >
                 <span className="font-medium flex-1 text-sm">{item.title}</span>
-                <div className={`w-9 h-9 rounded-lg ${item.bgColor} flex items-center justify-center group-hover:scale-105 transition-all`}>
-                  <item.icon className={`h-4 w-4 ${item.color}`} />
+                <div className={`w-10 h-10 rounded-xl ${item.bgColor} flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-200`}>
+                  <item.icon className={`h-5 w-5 ${item.color}`} />
                 </div>
               </NavLink>
             </li>
@@ -97,31 +97,31 @@ export const DashboardSidebar = () => {
         <Link to="/">
           <Button 
             variant="secondary" 
-            className="w-full justify-between h-10 text-sm"
+            className="w-full justify-between h-11 text-sm"
           >
             <span>חזרה לדף הבית</span>
-            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-              <Home className="h-4 w-4 text-blue-500" />
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center shadow-sm">
+              <Home className="h-4 w-4 text-blue-600" />
             </div>
           </Button>
         </Link>
         <Button 
           variant="secondary" 
-          className="w-full justify-between h-10 text-sm"
+          className="w-full justify-between h-11 text-sm"
         >
           <span>צור קשר</span>
-          <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
-            <Phone className="h-4 w-4 text-green-500" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center shadow-sm">
+            <Phone className="h-4 w-4 text-emerald-600" />
           </div>
         </Button>
         <Button 
           variant="ghost" 
-          className="w-full justify-between text-destructive hover:bg-destructive/10 hover:text-destructive h-10 text-sm"
+          className="w-full justify-between text-destructive hover:bg-destructive/10 hover:text-destructive h-11 text-sm"
           onClick={signOut}
         >
           <span>התנתקות</span>
-          <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
-            <LogOut className="h-4 w-4 text-red-500" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center shadow-sm">
+            <LogOut className="h-4 w-4 text-red-600" />
           </div>
         </Button>
       </div>
