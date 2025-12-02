@@ -152,8 +152,8 @@ const Auth = () => {
       {/* Logo */}
       <div className="absolute top-6 right-6">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
-            <span className="text-lg font-extrabold text-primary-foreground">yad2</span>
+          <div className="flex h-10 w-auto px-3 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
+            <span className="text-sm font-extrabold text-primary-foreground">SecondHandPro</span>
           </div>
         </Link>
       </div>
