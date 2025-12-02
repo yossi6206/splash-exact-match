@@ -167,8 +167,14 @@ serve(async (req) => {
 
     console.log("Reset link generated successfully");
 
-    // Extract the reset link
-    const resetLink = data.properties.action_link;
+    // Extract token from action_link and build custom link
+    const actionLink = data.properties.action_link;
+    const urlParams = new URL(actionLink);
+    const token = urlParams.searchParams.get('token');
+    const type = urlParams.searchParams.get('type');
+    
+    // Build custom reset link pointing directly to your domain
+    const resetLink = `https://secondhandpro.co.il/reset-password?token=${token}&type=${type}`;
     
     // Generate the HTML email
     console.log("Generating custom branded email...");
