@@ -296,9 +296,9 @@ const MyAds = () => {
 
   const renderListingCard = (listing: Listing) => (
     <Card key={listing.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="flex flex-col">
+      <div className="flex flex-row-reverse">
         {/* Image */}
-        <div className="relative aspect-[16/9] bg-muted">
+        <div className="relative w-28 h-28 sm:w-36 sm:h-36 flex-shrink-0 bg-muted">
           {listing.images && listing.images[0] ? (
             <img
               src={listing.images[0]}
@@ -310,100 +310,86 @@ const MyAds = () => {
               {getTypeIcon(listing.type)}
             </div>
           )}
-          <Badge className="absolute top-2 right-2 bg-background/90 text-foreground">
+          <Badge className="absolute top-1 right-1 text-[10px] px-1.5 py-0.5 bg-background/90 text-foreground">
             {getTypeName(listing.type)}
-          </Badge>
-          <Badge 
-            variant={listing.status === 'active' ? 'default' : 'secondary'}
-            className="absolute top-2 left-2"
-          >
-            {listing.status === 'active' ? 'פעיל' : 'לא פעיל'}
           </Badge>
         </div>
 
         {/* Content */}
-        <div className="p-4">
-          <h3 className="text-base font-bold text-foreground line-clamp-1 mb-2">
-            {listing.title || 'ללא כותרת'}
-          </h3>
-
-          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-            <div className="flex items-center gap-1">
-              <MapPin className="h-3 w-3" />
-              <span className="line-clamp-1">{listing.location}</span>
+        <div className="flex-1 p-3 flex flex-col justify-between min-w-0">
+          <div>
+            <div className="flex items-start justify-between gap-1 mb-1">
+              <h3 className="text-sm font-bold text-foreground line-clamp-1">
+                {listing.title || 'ללא כותרת'}
+              </h3>
+              <Badge 
+                variant={listing.status === 'active' ? 'default' : 'secondary'}
+                className="text-[10px] px-1.5 py-0 flex-shrink-0"
+              >
+                {listing.status === 'active' ? 'פעיל' : 'לא פעיל'}
+              </Badge>
             </div>
-            <div className="flex items-center gap-1">
-              <Calendar className="h-3 w-3" />
-              <span>{new Date(listing.created_at).toLocaleDateString('he-IL')}</span>
+
+            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+              <div className="flex items-center gap-0.5">
+                <MapPin className="h-3 w-3" />
+                <span className="line-clamp-1">{listing.location}</span>
+              </div>
+            </div>
+
+            <div className="text-base font-bold text-primary">
+              {listing.type === 'job' 
+                ? `₪${listing.price}` 
+                : listing.type === 'freelancer'
+                ? `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}/שעה`
+                : `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}`
+              }
             </div>
           </div>
 
-          <div className="text-xl font-bold text-primary mb-3">
-            {listing.type === 'job' 
-              ? `₪${listing.price}` 
-              : listing.type === 'freelancer'
-              ? `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price} לשעה`
-              : `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}`
-            }
-          </div>
-
-          {/* Statistics */}
-          <div className="grid grid-cols-3 gap-2 p-2 bg-muted/30 rounded-lg mb-3">
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
-                <Eye className="h-3 w-3" />
-                <span>צפיות</span>
-              </div>
-              <div className="text-sm font-bold text-foreground">
-                {listing.views_count || 0}
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
-                <MousePointer className="h-3 w-3" />
-                <span>לחיצות</span>
-              </div>
-              <div className="text-sm font-bold text-foreground">
-                {listing.clicks_count || 0}
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
-                <Phone className="h-3 w-3" />
-                <span>{listing.type === 'job' ? 'מועמדים' : 'פניות'}</span>
-              </div>
-              <div className="text-sm font-bold text-foreground">
-                {listing.type === 'job' ? (listing.applicants_count || 0) : (listing.contacts_count || 0)}
-              </div>
-            </div>
+          {/* Stats Row */}
+          <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
+            <span className="flex items-center gap-0.5">
+              <Eye className="h-3 w-3" />
+              {listing.views_count || 0}
+            </span>
+            <span className="flex items-center gap-0.5">
+              <MousePointer className="h-3 w-3" />
+              {listing.clicks_count || 0}
+            </span>
+            <span className="flex items-center gap-0.5">
+              <Phone className="h-3 w-3" />
+              {listing.type === 'job' ? (listing.applicants_count || 0) : (listing.contacts_count || 0)}
+            </span>
           </div>
 
           {/* Actions */}
-          <div className="flex gap-2">
+          <div className="flex gap-1.5 mt-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => navigate(getViewUrl(listing))}
-              className="flex-1"
+              className="flex-1 h-7 text-xs px-2"
             >
-              <Eye className="h-4 w-4 ml-1" />
+              <Eye className="h-3 w-3 ml-1" />
               צפייה
             </Button>
             <Button
               variant="outline"
               size="sm"
-              className="flex-1"
+              className="flex-1 h-7 text-xs px-2"
               disabled
             >
-              <Edit className="h-4 w-4 ml-1" />
+              <Edit className="h-3 w-3 ml-1" />
               עריכה
             </Button>
             <Button
               variant="destructive"
               size="sm"
               onClick={() => setDeleteId({ id: listing.id, type: listing.type })}
+              className="h-7 w-7 p-0"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-3 w-3" />
             </Button>
           </div>
         </div>
