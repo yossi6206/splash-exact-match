@@ -357,13 +357,35 @@ const CarDetails = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <Button 
-                    className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-12 text-lg font-semibold gap-2"
-                    onClick={handleContactClick}
-                  >
-                    <Phone className="h-5 w-5" />
-                    הצעת מספר טלפון
-                  </Button>
+                  {carData.seller_phone ? (
+                    !showPhone ? (
+                      <Button 
+                        className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-12 text-lg font-semibold gap-2"
+                        onClick={handleShowPhone}
+                      >
+                        <Phone className="h-5 w-5" />
+                        הצעת מספר טלפון
+                      </Button>
+                    ) : (
+                      <Button 
+                        className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-12 text-lg font-semibold gap-2"
+                        asChild
+                      >
+                        <a href={`tel:${carData.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
+                          <Phone className="h-5 w-5" />
+                          <span className="font-bold">{carData.seller_phone}</span>
+                        </a>
+                      </Button>
+                    )
+                  ) : (
+                    <Button 
+                      className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-12 text-lg font-semibold gap-2"
+                      onClick={handleContactClick}
+                    >
+                      <Phone className="h-5 w-5" />
+                      הצעת מספר טלפון
+                    </Button>
+                  )}
                   <Button 
                     variant="outline" 
                     className="w-full h-12 text-lg font-semibold gap-2 border-2"
@@ -398,29 +420,13 @@ const CarDetails = () => {
                         </div>
                       </div>
                     )}
-                    {carData.seller_phone && (
+                    {carData.seller_phone && showPhone && (
                       <div className="pt-3 border-t border-border">
-                        {!showPhone ? (
-                          <Button 
-                            variant="outline" 
-                            className="w-full"
-                            onClick={handleShowPhone}
-                          >
-                            <Phone className="h-4 w-4 ml-2" />
-                            הצג מספר טלפון
-                          </Button>
-                        ) : (
-                          <Button 
-                            variant="outline" 
-                            className="w-full"
-                            asChild
-                          >
-                            <a href={`tel:${carData.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
-                              <Phone className="h-4 w-4 ml-2" />
-                              <span className="font-bold">{carData.seller_phone}</span>
-                            </a>
-                          </Button>
-                        )}
+                        <div className="text-center" dir="ltr">
+                          <a href={`tel:${carData.seller_phone}`} className="text-lg font-bold text-primary hover:underline">
+                            {carData.seller_phone}
+                          </a>
+                        </div>
                       </div>
                     )}
                   </div>
