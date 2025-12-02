@@ -59,7 +59,7 @@ const MobileHeader = () => {
                 to="/"
                 className="block px-4 py-3 text-lg font-medium hover:bg-muted rounded-lg transition-colors"
               >
-                דרושים IL
+                דרושים
               </Link>
             </nav>
           </SheetContent>

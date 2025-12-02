@@ -211,7 +211,7 @@ const megaMenuData: MegaMenuData = {
       }
     ]
   },
-  "דרושים IL": {
+  "דרושים": {
     columns: [
       {
         title: "היי-טק וטכנולוגיה",
@@ -506,18 +506,18 @@ const Header = () => {
 
               <div 
                 className="relative"
-                onMouseEnter={() => setHoveredMenu("דרושים IL")}
+                onMouseEnter={() => setHoveredMenu("דרושים")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
                 <Button variant="ghost" className="text-sm font-medium" asChild>
-                  <Link to="/jobs">דרושים IL</Link>
+                  <Link to="/jobs">דרושים</Link>
                 </Button>
                 
-                {hoveredMenu === "דרושים IL" && megaMenuData["דרושים IL"] && (
+                {hoveredMenu === "דרושים" && megaMenuData["דרושים"] && (
                   <div className="absolute top-full right-0 pt-2 z-50">
                     <div className="bg-white border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)' }}>
                       <div className="grid grid-cols-5 gap-6">
-                        {megaMenuData["דרושים IL"].columns.map((column, index) => (
+                        {megaMenuData["דרושים"].columns.map((column, index) => (
                           <div key={index}>
                             <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20 group">
                               <column.icon className="h-4 w-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
