@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import carImage1 from "@/assets/item-car.jpg";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
+import MobileNav from "@/components/MobileNav";
 import FinanceCalculator from "@/components/FinanceCalculator";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
@@ -197,46 +198,46 @@ const CarDetails = () => {
       <MobileHeader />
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
+      <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-4 sm:gap-8">
           {/* Main Content */}
           <div>
             {/* Image Gallery */}
-            <div className="mb-6">
-              <div className="relative rounded-2xl overflow-hidden mb-4 bg-muted">
+            <div className="mb-4 sm:mb-6">
+              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden mb-3 sm:mb-4 bg-muted">
                 <img 
                   src={mainImage} 
                   alt="רכב"
-                  className="w-full h-[500px] object-cover"
+                  className="w-full h-[280px] sm:h-[400px] lg:h-[500px] object-cover"
                 />
-                 <div className="absolute top-4 left-4 flex gap-2">
-                <Button 
-                  variant="outline"
-                  size="icon" 
-                  className="rounded-full border-2"
-                  onClick={async () => {
-                    if (!user) {
-                      toast({
-                        title: "נדרשת התחברות",
-                        description: "יש להתחבר כדי לסמן רכבים כמועדפים",
-                        variant: "destructive"
-                      });
-                      return;
-                    }
-                    // TODO: Implement favorite toggle
-                  }}
-                >
-                  <Heart className="h-5 w-5" />
-                </Button>
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex gap-2">
+                  <Button 
+                    variant="outline"
+                    size="icon" 
+                    className="rounded-full border-2 h-9 w-9 sm:h-10 sm:w-10 bg-background/80 backdrop-blur-sm"
+                    onClick={async () => {
+                      if (!user) {
+                        toast({
+                          title: "נדרשת התחברות",
+                          description: "יש להתחבר כדי לסמן רכבים כמועדפים",
+                          variant: "destructive"
+                        });
+                        return;
+                      }
+                      // TODO: Implement favorite toggle
+                    }}
+                  >
+                    <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
+                  </Button>
                 </div>
-                <Badge className="absolute bottom-4 right-4 bg-foreground/80 text-background text-sm px-4 py-2">
+                <Badge className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 bg-foreground/80 text-background text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2">
                   תמונה 1 מתוך {images.length}
                 </Badge>
               </div>
               
               {/* Thumbnail Images */}
-              <div className="grid grid-cols-3 gap-3">
-                {images.map((img, index) => (
+              <div className="grid grid-cols-4 sm:grid-cols-3 gap-2 sm:gap-3">
+                {images.slice(0, 4).map((img, index) => (
                   <div 
                     key={index}
                     onClick={() => setMainImage(img)}
@@ -245,26 +246,116 @@ const CarDetails = () => {
                     <img 
                       src={img} 
                       alt={`תמונה ${index + 1}`}
-                      className="w-full h-32 object-cover"
+                      className="w-full h-16 sm:h-24 lg:h-32 object-cover"
                     />
                   </div>
                 ))}
               </div>
             </div>
 
+            {/* Mobile Price Card - Shows only on mobile */}
+            <Card className="mb-4 border-border lg:hidden">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-2xl font-bold text-foreground">
+                    {carDetails.price === "לא ציין מחיר" || !carDetails.price 
+                      ? "לא ציין מחיר" 
+                      : `${parseFloat(carDetails.price.replace(/,/g, "")).toLocaleString('he-IL')} ₪`}
+                  </div>
+                  <div className="flex gap-2">
+                    <ShareMenu 
+                      title={`${carDetails.manufacturer} ${carDetails.model}`}
+                      variant="outline"
+                    />
+                    <ReportListingDialog itemId={id!} itemType="car" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  {carData.seller_phone ? (
+                    !showPhone ? (
+                      <Button className="col-span-2" size="default" onClick={handleShowPhone}>
+                        <Phone className="ml-2 h-4 w-4" />
+                        הצג מספר טלפון
+                      </Button>
+                    ) : (
+                      <>
+                        <Button 
+                          size="default"
+                          asChild
+                        >
+                          <a href={`tel:${carData.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
+                            <Phone className="h-4 w-4" />
+                            <span className="font-bold text-sm">{carData.seller_phone}</span>
+                          </a>
+                        </Button>
+                        <Button 
+                          className="bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                          size="default"
+                          asChild
+                        >
+                          <a 
+                            href={`https://wa.me/972${carData.seller_phone.replace(/^0/, '').replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2"
+                          >
+                            <MessageSquare className="h-4 w-4" />
+                            וואטסאפ
+                          </a>
+                        </Button>
+                      </>
+                    )
+                  ) : (
+                    <div className="col-span-2 text-center p-3 bg-muted rounded-lg">
+                      <p className="text-sm text-muted-foreground">המוכר לא השאיר מספר טלפון</p>
+                    </div>
+                  )}
+                  
+                  <Button 
+                    className="col-span-2"
+                    size="default"
+                    variant="outline"
+                    onClick={() => {
+                      if (!user) {
+                        toast({
+                          title: "נדרשת התחברות",
+                          description: "יש להתחבר כדי לשלוח הודעות",
+                          variant: "destructive"
+                        });
+                        return;
+                      }
+                      if (carData.user_id === user.id) {
+                        toast({
+                          title: "שגיאה",
+                          description: "לא ניתן לשלוח הודעה לעצמך",
+                          variant: "destructive"
+                        });
+                        return;
+                      }
+                      window.location.href = `/messages?seller=${carData.user_id}&item=${carData.id}`;
+                    }}
+                  >
+                    <MessageSquare className="h-4 w-4 ml-2" />
+                    שלח הודעה למוכר
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Car Details */}
-            <Card className="mb-6 border-border">
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between mb-4">
+            <Card className="mb-4 sm:mb-6 border-border">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                   <div>
-                    <h1 className="text-3xl font-bold text-foreground mb-2">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-1 sm:mb-2">
                       {carDetails.manufacturer} {carDetails.model}
                     </h1>
-                    <p className="text-lg text-muted-foreground">
+                    <p className="text-sm sm:text-base lg:text-lg text-muted-foreground line-clamp-2 sm:line-clamp-none">
                       {carDetails.description}
                     </p>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="hidden lg:flex gap-2 flex-shrink-0">
                     <Button 
                       variant="outline"
                       size="icon"
@@ -291,58 +382,58 @@ const CarDetails = () => {
                 </div>
 
                 {/* Key Stats */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 mb-6">
-                  <div className="flex items-center gap-3 p-4 rounded-lg bg-muted">
-                    <Gauge className="h-5 w-5 text-primary" />
-                    <div>
-                      <div className="text-sm text-muted-foreground">ק״מ</div>
-                      <div className="font-bold text-foreground">{carDetails.km.toLocaleString()}</div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mt-4 sm:mt-6 mb-4 sm:mb-6">
+                  <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-muted">
+                    <Gauge className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                    <div className="min-w-0">
+                      <div className="text-xs sm:text-sm text-muted-foreground">ק״מ</div>
+                      <div className="font-bold text-foreground text-sm sm:text-base truncate">{carDetails.km.toLocaleString()}</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-4 rounded-lg bg-muted">
-                    <Hand className="h-5 w-5 text-primary" />
+                  <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-muted">
+                    <Hand className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
                     <div>
-                      <div className="text-sm text-muted-foreground">יד</div>
-                      <div className="font-bold text-foreground">{carDetails.hand}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">יד</div>
+                      <div className="font-bold text-foreground text-sm sm:text-base">{carDetails.hand}</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-4 rounded-lg bg-muted">
-                    <Calendar className="h-5 w-5 text-primary" />
+                  <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-muted">
+                    <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
                     <div>
-                      <div className="text-sm text-muted-foreground">שנה</div>
-                      <div className="font-bold text-foreground">{carDetails.year}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">שנה</div>
+                      <div className="font-bold text-foreground text-sm sm:text-base">{carDetails.year}</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-4 rounded-lg bg-muted">
-                    <MapPin className="h-5 w-5 text-primary" />
-                    <div>
-                      <div className="text-sm text-muted-foreground">מיקום</div>
-                      <div className="font-bold text-foreground">{carDetails.location}</div>
+                  <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-muted">
+                    <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                    <div className="min-w-0">
+                      <div className="text-xs sm:text-sm text-muted-foreground">מיקום</div>
+                      <div className="font-bold text-foreground text-sm sm:text-base truncate">{carDetails.location}</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Additional Info */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
-                  <div className="p-4 rounded-lg bg-muted/50">
-                    <div className="text-sm text-muted-foreground mb-1">סוג דלק</div>
-                    <div className="font-bold text-foreground">{carDetails.fuel_type}</div>
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
+                  <div className="p-3 sm:p-4 rounded-lg bg-muted/50">
+                    <div className="text-xs sm:text-sm text-muted-foreground mb-1">סוג דלק</div>
+                    <div className="font-bold text-foreground text-sm sm:text-base">{carDetails.fuel_type}</div>
                   </div>
-                  <div className="p-4 rounded-lg bg-muted/50">
-                    <div className="text-sm text-muted-foreground mb-1">תיבת הילוכים</div>
-                    <div className="font-bold text-foreground">{carDetails.transmission}</div>
+                  <div className="p-3 sm:p-4 rounded-lg bg-muted/50">
+                    <div className="text-xs sm:text-sm text-muted-foreground mb-1">תיבת הילוכים</div>
+                    <div className="font-bold text-foreground text-sm sm:text-base truncate">{carDetails.transmission}</div>
                   </div>
-                  <div className="p-4 rounded-lg bg-muted/50">
-                    <div className="text-sm text-muted-foreground mb-1">מצב</div>
-                    <div className="font-bold text-foreground">{carDetails.condition}</div>
+                  <div className="p-3 sm:p-4 rounded-lg bg-muted/50">
+                    <div className="text-xs sm:text-sm text-muted-foreground mb-1">מצב</div>
+                    <div className="font-bold text-foreground text-sm sm:text-base">{carDetails.condition}</div>
                   </div>
                 </div>
 
                 {/* Description */}
                 {carDetails.description && (
-                  <div className="border-t border-border pt-6">
-                    <h2 className="text-xl font-bold text-foreground mb-4">תיאור</h2>
-                    <p className="text-foreground leading-relaxed">
+                  <div className="border-t border-border pt-4 sm:pt-6">
+                    <h2 className="text-lg sm:text-xl font-bold text-foreground mb-3 sm:mb-4">תיאור</h2>
+                    <p className="text-foreground leading-relaxed text-sm sm:text-base">
                       {carDetails.description}
                     </p>
                   </div>
@@ -350,11 +441,11 @@ const CarDetails = () => {
 
                 {/* Features */}
                 {carDetails.features && carDetails.features.length > 0 && (
-                  <div className="border-t border-border pt-6 mt-6">
-                    <h2 className="text-xl font-bold text-foreground mb-4">ציוד ואבזור</h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div className="border-t border-border pt-4 sm:pt-6 mt-4 sm:mt-6">
+                    <h2 className="text-lg sm:text-xl font-bold text-foreground mb-3 sm:mb-4">ציוד ואבזור</h2>
+                    <div className="flex flex-wrap gap-2">
                       {carDetails.features.map((feature, index) => (
-                        <Badge key={index} variant="secondary" className="justify-center py-2">
+                        <Badge key={index} variant="secondary" className="py-1.5 px-3 text-xs sm:text-sm">
                           {feature}
                         </Badge>
                       ))}
@@ -365,8 +456,8 @@ const CarDetails = () => {
             </Card>
           </div>
 
-          {/* Sidebar */}
-          <div className="lg:sticky lg:top-24 h-fit">
+          {/* Sidebar - Hidden on mobile, content shown above */}
+          <div className="hidden lg:block lg:sticky lg:top-24 h-fit">
             {/* Price Card */}
             <Card className="mb-6 border-border">
               <CardContent className="p-6">
@@ -533,10 +624,56 @@ const CarDetails = () => {
             {/* AI Report */}
             <AIReport itemType="car" itemData={carDetails} />
           </div>
+
+          {/* Mobile Additional Content */}
+          <div className="lg:hidden space-y-4">
+            {/* Finance Calculator */}
+            {carDetails.price && carDetails.price !== "לא ציין מחיר" && (
+              <FinanceCalculator 
+                carPrice={parseFloat(carDetails.price.replace(/,/g, ""))} 
+              />
+            )}
+
+            {/* Safety Tips */}
+            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 mb-3 text-right">
+                  <div className="flex-shrink-0 w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Shield className="h-3.5 w-3.5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-base">טיפים לעסקה בטוחה</h3>
+                </div>
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2 text-xs">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-background flex items-center justify-center">
+                      <Users className="h-3 w-3 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">פגשו במקום ציבורי ובטוח</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-xs">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-background flex items-center justify-center">
+                      <Eye className="h-3 w-3 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">בדקו את הרכב לפני התשלום</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-xs">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-background flex items-center justify-center">
+                      <AlertCircle className="h-3 w-3 text-primary" />
+                    </div>
+                    <span className="text-foreground/80 text-right leading-relaxed">אל תשלמו מראש ללא בדיקה</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* AI Report */}
+            <AIReport itemType="car" itemData={carDetails} />
+          </div>
         </div>
       </main>
 
       <Footer />
+      <MobileNav />
 
       {/* AI Analysis Dialog */}
       <Dialog open={showAnalysis} onOpenChange={setShowAnalysis}>
