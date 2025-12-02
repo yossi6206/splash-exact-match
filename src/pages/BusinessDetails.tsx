@@ -463,18 +463,6 @@ const BusinessDetails = () => {
                       <MapPin className="h-4 w-4" />
                       <span>{business.location}</span>
                     </div>
-                    {business.seller_phone && showPhone && (
-                      <div className="pt-3 border-t border-border">
-                        <div className="text-sm text-muted-foreground mb-1">טלפון</div>
-                        <a 
-                          href={`tel:${business.seller_phone}`}
-                          className="text-lg font-bold text-foreground hover:text-primary transition-colors"
-                          dir="ltr"
-                        >
-                          {business.seller_phone}
-                        </a>
-                      </div>
-                    )}
                   </div>
                 ) : (
                   <div className="text-sm text-muted-foreground">

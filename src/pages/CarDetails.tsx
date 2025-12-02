@@ -470,18 +470,6 @@ const CarDetails = () => {
                         <MapPin className="h-4 w-4" />
                         <span>{carData.location}</span>
                       </div>
-                      {carData.seller_phone && showPhone && (
-                        <div className="pt-3 border-t border-border">
-                          <div className="text-sm text-muted-foreground mb-1">טלפון</div>
-                          <a 
-                            href={`tel:${carData.seller_phone}`}
-                            className="text-lg font-bold text-foreground hover:text-primary transition-colors"
-                            dir="ltr"
-                          >
-                            {carData.seller_phone}
-                          </a>
-                        </div>
-                      )}
                     </div>
                   ) : (
                     <div className="text-sm text-muted-foreground">
