@@ -438,7 +438,7 @@ const LaptopDetails = () => {
                     }}
                   >
                     <MessageSquare className="h-4 w-4 ml-2" />
-                    שלח הודעה דרך המערכת
+                    שלח הודעה למוכר
                   </Button>
                 </div>
               </CardContent>

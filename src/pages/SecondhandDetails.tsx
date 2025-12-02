@@ -434,7 +434,7 @@ const SecondhandDetails = () => {
                     }}
                   >
                     <MessageSquare className="h-4 w-4 ml-2" />
-                    שלח הודעה דרך המערכת
+                    שלח הודעה למוכר
                   </Button>
                   
                   <div className="grid grid-cols-2 gap-2">
