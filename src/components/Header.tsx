@@ -708,37 +708,18 @@ const Header = () => {
             </Button>
             
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="hidden md:flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-primary/10 text-sm">
-                        {getInitials(user.email || "")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm font-medium">{user.email?.split('@')[0]}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <div className="px-2 py-1.5 text-sm font-semibold text-right">
-                    {user.email}
-                  </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer flex items-center gap-2 justify-end" onClick={() => navigate("/dashboard")}>
-                    <span>לוח הבקרה</span>
-                    <LayoutDashboard className="h-4 w-4" />
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer flex items-center gap-2 justify-end">
-                    <span>הגדרות</span>
-                    <Settings className="h-4 w-4" />
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer text-destructive flex items-center gap-2 justify-end" onClick={signOut}>
-                    <span>התנתק</span>
-                    <LogOut className="h-4 w-4" />
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button 
+                variant="ghost" 
+                className="hidden md:flex items-center gap-2"
+                onClick={() => navigate("/dashboard/profile")}
+              >
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-primary/10 text-sm">
+                    {getInitials(user.email || "")}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-sm font-medium">{user.email?.split('@')[0]}</span>
+              </Button>
             ) : (
               <Button 
                 variant="ghost" 
