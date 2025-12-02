@@ -425,6 +425,14 @@ const BusinessDetails = () => {
                     });
                     return;
                   }
+                  if (business.user_id === user.id) {
+                    toast({
+                      title: "שגיאה",
+                      description: "לא ניתן לשלוח הודעה לעצמך",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
                   window.location.href = `/messages?seller=${business.user_id}&item=${business.id}`;
                 }}
               >
