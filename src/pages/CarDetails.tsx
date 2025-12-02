@@ -400,24 +400,27 @@ const CarDetails = () => {
                     )}
                     {carData.seller_phone && (
                       <div className="pt-3 border-t border-border">
-                        <Button 
-                          variant="outline" 
-                          className="w-full"
-                          onClick={handleShowPhone}
-                          asChild={showPhone}
-                        >
-                          {showPhone ? (
+                        {!showPhone ? (
+                          <Button 
+                            variant="outline" 
+                            className="w-full"
+                            onClick={handleShowPhone}
+                          >
+                            <Phone className="h-4 w-4 ml-2" />
+                            הצג מספר טלפון
+                          </Button>
+                        ) : (
+                          <Button 
+                            variant="outline" 
+                            className="w-full"
+                            asChild
+                          >
                             <a href={`tel:${carData.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
                               <Phone className="h-4 w-4 ml-2" />
                               <span className="font-bold">{carData.seller_phone}</span>
                             </a>
-                          ) : (
-                            <>
-                              <Phone className="h-4 w-4 ml-2" />
-                              הצג מספר טלפון
-                            </>
-                          )}
-                        </Button>
+                          </Button>
+                        )}
                       </div>
                     )}
                   </div>
