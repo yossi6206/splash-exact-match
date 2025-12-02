@@ -216,17 +216,6 @@ const SecondhandDetails = () => {
             <Card className="p-6">
               <h2 className="text-2xl font-bold mb-6">תכונות</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                {/* Location */}
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <MapPin className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">עיר</div>
-                    <div className="font-semibold">{item.location}</div>
-                  </div>
-                </div>
-
                 {/* Category */}
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-primary/10 rounded-lg">
@@ -564,6 +553,10 @@ const SecondhandDetails = () => {
                       צור קשר דרך הכפתורים למעלה
                     </div>
                   )}
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
+                    <MapPin className="h-4 w-4" />
+                    <span>{item.location}</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>

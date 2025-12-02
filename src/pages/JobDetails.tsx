@@ -369,10 +369,6 @@ const JobDetails = () => {
             {jobData.requirements && jobData.requirements.length > 0 && (
               <Card className="p-6">
                 <h2 className="text-2xl font-bold text-foreground mb-4">דרישות התפקיד</h2>
-                <div className="mb-4 flex items-center gap-2 text-muted-foreground">
-                  <MapPin className="w-4 h-4" />
-                  <span className="font-medium">מיקום: {jobData.location}</span>
-                </div>
                 <ul className="space-y-3">
                   {jobData.requirements.map((req: string, index: number) => (
                     <li key={index} className="flex items-start gap-3">

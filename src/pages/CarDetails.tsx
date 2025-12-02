@@ -466,6 +466,10 @@ const CarDetails = () => {
                           </div>
                         </div>
                       )}
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <MapPin className="h-4 w-4" />
+                        <span>{carData.location}</span>
+                      </div>
                       {carData.seller_phone && showPhone && (
                         <div className="pt-3 border-t border-border">
                           <div className="text-sm text-muted-foreground mb-1">טלפון</div>

@@ -397,10 +397,6 @@ const FreelancerDetails = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="mb-4 flex items-center gap-2 text-muted-foreground">
-                  <MapPin className="w-4 h-4" />
-                  <span className="font-medium">{freelancer.location || "ישראל"}</span>
-                </div>
                 <div className="flex flex-wrap gap-2">
                   {freelancer.skills.map((skill, index) => (
                     <Badge key={index} variant="secondary" className="text-sm px-3 py-1">
