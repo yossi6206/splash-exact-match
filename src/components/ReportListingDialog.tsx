@@ -46,13 +46,15 @@ export const ReportListingDialog = ({ itemId, itemType }: ReportListingDialogPro
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      const { error } = await supabase.from("reports").insert({
-        item_id: itemId,
-        item_type: itemType,
-        reason,
-        details,
-        reporter_id: user?.id || null,
-      });
+      const { error } = await supabase
+        .from("reports" as any)
+        .insert({
+          item_id: itemId,
+          item_type: itemType,
+          reason,
+          details,
+          reporter_id: user?.id || null,
+        });
 
       if (error) throw error;
 

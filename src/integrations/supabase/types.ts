@@ -1043,6 +1043,42 @@ export type Database = {
         }
         Relationships: []
       }
+      reports: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          item_id: string
+          item_type: string
+          reason: string
+          reporter_id: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          item_id: string
+          item_type: string
+          reason: string
+          reporter_id?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          item_id?: string
+          item_type?: string
+          reason?: string
+          reporter_id?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       review_helpful: {
         Row: {
           created_at: string

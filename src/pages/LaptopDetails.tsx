@@ -17,6 +17,7 @@ import { ReviewsList } from "@/components/reviews/ReviewsList";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
+import { ReportListingDialog } from "@/components/ReportListingDialog";
 
 const LaptopDetails = () => {
   const { id } = useParams();
@@ -205,18 +206,21 @@ const LaptopDetails = () => {
             </Card>
 
             {/* Title and Info */}
-            <div>
-              <h1 className="text-3xl font-bold text-foreground mb-3">{laptop.brand} {laptop.model}</h1>
-              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" />
-                  <span>{laptop.location}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{new Date(laptop.created_at).toLocaleDateString('he-IL')}</span>
+            <div className="flex items-start justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground mb-3">{laptop.brand} {laptop.model}</h1>
+                <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <MapPin className="h-4 w-4" />
+                    <span>{laptop.location}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    <span>{new Date(laptop.created_at).toLocaleDateString('he-IL')}</span>
+                  </div>
                 </div>
               </div>
+              <ReportListingDialog itemId={id!} itemType="laptop" />
             </div>
 
             {/* Features */}

@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { SellerReviewsList } from "@/components/seller-reviews/SellerReviewsList";
 import { useAuth } from "@/contexts/AuthContext";
+import { ReportListingDialog } from "@/components/ReportListingDialog";
 
 const SecondhandDetails = () => {
   const { id } = useParams();
@@ -355,6 +356,7 @@ const SecondhandDetails = () => {
                     <MapPin className="h-4 w-4" />
                     <span>{item.location}</span>
                   </div>
+                  <ReportListingDialog itemId={id!} itemType="secondhand" />
                 </div>
 
                 <div className="bg-primary/10 rounded-lg p-4">

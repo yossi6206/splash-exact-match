@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 import SoldPropertiesInArea from "@/components/SoldPropertiesInArea";
+import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { supabase } from "@/integrations/supabase/client";
 import property1 from "@/assets/property-1.jpg";
 
@@ -235,6 +236,7 @@ const PropertyDetails = () => {
                 <Button variant="outline" size="icon">
                   <Share2 className="h-5 w-5" />
                 </Button>
+                <ReportListingDialog itemId={id!} itemType="property" />
               </div>
             </div>
 

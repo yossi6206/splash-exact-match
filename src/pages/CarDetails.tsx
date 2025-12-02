@@ -14,6 +14,7 @@ import carImage1 from "@/assets/item-car.jpg";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 import FinanceCalculator from "@/components/FinanceCalculator";
+import { ReportListingDialog } from "@/components/ReportListingDialog";
 
 interface CarData {
   id: string;
@@ -229,6 +230,9 @@ const CarDetails = () => {
                   >
                     <Share2 className="h-5 w-5" />
                   </Button>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <ReportListingDialog itemId={id!} itemType="car" />
                 </div>
                 <Badge className="absolute bottom-4 right-4 bg-foreground/80 text-background text-sm px-4 py-2">
                   תמונה 1 מתוך {images.length}
