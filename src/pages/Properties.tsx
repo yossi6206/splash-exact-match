@@ -9,6 +9,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Search, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useSaveSearch } from "@/hooks/useSaveSearch";
 
 const Properties = () => {
   const [sortBy, setSortBy] = useState("date");
@@ -18,6 +19,7 @@ const Properties = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { saveSearch } = useSaveSearch();
   const [sidebarFilters, setSidebarFilters] = useState<PropertySidebarFilters>({
     propertyTypes: [],
     rooms: [],
@@ -95,6 +97,17 @@ const Properties = () => {
       clearTimeout(handler);
     };
   }, [searchQuery]);
+
+  // Save search to history
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      saveSearch({
+        searchQuery: debouncedSearchQuery,
+        category: "properties",
+        resultsCount: filteredProperties.length
+      });
+    }
+  }, [debouncedSearchQuery]);
   
   // Calculate counts for filter options
   const filterCounts = useMemo(() => {

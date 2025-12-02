@@ -12,6 +12,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { useCountUp } from "@/hooks/useCountUp";
 import { supabase } from "@/integrations/supabase/client";
+import { useSaveSearch } from "@/hooks/useSaveSearch";
 import laptopImage from "@/assets/item-laptop.jpg";
 import phoneImage from "@/assets/item-phone.jpg";
 import heroLaptopImage from "@/assets/hero-laptop.jpg";
@@ -89,6 +90,7 @@ const Laptops = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [laptops, setLaptops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { saveSearch } = useSaveSearch();
   const itemsPerPage = 12;
 
   useEffect(() => {
@@ -108,6 +110,17 @@ const Laptops = () => {
       clearTimeout(handler);
     };
   }, [searchQuery]);
+
+  // Save search to history
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      saveSearch({
+        searchQuery: debouncedSearchQuery,
+        category: "laptops",
+        resultsCount: filteredLaptops.length
+      });
+    }
+  }, [debouncedSearchQuery]);
 
   const fetchLaptops = async () => {
     setLoading(true);

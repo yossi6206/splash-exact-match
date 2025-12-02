@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Search, Briefcase, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useSaveSearch } from "@/hooks/useSaveSearch";
 
 
 const Jobs = () => {
@@ -22,6 +23,7 @@ const Jobs = () => {
   const [jobs, setJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
+  const { saveSearch } = useSaveSearch();
   const itemsPerPage = 10;
 
   // Calculate counts for filter options
@@ -67,6 +69,17 @@ const Jobs = () => {
       clearTimeout(handler);
     };
   }, [searchQuery]);
+
+  // Save search to history
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      saveSearch({
+        searchQuery: debouncedSearchQuery,
+        category: "jobs",
+        resultsCount: jobs.length
+      });
+    }
+  }, [debouncedSearchQuery]);
 
   const fetchJobs = async () => {
     try {
