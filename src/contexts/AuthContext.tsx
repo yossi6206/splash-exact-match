@@ -115,6 +115,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (profileError) {
           console.error('Error updating profile:', profileError);
         }
+
+        // Send welcome email
+        try {
+          await supabase.functions.invoke('send-welcome-email', {
+            body: { 
+              email: email,
+              name: fullName
+            }
+          });
+        } catch (emailError) {
+          console.error('Error sending welcome email:', emailError);
+          // Don't block signup if email fails
+        }
       }
 
       toast({
