@@ -182,29 +182,7 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
     font-family: 'Danidin', 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     font-weight: 600;
-    font-size: 18px;
     direction: rtl;
-  }
-  
-  /* Increase all text sizes */
-  h1 {
-    @apply text-5xl md:text-6xl lg:text-7xl font-black;
-  }
-  
-  h2 {
-    @apply text-3xl md:text-4xl font-black;
-  }
-  
-  h3 {
-    @apply text-2xl md:text-3xl font-bold;
-  }
-  
-  h4 {
-    @apply text-xl md:text-2xl font-bold;
-  }
-  
-  p {
-    @apply text-lg;
   }
   
   /* Mobile optimizations */
