@@ -8,3 +8,6 @@ verify_jwt = true
 
 [functions.increment-impression]
 verify_jwt = false
+
+[functions.send-reset-email]
+verify_jwt = false
