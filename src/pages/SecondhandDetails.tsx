@@ -23,7 +23,8 @@ import {
   Ruler,
   Weight,
   Shield,
-  Package
+  Package,
+  MessageSquare
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -36,6 +37,7 @@ const SecondhandDetails = () => {
   const [loading, setLoading] = useState(true);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showPhone, setShowPhone] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -363,30 +365,59 @@ const SecondhandDetails = () => {
 
                 {/* Contact Buttons */}
                 <div className="space-y-3">
-                  <Button 
-                    className="w-full" 
-                    size="lg"
-                    onClick={async () => {
-                      if (item.seller_phone) {
-                        // Increment contacts count
-                        try {
-                          await supabase
-                            .from("secondhand_items")
-                            .update({ contacts_count: (item.contacts_count || 0) + 1 })
-                            .eq("id", id);
-                        } catch (error) {
-                          console.error("Error updating contacts count:", error);
+                  {!showPhone ? (
+                    <Button 
+                      className="w-full" 
+                      size="lg"
+                      onClick={async () => {
+                        if (item.seller_phone) {
+                          setShowPhone(true);
+                          // Increment contacts count
+                          try {
+                            await supabase
+                              .from("secondhand_items")
+                              .update({ contacts_count: (item.contacts_count || 0) + 1 })
+                              .eq("id", id);
+                          } catch (error) {
+                            console.error("Error updating contacts count:", error);
+                          }
+                        } else {
+                          toast.error("מספר טלפון לא זמין");
                         }
-                        
-                        window.open(`tel:${item.seller_phone}`, '_self');
-                      } else {
-                        toast.error("מספר טלפון לא זמין");
-                      }
-                    }}
-                  >
-                    <Phone className="ml-2 h-5 w-5" />
-                    צור קשר עם המוכר
-                  </Button>
+                      }}
+                    >
+                      <Phone className="ml-2 h-5 w-5" />
+                      הצג מספר טלפון
+                    </Button>
+                  ) : (
+                    <div className="space-y-2">
+                      <Button 
+                        className="w-full" 
+                        size="lg"
+                        asChild
+                      >
+                        <a href={`tel:${item.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
+                          <Phone className="h-4 w-4 ml-2" />
+                          <span className="font-bold">{item.seller_phone}</span>
+                        </a>
+                      </Button>
+                      <Button 
+                        className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                        size="lg"
+                        asChild
+                      >
+                        <a 
+                          href={`https://wa.me/972${item.seller_phone.replace(/^0/, '').replace(/\D/g, '')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <MessageSquare className="h-4 w-4 ml-2" />
+                          שלח הודעה בוואטסאפ
+                        </a>
+                      </Button>
+                    </div>
+                  )}
                   <div className="grid grid-cols-2 gap-2">
                     <Button variant="outline" size="lg">
                       <Heart className="ml-2 h-5 w-5" />
@@ -433,10 +464,16 @@ const SecondhandDetails = () => {
                         {item.seller_name}
                       </p>
                     )}
-                    {item.seller_phone && (
+                    {item.seller_phone && showPhone && (
                       <p>
                         <span className="text-muted-foreground">טלפון:</span>{" "}
-                        {item.seller_phone}
+                        <a 
+                          href={`tel:${item.seller_phone}`}
+                          className="font-bold text-foreground hover:text-primary transition-colors"
+                          dir="ltr"
+                        >
+                          {item.seller_phone}
+                        </a>
                       </p>
                     )}
                   </div>

@@ -376,14 +376,40 @@ const BusinessDetails = () => {
               </div>
 
               <div className="space-y-3">
-                <Button className="w-full" size="lg" onClick={handleContactClick}>
-                  <Phone className="ml-2 h-4 w-4" />
-                  צור קשר
-                </Button>
-                <Button variant="outline" className="w-full" size="lg" onClick={handleContactClick}>
-                  <MessageSquare className="ml-2 h-4 w-4" />
-                  שלח הודעה
-                </Button>
+                {!showPhone ? (
+                  <Button className="w-full" size="lg" onClick={handleShowPhone}>
+                    <Phone className="ml-2 h-4 w-4" />
+                    הצג מספר טלפון
+                  </Button>
+                ) : (
+                  <div className="space-y-2">
+                    <Button 
+                      className="w-full" 
+                      size="lg"
+                      asChild
+                    >
+                      <a href={`tel:${business.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
+                        <Phone className="h-4 w-4 ml-2" />
+                        <span className="font-bold">{business.seller_phone}</span>
+                      </a>
+                    </Button>
+                    <Button 
+                      className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                      size="lg"
+                      asChild
+                    >
+                      <a 
+                        href={`https://wa.me/972${business.seller_phone.replace(/^0/, '').replace(/\D/g, '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <MessageSquare className="h-4 w-4 ml-2" />
+                        שלח הודעה בוואטסאפ
+                      </a>
+                    </Button>
+                  </div>
+                )}
               </div>
 
               <div className="mt-6 pt-6 border-t">
@@ -401,25 +427,16 @@ const BusinessDetails = () => {
                         </div>
                       </div>
                     )}
-                    {business.seller_phone && (
+                    {business.seller_phone && showPhone && (
                       <div className="pt-3 border-t border-border">
-                        {!showPhone ? (
-                          <Button 
-                            variant="outline" 
-                            className="w-full"
-                            onClick={handleShowPhone}
-                          >
-                            <Phone className="h-4 w-4 ml-2" />
-                            הצג מספר טלפון
-                          </Button>
-                        ) : (
-                          <>
-                            <div className="text-sm text-muted-foreground mb-1">טלפון</div>
-                            <a href={`tel:${business.seller_phone}`} className="text-lg font-bold text-primary hover:underline" dir="ltr">
-                              {business.seller_phone}
-                            </a>
-                          </>
-                        )}
+                        <div className="text-sm text-muted-foreground mb-1">טלפון</div>
+                        <a 
+                          href={`tel:${business.seller_phone}`}
+                          className="text-lg font-bold text-foreground hover:text-primary transition-colors"
+                          dir="ltr"
+                        >
+                          {business.seller_phone}
+                        </a>
                       </div>
                     )}
                   </div>
