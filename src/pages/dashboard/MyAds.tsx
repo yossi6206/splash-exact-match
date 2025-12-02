@@ -296,9 +296,103 @@ const MyAds = () => {
 
   const renderListingCard = (listing: Listing) => (
     <Card key={listing.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="flex flex-row-reverse">
+      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4">
+        {/* Content */}
+        <div className="p-4 flex flex-col justify-between order-2 md:order-2">
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-2">
+              <h3 className="text-lg font-bold text-foreground line-clamp-2">
+                {listing.title || 'ללא כותרת'}
+              </h3>
+              <Badge variant={listing.status === 'active' ? 'default' : 'secondary'}>
+                {listing.status === 'active' ? 'פעיל' : 'לא פעיל'}
+              </Badge>
+            </div>
+
+            <div className="space-y-2 text-sm text-muted-foreground mb-4">
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4" />
+                <span>{listing.location}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                <span>{new Date(listing.created_at).toLocaleDateString('he-IL')}</span>
+              </div>
+            </div>
+
+            <div className="text-2xl font-bold text-primary mb-3">
+              {listing.type === 'job' 
+                ? `₪${listing.price}` 
+                : listing.type === 'freelancer'
+                ? `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price} לשעה`
+                : `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}`
+              }
+            </div>
+
+            {/* Statistics */}
+            <div className="grid grid-cols-3 gap-3 p-3 bg-muted/30 rounded-lg">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
+                  <span>צפיות</span>
+                  <Eye className="h-3 w-3" />
+                </div>
+                <div className="text-lg font-bold text-foreground">
+                  {listing.views_count || 0}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
+                  <span>לחיצות</span>
+                  <MousePointer className="h-3 w-3" />
+                </div>
+                <div className="text-lg font-bold text-foreground">
+                  {listing.clicks_count || 0}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-1">
+                  <span>{listing.type === 'job' ? 'מועמדים' : listing.type === 'freelancer' ? 'ביקורות' : 'פניות'}</span>
+                  <Phone className="h-3 w-3" />
+                </div>
+                <div className="text-lg font-bold text-foreground">
+                  {listing.type === 'job' ? (listing.applicants_count || 0) : (listing.contacts_count || 0)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-2 mt-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate(getViewUrl(listing))}
+              className="flex-1"
+            >
+              <Eye className="h-4 w-4 ml-2" />
+              צפייה
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              disabled
+            >
+              <Edit className="h-4 w-4 ml-2" />
+              עריכה
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setDeleteId({ id: listing.id, type: listing.type })}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        
         {/* Image */}
-        <div className="relative w-28 h-28 sm:w-36 sm:h-36 flex-shrink-0 bg-muted">
+        <div className="relative aspect-video md:aspect-square bg-muted order-1 md:order-1">
           {listing.images && listing.images[0] ? (
             <img
               src={listing.images[0]}
@@ -310,88 +404,9 @@ const MyAds = () => {
               {getTypeIcon(listing.type)}
             </div>
           )}
-          <Badge className="absolute top-1 right-1 text-[10px] px-1.5 py-0.5 bg-background/90 text-foreground">
+          <Badge className="absolute top-2 left-2 bg-background/90 text-foreground">
             {getTypeName(listing.type)}
           </Badge>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 p-3 flex flex-col justify-between min-w-0">
-          <div>
-            <div className="flex items-start justify-between gap-1 mb-1">
-              <h3 className="text-sm font-bold text-foreground line-clamp-1">
-                {listing.title || 'ללא כותרת'}
-              </h3>
-              <Badge 
-                variant={listing.status === 'active' ? 'default' : 'secondary'}
-                className="text-[10px] px-1.5 py-0 flex-shrink-0"
-              >
-                {listing.status === 'active' ? 'פעיל' : 'לא פעיל'}
-              </Badge>
-            </div>
-
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
-              <div className="flex items-center gap-0.5">
-                <MapPin className="h-3 w-3" />
-                <span className="line-clamp-1">{listing.location}</span>
-              </div>
-            </div>
-
-            <div className="text-base font-bold text-primary">
-              {listing.type === 'job' 
-                ? `₪${listing.price}` 
-                : listing.type === 'freelancer'
-                ? `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}/שעה`
-                : `₪${typeof listing.price === 'number' ? listing.price.toLocaleString('he-IL') : listing.price}`
-              }
-            </div>
-          </div>
-
-          {/* Stats Row */}
-          <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
-            <span className="flex items-center gap-0.5">
-              <Eye className="h-3 w-3" />
-              {listing.views_count || 0}
-            </span>
-            <span className="flex items-center gap-0.5">
-              <MousePointer className="h-3 w-3" />
-              {listing.clicks_count || 0}
-            </span>
-            <span className="flex items-center gap-0.5">
-              <Phone className="h-3 w-3" />
-              {listing.type === 'job' ? (listing.applicants_count || 0) : (listing.contacts_count || 0)}
-            </span>
-          </div>
-
-          {/* Actions */}
-          <div className="flex gap-1.5 mt-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate(getViewUrl(listing))}
-              className="flex-1 h-7 text-xs px-2"
-            >
-              <Eye className="h-3 w-3 ml-1" />
-              צפייה
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1 h-7 text-xs px-2"
-              disabled
-            >
-              <Edit className="h-3 w-3 ml-1" />
-              עריכה
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => setDeleteId({ id: listing.id, type: listing.type })}
-              className="h-7 w-7 p-0"
-            >
-              <Trash2 className="h-3 w-3" />
-            </Button>
-          </div>
         </div>
       </div>
     </Card>
@@ -415,37 +430,35 @@ const MyAds = () => {
       </div>
 
       <Tabs defaultValue="all" className="space-y-6">
-        <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
-          <TabsList className="inline-flex min-w-max md:grid md:grid-cols-7 md:w-full">
-            <TabsTrigger value="all" className="whitespace-nowrap">
-              הכל ({listings.length})
-            </TabsTrigger>
-            <TabsTrigger value="car" className="whitespace-nowrap">
-              <Car className="h-4 w-4 ml-1" />
-              רכבים ({filterByType('car').length})
-            </TabsTrigger>
-            <TabsTrigger value="property" className="whitespace-nowrap">
-              <Home className="h-4 w-4 ml-1" />
-              נדל״ן ({filterByType('property').length})
-            </TabsTrigger>
-            <TabsTrigger value="laptop" className="whitespace-nowrap">
-              <Laptop className="h-4 w-4 ml-1" />
-              מחשבים ({filterByType('laptop').length})
-            </TabsTrigger>
-            <TabsTrigger value="secondhand" className="whitespace-nowrap">
-              <Package className="h-4 w-4 ml-1" />
-              יד שנייה ({filterByType('secondhand').length})
-            </TabsTrigger>
-            <TabsTrigger value="job" className="whitespace-nowrap">
-              <Briefcase className="h-4 w-4 ml-1" />
-              משרות ({filterByType('job').length})
-            </TabsTrigger>
-            <TabsTrigger value="freelancer" className="whitespace-nowrap">
-              <Users className="h-4 w-4 ml-1" />
-              פרילנסרים ({filterByType('freelancer').length})
-            </TabsTrigger>
-          </TabsList>
-        </div>
+        <TabsList className="grid grid-cols-3 md:grid-cols-7 w-full">
+          <TabsTrigger value="all">
+            הכל ({listings.length})
+          </TabsTrigger>
+          <TabsTrigger value="car">
+            <Car className="h-4 w-4 ml-2" />
+            רכבים ({filterByType('car').length})
+          </TabsTrigger>
+          <TabsTrigger value="property">
+            <Home className="h-4 w-4 ml-2" />
+            נדל״ן ({filterByType('property').length})
+          </TabsTrigger>
+          <TabsTrigger value="laptop">
+            <Laptop className="h-4 w-4 ml-2" />
+            מחשבים ({filterByType('laptop').length})
+          </TabsTrigger>
+          <TabsTrigger value="secondhand">
+            <Package className="h-4 w-4 ml-2" />
+            יד שנייה ({filterByType('secondhand').length})
+          </TabsTrigger>
+          <TabsTrigger value="job">
+            <Briefcase className="h-4 w-4 ml-2" />
+            משרות ({filterByType('job').length})
+          </TabsTrigger>
+          <TabsTrigger value="freelancer">
+            <Users className="h-4 w-4 ml-2" />
+            פרילנסרים ({filterByType('freelancer').length})
+          </TabsTrigger>
+        </TabsList>
 
         <TabsContent value="all" className="space-y-4">
           {listings.length === 0 ? (

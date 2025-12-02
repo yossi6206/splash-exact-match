@@ -32,7 +32,6 @@ import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
 import MobileNav from "./components/MobileNav";
 import TawkToChat from "./components/TawkToChat";
-import InstallPWA from "./components/InstallPWA";
 
 const queryClient = new QueryClient();
 
@@ -78,7 +77,6 @@ const AppContent = () => {
       </Routes>
         <MobileNav />
         <TawkToChat />
-        <InstallPWA />
     </>
   );
 };
