@@ -22,17 +22,17 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 const menuItems = [
-  { title: "פרסום מודעה חדשה", icon: PlusCircle, path: "/dashboard/post-wizard" },
-  { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads" },
-  { title: "קידום מודעות", icon: Sparkles, path: "/dashboard/promote" },
-  { title: "ניתוח קידום מתקדם", icon: TrendingUp, path: "/dashboard/promotion-analytics" },
-  { title: "הודעות", icon: MessageSquare, path: "/messages" },
-  { title: "פרסם פרופיל פרילנסר", icon: Edit3, path: "/dashboard/post-freelancer" },
-  { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile" },
-  { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats" },
-  { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved" },
-  { title: "חיפושים אחרונים", icon: Search, path: "/dashboard/searches" },
-  { title: "טיפים ומידע", icon: Lightbulb, path: "/dashboard/tips" },
+  { title: "פרסום מודעה חדשה", icon: PlusCircle, path: "/dashboard/post-wizard", color: "text-green-500", bgColor: "bg-green-100" },
+  { title: "המודעות שלי", icon: LayoutGrid, path: "/dashboard/ads", color: "text-blue-500", bgColor: "bg-blue-100" },
+  { title: "קידום מודעות", icon: Sparkles, path: "/dashboard/promote", color: "text-amber-500", bgColor: "bg-amber-100" },
+  { title: "ניתוח קידום מתקדם", icon: TrendingUp, path: "/dashboard/promotion-analytics", color: "text-purple-500", bgColor: "bg-purple-100" },
+  { title: "הודעות", icon: MessageSquare, path: "/messages", color: "text-cyan-500", bgColor: "bg-cyan-100" },
+  { title: "פרסם פרופיל פרילנסר", icon: Edit3, path: "/dashboard/post-freelancer", color: "text-orange-500", bgColor: "bg-orange-100" },
+  { title: "עדכון פרטים", icon: Edit3, path: "/dashboard/profile", color: "text-slate-500", bgColor: "bg-slate-100" },
+  { title: "סטטיסטיקות", icon: BarChart3, path: "/dashboard/stats", color: "text-indigo-500", bgColor: "bg-indigo-100" },
+  { title: "מודעות שמורות", icon: Heart, path: "/dashboard/saved", color: "text-rose-500", bgColor: "bg-rose-100" },
+  { title: "חיפושים אחרונים", icon: Search, path: "/dashboard/searches", color: "text-teal-500", bgColor: "bg-teal-100" },
+  { title: "טיפים ומידע", icon: Lightbulb, path: "/dashboard/tips", color: "text-yellow-500", bgColor: "bg-yellow-100" },
 ];
 
 export const DashboardSidebar = () => {
@@ -83,8 +83,8 @@ export const DashboardSidebar = () => {
                 activeClassName="bg-primary/10 text-primary shadow-sm border-r-4 border-primary"
               >
                 <span className="font-medium flex-1 text-sm">{item.title}</span>
-                <div className="w-9 h-9 rounded-lg bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                  <item.icon className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                <div className={`w-9 h-9 rounded-lg ${item.bgColor} flex items-center justify-center group-hover:scale-105 transition-all`}>
+                  <item.icon className={`h-4 w-4 ${item.color}`} />
                 </div>
               </NavLink>
             </li>
@@ -100,7 +100,9 @@ export const DashboardSidebar = () => {
             className="w-full justify-between h-10 text-sm"
           >
             <span>חזרה לדף הבית</span>
-            <Home className="h-4 w-4" />
+            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+              <Home className="h-4 w-4 text-blue-500" />
+            </div>
           </Button>
         </Link>
         <Button 
@@ -108,7 +110,9 @@ export const DashboardSidebar = () => {
           className="w-full justify-between h-10 text-sm"
         >
           <span>צור קשר</span>
-          <Phone className="h-4 w-4" />
+          <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+            <Phone className="h-4 w-4 text-green-500" />
+          </div>
         </Button>
         <Button 
           variant="ghost" 
@@ -116,7 +120,9 @@ export const DashboardSidebar = () => {
           onClick={signOut}
         >
           <span>התנתקות</span>
-          <LogOut className="h-4 w-4" />
+          <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
+            <LogOut className="h-4 w-4 text-red-500" />
+          </div>
         </Button>
       </div>
     </aside>
