@@ -20,31 +20,37 @@ const categoryConfig: Record<string, {
   title: string;
   description: string;
   icon: any;
+  subcategories: string[];
 }> = {
   "furniture": {
     title: "ריהוט",
     description: "מבחר ענק של ריהוט יד שנייה במחירים מעולים - ספות, שולחנות, כיסאות ועוד",
-    icon: Sofa
+    icon: Sofa,
+    subcategories: ["ספות", "כורסאות", "שולחנות אוכל", "שולחנות סלון", "כיסאות", "ארונות בגדים", "מיטות", "שידות", "מדפים"]
   },
   "electronics": {
     title: "מוצרי חשמל",
     description: "מוצרי חשמל יד שנייה באיכות גבוהה - מקררים, מכונות כביסה, תנורים ועוד",
-    icon: Zap
+    icon: Zap,
+    subcategories: ["מקררים", "מכונות כביסה", "תנורים", "מיקרוגל", "מזגנים", "טלוויזיות", "מדיחי כלים"]
   },
   "sports": {
     title: "ספורט ופנאי",
     description: "ציוד ספורט ופנאי יד שנייה - אופניים, ציוד כושר, משחקים וכלי נגינה",
-    icon: Dumbbell
+    icon: Dumbbell,
+    subcategories: ["אופני כביש", "אופני הרים", "אופניים חשמליים", "ציוד כושר", "משחקים", "ספרים", "כלי נגינה"]
   },
   "fashion": {
     title: "אופנה",
     description: "בגדים ואביזרים יד שנייה במצב מעולה - בגדים, נעליים, תיקים ותכשיטים",
-    icon: Shirt
+    icon: Shirt,
+    subcategories: ["חולצות", "מכנסיים", "שמלות", "נעלי ספורט", "נעלי עקב", "תיקי יד", "תיקי גב", "שעונים", "תכשיטים"]
   },
   "kids": {
     title: "תינוקות וילדים",
     description: "ציוד לתינוקות וילדים יד שנייה - עגלות, כיסאות אוכל, מיטות וצעצועים",
-    icon: Baby
+    icon: Baby,
+    subcategories: ["עגלות", "טיולונים", "כיסאות אוכל", "מיטות תינוק", "צעצועי התפתחות", "בגדי תינוקות", "בגדי ילדים"]
   }
 };
 
@@ -394,6 +400,30 @@ const SecondhandCategory = () => {
                   חיפוש אוטומטי מופעל - התוצאות מתעדכנות בזמן אמת
                 </p>
               )}
+            </div>
+
+            {/* Quick Subcategories */}
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              {config.subcategories.map((subcategory) => (
+                <button
+                  key={subcategory}
+                  onClick={() => {
+                    setFilters(prev => ({
+                      ...prev,
+                      subcategories: prev.subcategories.includes(subcategory)
+                        ? prev.subcategories.filter(s => s !== subcategory)
+                        : [...prev.subcategories, subcategory]
+                    }));
+                  }}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    filters.subcategories.includes(subcategory)
+                      ? "bg-white text-primary shadow-lg"
+                      : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm"
+                  }`}
+                >
+                  {subcategory}
+                </button>
+              ))}
             </div>
 
             {/* Quick Stats */}
