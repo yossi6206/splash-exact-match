@@ -335,6 +335,14 @@ export const FreelancerChat = ({
   const sendMessage = async () => {
     if ((!newMessage.trim() && !selectedFile) || !conversationId || !user) return;
 
+    // Save current values before clearing
+    const messageToSend = newMessage.trim();
+    const fileToUpload = selectedFile;
+    
+    // Clear inputs immediately for better UX
+    setNewMessage("");
+    removeSelectedFile();
+    
     setLoading(true);
     stopTyping();
     
@@ -343,17 +351,17 @@ export const FreelancerChat = ({
       let attachmentType = null;
       let attachmentName = null;
 
-      if (selectedFile) {
-        attachmentUrl = await uploadFile(selectedFile);
+      if (fileToUpload) {
+        attachmentUrl = await uploadFile(fileToUpload);
         if (!attachmentUrl) {
           setLoading(false);
           return;
         }
-        attachmentType = selectedFile.type;
-        attachmentName = selectedFile.name;
+        attachmentType = fileToUpload.type;
+        attachmentName = fileToUpload.name;
       }
 
-      const messageContent = newMessage.trim() || (selectedFile ? `שלח קובץ: ${selectedFile.name}` : "");
+      const messageContent = messageToSend || (fileToUpload ? `שלח קובץ: ${fileToUpload.name}` : "");
 
       const { data, error } = await supabase.from("messages").insert({
         conversation_id: conversationId,
@@ -370,10 +378,6 @@ export const FreelancerChat = ({
       if (data) {
         setMessages((prev) => [...prev, data as Message]);
       }
-
-      // Clear input immediately for faster UX
-      setNewMessage("");
-      removeSelectedFile();
 
       // Send email notification asynchronously (don't wait for it)
       if (conversationId) {
