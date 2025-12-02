@@ -1,8 +1,8 @@
 import TipCard from "./TipCard";
-import tipSelling from "@/assets/tip-selling.jpg";
-import tipBuying from "@/assets/tip-buying.jpg";
-import tipSafety from "@/assets/tip-safety.jpg";
-import tipWriting from "@/assets/tip-writing.jpg";
+import tipSelling from "@/assets/tip-selling-new.jpg";
+import tipBuying from "@/assets/tip-buying-new.jpg";
+import tipSafety from "@/assets/tip-safety-new.jpg";
+import tipWriting from "@/assets/tip-writing-new.jpg";
 
 const TipsGuides = () => {
   const tips = [
