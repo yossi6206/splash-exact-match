@@ -500,45 +500,45 @@ const MyAds = () => {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">המודעות שלי</h1>
-        <p className="text-muted-foreground">
+      <div className="mb-4 md:mb-8">
+        <h1 className="text-xl md:text-3xl font-bold text-foreground mb-1">המודעות שלי</h1>
+        <p className="text-xs md:text-base text-muted-foreground hidden md:block">
           כאן תוכל לראות, לערוך ולנהל את כל המודעות שפרסמת
         </p>
       </div>
 
-      <Tabs defaultValue="all" className="space-y-6">
-        <TabsList className="grid grid-cols-3 md:grid-cols-7 w-full">
-          <TabsTrigger value="all">
+      <Tabs defaultValue="all" className="space-y-3 md:space-y-6">
+        <TabsList className="flex overflow-x-auto w-full h-auto p-1 gap-1">
+          <TabsTrigger value="all" className="text-xs md:text-sm px-2 md:px-3 py-1.5 whitespace-nowrap">
             הכל ({listings.length})
           </TabsTrigger>
-          <TabsTrigger value="car">
-            <Car className="h-4 w-4 ml-2" />
+          <TabsTrigger value="car" className="text-xs md:text-sm px-2 md:px-3 py-1.5 whitespace-nowrap">
+            <Car className="h-3 w-3 md:h-4 md:w-4 ml-1" />
             רכבים ({filterByType('car').length})
           </TabsTrigger>
-          <TabsTrigger value="property">
-            <Home className="h-4 w-4 ml-2" />
+          <TabsTrigger value="property" className="text-xs md:text-sm px-2 md:px-3 py-1.5 whitespace-nowrap">
+            <Home className="h-3 w-3 md:h-4 md:w-4 ml-1" />
             נדל״ן ({filterByType('property').length})
           </TabsTrigger>
-          <TabsTrigger value="laptop">
-            <Laptop className="h-4 w-4 ml-2" />
+          <TabsTrigger value="laptop" className="text-xs md:text-sm px-2 md:px-3 py-1.5 whitespace-nowrap">
+            <Laptop className="h-3 w-3 md:h-4 md:w-4 ml-1" />
             מחשבים ({filterByType('laptop').length})
           </TabsTrigger>
-          <TabsTrigger value="secondhand">
-            <Package className="h-4 w-4 ml-2" />
+          <TabsTrigger value="secondhand" className="text-xs md:text-sm px-2 md:px-3 py-1.5 whitespace-nowrap">
+            <Package className="h-3 w-3 md:h-4 md:w-4 ml-1" />
             יד שנייה ({filterByType('secondhand').length})
           </TabsTrigger>
-          <TabsTrigger value="job">
-            <Briefcase className="h-4 w-4 ml-2" />
+          <TabsTrigger value="job" className="text-xs md:text-sm px-2 md:px-3 py-1.5 whitespace-nowrap">
+            <Briefcase className="h-3 w-3 md:h-4 md:w-4 ml-1" />
             משרות ({filterByType('job').length})
           </TabsTrigger>
-          <TabsTrigger value="freelancer">
-            <Users className="h-4 w-4 ml-2" />
+          <TabsTrigger value="freelancer" className="text-xs md:text-sm px-2 md:px-3 py-1.5 whitespace-nowrap">
+            <Users className="h-3 w-3 md:h-4 md:w-4 ml-1" />
             פרילנסרים ({filterByType('freelancer').length})
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="all" className="space-y-4">
+        <TabsContent value="all" className="space-y-2 md:space-y-4">
           {listings.length === 0 ? (
             <Card className="p-12 text-center">
               <p className="text-muted-foreground text-lg">אין לך מודעות עדיין</p>
