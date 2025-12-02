@@ -89,10 +89,14 @@ export const useUnreadMessages = (userId: string | undefined) => {
           if (isRecipient && !isSender) {
             setUnreadCount((prev) => prev + 1);
             
-            // Show toast notification
-            const senderName = isRecipientAsClient
-              ? "פרילנסר" 
-              : "לקוח";
+            // Get sender's profile to show their name
+            const { data: senderProfile } = await supabase
+              .from("profiles")
+              .select("full_name")
+              .eq("id", newMessage.sender_id)
+              .maybeSingle();
+            
+            const senderName = senderProfile?.full_name || "משתמש";
             
             toast.success("הודעה חדשה", {
               description: `קיבלת הודעה חדשה מ${senderName}`,
