@@ -520,10 +520,10 @@ export const FreelancerChat = ({
             return (
               <div
                 key={message.id}
-                className={`flex ${isOwn ? "justify-end" : "justify-start"} group`}
+                className={`flex ${isOwn ? "justify-end" : "justify-start"} group min-w-0`}
               >
                 <div
-                  className={`max-w-[70%] rounded-lg px-4 py-2 relative overflow-hidden ${
+                  className={`max-w-[70%] min-w-0 rounded-lg px-4 py-2 relative overflow-hidden break-words ${
                     isOwn
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted"
@@ -613,7 +613,7 @@ export const FreelancerChat = ({
                   ) : (
                     <>
                       {message.content && (
-                        <p className="text-sm whitespace-pre-wrap break-words" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                        <p className="text-sm whitespace-pre-wrap break-words overflow-wrap-anywhere min-w-0" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }}>
                           {message.content}
                         </p>
                       )}
