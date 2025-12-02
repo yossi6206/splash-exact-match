@@ -28,7 +28,7 @@ function generateResetEmailHTML(resetLink: string, userEmail: string): string {
           <!-- Logo Section -->
           <tr>
             <td align="center" style="padding-bottom: 32px;">
-              <div style="display: inline-block; font-size: 32px; font-weight: 900; color: #ffffff; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 24px; border-radius: 8px; letter-spacing: -1px;">
+              <div style="display: inline-block; font-size: 32px; font-weight: 900; color: #ffffff; background: linear-gradient(135deg, #667eea 0%, #7c5fdc 100%); padding: 12px 24px; border-radius: 8px; letter-spacing: -1px;">
                 secondhandpro
               </div>
             </td>
@@ -64,7 +64,7 @@ function generateResetEmailHTML(resetLink: string, userEmail: string): string {
           <!-- Button Section -->
           <tr>
             <td align="center" style="padding: 32px 0;">
-              <a href="${resetLink}" style="display: inline-block; background-color: #667eea; color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 6px; font-size: 16px; font-weight: 600;">
+              <a href="${resetLink}" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #7c5fdc 100%); color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 6px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(124, 95, 220, 0.3);">
                 איפוס סיסמה
               </a>
             </td>
