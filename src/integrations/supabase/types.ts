@@ -1336,6 +1336,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_searches: {
+        Row: {
+          category: string
+          created_at: string
+          filters: Json | null
+          id: string
+          results_count: number | null
+          search_query: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          filters?: Json | null
+          id?: string
+          results_count?: number | null
+          search_query: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          filters?: Json | null
+          id?: string
+          results_count?: number | null
+          search_query?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
