@@ -23,7 +23,7 @@ const RealEstateCTABanner = () => {
 
             {/* Content Side - Takes 1 column */}
             <div className="p-8 md:p-10 text-right md:col-span-1">
-              <h2 className="text-2xl md:text-3xl font-danidin font-black text-white mb-3 leading-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 leading-tight">
                 הנכס הבא שלך
                 <br />
                 מחכה לך כאן

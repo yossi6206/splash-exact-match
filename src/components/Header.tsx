@@ -329,7 +329,7 @@ const Header = () => {
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
               <div className="flex h-12 w-28 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary px-3">
-                <span className="text-base font-danidin font-black text-primary-foreground whitespace-nowrap">שוק יד שנייה</span>
+                <span className="text-base font-extrabold text-primary-foreground whitespace-nowrap">שוק יד שנייה</span>
               </div>
             </Link>
 
@@ -340,7 +340,7 @@ const Header = () => {
                 onMouseEnter={() => setHoveredMenu("נדל\"ן")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <Button variant="ghost" className="text-base font-semibold" asChild>
+                <Button variant="ghost" className="text-sm font-medium" asChild>
                   <Link to="/properties">נדל"ן</Link>
                 </Button>
                 
@@ -379,7 +379,7 @@ const Header = () => {
                 onMouseEnter={() => setHoveredMenu("רכב")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <Button variant="ghost" className="text-base font-semibold" asChild>
+                <Button variant="ghost" className="text-sm font-medium" asChild>
                   <Link to="/cars">רכב</Link>
                 </Button>
                 
@@ -418,7 +418,7 @@ const Header = () => {
                 onMouseEnter={() => setHoveredMenu("מחשבים")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <Button variant="ghost" className="text-base font-semibold" asChild>
+                <Button variant="ghost" className="text-sm font-medium" asChild>
                   <Link to="/laptops">מחשבים</Link>
                 </Button>
                 
@@ -457,7 +457,7 @@ const Header = () => {
                 onMouseEnter={() => setHoveredMenu("יד שניה")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <Button variant="ghost" className="text-base font-semibold" asChild>
+                <Button variant="ghost" className="text-sm font-medium" asChild>
                   <Link to="/secondhand">יד שניה</Link>
                 </Button>
                 
@@ -509,7 +509,7 @@ const Header = () => {
                 onMouseEnter={() => setHoveredMenu("דרושים")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <Button variant="ghost" className="text-base font-semibold" asChild>
+                <Button variant="ghost" className="text-sm font-medium" asChild>
                   <Link to="/jobs">דרושים</Link>
                 </Button>
                 
@@ -548,7 +548,7 @@ const Header = () => {
                 onMouseEnter={() => setHoveredMenu("פרילנסרים")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <Button variant="ghost" className="text-base font-semibold" asChild>
+                <Button variant="ghost" className="text-sm font-medium" asChild>
                   <Link to="/freelancers">פרילנסרים</Link>
                 </Button>
                 
@@ -587,7 +587,7 @@ const Header = () => {
                 onMouseEnter={() => setHoveredMenu("עסקים למכירה")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <Button variant="ghost" className="text-base font-semibold" asChild>
+                <Button variant="ghost" className="text-sm font-medium" asChild>
                   <Link to="/businesses">עסקים למכירה</Link>
                 </Button>
                 

@@ -22,7 +22,7 @@ const Categories = () => {
     <section className="py-12 md:py-16 bg-white dark:bg-background relative">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-8 md:mb-10">
-          <h2 className="text-2xl md:text-3xl font-danidin font-black text-foreground">קטגוריות פופולריות</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground">קטגוריות פופולריות</h2>
           <a 
             href="#" 
             className="text-sm md:text-base font-semibold text-primary hover:text-primary/80 transition-colors duration-200 flex items-center gap-2"

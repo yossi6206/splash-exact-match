@@ -92,7 +92,7 @@ const Footer = () => {
           {/* Brand & Social - Center */}
           <div className="lg:col-span-1 text-center space-y-6">
             <div>
-              <h3 className="text-2xl md:text-3xl font-danidin font-black text-primary mb-3">שוק יד שנייה</h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-primary mb-3">שוק יד שנייה</h3>
               <p className="text-foreground/70 text-sm leading-relaxed max-w-xs mx-auto">
                 הפלטפורמה המובילה למכירה וקנייה בישראל. מחברים בין אלפי משתמשים מדי יום.
               </p>
@@ -133,7 +133,7 @@ const Footer = () => {
 
           {/* Categories */}
           <div className="text-right">
-            <h4 className="text-lg font-danidin font-black text-foreground mb-5 border-b border-border/30 pb-3">קטגוריות פופולריות</h4>
+            <h4 className="text-lg font-bold text-foreground mb-5 border-b border-border/30 pb-3">קטגוריות פופולריות</h4>
             <ul className="space-y-3">
               {categories.map((category) => (
                 <li key={category}>
@@ -150,7 +150,7 @@ const Footer = () => {
 
           {/* About & Help Links */}
           <div className="text-right">
-            <h4 className="text-lg font-danidin font-black text-foreground mb-5 border-b border-border/30 pb-3">אודות ועזרה</h4>
+            <h4 className="text-lg font-bold text-foreground mb-5 border-b border-border/30 pb-3">אודות ועזרה</h4>
             <ul className="space-y-3">
               {aboutLinks.map((link) => (
                 <li key={link}>
@@ -167,7 +167,7 @@ const Footer = () => {
 
           {/* Contact Information */}
           <div className="text-right">
-            <h4 className="text-lg font-danidin font-black text-foreground mb-5 border-b border-border/30 pb-3">צור קשר</h4>
+            <h4 className="text-lg font-bold text-foreground mb-5 border-b border-border/30 pb-3">צור קשר</h4>
             <div className="space-y-4">
               <a href="mailto:info@shook-yad2.co.il" className="flex items-center gap-3 justify-end text-foreground/70 hover:text-primary transition-colors group">
                 <span className="text-sm">info@shook-yad2.co.il</span>
@@ -195,7 +195,7 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-border/50">
           <div className="max-w-xl mx-auto text-center">
             <div className="mb-4">
-              <h4 className="text-xl font-danidin font-black text-foreground mb-2">הישארו מעודכנים</h4>
+              <h4 className="text-xl font-bold text-foreground mb-2">הישארו מעודכנים</h4>
               <p className="text-foreground/70 text-sm">
                 הירשמו לניוזלטר שלנו וקבלו עדכונים על מוצרים חדשים, טיפים ומבצעים מיוחדים
               </p>

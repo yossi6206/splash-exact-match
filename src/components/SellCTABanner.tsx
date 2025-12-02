@@ -24,7 +24,7 @@ const SellCTABanner = () => {
 
             {/* Content Side */}
             <div className="p-8 md:p-12 text-right">
-              <h2 className="text-2xl md:text-3xl font-danidin font-black text-white mb-3 leading-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 leading-tight">
                 ההזדמנות שלא כדאי לפספס ביד2:
               </h2>
               <p className="text-lg text-white/90 mb-6">

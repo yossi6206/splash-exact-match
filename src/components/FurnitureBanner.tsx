@@ -15,7 +15,7 @@ const FurnitureBanner = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 items-center min-h-[180px] md:min-h-[200px]">
             {/* Content */}
             <div className="order-2 md:order-1 p-6 md:p-8 md:pr-4 text-right">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-danidin font-black text-white mb-1 md:mb-2">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 md:mb-2">
                 ריהוט איכותי במחירים שווים
               </h2>
               <p className="text-lg md:text-xl lg:text-2xl text-white/90 mb-4 md:mb-6 font-medium">

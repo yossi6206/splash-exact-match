@@ -355,7 +355,7 @@ const SecondhandCategory = () => {
               <div className="flex items-center justify-center gap-3 mb-4">
                 <CategoryIcon className="h-12 w-12 text-white drop-shadow-lg" />
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-danidin font-black text-white leading-tight drop-shadow-lg">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
                 {config.title}
               </h1>
               <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">

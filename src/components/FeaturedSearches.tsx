@@ -32,7 +32,7 @@ const FeaturedSearches = () => {
     <section className="py-8 md:py-12 bg-background">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-6 md:mb-8">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-danidin font-black text-foreground text-right">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground text-right">
             חיפושים שאסור לפספס
           </h2>
           <a 

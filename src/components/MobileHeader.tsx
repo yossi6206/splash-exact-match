@@ -67,7 +67,7 @@ const MobileHeader = () => {
 
         <Link to="/" className="flex items-center">
           <div className="flex h-10 w-24 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary px-2">
-            <span className="text-sm font-danidin font-black text-primary-foreground whitespace-nowrap">
+            <span className="text-sm font-extrabold text-primary-foreground whitespace-nowrap">
               שוק יד שנייה
             </span>
           </div>
