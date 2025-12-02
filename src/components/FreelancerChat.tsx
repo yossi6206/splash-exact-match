@@ -228,6 +228,38 @@ export const FreelancerChat = ({
           }
         }
       )
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "messages",
+          filter: `conversation_id=eq.${conversationId}`,
+        },
+        (payload) => {
+          const updatedMessage = payload.new as Message;
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === updatedMessage.id ? updatedMessage : msg
+            )
+          );
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "DELETE",
+          schema: "public",
+          table: "messages",
+          filter: `conversation_id=eq.${conversationId}`,
+        },
+        (payload) => {
+          const deletedMessage = payload.old as Message;
+          setMessages((prev) =>
+            prev.filter((msg) => msg.id !== deletedMessage.id)
+          );
+        }
+      )
       .subscribe();
 
     return () => {
@@ -520,14 +552,15 @@ export const FreelancerChat = ({
             return (
               <div
                 key={message.id}
-                className={`flex ${isOwn ? "justify-end" : "justify-start"} group min-w-0`}
+                className={`flex ${isOwn ? "justify-end" : "justify-start"} group`}
               >
                 <div
-                  className={`max-w-[70%] min-w-0 rounded-lg px-4 py-2 relative overflow-hidden break-words ${
+                  className={`max-w-[70%] rounded-lg px-4 py-2 relative ${
                     isOwn
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted"
                   }`}
+                  style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                 >
                   {/* Message Actions - Only for own messages */}
                   {isOwn && !isEditing && (
@@ -613,7 +646,7 @@ export const FreelancerChat = ({
                   ) : (
                     <>
                       {message.content && (
-                        <p className="text-sm whitespace-pre-wrap break-words overflow-wrap-anywhere min-w-0" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }}>
+                        <p className="text-sm whitespace-pre-wrap" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                           {message.content}
                         </p>
                       )}
