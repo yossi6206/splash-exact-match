@@ -382,7 +382,7 @@ const CarDetails = () => {
                           asChild
                         >
                           <a 
-                            href={`https://wa.me/972${carData.seller_phone.replace(/^0/, '').replace(/\D/g, '')}`}
+                            href={`https://wa.me/972${(carData.seller_phone || '').replace(/^0/, '').replace(/\D/g, '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center justify-center gap-2"
