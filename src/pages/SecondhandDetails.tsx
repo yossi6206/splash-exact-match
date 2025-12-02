@@ -351,44 +351,45 @@ const SecondhandDetails = () => {
 
           {/* Right Column - Seller Info and Actions */}
           <div className="space-y-6">
-            {/* Price and Title Card */}
+            {/* Title and Actions */}
+            <div className="space-y-4">
+              <h1 className="text-2xl font-bold text-right">{item.title}</h1>
+              <div className="flex items-center gap-2 text-muted-foreground text-right">
+                <MapPin className="h-4 w-4" />
+                <span>{item.location}</span>
+              </div>
+              <div className="flex gap-2 justify-end">
+                <Button 
+                  variant="outline"
+                  size="icon"
+                  onClick={async () => {
+                    if (!user) {
+                      toast.error("יש להתחבר כדי לסמן מוצרים כמועדפים");
+                      return;
+                    }
+                    // TODO: Implement favorite toggle
+                  }}
+                >
+                  <Heart className="h-5 w-5" />
+                </Button>
+                <ShareMenu 
+                  title={item.title}
+                  variant="outline"
+                />
+                <ReportListingDialog itemId={id!} itemType="secondhand" />
+              </div>
+            </div>
+
+            {/* Price and Contact Card */}
             <Card className="p-6 sticky top-20">
               <div className="space-y-4">
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">{item.title}</h1>
-                  <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                    <MapPin className="h-4 w-4" />
-                    <span>{item.location}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button 
-                      variant="outline"
-                      size="icon"
-                      onClick={async () => {
-                        if (!user) {
-                          toast.error("יש להתחבר כדי לסמן מוצרים כמועדפים");
-                          return;
-                        }
-                        // TODO: Implement favorite toggle
-                      }}
-                    >
-                      <Heart className="h-5 w-5" />
-                    </Button>
-                    <ShareMenu 
-                      title={item.title}
-                      variant="outline"
-                    />
-                    <ReportListingDialog itemId={id!} itemType="secondhand" />
-                  </div>
-                </div>
-
-                <div className="bg-primary/10 rounded-lg p-4">
-                  <div className="text-3xl font-bold text-primary">
+                {/* Price */}
+                <div className="text-center py-4">
+                  <div className="text-4xl font-bold text-foreground mb-1">
                     ₪{item.price.toLocaleString()}
                   </div>
+                  <div className="text-sm text-muted-foreground">מחיר מבוקש</div>
                 </div>
-
-                <Separator />
 
                 {/* Contact Buttons */}
                 <div className="space-y-3">
@@ -467,36 +468,23 @@ const SecondhandDetails = () => {
                   </Button>
                 </div>
 
-                <div className="mt-6 pt-6 border-t">
-                  <h3 className="font-semibold mb-3">פרטי המפרסם</h3>
-                  {item.seller_name || item.seller_phone ? (
-                    <div className="space-y-3">
-                      {item.seller_name && (
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                            <span className="font-bold text-primary">{item.seller_name.charAt(0)}</span>
-                          </div>
-                          <div>
-                            <div className="font-semibold text-foreground">{item.seller_name}</div>
-                            <div className="text-sm text-muted-foreground">מפרסם פרטי</div>
-                          </div>
-                        </div>
-                      )}
-                      {item.seller_phone && showPhone && (
-                        <div className="pt-3 border-t border-border">
-                          <div className="text-sm text-muted-foreground mb-1">טלפון</div>
-                          <a 
-                            href={`tel:${item.seller_phone}`}
-                            className="text-lg font-bold text-foreground hover:text-primary transition-colors"
-                            dir="ltr"
-                          >
-                            {item.seller_phone}
-                          </a>
-                        </div>
-                      )}
+                <Separator />
+
+                {/* Seller Info */}
+                <div>
+                  <h3 className="font-semibold mb-3 text-right">פרטי המפרסם</h3>
+                  {item.seller_name ? (
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-lg font-bold text-primary">{item.seller_name.charAt(0)}</span>
+                      </div>
+                      <div className="text-right flex-1">
+                        <div className="font-semibold text-foreground">{item.seller_name}</div>
+                        <div className="text-sm text-muted-foreground">מפרסם פרטי</div>
+                      </div>
                     </div>
                   ) : (
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-muted-foreground text-right">
                       צור קשר דרך הכפתורים למעלה
                     </div>
                   )}
