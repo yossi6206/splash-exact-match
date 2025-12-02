@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
+import MobileNav from "@/components/MobileNav";
 import Footer from "@/components/Footer";
 import { LaptopSidebarFilter } from "@/components/LaptopSidebarFilter";
 import { LaptopCard } from "@/components/LaptopCard";
@@ -214,7 +215,7 @@ const Laptops = () => {
   const currentLaptops = filteredLaptops.slice(startIndex, endIndex);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
       <MobileHeader />
       <Header />
       
@@ -258,8 +259,8 @@ const Laptops = () => {
               )}
             </div>
 
-            {/* Quick Stats */}
-            <div className="flex items-center justify-center gap-8 pt-4">
+            {/* Quick Stats - Desktop */}
+            <div className="hidden md:flex items-center justify-center gap-8 pt-4">
               <div className="text-center">
                 <div className="text-3xl font-bold text-white">{totalLaptops.count}+</div>
                 <div className="text-sm text-white/80">מחשבים זמינים</div>
@@ -273,6 +274,24 @@ const Laptops = () => {
               <div className="text-center">
                 <div className="text-3xl font-bold text-white">{avgViews.count}+</div>
                 <div className="text-sm text-white/80">ממוצע צפיות</div>
+              </div>
+            </div>
+
+            {/* Quick Stats - Mobile */}
+            <div className="flex md:hidden items-center justify-center gap-4 pt-2">
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">{totalLaptops.count}+</div>
+                <div className="text-xs text-white/80">מחשבים</div>
+              </div>
+              <div className="w-px h-8 bg-white/30" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">{activeListings.count}+</div>
+                <div className="text-xs text-white/80">מודעות</div>
+              </div>
+              <div className="w-px h-8 bg-white/30" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">{avgViews.count}+</div>
+                <div className="text-xs text-white/80">צפיות</div>
               </div>
             </div>
           </div>
@@ -321,8 +340,10 @@ const Laptops = () => {
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
-          {/* Sidebar Filters - Desktop */}
-          <LaptopSidebarFilter counts={filterCounts} />
+          {/* Sidebar Filters - Hidden on mobile, shown in Sheet */}
+          <div className="hidden lg:block">
+            <LaptopSidebarFilter counts={filterCounts} />
+          </div>
 
           {/* Laptops Grid */}
           <div>
@@ -388,6 +409,7 @@ const Laptops = () => {
       </main>
 
       <Footer />
+      <MobileNav />
     </div>
   );
 };

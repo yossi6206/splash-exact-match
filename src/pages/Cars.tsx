@@ -1,13 +1,16 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
+import MobileNav from "@/components/MobileNav";
 import Footer from "@/components/Footer";
 import { CarCard } from "@/components/CarCard";
 import { CarSidebar, SidebarFilters } from "@/components/CarSidebar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from "@/components/ui/pagination";
-import { Search, Loader2, TrendingUp } from "lucide-react";
+import { Search, Loader2, TrendingUp, Filter } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useSaveSearch } from "@/hooks/useSaveSearch";
 import carImage1 from "@/assets/item-car.jpg";
@@ -376,7 +379,7 @@ const Cars = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
       <MobileHeader />
       <Header />
       
@@ -448,8 +451,8 @@ const Cars = () => {
               )}
             </div>
 
-            {/* Quick Stats */}
-            <div className="flex items-center justify-center gap-8 pt-4">
+            {/* Quick Stats - Desktop */}
+            <div className="hidden md:flex items-center justify-center gap-8 pt-4">
               <div className="text-center">
                 <div className="text-3xl font-bold text-white">{cars.length}+</div>
                 <div className="text-sm text-white/80">רכבים זמינים</div>
@@ -465,45 +468,81 @@ const Cars = () => {
                 <div className="text-sm text-white/80">מאומתים</div>
               </div>
             </div>
+
+            {/* Quick Stats - Mobile */}
+            <div className="flex md:hidden items-center justify-center gap-4 pt-2">
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">{cars.length}+</div>
+                <div className="text-xs text-white/80">רכבים</div>
+              </div>
+              <div className="w-px h-8 bg-white/30" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">{Object.keys(filterCounts.manufacturers).length}+</div>
+                <div className="text-xs text-white/80">יצרנים</div>
+              </div>
+              <div className="w-px h-8 bg-white/30" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-white">100%</div>
+                <div className="text-xs text-white/80">מאומתים</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <main className="container mx-auto px-4 py-6">
+      <main className="container mx-auto px-4 py-4 md:py-6">
         {/* Category Tabs */}
-        <div className="flex gap-4 mb-6 overflow-x-auto pb-2">
-          <button className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium whitespace-nowrap border-b-4 border-primary">
+        <div className="flex gap-2 md:gap-4 mb-4 md:mb-6 overflow-x-auto pb-2 -mx-4 px-4">
+          <button className="px-4 md:px-6 py-2 md:py-3 bg-primary text-primary-foreground rounded-lg font-medium whitespace-nowrap text-sm md:text-base">
             פריטים ומסחרים
           </button>
-          <button className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80">
+          <button className="px-4 md:px-6 py-2 md:py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80 text-sm md:text-base">
             אופנועים
           </button>
-          <button className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80">
+          <button className="px-4 md:px-6 py-2 md:py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80 text-sm md:text-base">
             קטנועים
           </button>
-          <button className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80">
+          <button className="px-4 md:px-6 py-2 md:py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80 text-sm md:text-base">
             משאיות
           </button>
-          <button className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80">
+          <button className="px-4 md:px-6 py-2 md:py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80 text-sm md:text-base">
             כלי שיט
           </button>
-          <button className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80">
+          <button className="px-4 md:px-6 py-2 md:py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80 text-sm md:text-base">
             מיוחדים
           </button>
         </div>
 
         {/* Results Header */}
-        <div className="flex items-center justify-between mb-6 mt-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0 mb-4 md:mb-6 mt-4 md:mt-8">
           <div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">רכבים למכירה</h2>
-            <p className="text-muted-foreground">{filteredCars.length.toLocaleString()} תוצאות</p>
+            <h2 className="text-lg md:text-2xl font-bold text-foreground mb-1">רכבים למכירה</h2>
+            <p className="text-sm md:text-base text-muted-foreground">{filteredCars.length.toLocaleString()} תוצאות</p>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Mobile Filter Button */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="lg:hidden">
+                  <Filter className="w-4 h-4 ml-2" />
+                  סינון
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle>סינון רכבים</SheetTitle>
+                </SheetHeader>
+                <div className="mt-4">
+                  <CarSidebar onFilterChange={handleSidebarFilterChange} counts={filterCounts} />
+                </div>
+              </SheetContent>
+            </Sheet>
+
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">מיון לפי</span>
+              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">מיון לפי</span>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-40 bg-background">
+                <SelectTrigger className="w-32 md:w-40 bg-background text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -519,8 +558,10 @@ const Cars = () => {
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
-          {/* Sidebar - Right side for RTL */}
-          <CarSidebar onFilterChange={handleSidebarFilterChange} counts={filterCounts} />
+          {/* Sidebar - Hidden on mobile, shown in sheet */}
+          <div className="hidden lg:block">
+            <CarSidebar onFilterChange={handleSidebarFilterChange} counts={filterCounts} />
+          </div>
           
           {/* Cars List */}
           <div className="space-y-4">
@@ -591,6 +632,7 @@ const Cars = () => {
       </main>
 
       <Footer />
+      <MobileNav />
     </div>
   );
 };
