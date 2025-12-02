@@ -214,133 +214,196 @@ const SecondhandDetails = () => {
 
             {/* Item Details */}
             <Card className="p-6">
-              <h2 className="text-2xl font-bold mb-4">פרטי המוצר</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-sm text-muted-foreground">קטגוריה</span>
-                    <p className="font-medium text-lg">{item.category}</p>
+              <h2 className="text-2xl font-bold mb-6">תכונות</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                {/* Category */}
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Package className="h-5 w-5 text-primary" />
                   </div>
-                  {item.subcategory && (
-                    <div>
-                      <span className="text-sm text-muted-foreground">תת-קטגוריה</span>
-                      <p className="font-medium">{item.subcategory}</p>
-                    </div>
-                  )}
                   <div>
-                    <span className="text-sm text-muted-foreground">מצב</span>
-                    <p className="font-medium">{item.condition}</p>
+                    <div className="text-sm text-muted-foreground">קטגוריה</div>
+                    <div className="font-semibold">{item.category}</div>
                   </div>
-                  {item.brand && (
-                    <div>
-                      <span className="text-sm text-muted-foreground">מותג</span>
-                      <p className="font-medium">{item.brand}</p>
-                    </div>
-                  )}
                 </div>
 
-                <div className="space-y-4">
-                  {item.size && (
-                    <div className="flex items-center gap-2">
-                      <Ruler className="h-4 w-4 text-muted-foreground" />
-                      <div>
-                        <span className="text-sm text-muted-foreground">גודל/מידה</span>
-                        <p className="font-medium">{item.size}</p>
-                      </div>
+                {/* Subcategory */}
+                {item.subcategory && (
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <FileCheck className="h-5 w-5 text-primary" />
                     </div>
-                  )}
-                  {item.color && (
                     <div>
-                      <span className="text-sm text-muted-foreground">צבע</span>
-                      <p className="font-medium">{item.color}</p>
+                      <div className="text-sm text-muted-foreground">תת-קטגוריה</div>
+                      <div className="font-semibold">{item.subcategory}</div>
                     </div>
-                  )}
-                  {item.material && (
-                    <div>
-                      <span className="text-sm text-muted-foreground">חומר</span>
-                      <p className="font-medium">{item.material}</p>
-                    </div>
-                  )}
-                  {item.age && (
-                    <div>
-                      <span className="text-sm text-muted-foreground">גיל/תקופת שימוש</span>
-                      <p className="font-medium">{item.age}</p>
-                    </div>
-                  )}
+                  </div>
+                )}
+
+                {/* Condition */}
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Shield className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">מצב</div>
+                    <div className="font-semibold">{item.condition}</div>
+                  </div>
                 </div>
-              </div>
 
-              <Separator className="my-6" />
+                {/* Brand */}
+                {item.brand && (
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Users className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">מותג</div>
+                      <div className="font-semibold">{item.brand}</div>
+                    </div>
+                  </div>
+                )}
 
-              {/* Additional specifications */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Size */}
+                {item.size && (
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Ruler className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">גודל</div>
+                      <div className="font-semibold">{item.size}</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Color */}
+                {item.color && (
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Eye className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">צבע</div>
+                      <div className="font-semibold">{item.color}</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Material */}
+                {item.material && (
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Package className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">חומר</div>
+                      <div className="font-semibold">{item.material}</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Age */}
+                {item.age && (
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Calendar className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">גיל</div>
+                      <div className="font-semibold">{item.age}</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Year Manufactured */}
                 {item.year_manufactured && (
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Calendar className="h-5 w-5 text-primary" />
+                    </div>
                     <div>
-                      <span className="text-sm text-muted-foreground">שנת ייצור</span>
-                      <p className="font-medium">{item.year_manufactured}</p>
+                      <div className="text-sm text-muted-foreground">שנת ייצור</div>
+                      <div className="font-semibold">{item.year_manufactured}</div>
                     </div>
                   </div>
                 )}
+
+                {/* Dimensions */}
                 {item.dimensions && (
-                  <div className="flex items-center gap-2">
-                    <Package className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Ruler className="h-5 w-5 text-primary" />
+                    </div>
                     <div>
-                      <span className="text-sm text-muted-foreground">מידות</span>
-                      <p className="font-medium">{item.dimensions}</p>
+                      <div className="text-sm text-muted-foreground">מידות</div>
+                      <div className="font-semibold">{item.dimensions}</div>
                     </div>
                   </div>
                 )}
+
+                {/* Weight */}
                 {item.weight && (
-                  <div className="flex items-center gap-2">
-                    <Weight className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Weight className="h-5 w-5 text-primary" />
+                    </div>
                     <div>
-                      <span className="text-sm text-muted-foreground">משקל</span>
-                      <p className="font-medium">{item.weight}</p>
+                      <div className="text-sm text-muted-foreground">משקל</div>
+                      <div className="font-semibold">{item.weight}</div>
                     </div>
                   </div>
                 )}
+
+                {/* Warranty */}
                 {item.warranty && (
-                  <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Shield className="h-5 w-5 text-primary" />
+                    </div>
                     <div>
-                      <span className="text-sm text-muted-foreground">אחריות</span>
-                      <p className="font-medium">{item.warranty}</p>
+                      <div className="text-sm text-muted-foreground">אחריות</div>
+                      <div className="font-semibold">{item.warranty}</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Delivery Available */}
+                {item.delivery_available && (
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Truck className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">משלוח</div>
+                      <div className="font-semibold">זמין</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Negotiable */}
+                {item.negotiable && (
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <HandshakeIcon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">מחיר</div>
+                      <div className="font-semibold">ניתן למיקוח</div>
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* Delivery and Negotiable badges */}
-              {(item.delivery_available || item.negotiable) && (
-                <>
-                  <Separator className="my-6" />
-                  <div className="flex flex-wrap gap-3">
-                    {item.delivery_available && (
-                      <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100 border-green-300 dark:border-green-700 px-4 py-2">
-                        <Truck className="h-4 w-4 ml-2" />
-                        משלוח זמין
-                      </Badge>
-                    )}
-                    {item.negotiable && (
-                      <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100 border-blue-300 dark:border-blue-700 px-4 py-2">
-                        <HandshakeIcon className="h-4 w-4 ml-2" />
-                        ניתן למיקוח
-                      </Badge>
-                    )}
-                  </div>
-                </>
-              )}
-
+              {/* Features */}
               {item.features && item.features.length > 0 && (
                 <>
                   <Separator className="my-6" />
                   <div>
-                    <span className="text-sm text-muted-foreground mb-2 block">תכונות נוספות</span>
+                    <h3 className="text-lg font-semibold mb-3">תכונות נוספות</h3>
                     <div className="flex flex-wrap gap-2">
                       {item.features.map((feature: string, index: number) => (
-                        <Badge key={index} variant="secondary">
+                        <Badge key={index} variant="secondary" className="px-3 py-1">
                           ✓ {feature}
                         </Badge>
                       ))}
