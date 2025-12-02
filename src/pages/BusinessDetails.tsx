@@ -268,6 +268,13 @@ const BusinessDetails = () => {
             <Card className="p-6">
               <h2 className="text-xl font-bold mb-4">נתונים פיננסיים</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="flex items-center gap-3">
+                  <MapPin className="h-5 w-5 text-primary" />
+                  <div>
+                    <div className="text-sm text-muted-foreground">עיר</div>
+                    <div className="font-semibold">{business.location}</div>
+                  </div>
+                </div>
                 {business.annual_revenue && (
                   <div className="flex items-center gap-3">
                     <TrendingUp className="h-5 w-5 text-primary" />
