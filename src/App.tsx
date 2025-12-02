@@ -19,6 +19,7 @@ import SecondhandDetails from "./pages/SecondhandDetails";
 import Jobs from "./pages/Jobs";
 import JobDetails from "./pages/JobDetails";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import TipsGuidesPage from "./pages/TipsGuides";
 import TipDetails from "./pages/TipDetails";
 import Freelancers from "./pages/Freelancers";
@@ -71,6 +72,7 @@ const AppContent = () => {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
         <MobileNav />

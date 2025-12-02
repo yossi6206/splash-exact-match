@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2, Eye, EyeOff, User, Rocket, MessageCircle, Bell, ShoppingCart, Store, Briefcase, Search } from "lucide-react";
 import { z } from "zod";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const emailSchema = z.string().email("כתובת אימייל לא תקינה");
 const passwordSchema = z.string().min(6, "הסיסמה חייבת להכיל לפחות 6 תווים");
@@ -18,8 +20,12 @@ const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [showPassword, setShowPassword] = useState(false);
+  const [showResetDialog, setShowResetDialog] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   // Redirect if already logged in
   useEffect(() => {
@@ -99,6 +105,41 @@ const Auth = () => {
     setIsLoading(true);
     await signUp(signupData.email, signupData.password, signupData.fullName, signupData.userType);
     setIsLoading(false);
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const emailValidation = emailSchema.safeParse(resetEmail);
+    if (!emailValidation.success) {
+      toast({
+        title: "שגיאה",
+        description: emailValidation.error.errors[0].message,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setResetLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setResetLoading(false);
+
+    if (error) {
+      toast({
+        title: "שגיאה",
+        description: "אירעה שגיאה בשליחת המייל. אנא נסה שוב.",
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "הצלחה!",
+        description: "נשלח אליך קישור לאיפוס סיסמה למייל",
+      });
+      setShowResetDialog(false);
+      setResetEmail("");
+    }
   };
 
   return (
@@ -235,7 +276,11 @@ const Auth = () => {
                 </div>
 
                 <div className="text-right">
-                  <button type="button" className="text-sm text-primary hover:underline">
+                  <button 
+                    type="button" 
+                    onClick={() => setShowResetDialog(true)}
+                    className="text-sm text-primary hover:underline"
+                  >
                     שכחתי סיסמה
                   </button>
                 </div>
@@ -394,6 +439,59 @@ const Auth = () => {
           </div>
         </div>
       </div>
+
+      {/* Reset Password Dialog */}
+      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+        <DialogContent className="sm:max-w-md" dir="rtl">
+          <DialogHeader>
+            <DialogTitle className="text-right">איפוס סיסמה</DialogTitle>
+            <DialogDescription className="text-right">
+              הזן את כתובת המייל שלך ונשלח לך קישור לאיפוס הסיסמה
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleResetPassword} className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="reset-email" className="text-right block">מייל</Label>
+              <Input
+                id="reset-email"
+                type="email"
+                placeholder="yourmail@email.co.il"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                className="h-11 text-right"
+                required
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setShowResetDialog(false);
+                  setResetEmail("");
+                }}
+                className="flex-1"
+              >
+                ביטול
+              </Button>
+              <Button
+                type="submit"
+                disabled={resetLoading}
+                className="flex-1"
+              >
+                {resetLoading ? (
+                  <>
+                    <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+                    שולח...
+                  </>
+                ) : (
+                  "שלח קישור"
+                )}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
