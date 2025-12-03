@@ -51,9 +51,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
     }`} dir="rtl">
       <Link to={`/properties/${property.id}`} onClick={handleClick}>
-        <div className="flex flex-col sm:flex-row-reverse gap-4 p-4">
+        <div className="flex flex-col sm:flex-row-reverse">
           {/* Image */}
-          <div className="w-full sm:w-64 h-48 rounded-lg overflow-hidden flex-shrink-0 relative">
+          <div className="w-full sm:w-72 h-48 overflow-hidden flex-shrink-0 relative">
             <div className="absolute top-2 left-2 z-10 flex gap-2">
               {property.listing_type && (
                 <Badge className="bg-primary text-primary-foreground font-semibold">
@@ -90,7 +90,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
 
           {/* Content */}
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col p-4">
             <div className="mb-3 text-right">
               <h3 className="text-xl font-bold text-foreground mb-1">{property.title}</h3>
               <p className="text-sm text-muted-foreground mb-2">{property.subtitle}</p>
