@@ -95,9 +95,8 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <div className="flex-1 flex flex-col p-4">
             <div className="mb-3 text-right">
               <h3 className="text-lg font-bold text-foreground mb-1">
-                {property.propertyType} • {property.rooms} חד' • קומה {property.floor} • {property.size} מ"ר
+                {property.propertyType} • {property.rooms} חד' • קומה {property.floor} • {property.size} מ"ר • {property.location}
               </h3>
-              <p className="text-sm text-muted-foreground">{property.location}</p>
             </div>
 
             {/* Features */}
