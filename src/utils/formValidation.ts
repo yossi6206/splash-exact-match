@@ -3,6 +3,7 @@ import { toast } from "sonner";
 // Validation patterns
 const LETTERS_ONLY_PATTERN = /^[\u0590-\u05FFa-zA-Z\s\-׳'"״]+$/;
 const NUMBERS_ONLY_PATTERN = /^\d*$/;
+const POSITIVE_NUMBER_PATTERN = /^\d+$/;
 const PHONE_PATTERN = /^0\d{0,9}$/; // Israeli phone: starts with 0, up to 10 digits
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -17,9 +18,10 @@ const fieldNameTranslations: Record<string, string> = {
   seller_phone: "טלפון",
   phone: "טלפון",
   email: "אימייל",
+  price: "מחיר",
 };
 
-type ValidationRule = "letters" | "numbers" | "phone" | "email";
+type ValidationRule = "letters" | "numbers" | "phone" | "email" | "price";
 
 interface FieldValidationConfig {
   [fieldName: string]: ValidationRule;
@@ -73,6 +75,13 @@ export const validateField = (
     }
   }
 
+  if (rule === "price") {
+    if (!POSITIVE_NUMBER_PATTERN.test(value)) {
+      toast.error("מחיר חייב להכיל רק מספרים חיוביים");
+      return false;
+    }
+  }
+
   return true;
 };
 
@@ -111,24 +120,28 @@ export const propertyValidationConfig: FieldValidationConfig = {
   seller_name: "letters",
   house_number: "numbers",
   seller_phone: "phone",
+  price: "price",
 };
 
 export const carValidationConfig: FieldValidationConfig = {
   location: "letters",
   seller_name: "letters",
   seller_phone: "phone",
+  price: "price",
 };
 
 export const laptopValidationConfig: FieldValidationConfig = {
   location: "letters",
   seller_name: "letters",
   seller_phone: "phone",
+  price: "price",
 };
 
 export const secondhandValidationConfig: FieldValidationConfig = {
   location: "letters",
   seller_name: "letters",
   seller_phone: "phone",
+  price: "price",
 };
 
 export const jobValidationConfig: FieldValidationConfig = {
@@ -138,10 +151,12 @@ export const jobValidationConfig: FieldValidationConfig = {
 
 export const freelancerValidationConfig: FieldValidationConfig = {
   full_name: "letters",
+  hourly_rate: "price",
 };
 
 export const businessValidationConfig: FieldValidationConfig = {
   location: "letters",
   seller_name: "letters",
   seller_phone: "phone",
+  price: "price",
 };
