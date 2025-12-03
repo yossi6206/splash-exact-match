@@ -80,6 +80,18 @@ const PostCar = () => {
 
   const handleInputChange = createValidatedChangeHandler(setFormData, formData, carValidationConfig);
 
+  const formatPriceWithCommas = (value: string) => {
+    // Remove all non-digit characters
+    const digitsOnly = value.replace(/\D/g, "");
+    // Format with commas
+    return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPriceWithCommas(e.target.value);
+    setFormData({ ...formData, price: formatted });
+  };
+
   const handleFeatureToggle = (feature: string) => {
     setSelectedFeatures(prev =>
       prev.includes(feature)
@@ -400,9 +412,9 @@ const PostCar = () => {
                   id="price"
                   name="price"
                   value={formData.price}
-                  onChange={handleInputChange}
+                  onChange={handlePriceChange}
                   required
-                  placeholder="150,000 ₪"
+                  placeholder="150,000"
                 />
               </div>
             </div>
