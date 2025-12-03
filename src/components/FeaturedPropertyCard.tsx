@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 interface FeaturedPropertyCardProps {
   property: {
@@ -41,9 +42,10 @@ const FeaturedPropertyCard = ({ property }: FeaturedPropertyCardProps) => {
       <Link to={`/properties/${property.id}`} onClick={handleClick}>
         {/* Image with Navigation Arrows */}
         <div className="relative h-40 md:h-48 lg:h-64 overflow-hidden">
-          <img 
+          <CloudflareImage 
             src={property.image} 
             alt={property.title}
+            preset="card"
             className="w-full h-full object-cover"
           />
           

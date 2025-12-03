@@ -4,6 +4,7 @@ import { Heart, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/hooks/useFavorites";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 interface LaptopCardProps {
   laptop: {
@@ -40,9 +41,10 @@ export const LaptopCard = ({ laptop }: LaptopCardProps) => {
         <div className="relative">
           {/* Image */}
           <div className="aspect-[4/3] overflow-hidden bg-muted">
-            <img 
+            <CloudflareImage 
               src={laptop.image} 
               alt={laptop.title}
+              preset="card"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             />
           </div>
