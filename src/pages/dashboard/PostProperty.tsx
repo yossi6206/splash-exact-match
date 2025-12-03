@@ -75,9 +75,25 @@ const PostProperty = () => {
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    // Validate street and location - only letters (Hebrew/English), spaces, and hyphens allowed
+    if (name === "street" || name === "location") {
+      if (value && !/^[\u0590-\u05FFa-zA-Z\s\-׳']+$/.test(value)) {
+        return; // Don't update if contains numbers
+      }
+    }
+    
+    // Validate house_number - only numbers allowed
+    if (name === "house_number") {
+      if (value && !/^\d*$/.test(value)) {
+        return; // Don't update if contains non-numbers
+      }
+    }
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
