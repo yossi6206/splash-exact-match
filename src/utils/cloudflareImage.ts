@@ -23,8 +23,13 @@ export const getCloudflareImageUrl = (
   originalUrl: string,
   options: CloudflareImageOptions = {}
 ): string => {
-  // Skip if no URL or if it's a data URL
+  // Skip if no URL, data URL, or local/relative paths
   if (!originalUrl || originalUrl.startsWith('data:')) {
+    return originalUrl;
+  }
+
+  // Only process external URLs (http/https) - return local paths unchanged
+  if (!originalUrl.startsWith('http://') && !originalUrl.startsWith('https://')) {
     return originalUrl;
   }
 
