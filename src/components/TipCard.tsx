@@ -1,5 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 interface TipCardProps {
   image: string;
@@ -12,9 +13,10 @@ const TipCard = ({ image, title, description, slug }: TipCardProps) => {
   const content = (
     <div className="group cursor-pointer">
       <div className="relative overflow-hidden rounded-lg mb-3 aspect-[4/3]">
-        <img
+        <CloudflareImage
           src={image}
           alt={title}
+          preset="card"
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

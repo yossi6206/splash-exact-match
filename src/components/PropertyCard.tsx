@@ -4,6 +4,7 @@ import { Heart, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/hooks/useFavorites";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 interface PropertyCardProps {
   property: {
@@ -82,9 +83,10 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
               <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
             </Button>
             
-            <img 
+            <CloudflareImage 
               src={property.image} 
               alt={property.title}
+              preset="card"
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             />
           </div>

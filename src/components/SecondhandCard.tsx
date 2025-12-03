@@ -4,6 +4,7 @@ import { Heart, MapPin, Truck, HandshakeIcon, Calendar, Ruler } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/hooks/useFavorites";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 interface SecondhandCardProps {
   item: {
@@ -57,9 +58,10 @@ export const SecondhandCard = ({ item }: SecondhandCardProps) => {
           {/* Image */}
           <div className="aspect-[4/3] overflow-hidden bg-muted">
             {displayImage ? (
-              <img 
+              <CloudflareImage 
                 src={displayImage} 
                 alt={item.title}
+                preset="card"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
             ) : (

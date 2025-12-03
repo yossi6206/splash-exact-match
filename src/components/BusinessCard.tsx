@@ -5,6 +5,7 @@ import { Building2, MapPin, TrendingUp, Users, Phone, Eye, Sparkles, Heart } fro
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 interface BusinessCardProps {
   id: string;
@@ -82,9 +83,10 @@ const BusinessCard = ({
             </Badge>
           )}
           {images && images.length > 0 ? (
-            <img
+            <CloudflareImage
               src={images[0]}
               alt={title}
+              preset="card"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             />
           ) : (

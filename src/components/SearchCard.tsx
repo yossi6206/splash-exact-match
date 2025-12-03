@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 interface SearchCardProps {
   image: string;
@@ -9,9 +10,10 @@ const SearchCard = ({ image, title }: SearchCardProps) => {
   return (
     <Card className="group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all cursor-pointer">
       <div className="relative aspect-[4/3] overflow-hidden">
-        <img
+        <CloudflareImage
           src={image}
           alt={title}
+          preset="card"
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
