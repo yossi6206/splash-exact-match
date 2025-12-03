@@ -3,7 +3,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
-import { Package, DollarSign, CheckSquare, MapPin, Tag, Palette } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Package, DollarSign, CheckSquare, MapPin, Tag, Palette, RotateCcw } from "lucide-react";
 import { useState } from "react";
 
 interface SecondhandSidebarFilterProps {
@@ -99,13 +100,36 @@ export const SecondhandSidebarFilter = ({
     onFilterChange?.(newFilters);
   };
 
+  const resetFilters = () => {
+    const defaultFilters: SecondhandFilters = {
+      categories: [],
+      subcategories: [],
+      priceMin: priceRange.min,
+      priceMax: priceRange.max,
+      conditions: [],
+      cities: [],
+      brands: [],
+      sizes: [],
+      colors: [],
+      materials: [],
+      deliveryAvailable: false,
+      negotiable: false,
+    };
+    setFilters(defaultFilters);
+    onFilterChange?.(defaultFilters);
+  };
+
   return (
     <Card className="sticky top-24">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl flex items-center gap-2">
           <Package className="w-5 h-5 text-primary" />
           סינון מוצרים
         </CardTitle>
+        <Button variant="ghost" size="sm" onClick={resetFilters} className="h-8 px-2 text-muted-foreground hover:text-foreground">
+          <RotateCcw className="w-4 h-4 ml-1" />
+          איפוס
+        </Button>
       </CardHeader>
       <CardContent className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto overscroll-contain">
         {/* Price Range */}

@@ -3,7 +3,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
-import { Building2, MapPin, TrendingUp, DollarSign } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Building2, MapPin, TrendingUp, DollarSign, RotateCcw } from "lucide-react";
 
 interface BusinessFiltersProps {
   counts?: {
@@ -49,11 +50,15 @@ export const BusinessFilters = ({ counts }: BusinessFiltersProps) => {
 
   return (
     <Card className="sticky top-24">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl flex items-center gap-2">
           <Building2 className="w-5 h-5 text-primary" />
           סינון עסקים
         </CardTitle>
+        <Button variant="ghost" size="sm" className="h-8 px-2 text-muted-foreground hover:text-foreground">
+          <RotateCcw className="w-4 h-4 ml-1" />
+          איפוס
+        </Button>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Price Range */}

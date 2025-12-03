@@ -3,7 +3,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
-import { Briefcase, DollarSign, Clock, MapPin, Building } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Briefcase, DollarSign, Clock, MapPin, Building, RotateCcw } from "lucide-react";
 import { useState } from "react";
 
 interface JobSidebarProps {
@@ -77,13 +78,32 @@ export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
     onFilterChange?.(newFilters);
   };
 
+  const resetFilters = () => {
+    const defaultFilters: JobFilters = {
+      categories: [],
+      jobTypes: [],
+      scopes: [],
+      experienceMin: 0,
+      experienceMax: 20,
+      salaryMin: 0,
+      salaryMax: 50000,
+      locations: [],
+    };
+    setFilters(defaultFilters);
+    onFilterChange?.(defaultFilters);
+  };
+
   return (
     <Card className="sticky top-24">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl flex items-center gap-2">
           <Briefcase className="w-5 h-5 text-primary" />
           סינון משרות
         </CardTitle>
+        <Button variant="ghost" size="sm" onClick={resetFilters} className="h-8 px-2 text-muted-foreground hover:text-foreground">
+          <RotateCcw className="w-4 h-4 ml-1" />
+          איפוס
+        </Button>
       </CardHeader>
       <CardContent className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto overscroll-contain">
         {/* Salary Range */}
