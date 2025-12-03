@@ -77,17 +77,24 @@ const PostProperty = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     
-    // Validate street and location - only letters (Hebrew/English), spaces, and hyphens allowed
-    if (name === "street" || name === "location") {
+    // Validate street, location and seller_name - only letters (Hebrew/English), spaces, and hyphens allowed
+    if (name === "street" || name === "location" || name === "seller_name") {
       if (value && !/^[\u0590-\u05FFa-zA-Z\s\-׳']+$/.test(value)) {
-        return; // Don't update if contains numbers
+        const fieldNames: Record<string, string> = {
+          street: "רחוב",
+          location: "עיר",
+          seller_name: "שם המוכר"
+        };
+        toast.error(`בשדה ${fieldNames[name]} ניתן להזין רק אותיות`);
+        return;
       }
     }
     
     // Validate house_number - only numbers allowed
     if (name === "house_number") {
       if (value && !/^\d*$/.test(value)) {
-        return; // Don't update if contains non-numbers
+        toast.error("במספר בית ניתן להזין רק מספרים");
+        return;
       }
     }
     
