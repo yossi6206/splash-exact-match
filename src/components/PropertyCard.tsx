@@ -95,10 +95,16 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
           {/* Content */}
           <div className="flex-1 flex flex-col p-4">
-            <div className="mb-3 text-right">
-              <h3 className="text-lg font-bold text-foreground mb-1">
-                {property.propertyType}{property.street && ` • ${property.street}`}{property.house_number && ` ${property.house_number}`} • {property.location} • קומה {property.floor} • {property.size} מ"ר
+            <div className="mb-3 text-right space-y-1">
+              <h3 className="text-xl font-bold text-foreground">
+                {property.street && property.house_number ? `${property.street} ${property.house_number}` : property.title}
               </h3>
+              <p className="text-sm text-muted-foreground">
+                {property.propertyType}, {property.location}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {property.rooms} חדרים • קומה {property.floor} • {property.size} מ"ר
+              </p>
             </div>
 
             {/* Features */}
