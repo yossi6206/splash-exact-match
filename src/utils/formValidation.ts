@@ -1,4 +1,25 @@
 import { toast } from "sonner";
+import React from "react";
+
+// Price formatting utilities
+export const formatPriceWithCommas = (value: string): string => {
+  const digitsOnly = value.replace(/\D/g, "");
+  return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+export const parsePriceToNumber = (formattedPrice: string): number => {
+  return parseInt(formattedPrice.replace(/,/g, ""), 10) || 0;
+};
+
+export const createPriceChangeHandler = <T extends Record<string, any>>(
+  setFormData: React.Dispatch<React.SetStateAction<T>>,
+  formData: T
+) => {
+  return (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPriceWithCommas(e.target.value);
+    setFormData({ ...formData, price: formatted });
+  };
+};
 
 // Validation patterns
 const LETTERS_ONLY_PATTERN = /^[\u0590-\u05FFa-zA-Z\s\-׳'"״]+$/;

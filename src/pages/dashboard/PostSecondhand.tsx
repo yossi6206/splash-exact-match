@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
 import { ImageUpload } from "@/components/ImageUpload";
-import { createValidatedChangeHandler, secondhandValidationConfig } from "@/utils/formValidation";
+import { createValidatedChangeHandler, secondhandValidationConfig, createPriceChangeHandler, parsePriceToNumber } from "@/utils/formValidation";
 
 const secondhandSchema = z.object({
   title: z.string().trim().min(3, "כותרת חייבת להכיל לפחות 3 תווים").max(200, "כותרת ארוכה מדי"),
@@ -101,15 +101,7 @@ const PostSecondhand = () => {
 
   const handleInputChange = createValidatedChangeHandler(setFormData, formData, secondhandValidationConfig);
 
-  const formatPriceWithCommas = (value: string) => {
-    const digitsOnly = value.replace(/\D/g, "");
-    return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPriceWithCommas(e.target.value);
-    setFormData({ ...formData, price: formatted });
-  };
+  const handlePriceChange = createPriceChangeHandler(setFormData, formData);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,7 +117,7 @@ const PostSecondhand = () => {
         title: formData.title,
         category: formData.category,
         condition: formData.condition,
-        price: parseInt(formData.price.replace(/,/g, "")),
+        price: parsePriceToNumber(formData.price),
         location: formData.location,
         description: formData.description,
         seller_name: formData.seller_name,
@@ -152,7 +144,7 @@ const PostSecondhand = () => {
         category: formData.category,
         subcategory: formData.subcategory || null,
         condition: formData.condition,
-        price: parseInt(formData.price.replace(/,/g, "")),
+        price: parsePriceToNumber(formData.price),
         location: formData.location,
         brand: formData.brand || null,
         size: formData.size || null,

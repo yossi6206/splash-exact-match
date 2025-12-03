@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
 import { ImageUpload } from "@/components/ImageUpload";
-import { createValidatedChangeHandler, carValidationConfig } from "@/utils/formValidation";
+import { createValidatedChangeHandler, carValidationConfig, createPriceChangeHandler, parsePriceToNumber } from "@/utils/formValidation";
 
 const carSchema = z.object({
   manufacturer: z.string().trim().min(2, "יצרן חובה"),
@@ -80,17 +80,7 @@ const PostCar = () => {
 
   const handleInputChange = createValidatedChangeHandler(setFormData, formData, carValidationConfig);
 
-  const formatPriceWithCommas = (value: string) => {
-    // Remove all non-digit characters
-    const digitsOnly = value.replace(/\D/g, "");
-    // Format with commas
-    return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPriceWithCommas(e.target.value);
-    setFormData({ ...formData, price: formatted });
-  };
+  const handlePriceChange = createPriceChangeHandler(setFormData, formData);
 
   const handleFeatureToggle = (feature: string) => {
     setSelectedFeatures(prev =>

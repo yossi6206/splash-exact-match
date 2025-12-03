@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
 import { ImageUpload } from "@/components/ImageUpload";
-import { createValidatedChangeHandler, laptopValidationConfig } from "@/utils/formValidation";
+import { createValidatedChangeHandler, laptopValidationConfig, createPriceChangeHandler, parsePriceToNumber } from "@/utils/formValidation";
 
 const laptopSchema = z.object({
   brand: z.string().trim().min(2, "יצרן חייב להכיל לפחות 2 תווים").max(100, "יצרן ארוך מדי"),
@@ -78,15 +78,7 @@ const PostLaptop = () => {
 
   const handleInputChange = createValidatedChangeHandler(setFormData, formData, laptopValidationConfig);
 
-  const formatPriceWithCommas = (value: string) => {
-    const digitsOnly = value.replace(/\D/g, "");
-    return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPriceWithCommas(e.target.value);
-    setFormData({ ...formData, price: formatted });
-  };
+  const handlePriceChange = createPriceChangeHandler(setFormData, formData);
 
   const handleFeatureToggle = (feature: string) => {
     setSelectedFeatures(prev =>
@@ -110,7 +102,7 @@ const PostLaptop = () => {
         brand: formData.brand,
         model: formData.model,
         condition: formData.condition,
-        price: parseInt(formData.price.replace(/,/g, "")),
+        price: parsePriceToNumber(formData.price),
         location: formData.location,
         description: formData.description,
         seller_name: formData.seller_name,
@@ -148,7 +140,7 @@ const PostLaptop = () => {
         connectivity: formData.connectivity || null,
         ports: formData.ports || null,
         condition: formData.condition,
-        price: parseInt(formData.price.replace(/,/g, "")),
+        price: parsePriceToNumber(formData.price),
         location: formData.location,
         description: formData.description,
         seller_name: formData.seller_name,
