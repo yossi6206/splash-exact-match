@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import logoImage from "@/assets/logo-secondhandpro-new.png";
 
 const newsletterSchema = z.object({
   email: z.string().email({ message: "כתובת אימייל לא תקינה" }).max(255),
@@ -26,7 +27,7 @@ const Footer = () => {
   ];
 
   const aboutLinks = [
-    "אודות שוק יד שנייה",
+    "אודות SecondHandPro",
     "צור קשר",
     "מדיניות פרטיות",
     "תנאי שימוש",
@@ -92,7 +93,7 @@ const Footer = () => {
           {/* Brand & Social - Center */}
           <div className="lg:col-span-1 text-center space-y-6">
             <div>
-              <h3 className="text-2xl md:text-3xl font-bold text-primary mb-3">שוק יד שנייה</h3>
+              <img src={logoImage} alt="SecondHandPro" className="h-12 w-auto mx-auto mb-3" />
               <p className="text-foreground/70 text-sm leading-relaxed max-w-xs mx-auto">
                 הפלטפורמה המובילה למכירה וקנייה בישראל. מחברים בין אלפי משתמשים מדי יום.
               </p>
@@ -226,7 +227,7 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-border/50">
           <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-4 text-center">
             <p className="text-foreground/60 text-sm order-2 md:order-1">
-              © {currentYear} שוק יד שנייה. כל הזכויות שמורות.
+              © {currentYear} SecondHandPro. כל הזכויות שמורות.
             </p>
             <div className="flex gap-4 text-sm order-1 md:order-2 flex-wrap justify-center">
               <a href="#" className="text-foreground/60 hover:text-primary transition-colors whitespace-nowrap">
