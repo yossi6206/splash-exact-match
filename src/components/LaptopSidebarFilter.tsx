@@ -168,7 +168,7 @@ export const LaptopSidebarFilter = ({ onFilterChange, counts }: LaptopSidebarFil
           </div>
         </div>
 
-        <div className="max-h-[calc(100vh-280px)] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent">
+        <div className="max-h-[calc(100vh-280px)] overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent">
           {/* Brands */}
           <FilterSection title="יצרן" section="brands">
             <div className="space-y-3">
