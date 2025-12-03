@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import logoImage from "@/assets/logo-secondhandpro-new.png";
+
 
 const newsletterSchema = z.object({
   email: z.string().email({ message: "כתובת אימייל לא תקינה" }).max(255),
@@ -93,7 +93,9 @@ const Footer = () => {
           {/* Brand & Social - Center */}
           <div className="lg:col-span-1 text-center space-y-6">
             <div>
-              <img src={logoImage} alt="SecondHandPro" className="h-12 w-auto mx-auto mb-3" />
+              <div className="flex h-12 w-auto px-4 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md mx-auto mb-3">
+                <span className="text-lg font-extrabold text-primary-foreground">SecondHandPro</span>
+              </div>
               <p className="text-foreground/70 text-sm leading-relaxed max-w-xs mx-auto">
                 הפלטפורמה המובילה למכירה וקנייה בישראל. מחברים בין אלפי משתמשים מדי יום.
               </p>
