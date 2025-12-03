@@ -108,7 +108,7 @@ const FeaturedPropertyCard = ({ property }: FeaturedPropertyCardProps) => {
             {property.rooms} חדרים • קומה {property.floor} • {property.size} מ"ר
           </p>
           <div className="text-xl md:text-2xl font-bold text-foreground">
-            ₪{Number(property.price).toLocaleString()}
+            {property.price ? `₪${Number(property.price).toLocaleString()}` : 'לא צוין מחיר'}
           </div>
         </div>
       </Link>
