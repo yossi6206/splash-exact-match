@@ -251,39 +251,39 @@ const PropertyDetails = () => {
 
             {/* Key Info */}
             <Card className="p-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4" dir="rtl">
-                <div className="flex items-center gap-3 justify-end">
-                  <div className="text-left">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="flex items-center gap-3">
+                  <Bed className="h-5 w-5 text-muted-foreground" />
+                  <div>
                     <div className="text-sm text-muted-foreground">חדרים</div>
-                    <div className="font-bold text-lg">{property.rooms}</div>
+                    <div className="font-semibold">{property.rooms}</div>
                   </div>
-                  <Bed className="h-6 w-6 text-muted-foreground" />
                 </div>
                 {property.size && (
-                  <div className="flex items-center gap-3 justify-end">
-                    <div className="text-left">
+                  <div className="flex items-center gap-3">
+                    <Square className="h-5 w-5 text-muted-foreground" />
+                    <div>
                       <div className="text-sm text-muted-foreground">מ"ר</div>
-                      <div className="font-bold text-lg">{property.size}</div>
+                      <div className="font-semibold">{property.size}</div>
                     </div>
-                    <Square className="h-6 w-6 text-muted-foreground" />
                   </div>
                 )}
                 {property.floor !== null && property.floor !== undefined && (
-                  <div className="flex items-center gap-3 justify-end">
-                    <div className="text-left">
+                  <div className="flex items-center gap-3">
+                    <Layers className="h-5 w-5 text-muted-foreground" />
+                    <div>
                       <div className="text-sm text-muted-foreground">קומה</div>
-                      <div className="font-bold text-lg">{property.floor}{property.total_floors ? `/${property.total_floors}` : ''}</div>
+                      <div className="font-semibold">{property.floor}{property.total_floors ? `/${property.total_floors}` : ''}</div>
                     </div>
-                    <Layers className="h-6 w-6 text-muted-foreground" />
                   </div>
                 )}
                 {property.year && (
-                  <div className="flex items-center gap-3 justify-end">
-                    <div className="text-left">
+                  <div className="flex items-center gap-3">
+                    <Calendar className="h-5 w-5 text-muted-foreground" />
+                    <div>
                       <div className="text-sm text-muted-foreground">שנת בנייה</div>
-                      <div className="font-bold text-lg">{property.year}</div>
+                      <div className="font-semibold">{property.year}</div>
                     </div>
-                    <Calendar className="h-6 w-6 text-muted-foreground" />
                   </div>
                 )}
               </div>
