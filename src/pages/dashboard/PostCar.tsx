@@ -97,13 +97,31 @@ const PostCar = () => {
       return;
     }
 
+    // Validate required numeric fields
+    const yearNum = formData.year ? parseInt(formData.year) : NaN;
+    const kmNum = formData.km ? parseInt(formData.km) : NaN;
+    const handNum = formData.hand ? parseInt(formData.hand) : NaN;
+
+    if (isNaN(yearNum)) {
+      toast.error("שנת ייצור חובה");
+      return;
+    }
+    if (isNaN(kmNum)) {
+      toast.error("קילומטראז' חובה");
+      return;
+    }
+    if (isNaN(handNum)) {
+      toast.error("יד חובה");
+      return;
+    }
+
     try {
       carSchema.parse({
         manufacturer: formData.manufacturer,
         model: formData.model,
-        year: parseInt(formData.year),
-        km: parseInt(formData.km),
-        hand: parseInt(formData.hand),
+        year: yearNum,
+        km: kmNum,
+        hand: handNum,
         fuel_type: formData.fuel_type,
         transmission: formData.transmission,
         vehicle_type: formData.vehicle_type,
@@ -133,9 +151,9 @@ const PostCar = () => {
         user_id: user.id,
         manufacturer: formData.manufacturer,
         model: formData.model,
-        year: parseInt(formData.year),
-        km: parseInt(formData.km),
-        hand: parseInt(formData.hand),
+        year: yearNum,
+        km: kmNum,
+        hand: handNum,
         fuel_type: formData.fuel_type,
         transmission: formData.transmission,
         vehicle_type: formData.vehicle_type || "רכב פרטי",
