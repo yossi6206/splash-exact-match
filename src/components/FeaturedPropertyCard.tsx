@@ -13,7 +13,7 @@ interface FeaturedPropertyCardProps {
     subtitle: string;
     propertyType: string;
     condition: string;
-    price: string;
+    price: number | string;
     location: string;
     rooms: number;
     size: number;
