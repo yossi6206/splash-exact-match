@@ -108,24 +108,20 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             </div>
 
             {/* Features */}
-            <div className="flex flex-wrap gap-1.5 mb-4">
-              <Badge variant="secondary" className="bg-muted text-foreground text-xs">
-                {property.rooms} חדרים
-              </Badge>
-              <Badge variant="secondary" className="bg-muted text-foreground text-xs">
-                {property.size} מ"ר
-              </Badge>
-              {property.features && property.features.slice(0, 3).map((feature, index) => (
-                <Badge key={index} variant="secondary" className="bg-muted text-foreground text-xs">
-                  {feature}
-                </Badge>
-              ))}
-              {property.features && property.features.length > 3 && (
-                <Badge variant="secondary" className="bg-muted text-muted-foreground text-xs">
-                  +{property.features.length - 3}
-                </Badge>
-              )}
-            </div>
+            {property.features && property.features.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {property.features.slice(0, 5).map((feature, index) => (
+                  <Badge key={index} variant="secondary" className="bg-muted text-foreground text-xs">
+                    {feature}
+                  </Badge>
+                ))}
+                {property.features.length > 5 && (
+                  <Badge variant="secondary" className="bg-muted text-muted-foreground text-xs">
+                    +{property.features.length - 5}
+                  </Badge>
+                )}
+              </div>
+            )}
 
             {/* Price */}
             <div className="mt-auto text-right">
