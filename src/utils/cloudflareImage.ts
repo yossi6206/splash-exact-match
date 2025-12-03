@@ -1,6 +1,7 @@
 // Cloudflare Image Resizing utility
-// Note: Cloudflare Image Resizing requires Pro/Business/Enterprise plan
-// Currently disabled - images load directly from source
+// Docs: https://developers.cloudflare.com/images/image-resizing/url-format/
+
+const CLOUDFLARE_DOMAIN = 'https://secondhandpro.co.il';
 
 export interface CloudflareImageOptions {
   width?: number;
@@ -13,30 +14,75 @@ export interface CloudflareImageOptions {
 }
 
 /**
- * Get image URL - currently returns original URL
- * When Cloudflare Image Resizing is enabled, this will optimize images via CDN
+ * Generate a Cloudflare Image Resizing URL
+ * @param originalUrl - The original image URL (can be external like Supabase)
+ * @param options - Cloudflare image transformation options
+ * @returns Optimized image URL via Cloudflare CDN
  */
 export const getCloudflareImageUrl = (
   originalUrl: string,
-  _options: CloudflareImageOptions = {}
+  options: CloudflareImageOptions = {}
 ): string => {
-  // Return original URL as-is (Cloudflare Image Resizing not enabled)
-  return originalUrl || '';
+  // Skip if no URL or data URL
+  if (!originalUrl || originalUrl.startsWith('data:')) {
+    return originalUrl;
+  }
+
+  // Only process external URLs (http/https) - return local paths unchanged
+  if (!originalUrl.startsWith('http://') && !originalUrl.startsWith('https://')) {
+    return originalUrl;
+  }
+
+  // Default options for optimal performance
+  const {
+    width,
+    height,
+    quality = 80,
+    format = 'auto',
+    fit = 'cover',
+    gravity = 'auto',
+    dpr,
+  } = options;
+
+  // Build the options string
+  const params: string[] = [];
+  
+  if (width) params.push(`width=${width}`);
+  if (height) params.push(`height=${height}`);
+  params.push(`quality=${quality}`);
+  params.push(`format=${format}`);
+  params.push(`fit=${fit}`);
+  if (gravity !== 'auto') params.push(`gravity=${gravity}`);
+  if (dpr) params.push(`dpr=${dpr}`);
+
+  const optionsString = params.join(',');
+
+  // Return the Cloudflare Image Resizing URL
+  return `${CLOUDFLARE_DOMAIN}/cdn-cgi/image/${optionsString}/${originalUrl}`;
 };
 
 /**
- * Generate responsive srcSet - currently returns empty string
+ * Generate responsive srcSet for different screen sizes
+ * @param originalUrl - The original image URL
+ * @param sizes - Array of widths to generate
+ * @returns srcSet string for responsive images
  */
 export const getCloudflareImageSrcSet = (
-  _originalUrl: string,
-  _sizes: number[] = [400, 800, 1200, 1600]
+  originalUrl: string,
+  sizes: number[] = [400, 800, 1200, 1600]
 ): string => {
-  // Disabled - would generate srcSet when Cloudflare is enabled
-  return '';
+  // Skip if not an external URL
+  if (!originalUrl || !originalUrl.startsWith('http')) {
+    return '';
+  }
+  
+  return sizes
+    .map(size => `${getCloudflareImageUrl(originalUrl, { width: size })} ${size}w`)
+    .join(', ');
 };
 
 /**
- * Predefined image size presets (for future use)
+ * Predefined image size presets
  */
 export const imagePresets = {
   thumbnail: { width: 150, height: 150, fit: 'cover' as const },
