@@ -72,7 +72,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             <Button 
               variant="ghost" 
               size="icon"
-              className="absolute top-2 right-2 z-20 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm text-muted-foreground hover:text-red-500"
+              className="absolute top-3 right-3 z-20 bg-background/90 hover:bg-background rounded-full shadow-md backdrop-blur-sm text-muted-foreground hover:text-red-500 h-9 w-9"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
