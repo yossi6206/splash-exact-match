@@ -3,6 +3,14 @@
 
 const CLOUDFLARE_DOMAIN = 'https://secondhandpro.co.il';
 
+// Check if we're on the production domain where Cloudflare is configured
+const isCloudflareEnabled = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const hostname = window.location.hostname;
+  // Only enable on production domain where Cloudflare Image Resizing is configured
+  return hostname === 'secondhandpro.co.il' || hostname === 'www.secondhandpro.co.il';
+};
+
 export interface CloudflareImageOptions {
   width?: number;
   height?: number;
@@ -30,6 +38,11 @@ export const getCloudflareImageUrl = (
 
   // Only process external URLs (http/https) - return local paths unchanged
   if (!originalUrl.startsWith('http://') && !originalUrl.startsWith('https://')) {
+    return originalUrl;
+  }
+
+  // Only use Cloudflare on production domain where it's configured
+  if (!isCloudflareEnabled()) {
     return originalUrl;
   }
 
