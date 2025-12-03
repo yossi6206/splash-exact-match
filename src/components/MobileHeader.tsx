@@ -5,7 +5,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import logoImage from "@/assets/logo-secondhandpro-new.png";
+
 import {
   Sheet,
   SheetContent,
@@ -85,7 +85,9 @@ const MobileHeader = () => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-3">
-                  <img src={logoImage} alt="SecondHandPro" className="h-10 w-auto" />
+                  <div className="flex h-10 w-auto px-3 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
+                    <span className="text-sm font-extrabold text-primary-foreground">SecondHandPro</span>
+                  </div>
                   <Button
                     className="w-full mt-2"
                     onClick={() => navigate("/auth")}
@@ -162,9 +164,10 @@ const MobileHeader = () => {
           </SheetContent>
         </Sheet>
 
-        {/* Logo / Page Title */}
         <Link to="/" className="flex items-center">
-          <img src={logoImage} alt="SecondHandPro" className="h-8 w-auto" />
+          <div className="flex h-8 w-auto px-2 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
+            <span className="text-xs font-extrabold text-primary-foreground">SecondHandPro</span>
+          </div>
         </Link>
 
         {/* Actions */}
