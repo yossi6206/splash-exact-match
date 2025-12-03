@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CloudflareImage } from "@/components/CloudflareImage";
-import { MapPin } from "lucide-react";
+import { Heart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 // Default images for fallbacks
@@ -33,8 +33,7 @@ interface SimilarItem {
   image: string;
   price: string;
   location: string;
-  condition?: string;
-  badges?: string[];
+  details: string;
 }
 
 const SimilarListings = ({
@@ -61,7 +60,7 @@ const SimilarListings = ({
           case "property": {
             let query = supabase
               .from("properties")
-              .select("id, title, images, price, location, property_type, rooms, street, house_number, size, condition, features")
+              .select("id, title, images, price, location, property_type, rooms, street, house_number, size, floor")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
@@ -75,12 +74,11 @@ const SimilarListings = ({
               data = properties.map((p) => ({
                 id: p.id,
                 title: p.street && p.house_number ? `${p.street} ${p.house_number}` : p.title,
-                subtitle: `${p.rooms} חדרים • ${p.size || 0} מ"ר • ${p.property_type}`,
+                subtitle: `${p.street || ""}, ${p.location}`.trim().replace(/^,\s*/, ""),
                 image: p.images?.[0] || property1,
-                price: `₪${p.price?.toLocaleString("he-IL") || 0}`,
+                price: `₪ ${p.price?.toLocaleString("he-IL") || 0}`,
                 location: p.location,
-                condition: p.condition || undefined,
-                badges: p.features?.slice(0, 3) || [],
+                details: `${p.rooms} חדרים • קומה ${p.floor || 0} • ${p.size || 0} מ"ר`,
               }));
             }
             break;
@@ -89,7 +87,7 @@ const SimilarListings = ({
           case "car": {
             let query = supabase
               .from("cars")
-              .select("id, manufacturer, model, images, price, location, year, km, hand, condition, features")
+              .select("id, manufacturer, model, images, price, location, year, km, hand")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
@@ -102,12 +100,11 @@ const SimilarListings = ({
               data = cars.map((c) => ({
                 id: c.id,
                 title: `${c.manufacturer || ""} ${c.model}`,
-                subtitle: `${c.year} • ${c.km?.toLocaleString()} ק"מ • יד ${c.hand}`,
+                subtitle: c.location,
                 image: c.images?.[0] || carImage,
-                price: c.price ? `₪${parseFloat(c.price.replace(/,/g, "")).toLocaleString("he-IL")}` : "לא צוין מחיר",
+                price: c.price ? `₪ ${parseFloat(c.price.replace(/,/g, "")).toLocaleString("he-IL")}` : "לא צוין מחיר",
                 location: c.location,
-                condition: c.condition || undefined,
-                badges: c.features?.slice(0, 3) || [],
+                details: `${c.year} • ${c.km?.toLocaleString()} ק"מ • יד ${c.hand}`,
               }));
             }
             break;
@@ -116,7 +113,7 @@ const SimilarListings = ({
           case "laptop": {
             let query = supabase
               .from("laptops")
-              .select("id, brand, model, images, price, location, condition, ram, storage, processor, features")
+              .select("id, brand, model, images, price, location, condition, ram, storage, processor")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
@@ -129,12 +126,11 @@ const SimilarListings = ({
               data = laptops.map((l) => ({
                 id: l.id,
                 title: `${l.brand} ${l.model}`,
-                subtitle: `${l.processor || ""} ${l.ram}GB ${l.storage}GB`.trim(),
+                subtitle: l.location,
                 image: l.images?.[0] || laptopImage,
-                price: `₪${l.price?.toLocaleString("he-IL") || 0}`,
+                price: `₪ ${l.price?.toLocaleString("he-IL") || 0}`,
                 location: l.location,
-                condition: l.condition || undefined,
-                badges: l.features?.slice(0, 3) || [],
+                details: `${l.processor || ""} • ${l.ram}GB • ${l.storage}GB`,
               }));
             }
             break;
@@ -143,7 +139,7 @@ const SimilarListings = ({
           case "secondhand": {
             let query = supabase
               .from("secondhand_items")
-              .select("id, title, images, price, location, category, condition, brand, features")
+              .select("id, title, images, price, location, category, condition")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
@@ -156,12 +152,11 @@ const SimilarListings = ({
               data = items.map((i) => ({
                 id: i.id,
                 title: i.title,
-                subtitle: `${i.category}${i.brand ? ` • ${i.brand}` : ""}`,
+                subtitle: i.location,
                 image: i.images?.[0] || laptopImage,
-                price: `₪${i.price?.toLocaleString("he-IL") || 0}`,
+                price: `₪ ${i.price?.toLocaleString("he-IL") || 0}`,
                 location: i.location,
-                condition: i.condition || undefined,
-                badges: i.features?.slice(0, 3) || [],
+                details: `${i.category} • ${i.condition}`,
               }));
             }
             break;
@@ -170,7 +165,7 @@ const SimilarListings = ({
           case "job": {
             let query = supabase
               .from("jobs")
-              .select("id, title, company_name, location, job_type, salary_min, salary_max, scope, benefits")
+              .select("id, title, company_name, location, job_type, salary_min, salary_max, scope")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
@@ -183,13 +178,13 @@ const SimilarListings = ({
               data = jobs.map((j) => ({
                 id: j.id,
                 title: j.title,
-                subtitle: `${j.company_name} • ${j.job_type} • ${j.scope}`,
+                subtitle: j.company_name,
                 image: jobImage,
                 price: j.salary_min && j.salary_max 
-                  ? `₪${j.salary_min.toLocaleString("he-IL")} - ₪${j.salary_max.toLocaleString("he-IL")}`
+                  ? `₪ ${j.salary_min.toLocaleString("he-IL")} - ₪ ${j.salary_max.toLocaleString("he-IL")}`
                   : "שכר לא צוין",
                 location: j.location,
-                badges: j.benefits?.slice(0, 3) || [],
+                details: `${j.job_type} • ${j.scope} • ${j.location}`,
               }));
             }
             break;
@@ -198,7 +193,7 @@ const SimilarListings = ({
           case "business": {
             let query = supabase
               .from("businesses")
-              .select("id, title, images, price, location, category, business_type, years_operating, includes")
+              .select("id, title, images, price, location, category, business_type")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
@@ -211,11 +206,11 @@ const SimilarListings = ({
               data = businesses.map((b) => ({
                 id: b.id,
                 title: b.title,
-                subtitle: `${b.category} • ${b.business_type}${b.years_operating ? ` • ${b.years_operating} שנים` : ""}`,
+                subtitle: b.location,
                 image: b.images?.[0] || jobImage,
-                price: `₪${b.price?.toLocaleString("he-IL") || 0}`,
+                price: `₪ ${b.price?.toLocaleString("he-IL") || 0}`,
                 location: b.location,
-                badges: b.includes?.slice(0, 3) || [],
+                details: `${b.category} • ${b.business_type}`,
               }));
             }
             break;
@@ -224,7 +219,7 @@ const SimilarListings = ({
           case "freelancer": {
             let query = supabase
               .from("freelancers")
-              .select("id, full_name, title, avatar_url, hourly_rate, location, category, rating, skills")
+              .select("id, full_name, title, avatar_url, hourly_rate, location, category, rating")
               .eq("availability", "available")
               .neq("id", currentItemId)
               .limit(6);
@@ -237,11 +232,11 @@ const SimilarListings = ({
               data = freelancers.map((f) => ({
                 id: f.id,
                 title: f.full_name,
-                subtitle: `${f.title} • ${f.category}${f.rating ? ` • ⭐ ${f.rating}` : ""}`,
+                subtitle: f.title,
                 image: f.avatar_url || jobImage,
-                price: `₪${f.hourly_rate}/שעה`,
+                price: `₪ ${f.hourly_rate}/שעה`,
                 location: f.location || "לא צוין",
-                badges: f.skills?.slice(0, 3) || [],
+                details: `${f.category}${f.rating ? ` • ⭐ ${f.rating}` : ""}`,
               }));
             }
             break;
@@ -271,33 +266,30 @@ const SimilarListings = ({
     return routes[itemType];
   };
 
-  const SectionHeader = () => (
-    <div className="flex items-center gap-3">
-      <div className="h-10 w-1.5 bg-gradient-to-b from-primary to-primary/50 rounded-full" />
-      <div>
-        <h2 className="text-2xl font-bold text-foreground">מודעות דומות</h2>
-        <p className="text-sm text-muted-foreground">פריטים נוספים שעשויים לעניין אותך</p>
-      </div>
-    </div>
-  );
+  const getTitle = () => {
+    switch (itemType) {
+      case "property": return "נכסים דומים למה שחיפשת";
+      case "car": return "רכבים דומים למה שחיפשת";
+      case "laptop": return "מחשבים דומים למה שחיפשת";
+      case "job": return "משרות דומות למה שחיפשת";
+      case "business": return "עסקים דומים למה שחיפשת";
+      case "freelancer": return "פרילנסרים דומים למה שחיפשת";
+      default: return "מודעות דומות למה שחיפשת";
+    }
+  };
 
   if (loading) {
     return (
       <div className="space-y-6">
-        <SectionHeader />
+        <h2 className="text-2xl font-bold text-foreground text-right">{getTitle()}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i} className="overflow-hidden" dir="rtl">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="overflow-hidden border-0 shadow-sm" dir="rtl">
               <Skeleton className="aspect-[4/3] w-full" />
               <div className="p-4 space-y-3">
-                <Skeleton className="h-6 w-3/4 mx-auto" />
+                <Skeleton className="h-8 w-32 mr-auto" />
                 <Skeleton className="h-4 w-full" />
-                <div className="flex gap-2 justify-center">
-                  <Skeleton className="h-6 w-16" />
-                  <Skeleton className="h-6 w-16" />
-                </div>
-                <Skeleton className="h-4 w-24 mx-auto" />
-                <Skeleton className="h-8 w-32 mx-auto" />
+                <Skeleton className="h-4 w-3/4" />
               </div>
             </Card>
           ))}
@@ -312,7 +304,7 @@ const SimilarListings = ({
 
   return (
     <div className="space-y-6">
-      <SectionHeader />
+      <h2 className="text-2xl font-bold text-foreground text-right">{getTitle()}</h2>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item) => (
@@ -321,14 +313,20 @@ const SimilarListings = ({
             to={getItemLink(item.id)}
             className="block group"
           >
-            <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border-border h-full" dir="rtl">
-              {/* Image */}
+            <Card className="overflow-hidden border-0 shadow-sm hover:shadow-lg transition-shadow duration-300 bg-card h-full" dir="rtl">
+              {/* Image with Heart */}
               <div className="aspect-[4/3] relative overflow-hidden bg-muted">
-                {item.condition && (
-                  <Badge className="absolute top-3 right-3 z-10 bg-background/95 text-foreground border-0 shadow-sm">
-                    {item.condition}
-                  </Badge>
-                )}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-3 right-3 z-10 bg-white/80 hover:bg-white rounded-full shadow-sm h-10 w-10"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <Heart className="h-5 w-5 text-muted-foreground" />
+                </Button>
                 <CloudflareImage
                   src={item.image}
                   alt={item.title}
@@ -338,44 +336,23 @@ const SimilarListings = ({
               </div>
 
               {/* Content */}
-              <div className="p-5 space-y-3">
-                {/* Title */}
-                <h3 className="text-lg font-bold text-foreground text-center group-hover:text-primary transition-colors line-clamp-1">
-                  {item.title}
-                </h3>
-                
-                {/* Subtitle */}
-                <p className="text-sm text-muted-foreground text-center line-clamp-1">
-                  {item.subtitle}
-                </p>
-
-                {/* Badges */}
-                {item.badges && item.badges.length > 0 && (
-                  <div className="flex flex-wrap justify-center gap-2 pt-2">
-                    {item.badges.map((badge, index) => (
-                      <Badge 
-                        key={index} 
-                        variant="outline" 
-                        className="text-xs bg-muted/50 border-border"
-                      >
-                        {badge}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-
-                {/* Location */}
-                <div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground pt-2 border-t border-border/50">
-                  <MapPin className="h-4 w-4" />
-                  <span>{item.location}</span>
-                </div>
-
+              <div className="p-4 space-y-2">
                 {/* Price */}
-                <div className="text-center pt-2">
+                <div className="text-right">
                   <span className="text-2xl font-bold text-foreground">
                     {item.price}
                   </span>
                 </div>
+                
+                {/* Address/Subtitle */}
+                <p className="text-sm text-foreground text-right line-clamp-1">
+                  {item.subtitle}
+                </p>
+
+                {/* Details */}
+                <p className="text-sm text-muted-foreground text-right">
+                  {item.details}
+                </p>
               </div>
             </Card>
           </Link>
