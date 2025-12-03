@@ -356,7 +356,7 @@ export default function Messages() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="h-screen flex flex-col bg-background pb-20 md:pb-0">
       {/* Mobile Header */}
       <MobileHeader />
       
@@ -373,9 +373,9 @@ export default function Messages() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden flex-col md:flex-row">
+      <div className="flex-1 flex overflow-hidden flex-col md:flex-row min-h-0">
         {/* Conversations List - Full width on mobile when no conversation selected */}
-        <div className={`${selectedConversation ? 'hidden md:block' : 'block'} w-full md:w-96 flex-shrink-0 md:border-l h-full`}>
+        <div className={`${selectedConversation ? 'hidden md:block' : 'block'} w-full md:w-96 flex-shrink-0 md:border-l h-full overflow-hidden`}>
           <ConversationsList
             conversations={conversations}
             selectedConversationId={selectedConversation?.conversationId || null}
@@ -388,11 +388,11 @@ export default function Messages() {
         </div>
 
         {/* Chat Area - Full width on mobile when conversation selected */}
-        <div className={`${!selectedConversation ? 'hidden md:flex' : 'flex'} flex-1 items-center justify-center`}>
+        <div className={`${!selectedConversation ? 'hidden md:flex' : 'flex'} flex-1 flex-col min-h-0`}>
           {selectedConversation ? (
-            <div className="w-full h-full flex flex-col">
+            <div className="w-full h-full flex flex-col min-h-0">
               {/* Mobile Back Button */}
-              <div className="md:hidden flex items-center gap-2 p-3 border-b bg-background">
+              <div className="md:hidden flex items-center gap-2 p-3 border-b bg-background flex-shrink-0">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -402,7 +402,7 @@ export default function Messages() {
                 </Button>
                 <span className="font-medium">{selectedConversation.otherUserName}</span>
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-h-0">
                 <FreelancerChat
                   conversationId={selectedConversation.conversationId}
                   otherUserId={selectedConversation.otherUserId}
@@ -416,15 +416,17 @@ export default function Messages() {
               </div>
             </div>
           ) : (
-            <div className="text-center space-y-4 p-8">
-              <div className="mx-auto w-32 h-32 rounded-full bg-muted/30 flex items-center justify-center">
-                <MessageSquare className="h-16 w-16 text-muted-foreground/40" />
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2 text-foreground">המשך מאיפה שעצרת</h3>
-                <p className="text-muted-foreground">
-                  בחר שיחה ותוכל להמשיך לצ'אט
-                </p>
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center space-y-4 p-8">
+                <div className="mx-auto w-32 h-32 rounded-full bg-muted/30 flex items-center justify-center">
+                  <MessageSquare className="h-16 w-16 text-muted-foreground/40" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-2 text-foreground">המשך מאיפה שעצרת</h3>
+                  <p className="text-muted-foreground">
+                    בחר שיחה ותוכל להמשיך לצ'אט
+                  </p>
+                </div>
               </div>
             </div>
           )}
