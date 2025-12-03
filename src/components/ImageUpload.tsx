@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { compressImage } from "@/utils/imageCompression";
 
 interface ImageUploadProps {
   onImagesChange: (urls: string[]) => void;
@@ -17,15 +18,18 @@ export const ImageUpload = ({ onImagesChange, maxImages = 8, existingImages = []
 
   const uploadImage = async (file: File) => {
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
+      // Compress image before upload
+      const compressedFile = await compressImage(file);
+      
+      const fileName = `${Math.random()}.jpg`;
       const filePath = `${fileName}`;
 
       const { error: uploadError, data } = await supabase.storage
         .from('product-images')
-        .upload(filePath, file, {
+        .upload(filePath, compressedFile, {
           cacheControl: '3600',
-          upsert: false
+          upsert: false,
+          contentType: 'image/jpeg'
         });
 
       if (uploadError) throw uploadError;
@@ -54,9 +58,9 @@ export const ImageUpload = ({ onImagesChange, maxImages = 8, existingImages = []
     setUploading(true);
 
     const uploadPromises = Array.from(files).map(file => {
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error(`הקובץ ${file.name} גדול מדי (מקסימום 5MB)`);
+      // Validate file size (max 10MB before compression)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error(`הקובץ ${file.name} גדול מדי (מקסימום 10MB)`);
         return Promise.resolve(null);
       }
 
@@ -144,7 +148,7 @@ export const ImageUpload = ({ onImagesChange, maxImages = 8, existingImages = []
       <div className="flex items-start gap-2 text-sm text-muted-foreground">
         <ImageIcon className="h-4 w-4 mt-0.5 flex-shrink-0" />
         <div>
-          <p>ניתן להעלות עד {maxImages} תמונות (מקסימום 5MB לתמונה)</p>
+          <p>ניתן להעלות עד {maxImages} תמונות (התמונות יכווצו אוטומטית)</p>
           <p>תמונה ראשונה תהיה התמונה הראשית של המודעה</p>
         </div>
       </div>
