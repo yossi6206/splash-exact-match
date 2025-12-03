@@ -21,6 +21,8 @@ interface FeaturedPropertyCardProps {
     features: string[];
     clicks_count?: number;
     listing_type?: string;
+    street?: string;
+    house_number?: string;
   };
 }
 
@@ -95,15 +97,18 @@ const FeaturedPropertyCard = ({ property }: FeaturedPropertyCardProps) => {
         </div>
 
         {/* Content */}
-        <div className="p-3 md:p-4 text-center">
-          <div className="text-xl md:text-2xl font-bold text-foreground mb-1 md:mb-2">
+        <div className="p-3 md:p-4 text-right" dir="rtl">
+          <h3 className="text-base md:text-lg font-bold text-foreground mb-1 truncate">
+            {property.street && property.house_number ? `${property.street} ${property.house_number}` : property.title}
+          </h3>
+          <p className="text-xs md:text-sm text-muted-foreground mb-0.5 truncate">
+            {property.propertyType}, {property.location}
+          </p>
+          <p className="text-xs md:text-sm text-muted-foreground mb-2">
+            {property.rooms} חדרים • קומה {property.floor} • {property.size} מ"ר
+          </p>
+          <div className="text-xl md:text-2xl font-bold text-foreground">
             ₪{property.price}
-          </div>
-          <div className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1 truncate">
-            {property.location}
-          </div>
-          <div className="text-xs md:text-sm text-muted-foreground">
-            {property.rooms} חדרים
           </div>
         </div>
       </Link>
