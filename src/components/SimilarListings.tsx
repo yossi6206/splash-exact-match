@@ -63,7 +63,7 @@ const SimilarListings = ({
               .select("id, title, images, price, location, property_type, rooms, street, house_number, size, floor")
               .eq("status", "active")
               .neq("id", currentItemId)
-              .limit(6);
+              .limit(4);
 
             if (location) query = query.eq("location", location);
             if (propertyType) query = query.eq("property_type", propertyType);
@@ -90,7 +90,7 @@ const SimilarListings = ({
               .select("id, manufacturer, model, images, price, location, year, km, hand")
               .eq("status", "active")
               .neq("id", currentItemId)
-              .limit(6);
+              .limit(4);
 
             if (manufacturer) query = query.eq("manufacturer", manufacturer);
             if (location) query = query.eq("location", location);
@@ -116,7 +116,7 @@ const SimilarListings = ({
               .select("id, brand, model, images, price, location, condition, ram, storage, processor")
               .eq("status", "active")
               .neq("id", currentItemId)
-              .limit(6);
+              .limit(4);
 
             if (brand) query = query.eq("brand", brand);
             if (location) query = query.eq("location", location);
@@ -142,7 +142,7 @@ const SimilarListings = ({
               .select("id, title, images, price, location, category, condition")
               .eq("status", "active")
               .neq("id", currentItemId)
-              .limit(6);
+              .limit(4);
 
             if (category) query = query.eq("category", category);
             if (location) query = query.eq("location", location);
@@ -168,7 +168,7 @@ const SimilarListings = ({
               .select("id, title, company_name, location, job_type, salary_min, salary_max, scope")
               .eq("status", "active")
               .neq("id", currentItemId)
-              .limit(6);
+              .limit(4);
 
             if (jobType) query = query.eq("job_type", jobType);
             if (location) query = query.eq("location", location);
@@ -196,7 +196,7 @@ const SimilarListings = ({
               .select("id, title, images, price, location, category, business_type")
               .eq("status", "active")
               .neq("id", currentItemId)
-              .limit(6);
+              .limit(4);
 
             if (category) query = query.eq("category", category);
             if (location) query = query.eq("location", location);
@@ -222,7 +222,7 @@ const SimilarListings = ({
               .select("id, full_name, title, avatar_url, hourly_rate, location, category, rating")
               .eq("availability", "available")
               .neq("id", currentItemId)
-              .limit(6);
+              .limit(4);
 
             if (category) query = query.eq("category", category);
             if (location) query = query.eq("location", location);
@@ -282,7 +282,7 @@ const SimilarListings = ({
     return (
       <div className="space-y-3">
         <h2 className="text-lg font-bold text-foreground text-right">{getTitle()}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3].map((i) => (
             <Card key={i} className="overflow-hidden border-0 shadow-sm" dir="rtl">
               <Skeleton className="aspect-[16/10] w-full" />
@@ -306,7 +306,7 @@ const SimilarListings = ({
     <div className="space-y-3">
       <h2 className="text-lg font-bold text-foreground text-right">{getTitle()}</h2>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {items.map((item) => (
           <Link
             key={item.id}

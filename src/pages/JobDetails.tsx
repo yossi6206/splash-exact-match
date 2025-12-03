@@ -599,8 +599,8 @@ const JobDetails = () => {
           </div>
         </div>
 
-        {/* Similar Jobs - Using SimilarListings component */}
-        <section className="mt-12">
+        {/* Similar Jobs - minimal spacing */}
+        <section className="mt-4">
           <SimilarListings 
             itemType="job"
             currentItemId={id!}

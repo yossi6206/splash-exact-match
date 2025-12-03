@@ -533,12 +533,15 @@ const BusinessDetails = () => {
 
             <AIReport itemType="business" itemData={business} />
 
-            <SimilarListings 
-              itemType="business"
-              currentItemId={id!}
-              location={business.location}
-              category={business.category}
-            />
+            {/* Similar Listings - minimal spacing */}
+            <div className="-mt-2">
+              <SimilarListings 
+                itemType="business"
+                currentItemId={id!}
+                location={business.location}
+                category={business.category}
+              />
+            </div>
           </div>
         </div>
       </main>

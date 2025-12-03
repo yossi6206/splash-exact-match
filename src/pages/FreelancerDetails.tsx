@@ -634,12 +634,15 @@ const FreelancerDetails = () => {
           </div>
         </Card>
 
-        <SimilarListings 
-          itemType="freelancer"
-          currentItemId={id!}
-          location={freelancer.location || undefined}
-          category={freelancer.category}
-        />
+        {/* Similar Listings - minimal spacing */}
+        <div className="-mt-2">
+          <SimilarListings 
+            itemType="freelancer"
+            currentItemId={id!}
+            location={freelancer.location || undefined}
+            category={freelancer.category}
+          />
+        </div>
       </div>
 
       <Footer />

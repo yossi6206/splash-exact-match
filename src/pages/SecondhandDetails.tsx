@@ -608,8 +608,8 @@ const SecondhandDetails = () => {
           </div>
         </div>
 
-        {/* Similar Listings */}
-        <div className="mt-8">
+        {/* Similar Listings - minimal spacing */}
+        <div className="mt-4">
           <SimilarListings 
             itemType="secondhand"
             currentItemId={id!}
