@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/hooks/useFavorites";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 // Unified card component for all favorite types
 const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
@@ -104,9 +105,10 @@ const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
           {/* Image */}
           <div className="w-32 h-24 rounded-lg overflow-hidden flex-shrink-0 relative">
             {getImage() ? (
-              <img 
+              <CloudflareImage 
                 src={getImage()} 
                 alt={getTitle()}
+                preset="thumbnail"
                 className="w-full h-full object-cover"
               />
             ) : (

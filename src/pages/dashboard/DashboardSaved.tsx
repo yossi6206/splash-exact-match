@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/hooks/useFavorites";
 import { Link } from "react-router-dom";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 // Unified card component for all favorite types
 const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
@@ -99,9 +100,10 @@ const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
         <div className="flex gap-3 p-3">
           <div className="w-32 h-24 rounded-lg overflow-hidden flex-shrink-0 relative">
             {getImage() ? (
-              <img 
+              <CloudflareImage 
                 src={getImage()} 
                 alt={getTitle()}
+                preset="thumbnail"
                 className="w-full h-full object-cover"
               />
             ) : (

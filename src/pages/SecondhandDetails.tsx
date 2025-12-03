@@ -38,6 +38,7 @@ import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import AIReport from "@/components/AIReport";
 import { CardContent } from "@/components/ui/card";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 const SecondhandDetails = () => {
   const { id } = useParams();
@@ -156,9 +157,10 @@ const SecondhandDetails = () => {
                 <div className="space-y-4">
                   {/* Main Image */}
                   <div className="relative aspect-[4/3] bg-muted overflow-hidden group cursor-pointer" onClick={() => openGallery(0)}>
-                    <img
+                    <CloudflareImage
                       src={images[0]}
                       alt={item.title}
+                      preset="hero"
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                     <Button
@@ -180,9 +182,10 @@ const SecondhandDetails = () => {
                           className="relative aspect-square bg-muted rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all"
                           onClick={() => openGallery(index + 1)}
                         >
-                          <img
+                          <CloudflareImage
                             src={img}
                             alt={`${item.title} - תמונה ${index + 2}`}
+                            preset="thumbnail"
                             className="w-full h-full object-cover"
                           />
                           {index === 3 && images.length > 5 && (

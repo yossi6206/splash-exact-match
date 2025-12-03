@@ -2,6 +2,7 @@ import { Heart } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 interface ShowcaseItem {
   id: number;
@@ -47,9 +48,10 @@ const CategoryShowcase = ({ title, items, categoryLink }: CategoryShowcaseProps)
           >
             <Card className="overflow-hidden hover:shadow-xl transition-all duration-300">
               <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                <img
+                <CloudflareImage
                   src={mainItem.image}
                   alt={mainItem.title}
+                  preset="card"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <Button
@@ -93,9 +95,10 @@ const CategoryShowcase = ({ title, items, categoryLink }: CategoryShowcaseProps)
               >
                 <Card className="overflow-hidden hover:shadow-xl transition-all duration-300">
                   <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                    <img
+                    <CloudflareImage
                       src={item.image}
                       alt={item.title}
+                      preset="card"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <Button

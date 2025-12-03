@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
+import { CloudflareImage } from "@/components/CloudflareImage";
 import officeFurnitureHero from "@/assets/office-furniture-hero.jpg";
 
 const FurnitureBanner = () => {
@@ -30,9 +31,10 @@ const FurnitureBanner = () => {
 
             {/* Image */}
             <div className="order-1 md:order-2 relative h-full min-h-[150px] md:min-h-[200px]">
-              <img
+              <CloudflareImage
                 src={officeFurnitureHero}
                 alt="ריהוט משרדי איכותי"
+                preset="hero"
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>

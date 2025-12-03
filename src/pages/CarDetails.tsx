@@ -17,6 +17,7 @@ import MobileNav from "@/components/MobileNav";
 import FinanceCalculator from "@/components/FinanceCalculator";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 interface CarData {
   id: string;
@@ -205,9 +206,10 @@ const CarDetails = () => {
             {/* Image Gallery */}
             <div className="mb-4 sm:mb-6">
               <div className="relative rounded-xl sm:rounded-2xl overflow-hidden mb-3 sm:mb-4 bg-muted">
-                <img 
+                <CloudflareImage 
                   src={mainImage} 
                   alt="רכב"
+                  preset="hero"
                   className="w-full h-[280px] sm:h-[400px] lg:h-[500px] object-cover"
                 />
                 <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex gap-2">
@@ -243,9 +245,10 @@ const CarDetails = () => {
                     onClick={() => setMainImage(img)}
                     className="relative rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
                   >
-                    <img 
+                    <CloudflareImage 
                       src={img} 
                       alt={`תמונה ${index + 1}`}
+                      preset="thumbnail"
                       className="w-full h-16 sm:h-24 lg:h-32 object-cover"
                     />
                   </div>
