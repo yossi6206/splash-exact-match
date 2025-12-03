@@ -25,6 +25,8 @@ interface PropertyCardProps {
     is_promoted?: boolean;
     promotion_end_date?: string;
     listing_type?: string;
+    street?: string;
+    house_number?: string;
   };
 }
 
@@ -95,7 +97,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <div className="flex-1 flex flex-col p-4">
             <div className="mb-3 text-right">
               <h3 className="text-lg font-bold text-foreground mb-1">
-                {property.propertyType} • {property.rooms} חד' • קומה {property.floor} • {property.size} מ"ר • {property.location}
+                {property.propertyType} • {property.rooms} חד' • קומה {property.floor} • {property.size} מ"ר • {property.location} {property.street && `${property.street}`}{property.house_number && ` ${property.house_number}`}
               </h3>
             </div>
 
