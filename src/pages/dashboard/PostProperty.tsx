@@ -77,6 +77,16 @@ const PostProperty = () => {
 
   const handleInputChange = createValidatedChangeHandler(setFormData, formData, propertyValidationConfig);
 
+  const formatPriceWithCommas = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, "");
+    return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPriceWithCommas(e.target.value);
+    setFormData({ ...formData, price: formatted });
+  };
+
   const handleFeatureToggle = (feature: string) => {
     setSelectedFeatures(prev =>
       prev.includes(feature)
@@ -101,7 +111,7 @@ const PostProperty = () => {
         rooms: parseInt(formData.rooms),
         size: formData.size ? parseInt(formData.size) : undefined,
         floor: parseInt(formData.floor),
-        price: parseInt(formData.price),
+        price: parseInt(formData.price.replace(/,/g, "")),
         location: formData.location,
         street: formData.street,
         house_number: formData.house_number,
@@ -135,7 +145,7 @@ const PostProperty = () => {
         floor: formData.floor ? parseInt(formData.floor) : null,
         total_floors: formData.total_floors ? parseInt(formData.total_floors) : null,
         year: formData.year ? parseInt(formData.year) : null,
-        price: parseInt(formData.price),
+        price: parseInt(formData.price.replace(/,/g, "")),
         location: formData.location,
         street: formData.street,
         house_number: formData.house_number,
@@ -313,11 +323,10 @@ const PostProperty = () => {
                 <Input
                   id="price"
                   name="price"
-                  type="number"
                   value={formData.price}
-                  onChange={handleInputChange}
+                  onChange={handlePriceChange}
                   required
-                  placeholder="1500000"
+                  placeholder="1,500,000"
                 />
               </div>
               <div className="space-y-2">

@@ -101,6 +101,16 @@ const PostSecondhand = () => {
 
   const handleInputChange = createValidatedChangeHandler(setFormData, formData, secondhandValidationConfig);
 
+  const formatPriceWithCommas = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, "");
+    return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPriceWithCommas(e.target.value);
+    setFormData({ ...formData, price: formatted });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -115,7 +125,7 @@ const PostSecondhand = () => {
         title: formData.title,
         category: formData.category,
         condition: formData.condition,
-        price: parseInt(formData.price),
+        price: parseInt(formData.price.replace(/,/g, "")),
         location: formData.location,
         description: formData.description,
         seller_name: formData.seller_name,
@@ -142,7 +152,7 @@ const PostSecondhand = () => {
         category: formData.category,
         subcategory: formData.subcategory || null,
         condition: formData.condition,
-        price: parseInt(formData.price),
+        price: parseInt(formData.price.replace(/,/g, "")),
         location: formData.location,
         brand: formData.brand || null,
         size: formData.size || null,
@@ -547,13 +557,10 @@ const PostSecondhand = () => {
                 <Input
                   id="price"
                   name="price"
-                  type="number"
                   value={formData.price}
-                  onChange={handleInputChange}
+                  onChange={handlePriceChange}
                   required
                   placeholder="500"
-                  min="1"
-                  max="1000000"
                 />
               </div>
             </div>
