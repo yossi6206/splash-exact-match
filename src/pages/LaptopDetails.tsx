@@ -17,6 +17,7 @@ import { ReviewsList } from "@/components/reviews/ReviewsList";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
+import SimilarListings from "@/components/SimilarListings";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import { CloudflareImage } from "@/components/CloudflareImage";
@@ -582,6 +583,13 @@ const LaptopDetails = () => {
             </Card>
 
             <AIReport itemType="laptop" itemData={{ brand: laptop.brand, model: laptop.model, price: laptop.price, condition: laptop.condition }} />
+
+            <SimilarListings 
+              itemType="laptop"
+              currentItemId={id!}
+              location={laptop.location}
+              brand={laptop.brand}
+            />
           </div>
         </div>
       </main>

@@ -10,7 +10,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { JobCard } from "@/components/JobCard";
 import {
   Building2,
   MapPin,
@@ -32,6 +31,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import SimilarListings from "@/components/SimilarListings";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import { z } from "zod";
@@ -51,7 +51,6 @@ const JobDetails = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [jobData, setJobData] = useState<any>(null);
-  const [similarJobs, setSimilarJobs] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -65,7 +64,6 @@ const JobDetails = () => {
   useEffect(() => {
     if (id) {
       fetchJob();
-      fetchSimilarJobs();
     }
   }, [id]);
 
@@ -93,40 +91,6 @@ const JobDetails = () => {
       toast.error("שגיאה בטעינת המשרה");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchSimilarJobs = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("jobs")
-        .select("*")
-        .eq("status", "active")
-        .neq("id", id)
-        .limit(3);
-
-      if (error) throw error;
-
-      const transformedJobs = (data || []).map((job) => ({
-        id: job.id,
-        company: job.company_name,
-        title: job.title,
-        location: job.location,
-        type: job.job_type,
-        scope: job.scope,
-        salary: job.salary_min && job.salary_max
-          ? `₪${job.salary_min.toLocaleString()}-${job.salary_max.toLocaleString()}`
-          : null,
-        experience: job.experience_min && job.experience_max
-          ? `${job.experience_min}-${job.experience_max} שנות ניסיון`
-          : "לא צוין",
-        postedDate: getTimeAgo(job.created_at),
-        requirements: job.requirements || [],
-      }));
-
-      setSimilarJobs(transformedJobs);
-    } catch (error: any) {
-      console.error("Error fetching similar jobs:", error);
     }
   };
 
@@ -635,14 +599,14 @@ const JobDetails = () => {
           </div>
         </div>
 
-        {/* Similar Jobs */}
+        {/* Similar Jobs - Using SimilarListings component */}
         <section className="mt-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">משרות דומות</h2>
-          <div className="space-y-4">
-            {similarJobs.map((job) => (
-              <JobCard key={job.id} {...job} />
-            ))}
-          </div>
+          <SimilarListings 
+            itemType="job"
+            currentItemId={id!}
+            location={jobData.location}
+            jobType={jobData.job_type}
+          />
         </section>
       </main>
 

@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 import SoldPropertiesInArea from "@/components/SoldPropertiesInArea";
+import SimilarListings from "@/components/SimilarListings";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import { supabase } from "@/integrations/supabase/client";
@@ -488,6 +489,14 @@ const PropertyDetails = () => {
             </Card>
 
             <AIReport itemType="property" itemData={property} />
+
+            <SimilarListings 
+              itemType="property"
+              currentItemId={id!}
+              location={property.location}
+              propertyType={property.property_type}
+              rooms={property.rooms}
+            />
           </div>
         </div>
       </main>

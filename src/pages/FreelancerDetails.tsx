@@ -37,6 +37,7 @@ import FreelancerReviewsList from "@/components/freelancer-reviews/FreelancerRev
 import FreelancerReviewForm from "@/components/freelancer-reviews/FreelancerReviewForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FreelancerChat } from "@/components/FreelancerChat";
+import SimilarListings from "@/components/SimilarListings";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 
@@ -632,6 +633,13 @@ const FreelancerDetails = () => {
             </ul>
           </div>
         </Card>
+
+        <SimilarListings 
+          itemType="freelancer"
+          currentItemId={id!}
+          location={freelancer.location || undefined}
+          category={freelancer.category}
+        />
       </div>
 
       <Footer />
