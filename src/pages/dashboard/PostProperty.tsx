@@ -19,7 +19,7 @@ const propertySchema = z.object({
   property_type: z.string().min(1, "סוג נכס חובה"),
   rooms: z.number().int().min(0, "מספר חדרים לא תקין").max(50, "מספר חדרים גבוה מדי"),
   size: z.number().int().min(1, "שטח חייב להיות חיובי").max(10000, "שטח גבוה מדי").optional(),
-  floor: z.number().int().min(-5, "קומה לא תקינה").max(200, "קומה גבוהה מדי").optional(),
+  floor: z.number().int().min(-5, "קומה לא תקינה").max(200, "קומה גבוהה מדי"),
   price: z.number().int().min(1, "מחיר חובה").max(1000000000, "מחיר גבוה מדי"),
   location: z.string().trim().min(2, "עיר/אזור חובה"),
   street: z.string().trim().min(2, "רחוב חובה"),
@@ -104,7 +104,7 @@ const PostProperty = () => {
         property_type: formData.property_type,
         rooms: parseInt(formData.rooms),
         size: formData.size ? parseInt(formData.size) : undefined,
-        floor: formData.floor ? parseInt(formData.floor) : undefined,
+        floor: parseInt(formData.floor),
         price: parseInt(formData.price),
         location: formData.location,
         street: formData.street,
@@ -259,13 +259,14 @@ const PostProperty = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="floor">קומה</Label>
+                <Label htmlFor="floor">קומה *</Label>
                 <Input
                   id="floor"
                   name="floor"
                   type="number"
                   value={formData.floor}
                   onChange={handleInputChange}
+                  required
                   placeholder="3"
                 />
               </div>
