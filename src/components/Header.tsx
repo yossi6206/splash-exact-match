@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import PostAdDialog from "@/components/PostAdDialog";
+import logoImage from "@/assets/logo-secondhandpro-new.png";
 import { 
   MessageSquare, 
   Heart, 
@@ -304,9 +305,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-12 w-auto items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary px-4">
-                <span className="text-sm font-extrabold text-primary-foreground whitespace-nowrap">SecondHandPro</span>
-              </div>
+              <img src={logoImage} alt="SecondHandPro" className="h-10 w-auto" />
             </Link>
 
             {/* Navigation */}
