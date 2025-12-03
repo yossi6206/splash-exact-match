@@ -950,6 +950,7 @@ export type Database = {
           elevator: boolean | null
           features: string[] | null
           floor: number | null
+          house_number: string | null
           id: string
           images: string[] | null
           is_promoted: boolean | null
@@ -967,6 +968,7 @@ export type Database = {
           seller_phone: string | null
           size: number | null
           status: string
+          street: string | null
           title: string
           total_floors: number | null
           updated_at: string
@@ -985,6 +987,7 @@ export type Database = {
           elevator?: boolean | null
           features?: string[] | null
           floor?: number | null
+          house_number?: string | null
           id?: string
           images?: string[] | null
           is_promoted?: boolean | null
@@ -1002,6 +1005,7 @@ export type Database = {
           seller_phone?: string | null
           size?: number | null
           status?: string
+          street?: string | null
           title: string
           total_floors?: number | null
           updated_at?: string
@@ -1020,6 +1024,7 @@ export type Database = {
           elevator?: boolean | null
           features?: string[] | null
           floor?: number | null
+          house_number?: string | null
           id?: string
           images?: string[] | null
           is_promoted?: boolean | null
@@ -1037,6 +1042,7 @@ export type Database = {
           seller_phone?: string | null
           size?: number | null
           status?: string
+          street?: string | null
           title?: string
           total_floors?: number | null
           updated_at?: string
