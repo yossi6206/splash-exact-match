@@ -226,10 +226,10 @@ const Properties = () => {
     // Sort properties
     switch (sortBy) {
       case "price-low":
-        filtered.sort((a, b) => parseInt(a.price.replace(/,/g, '')) - parseInt(b.price.replace(/,/g, '')));
+        filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
         break;
       case "price-high":
-        filtered.sort((a, b) => parseInt(b.price.replace(/,/g, '')) - parseInt(a.price.replace(/,/g, '')));
+        filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
         break;
       case "rooms":
         filtered.sort((a, b) => b.rooms - a.rooms);
