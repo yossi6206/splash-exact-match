@@ -267,7 +267,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 )}
-                {property.floor && (
+                {property.floor !== null && property.floor !== undefined && (
                   <div className="flex items-center gap-3">
                     <Home className="h-5 w-5 text-muted-foreground" />
                     <div>
