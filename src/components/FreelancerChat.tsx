@@ -533,7 +533,7 @@ export const FreelancerChat = ({
 
   const chatContent = (
     <>
-      <div className="p-4 border-b flex items-center gap-3">
+      <div className="p-4 border-b flex items-center gap-3 flex-shrink-0">
         <Avatar className="h-10 w-10">
           <AvatarImage src={displayAvatar || ""} alt={displayName} />
           <AvatarFallback className="bg-primary/10 text-primary">
@@ -545,7 +545,7 @@ export const FreelancerChat = ({
         </div>
       </div>
 
-      <ScrollArea className="flex-1 p-4">
+      <ScrollArea className="flex-1 p-4 min-h-0">
         <div ref={scrollRef} className="space-y-4">
           {messages.map((message) => {
             const isOwn = message.sender_id === user?.id;
@@ -702,7 +702,7 @@ export const FreelancerChat = ({
         </div>
       </ScrollArea>
 
-      <div className="p-4 border-t">
+      <div className="p-4 border-t flex-shrink-0">
         {selectedFile && (
           <div className="mb-3 p-3 bg-muted rounded-lg flex items-center gap-3">
             {filePreview ? (
@@ -773,7 +773,7 @@ export const FreelancerChat = ({
   );
 
   if (embedded) {
-    return <div className="h-full flex flex-col">{chatContent}</div>;
+    return <div className="h-full flex flex-col min-h-0 overflow-hidden">{chatContent}</div>;
   }
 
   return (
