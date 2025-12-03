@@ -55,19 +55,14 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         <div className="flex flex-col sm:flex-row-reverse p-2">
           {/* Image */}
           <div className="w-full sm:w-72 h-48 sm:h-auto sm:self-stretch overflow-hidden flex-shrink-0 relative rounded-lg">
-            <div className="absolute top-2 left-2 z-10 flex gap-2">
-              {property.listing_type && (
-                <Badge className="bg-primary text-primary-foreground font-semibold">
-                  {property.listing_type}
-                </Badge>
-              )}
-              {isPromoted && (
+            {isPromoted && (
+              <div className="absolute top-2 left-2 z-10">
                 <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg">
                   <Sparkles className="w-3 h-3 ml-1" />
                   מקודם
                 </Badge>
-              )}
-            </div>
+              </div>
+            )}
             
             {/* Heart Button on Image */}
             <Button 
@@ -95,7 +90,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <div className="flex-1 flex flex-col p-4">
             <div className="mb-3 text-right">
               <h3 className="text-lg font-bold text-foreground mb-1">
-                {property.propertyType} • {property.rooms} חד' • קומה {property.floor} • {property.size} מ"ר
+                {property.listing_type && `${property.listing_type} • `}{property.propertyType} • {property.rooms} חד' • קומה {property.floor} • {property.size} מ"ר
               </h3>
               <p className="text-sm text-muted-foreground">{property.location}</p>
             </div>
