@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CloudflareImage } from "@/components/CloudflareImage";
 import { MapPin, Bed, Calendar, Gauge, Briefcase, Building2 } from "lucide-react";
@@ -311,94 +311,89 @@ const SimilarListings = ({
 
   if (loading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">מודעות דומות</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="space-y-2">
-                <Skeleton className="aspect-[4/3] rounded-lg" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-3 w-1/2" />
+      <div className="space-y-6">
+        <div className="flex items-center justify-end gap-3">
+          <Skeleton className="h-8 w-40" />
+          <div className="h-1 w-10 bg-primary rounded-full" />
+        </div>
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="overflow-hidden" dir="rtl">
+              <div className="flex flex-col sm:flex-row-reverse p-2">
+                <Skeleton className="w-full sm:w-72 h-48 rounded-lg" />
+                <div className="flex-1 p-4 space-y-3">
+                  <Skeleton className="h-6 w-3/4 mr-auto" />
+                  <Skeleton className="h-4 w-1/2 mr-auto" />
+                  <Skeleton className="h-4 w-1/3 mr-auto" />
+                  <Skeleton className="h-8 w-32 mr-auto mt-auto" />
+                </div>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </Card>
+          ))}
+        </div>
+      </div>
     );
   }
 
   if (items.length === 0) {
-    return (
-      <Card className="border-0 shadow-lg bg-gradient-to-br from-background to-muted/30">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-bold text-right flex items-center justify-end gap-2">
-            <span>מודעות דומות</span>
-            <div className="h-1 w-8 bg-primary rounded-full" />
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
-            <p>לא נמצאו מודעות דומות</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return null;
   }
 
   return (
-    <Card className="border-0 shadow-lg bg-gradient-to-br from-background to-muted/30">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-right flex items-center justify-end gap-2">
-          <span>מודעות דומות</span>
-          <div className="h-1 w-8 bg-primary rounded-full" />
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-          {items.map((item, index) => (
-            <Link
-              key={item.id}
-              to={getItemLink(item.id)}
-              className="group block"
-              style={{ animationDelay: `${index * 50}ms` }}
-            >
-              <div className="bg-card rounded-xl overflow-hidden border border-border/50 shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 h-full flex flex-col">
-                <div className="aspect-[4/3] overflow-hidden bg-muted relative">
+    <div className="space-y-6">
+      <div className="flex items-center justify-end gap-3">
+        <h2 className="text-2xl font-bold text-foreground">מודעות דומות</h2>
+        <div className="h-1 w-10 bg-primary rounded-full" />
+      </div>
+      
+      <div className="space-y-4">
+        {items.map((item) => (
+          <Link
+            key={item.id}
+            to={getItemLink(item.id)}
+            className="block"
+          >
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-card border-border" dir="rtl">
+              <div className="flex flex-col sm:flex-row-reverse p-2">
+                {/* Image */}
+                <div className="w-full sm:w-72 h-48 sm:h-auto sm:self-stretch overflow-hidden flex-shrink-0 relative rounded-lg">
                   <CloudflareImage
                     src={item.image}
                     alt={item.title}
                     preset="card"
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-                <div className="p-3 flex flex-col flex-1">
-                  <h3 className="font-semibold text-foreground text-sm line-clamp-2 group-hover:text-primary transition-colors text-right leading-tight min-h-[2.5rem]">
-                    {item.title}
-                  </h3>
-                  <p className="text-primary font-bold text-base mt-2 text-right">
-                    {item.price}
-                  </p>
-                  <div className="mt-auto pt-2 border-t border-border/30">
-                    <div className="flex items-center justify-end gap-1.5 text-xs text-muted-foreground">
-                      <span className="line-clamp-1">{item.location}</span>
-                      <MapPin className="h-3.5 w-3.5 text-primary/60 flex-shrink-0" />
+
+                {/* Content */}
+                <div className="flex-1 flex flex-col p-4">
+                  <div className="mb-3 text-right space-y-1">
+                    <h3 className="text-xl font-bold text-foreground">
+                      {item.title}
+                    </h3>
+                    <div className="flex items-center justify-end gap-2 text-sm text-muted-foreground">
+                      <span>{item.location}</span>
+                      <MapPin className="h-4 w-4" />
                     </div>
-                    <div className="flex items-center justify-end gap-1.5 text-xs text-muted-foreground mt-1">
-                      <span className="line-clamp-1">{item.extraInfo}</span>
+                    <div className="flex items-center justify-end gap-2 text-sm text-muted-foreground">
+                      <span>{item.extraInfo}</span>
                       {getIcon()}
+                    </div>
+                  </div>
+
+                  {/* Price */}
+                  <div className="mt-auto text-right">
+                    <div className="text-2xl font-bold text-foreground">
+                      {item.price}
                     </div>
                   </div>
                 </div>
               </div>
-            </Link>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+            </Card>
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 };
 
