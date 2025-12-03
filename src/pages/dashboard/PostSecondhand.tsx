@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
 import { ImageUpload } from "@/components/ImageUpload";
+import { createValidatedChangeHandler, secondhandValidationConfig } from "@/utils/formValidation";
 
 const secondhandSchema = z.object({
   title: z.string().trim().min(3, "כותרת חייבת להכיל לפחות 3 תווים").max(200, "כותרת ארוכה מדי"),
@@ -98,26 +99,7 @@ const PostSecondhand = () => {
     setAvailableSubcategories(categories[value as keyof typeof categories] || []);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    
-    // Validate location and seller_name - only letters (Hebrew/English), spaces, and hyphens allowed
-    if (name === "location" || name === "seller_name") {
-      if (value && !/^[\u0590-\u05FFa-zA-Z\s\-׳']+$/.test(value)) {
-        const fieldNames: Record<string, string> = {
-          location: "מיקום",
-          seller_name: "שם המוכר"
-        };
-        toast.error(`בשדה ${fieldNames[name]} ניתן להזין רק אותיות`);
-        return;
-      }
-    }
-    
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const handleInputChange = createValidatedChangeHandler(setFormData, formData, secondhandValidationConfig);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

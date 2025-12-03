@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
 import { ImageUpload } from "@/components/ImageUpload";
+import { createValidatedChangeHandler, propertyValidationConfig } from "@/utils/formValidation";
 
 const propertySchema = z.object({
   listing_type: z.enum(["למכירה", "להשכרה"], { required_error: "סוג מודעה חובה" }),
@@ -74,35 +75,7 @@ const PostProperty = () => {
 
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    
-    // Validate street, location and seller_name - only letters (Hebrew/English), spaces, and hyphens allowed
-    if (name === "street" || name === "location" || name === "seller_name") {
-      if (value && !/^[\u0590-\u05FFa-zA-Z\s\-׳']+$/.test(value)) {
-        const fieldNames: Record<string, string> = {
-          street: "רחוב",
-          location: "עיר",
-          seller_name: "שם המוכר"
-        };
-        toast.error(`בשדה ${fieldNames[name]} ניתן להזין רק אותיות`);
-        return;
-      }
-    }
-    
-    // Validate house_number - only numbers allowed
-    if (name === "house_number") {
-      if (value && !/^\d*$/.test(value)) {
-        toast.error("במספר בית ניתן להזין רק מספרים");
-        return;
-      }
-    }
-    
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const handleInputChange = createValidatedChangeHandler(setFormData, formData, propertyValidationConfig);
 
   const handleFeatureToggle = (feature: string) => {
     setSelectedFeatures(prev =>

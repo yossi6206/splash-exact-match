@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
+import { createValidatedChangeHandler, freelancerValidationConfig } from "@/utils/formValidation";
 
 const freelancerSchema = z.object({
   full_name: z.string().trim().min(2, "שם מלא חובה").max(100, "שם ארוך מדי"),
@@ -73,22 +74,7 @@ const PostFreelancer = () => {
     "עבודה מרחוק",
   ];
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    
-    // Validate full_name - only letters (Hebrew/English), spaces, and hyphens allowed
-    if (name === "full_name") {
-      if (value && !/^[\u0590-\u05FFa-zA-Z\s\-׳']+$/.test(value)) {
-        toast.error("בשדה שם מלא ניתן להזין רק אותיות");
-        return;
-      }
-    }
-    
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const handleInputChange = createValidatedChangeHandler(setFormData, formData, freelancerValidationConfig);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

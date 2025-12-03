@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
+import { createValidatedChangeHandler, jobValidationConfig } from "@/utils/formValidation";
 
 const jobSchema = z.object({
   company_name: z.string().trim().min(2, "שם חברה חייב להכיל לפחות 2 תווים").max(200, "שם חברה ארוך מדי"),
@@ -56,26 +57,7 @@ const PostJob = () => {
   const [niceToHave, setNiceToHave] = useState<string[]>([""]);
   const [benefits, setBenefits] = useState<string[]>([""]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    
-    // Validate location and company_name - only letters (Hebrew/English), spaces, and hyphens allowed
-    if (name === "location" || name === "company_name") {
-      if (value && !/^[\u0590-\u05FFa-zA-Z\s\-׳'"״]+$/.test(value)) {
-        const fieldNames: Record<string, string> = {
-          location: "מיקום",
-          company_name: "שם החברה"
-        };
-        toast.error(`בשדה ${fieldNames[name]} ניתן להזין רק אותיות`);
-        return;
-      }
-    }
-    
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const handleInputChange = createValidatedChangeHandler(setFormData, formData, jobValidationConfig);
 
   const handleArrayChange = (
     index: number,
