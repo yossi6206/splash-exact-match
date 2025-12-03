@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useCountUp } from "@/hooks/useCountUp";
 import { FileText, Users, CheckCircle } from "lucide-react";
+import { CloudflareImage } from "@/components/CloudflareImage";
 import heroPhone from "@/assets/hero-phone.jpg";
 import heroLaptop from "@/assets/hero-laptop.jpg";
 import heroCar from "@/assets/hero-car.jpg";
@@ -78,7 +79,7 @@ const HeroSection = () => {
               {/* Phone */}
               <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-500 group cursor-pointer">
                 <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-2xl">
-                  <img src={heroPhone} alt="טלפון למכירה" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+                  <CloudflareImage src={heroPhone} alt="טלפון למכירה" preset="thumbnail" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg transition-transform duration-300 group-hover:scale-110">
                   ₪ 2,500
@@ -88,7 +89,7 @@ const HeroSection = () => {
               {/* Laptop */}
               <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 group cursor-pointer">
                 <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 group-hover:shadow-2xl">
-                  <img src={heroLaptop} alt="מחשב נייד למכירה" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+                  <CloudflareImage src={heroLaptop} alt="מחשב נייד למכירה" preset="thumbnail" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg transition-transform duration-300 group-hover:scale-110">
                   ₪ 3,800
@@ -98,7 +99,7 @@ const HeroSection = () => {
               {/* Car */}
               <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 group cursor-pointer">
                 <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-2xl">
-                  <img src={heroCar} alt="רכב למכירה" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+                  <CloudflareImage src={heroCar} alt="רכב למכירה" preset="thumbnail" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg transition-transform duration-300 group-hover:scale-110">
                   ₪ 150,000
@@ -108,7 +109,7 @@ const HeroSection = () => {
               {/* Watch */}
               <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 group cursor-pointer">
                 <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-xl border-4 border-white/20 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 group-hover:shadow-2xl">
-                  <img src={heroWatch} alt="שעון למכירה" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+                  <CloudflareImage src={heroWatch} alt="שעון למכירה" preset="thumbnail" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-accent text-accent-foreground px-3 py-1 rounded-lg font-bold text-sm md:text-base shadow-lg transition-transform duration-300 group-hover:scale-110">
                   ₪ 8,500
@@ -119,7 +120,7 @@ const HeroSection = () => {
             {/* Center apartment image */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 animate-in fade-in scale-in duration-700 delay-700 group cursor-pointer">
               <div className="w-40 h-40 md:w-52 md:h-52 lg:w-64 lg:h-64 rounded-full overflow-hidden shadow-2xl border-8 border-white/30 bg-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-3xl">
-                <img src={heroApartment} alt="דירה למכירה" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+                <CloudflareImage src={heroApartment} alt="דירה למכירה" cfOptions={{ width: 300, height: 300 }} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
               </div>
               <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-xl transition-transform duration-300 group-hover:scale-110">
                 ₪ 1,850,000

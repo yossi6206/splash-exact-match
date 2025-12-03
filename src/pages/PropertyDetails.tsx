@@ -15,6 +15,7 @@ import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import { supabase } from "@/integrations/supabase/client";
 import property1 from "@/assets/property-1.jpg";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -146,9 +147,10 @@ const PropertyDetails = () => {
         {/* Image Gallery */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
           <div className="aspect-video relative overflow-hidden rounded-lg group cursor-pointer" onClick={() => openGallery(0)}>
-            <img 
+            <CloudflareImage 
               src={images[0]} 
               alt={property.title}
+              preset="hero"
               className="w-full h-full object-cover transition-transform group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
@@ -165,9 +167,10 @@ const PropertyDetails = () => {
                 className="aspect-video relative overflow-hidden rounded-lg bg-muted group cursor-pointer"
                 onClick={() => openGallery(i + 1)}
               >
-                <img 
+                <CloudflareImage 
                   src={img} 
                   alt={`תמונה ${i + 2}`}
+                  preset="card"
                   className="w-full h-full object-cover transition-transform group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
@@ -182,9 +185,10 @@ const PropertyDetails = () => {
         <Dialog open={galleryOpen} onOpenChange={setGalleryOpen}>
           <DialogContent className="max-w-4xl p-0">
             <div className="relative bg-black">
-              <img 
+              <CloudflareImage 
                 src={images[currentImageIndex]} 
                 alt={`תמונה ${currentImageIndex + 1}`}
+                preset="full"
                 className="w-full h-[70vh] object-contain"
               />
               {images.length > 1 && (

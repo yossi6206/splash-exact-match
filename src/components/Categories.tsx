@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { CloudflareImage } from "@/components/CloudflareImage";
 import categoryBusiness from "@/assets/category-business.png";
 import categoryTools from "@/assets/category-tools.png";
 import categoryJobs from "@/assets/category-jobs.png";
@@ -41,9 +42,10 @@ const Categories = () => {
               className="flex flex-col items-center gap-3 md:gap-4 group cursor-pointer transition-all duration-300"
             >
               <div className="w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:scale-105 overflow-hidden relative">
-                <img 
+                <CloudflareImage 
                   src={category.image} 
                   alt={category.name}
+                  preset="thumbnail"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 {/* Hover overlay with item count */}

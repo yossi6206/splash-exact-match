@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { CloudflareImage } from "@/components/CloudflareImage";
 import propertyBanner from "@/assets/search-apartments.jpg";
 
 const RealEstateCTABanner = () => {
@@ -10,9 +11,10 @@ const RealEstateCTABanner = () => {
           <div className="grid md:grid-cols-3 items-center min-h-[200px]">
             {/* Image Side - Takes 2 columns */}
             <div className="hidden md:block relative h-full md:col-span-2 overflow-hidden">
-              <img
+              <CloudflareImage
                 src={propertyBanner}
                 alt="נדלן למכירה"
+                preset="hero"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-l from-primary/60 to-transparent"></div>

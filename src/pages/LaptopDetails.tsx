@@ -19,6 +19,7 @@ import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
+import { CloudflareImage } from "@/components/CloudflareImage";
 
 const LaptopDetails = () => {
   const { id } = useParams();
@@ -150,9 +151,10 @@ const LaptopDetails = () => {
               <CardContent className="p-0">
                 {/* Main Image */}
                 <div className="relative aspect-[4/3] bg-muted">
-                  <img
+                  <CloudflareImage
                     src={images[selectedImage]}
                     alt={`${laptop.brand} ${laptop.model}`}
+                    preset="hero"
                     className="w-full h-full object-contain p-8"
                   />
                   {/* Condition Badge */}
@@ -194,9 +196,10 @@ const LaptopDetails = () => {
                             : 'border-border hover:border-primary/50'
                         }`}
                       >
-                        <img
+                        <CloudflareImage
                           src={image}
                           alt={`תמונה ${index + 1}`}
+                          preset="thumbnail"
                           className="w-full h-full object-cover"
                         />
                       </button>

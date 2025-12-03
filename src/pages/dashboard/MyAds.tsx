@@ -32,6 +32,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { CloudflareImage } from "@/components/CloudflareImage";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -301,9 +302,10 @@ const MyAds = () => {
         {/* Mobile Image - tiny square thumbnail */}
         <div className="relative w-14 h-14 flex-shrink-0 rounded-md overflow-hidden bg-muted">
           {listing.images && listing.images[0] ? (
-            <img
+            <CloudflareImage
               src={listing.images[0]}
               alt={listing.title || 'תמונה'}
+              preset="thumbnail"
               className="w-full h-full object-cover"
             />
           ) : (
@@ -367,9 +369,10 @@ const MyAds = () => {
         {/* Desktop Image */}
         <div className="relative aspect-square bg-muted">
           {listing.images && listing.images[0] ? (
-            <img
+            <CloudflareImage
               src={listing.images[0]}
               alt={listing.title || 'תמונה'}
+              preset="card"
               className="w-full h-full object-cover"
             />
           ) : (
