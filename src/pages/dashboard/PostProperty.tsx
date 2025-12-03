@@ -15,7 +15,6 @@ import { z } from "zod";
 import { ImageUpload } from "@/components/ImageUpload";
 
 const propertySchema = z.object({
-  title: z.string().trim().min(3, "כותרת חייבת להכיל לפחות 3 תווים").max(200, "כותרת ארוכה מדי"),
   listing_type: z.enum(["למכירה", "להשכרה"], { required_error: "סוג מודעה חובה" }),
   property_type: z.string().min(1, "סוג נכס חובה"),
   rooms: z.number().int().min(0, "מספר חדרים לא תקין").max(50, "מספר חדרים גבוה מדי"),
@@ -36,7 +35,6 @@ const PostProperty = () => {
   const [loading, setLoading] = useState(false);
   
   const [formData, setFormData] = useState({
-    title: "",
     listing_type: "למכירה",
     property_type: "",
     rooms: "",
@@ -102,7 +100,6 @@ const PostProperty = () => {
 
     try {
       propertySchema.parse({
-        title: formData.title,
         listing_type: formData.listing_type,
         property_type: formData.property_type,
         rooms: parseInt(formData.rooms),
@@ -131,9 +128,10 @@ const PostProperty = () => {
     setLoading(true);
 
     try {
+      const generatedTitle = `${formData.street} ${formData.house_number}`;
       const { error } = await supabase.from("properties").insert({
         user_id: user.id,
-        title: formData.title,
+        title: generatedTitle,
         listing_type: formData.listing_type,
         property_type: formData.property_type,
         rooms: parseInt(formData.rooms),
@@ -195,18 +193,6 @@ const PostProperty = () => {
         <Card className="p-6">
           <h2 className="text-xl font-bold text-foreground mb-4">פרטי הנכס</h2>
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">כותרת המודעה *</Label>
-              <Input
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                required
-                placeholder="דירת 4 חדרים מרווחת בלב העיר"
-              />
-            </div>
-
             <div className="space-y-2">
               <Label htmlFor="listing_type">סוג מודעה *</Label>
               <Select
