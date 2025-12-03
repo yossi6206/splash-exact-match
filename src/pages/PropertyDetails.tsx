@@ -224,10 +224,12 @@ const PropertyDetails = () => {
             {/* Title and Actions */}
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-foreground mb-2">{property.title}</h1>
+                <h1 className="text-3xl font-bold text-foreground mb-2">
+                  {property.location}{property.street ? `, ${property.street}` : ''}{property.house_number ? ` ${property.house_number}` : ''}
+                </h1>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <MapPin className="h-4 w-4" />
-                  <span>{property.location}</span>
+                  <span>{property.property_type} • {property.rooms} חדרים</span>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -286,13 +288,6 @@ const PropertyDetails = () => {
               </div>
             </Card>
 
-            {/* Description */}
-            {property.description && (
-              <Card className="p-6">
-                <h2 className="text-xl font-bold mb-4">תיאור הנכס</h2>
-                <p className="text-foreground/80 leading-relaxed whitespace-pre-line">{property.description}</p>
-              </Card>
-            )}
 
             {/* Features */}
             {property.features && property.features.length > 0 && (
