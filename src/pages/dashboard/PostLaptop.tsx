@@ -78,6 +78,16 @@ const PostLaptop = () => {
 
   const handleInputChange = createValidatedChangeHandler(setFormData, formData, laptopValidationConfig);
 
+  const formatPriceWithCommas = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, "");
+    return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPriceWithCommas(e.target.value);
+    setFormData({ ...formData, price: formatted });
+  };
+
   const handleFeatureToggle = (feature: string) => {
     setSelectedFeatures(prev =>
       prev.includes(feature)
@@ -100,7 +110,7 @@ const PostLaptop = () => {
         brand: formData.brand,
         model: formData.model,
         condition: formData.condition,
-        price: parseInt(formData.price),
+        price: parseInt(formData.price.replace(/,/g, "")),
         location: formData.location,
         description: formData.description,
         seller_name: formData.seller_name,
@@ -138,7 +148,7 @@ const PostLaptop = () => {
         connectivity: formData.connectivity || null,
         ports: formData.ports || null,
         condition: formData.condition,
-        price: parseInt(formData.price),
+        price: parseInt(formData.price.replace(/,/g, "")),
         location: formData.location,
         description: formData.description,
         seller_name: formData.seller_name,
@@ -406,11 +416,10 @@ const PostLaptop = () => {
                 <Input
                   id="price"
                   name="price"
-                  type="number"
                   value={formData.price}
-                  onChange={handleInputChange}
+                  onChange={handlePriceChange}
                   required
-                  placeholder="5000"
+                  placeholder="5,000"
                 />
               </div>
               <div className="space-y-2">
