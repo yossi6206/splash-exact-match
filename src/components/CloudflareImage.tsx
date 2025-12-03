@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   getCloudflareImageUrl, 
   getCloudflareImageSrcSet, 
@@ -22,37 +22,10 @@ interface CloudflareImageProps extends React.ImgHTMLAttributes<HTMLImageElement>
 }
 
 /**
- * CloudflareImage Component
+ * CloudflareImage Component with automatic fallback
  * 
  * Automatically optimizes images through Cloudflare's Image Resizing CDN.
- * 
- * @example Basic usage with preset:
- * ```tsx
- * <CloudflareImage 
- *   src="https://storage.supabase.co/image.jpg" 
- *   alt="Product" 
- *   preset="card" 
- * />
- * ```
- * 
- * @example Custom options:
- * ```tsx
- * <CloudflareImage 
- *   src={imageUrl} 
- *   alt="Hero" 
- *   cfOptions={{ width: 1200, quality: 85, format: 'webp' }} 
- * />
- * ```
- * 
- * @example Responsive image:
- * ```tsx
- * <CloudflareImage 
- *   src={imageUrl} 
- *   alt="Product" 
- *   responsive 
- *   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px" 
- * />
- * ```
+ * Falls back to original URL if Cloudflare fails.
  */
 export const CloudflareImage: React.FC<CloudflareImageProps> = ({
   src,
@@ -64,30 +37,44 @@ export const CloudflareImage: React.FC<CloudflareImageProps> = ({
   sizes = '100vw',
   className = '',
   loading = 'lazy',
+  onError,
   ...props
 }) => {
+  const [useFallback, setUseFallback] = useState(false);
+
   // Merge preset options with custom options
   const options = {
     ...(preset ? imagePresets[preset] : {}),
     ...cfOptions,
   };
 
-  // Generate the optimized URL
-  const optimizedSrc = getCloudflareImageUrl(src, options);
+  // Use original URL if fallback is triggered, otherwise try Cloudflare
+  const optimizedSrc = useFallback ? src : getCloudflareImageUrl(src, options);
 
-  // Generate srcSet if responsive
-  const srcSet = responsive 
+  // Generate srcSet if responsive (only if not in fallback mode)
+  const srcSet = responsive && !useFallback
     ? getCloudflareImageSrcSet(src, responsiveSizes) 
     : undefined;
+
+  const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    // If Cloudflare URL failed and we haven't tried fallback yet
+    if (!useFallback && optimizedSrc !== src) {
+      console.log('Cloudflare image failed, falling back to original:', src);
+      setUseFallback(true);
+    }
+    // Call original onError if provided
+    onError?.(e);
+  };
 
   return (
     <img
       src={optimizedSrc}
       srcSet={srcSet}
-      sizes={responsive ? sizes : undefined}
+      sizes={responsive && !useFallback ? sizes : undefined}
       alt={alt}
       loading={loading}
       className={className}
+      onError={handleError}
       {...props}
     />
   );
