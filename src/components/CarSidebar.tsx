@@ -199,8 +199,8 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
   );
 
   return (
-    <div className="hidden lg:block">
-      <div className="sticky top-20 max-h-[calc(100vh-96px)]">
+    <div>
+      <div className="max-h-[calc(100vh-96px)]">
         <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 backdrop-blur-md bg-background/95 border-2">
         <div className="bg-card border-b border-border p-4 flex items-center justify-between">
           {activeFiltersCount > 0 && (
