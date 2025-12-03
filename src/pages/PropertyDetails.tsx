@@ -489,15 +489,18 @@ const PropertyDetails = () => {
             </Card>
 
             <AIReport itemType="property" itemData={property} />
-
-            <SimilarListings 
-              itemType="property"
-              currentItemId={id!}
-              location={property.location}
-              propertyType={property.property_type}
-              rooms={property.rooms}
-            />
           </div>
+        </div>
+
+        {/* Similar Listings - Full Width Section */}
+        <div className="mt-8">
+          <SimilarListings 
+            itemType="property"
+            currentItemId={id!}
+            location={property.location}
+            propertyType={property.property_type}
+            rooms={property.rooms}
+          />
         </div>
       </main>
 
