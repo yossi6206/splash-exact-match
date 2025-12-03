@@ -1,8 +1,6 @@
 // Cloudflare Image Resizing utility
 // Docs: https://developers.cloudflare.com/images/image-resizing/url-format/
 
-const CLOUDFLARE_DOMAIN = 'https://secondhandpro.co.il';
-
 export interface CloudflareImageOptions {
   width?: number;
   height?: number;
@@ -12,6 +10,16 @@ export interface CloudflareImageOptions {
   gravity?: 'auto' | 'center' | 'top' | 'bottom' | 'left' | 'right';
   dpr?: number;
 }
+
+/**
+ * Get the current domain dynamically
+ */
+const getCurrentDomain = (): string => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  return 'https://secondhandpro.co.il';
+};
 
 /**
  * Generate a Cloudflare Image Resizing URL
@@ -57,8 +65,11 @@ export const getCloudflareImageUrl = (
 
   const optionsString = params.join(',');
 
+  // Use current domain dynamically
+  const domain = getCurrentDomain();
+
   // Return the Cloudflare Image Resizing URL
-  return `${CLOUDFLARE_DOMAIN}/cdn-cgi/image/${optionsString}/${originalUrl}`;
+  return `${domain}/cdn-cgi/image/${optionsString}/${originalUrl}`;
 };
 
 /**
