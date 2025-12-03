@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
+import SimilarListings from "@/components/SimilarListings";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import { supabase } from "@/integrations/supabase/client";
@@ -531,6 +532,13 @@ const BusinessDetails = () => {
             </Card>
 
             <AIReport itemType="business" itemData={business} />
+
+            <SimilarListings 
+              itemType="business"
+              currentItemId={id!}
+              location={business.location}
+              category={business.category}
+            />
           </div>
         </div>
       </main>

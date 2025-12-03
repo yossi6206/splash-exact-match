@@ -15,6 +15,7 @@ import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 import MobileNav from "@/components/MobileNav";
 import FinanceCalculator from "@/components/FinanceCalculator";
+import SimilarListings from "@/components/SimilarListings";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import { CloudflareImage } from "@/components/CloudflareImage";
@@ -671,6 +672,14 @@ const CarDetails = () => {
 
             {/* AI Report */}
             <AIReport itemType="car" itemData={carDetails} />
+
+            {/* Similar Listings */}
+            <SimilarListings 
+              itemType="car"
+              currentItemId={id!}
+              location={carData.location}
+              manufacturer={carData.manufacturer || undefined}
+            />
           </div>
         </div>
       </main>

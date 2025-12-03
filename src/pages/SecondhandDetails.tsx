@@ -37,6 +37,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import AIReport from "@/components/AIReport";
+import SimilarListings from "@/components/SimilarListings";
 import { CardContent } from "@/components/ui/card";
 import { CloudflareImage } from "@/components/CloudflareImage";
 
@@ -605,6 +606,16 @@ const SecondhandDetails = () => {
               </div>
             </Card>
           </div>
+        </div>
+
+        {/* Similar Listings */}
+        <div className="mt-8">
+          <SimilarListings 
+            itemType="secondhand"
+            currentItemId={id!}
+            location={item.location}
+            category={item.category}
+          />
         </div>
 
         {/* Seller Reviews Section */}
