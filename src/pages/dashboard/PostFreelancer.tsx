@@ -74,9 +74,19 @@ const PostFreelancer = () => {
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    // Validate full_name - only letters (Hebrew/English), spaces, and hyphens allowed
+    if (name === "full_name") {
+      if (value && !/^[\u0590-\u05FFa-zA-Z\s\-׳']+$/.test(value)) {
+        toast.error("בשדה שם מלא ניתן להזין רק אותיות");
+        return;
+      }
+    }
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
