@@ -94,21 +94,10 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           {/* Content */}
           <div className="flex-1 flex flex-col p-4">
             <div className="mb-3 text-right">
-              <h3 className="text-xl font-bold text-foreground mb-1">{property.title}</h3>
-              <p className="text-sm text-muted-foreground mb-2">{property.subtitle}</p>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
-                <span>{property.propertyType}</span>
-                <span>•</span>
-                <span>{property.condition}</span>
-                <span>•</span>
-                <span>קומה {property.floor}</span>
-                {property.year && (
-                  <>
-                    <span>•</span>
-                    <span>נבנה {property.year}</span>
-                  </>
-                )}
-              </div>
+              <h3 className="text-lg font-bold text-foreground mb-1">
+                {property.propertyType} • {property.rooms} חד' • קומה {property.floor} • {property.size} מ"ר
+              </h3>
+              <p className="text-sm text-muted-foreground">{property.location}</p>
             </div>
 
             {/* Features */}
