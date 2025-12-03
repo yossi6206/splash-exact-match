@@ -95,6 +95,11 @@ const Laptops = () => {
   const { saveSearch } = useSaveSearch();
   const itemsPerPage = 12;
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   useEffect(() => {
     fetchLaptops();
   }, []);
@@ -379,7 +384,7 @@ const Laptops = () => {
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious 
-                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                     className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                   />
                 </PaginationItem>
@@ -387,7 +392,7 @@ const Laptops = () => {
                 {[...Array(Math.min(totalPages, 5))].map((_, i) => (
                   <PaginationItem key={i + 1}>
                     <PaginationLink
-                      onClick={() => setCurrentPage(i + 1)}
+                      onClick={() => handlePageChange(i + 1)}
                       isActive={currentPage === i + 1}
                       className="cursor-pointer"
                     >
@@ -398,7 +403,7 @@ const Laptops = () => {
                 
                 <PaginationItem>
                   <PaginationNext 
-                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                     className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
                   />
                 </PaginationItem>
