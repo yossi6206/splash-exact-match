@@ -339,6 +339,15 @@ const PropertyDetails = () => {
               currentPropertyLocation={property.location}
               currentPropertyId={property.id}
             />
+
+            {/* Similar Listings */}
+            <SimilarListings 
+              itemType="property"
+              currentItemId={id!}
+              location={property.location}
+              propertyType={property.property_type}
+              rooms={property.rooms}
+            />
           </div>
 
           {/* Sidebar - Contact Card */}
@@ -490,17 +499,6 @@ const PropertyDetails = () => {
 
             <AIReport itemType="property" itemData={property} />
           </div>
-        </div>
-
-        {/* Similar Listings - Full Width Section */}
-        <div className="mt-8">
-          <SimilarListings 
-            itemType="property"
-            currentItemId={id!}
-            location={property.location}
-            propertyType={property.property_type}
-            rooms={property.rooms}
-          />
         </div>
       </main>
 

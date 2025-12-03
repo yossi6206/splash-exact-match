@@ -271,26 +271,33 @@ const SimilarListings = ({
     return routes[itemType];
   };
 
+  const SectionHeader = () => (
+    <div className="flex items-center gap-3">
+      <div className="h-10 w-1.5 bg-gradient-to-b from-primary to-primary/50 rounded-full" />
+      <div>
+        <h2 className="text-2xl font-bold text-foreground">מודעות דומות</h2>
+        <p className="text-sm text-muted-foreground">פריטים נוספים שעשויים לעניין אותך</p>
+      </div>
+    </div>
+  );
+
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-end gap-3">
-          <h2 className="text-2xl font-bold text-foreground">מודעות דומות</h2>
-          <div className="h-1 w-10 bg-primary rounded-full" />
-        </div>
+        <SectionHeader />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <Card key={i} className="overflow-hidden" dir="rtl">
               <Skeleton className="aspect-[4/3] w-full" />
               <div className="p-4 space-y-3">
-                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-6 w-3/4 mx-auto" />
                 <Skeleton className="h-4 w-full" />
-                <div className="flex gap-2">
+                <div className="flex gap-2 justify-center">
                   <Skeleton className="h-6 w-16" />
                   <Skeleton className="h-6 w-16" />
                 </div>
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-8 w-32" />
+                <Skeleton className="h-4 w-24 mx-auto" />
+                <Skeleton className="h-8 w-32 mx-auto" />
               </div>
             </Card>
           ))}
@@ -305,10 +312,7 @@ const SimilarListings = ({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-end gap-3">
-        <h2 className="text-2xl font-bold text-foreground">מודעות דומות</h2>
-        <div className="h-1 w-10 bg-primary rounded-full" />
-      </div>
+      <SectionHeader />
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item) => (
