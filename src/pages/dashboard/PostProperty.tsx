@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
 import { ImageUpload } from "@/components/ImageUpload";
-import { createValidatedChangeHandler, propertyValidationConfig } from "@/utils/formValidation";
+import { createValidatedChangeHandler, propertyValidationConfig, createPriceChangeHandler, parsePriceToNumber } from "@/utils/formValidation";
 
 const propertySchema = z.object({
   listing_type: z.enum(["למכירה", "להשכרה"], { required_error: "סוג מודעה חובה" }),
@@ -77,15 +77,7 @@ const PostProperty = () => {
 
   const handleInputChange = createValidatedChangeHandler(setFormData, formData, propertyValidationConfig);
 
-  const formatPriceWithCommas = (value: string) => {
-    const digitsOnly = value.replace(/\D/g, "");
-    return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPriceWithCommas(e.target.value);
-    setFormData({ ...formData, price: formatted });
-  };
+  const handlePriceChange = createPriceChangeHandler(setFormData, formData);
 
   const handleFeatureToggle = (feature: string) => {
     setSelectedFeatures(prev =>
@@ -111,7 +103,7 @@ const PostProperty = () => {
         rooms: parseInt(formData.rooms),
         size: formData.size ? parseInt(formData.size) : undefined,
         floor: parseInt(formData.floor),
-        price: parseInt(formData.price.replace(/,/g, "")),
+        price: parsePriceToNumber(formData.price),
         location: formData.location,
         street: formData.street,
         house_number: formData.house_number,
@@ -145,7 +137,7 @@ const PostProperty = () => {
         floor: formData.floor ? parseInt(formData.floor) : null,
         total_floors: formData.total_floors ? parseInt(formData.total_floors) : null,
         year: formData.year ? parseInt(formData.year) : null,
-        price: parseInt(formData.price.replace(/,/g, "")),
+        price: parsePriceToNumber(formData.price),
         location: formData.location,
         street: formData.street,
         house_number: formData.house_number,
