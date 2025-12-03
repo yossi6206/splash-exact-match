@@ -331,45 +331,66 @@ const SimilarListings = ({
   }
 
   if (items.length === 0) {
-    return null;
+    return (
+      <Card className="border-0 shadow-lg bg-gradient-to-br from-background to-muted/30">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl font-bold text-right flex items-center justify-end gap-2">
+            <span>מודעות דומות</span>
+            <div className="h-1 w-8 bg-primary rounded-full" />
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8 text-muted-foreground">
+            <p>לא נמצאו מודעות דומות</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-xl">מודעות דומות</CardTitle>
+    <Card className="border-0 shadow-lg bg-gradient-to-br from-background to-muted/30">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl font-bold text-right flex items-center justify-end gap-2">
+          <span>מודעות דומות</span>
+          <div className="h-1 w-8 bg-primary rounded-full" />
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {items.map((item) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          {items.map((item, index) => (
             <Link
               key={item.id}
               to={getItemLink(item.id)}
               className="group block"
+              style={{ animationDelay: `${index * 50}ms` }}
             >
-              <div className="space-y-2">
-                <div className="aspect-[4/3] rounded-lg overflow-hidden bg-muted">
+              <div className="bg-card rounded-xl overflow-hidden border border-border/50 shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 h-full flex flex-col">
+                <div className="aspect-[4/3] overflow-hidden bg-muted relative">
                   <CloudflareImage
                     src={item.image}
                     alt={item.title}
                     preset="card"
-                    className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-foreground text-sm line-clamp-1 group-hover:text-primary transition-colors">
+                <div className="p-3 flex flex-col flex-1">
+                  <h3 className="font-semibold text-foreground text-sm line-clamp-2 group-hover:text-primary transition-colors text-right leading-tight min-h-[2.5rem]">
                     {item.title}
                   </h3>
-                  <p className="text-primary font-bold text-sm mt-1">
+                  <p className="text-primary font-bold text-base mt-2 text-right">
                     {item.price}
                   </p>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                    <MapPin className="h-3 w-3" />
-                    <span className="line-clamp-1">{item.location}</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
-                    {getIcon()}
-                    <span className="line-clamp-1">{item.extraInfo}</span>
+                  <div className="mt-auto pt-2 border-t border-border/30">
+                    <div className="flex items-center justify-end gap-1.5 text-xs text-muted-foreground">
+                      <span className="line-clamp-1">{item.location}</span>
+                      <MapPin className="h-3.5 w-3.5 text-primary/60 flex-shrink-0" />
+                    </div>
+                    <div className="flex items-center justify-end gap-1.5 text-xs text-muted-foreground mt-1">
+                      <span className="line-clamp-1">{item.extraInfo}</span>
+                      {getIcon()}
+                    </div>
                   </div>
                 </div>
               </div>
