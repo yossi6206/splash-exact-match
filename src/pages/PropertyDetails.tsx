@@ -340,14 +340,16 @@ const PropertyDetails = () => {
               currentPropertyId={property.id}
             />
 
-            {/* Similar Listings */}
-            <SimilarListings 
-              itemType="property"
-              currentItemId={id!}
-              location={property.location}
-              propertyType={property.property_type}
-              rooms={property.rooms}
-            />
+            {/* Similar Listings - minimal spacing */}
+            <div className="-mt-2">
+              <SimilarListings 
+                itemType="property"
+                currentItemId={id!}
+                location={property.location}
+                propertyType={property.property_type}
+                rooms={property.rooms}
+              />
+            </div>
           </div>
 
           {/* Sidebar - Contact Card */}

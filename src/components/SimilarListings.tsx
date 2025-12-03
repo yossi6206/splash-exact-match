@@ -280,16 +280,16 @@ const SimilarListings = ({
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-foreground text-right">{getTitle()}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="space-y-3">
+        <h2 className="text-lg font-bold text-foreground text-right">{getTitle()}</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
             <Card key={i} className="overflow-hidden border-0 shadow-sm" dir="rtl">
-              <Skeleton className="aspect-[4/3] w-full" />
-              <div className="p-4 space-y-3">
-                <Skeleton className="h-8 w-32 mr-auto" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="aspect-[16/10] w-full" />
+              <div className="p-3 space-y-2">
+                <Skeleton className="h-6 w-24 mr-auto" />
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-3 w-3/4" />
               </div>
             </Card>
           ))}
@@ -303,29 +303,29 @@ const SimilarListings = ({
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-foreground text-right">{getTitle()}</h2>
+    <div className="space-y-3">
+      <h2 className="text-lg font-bold text-foreground text-right">{getTitle()}</h2>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((item) => (
           <Link
             key={item.id}
             to={getItemLink(item.id)}
             className="block group"
           >
-            <Card className="overflow-hidden border-0 shadow-sm hover:shadow-lg transition-shadow duration-300 bg-card h-full" dir="rtl">
+            <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow duration-300 bg-card h-full" dir="rtl">
               {/* Image with Heart */}
-              <div className="aspect-[4/3] relative overflow-hidden bg-muted">
+              <div className="aspect-[16/10] relative overflow-hidden bg-muted">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute top-3 right-3 z-10 bg-white/80 hover:bg-white rounded-full shadow-sm h-10 w-10"
+                  className="absolute top-2 right-2 z-10 bg-white/80 hover:bg-white rounded-full shadow-sm h-8 w-8"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                   }}
                 >
-                  <Heart className="h-5 w-5 text-muted-foreground" />
+                  <Heart className="h-4 w-4 text-muted-foreground" />
                 </Button>
                 <CloudflareImage
                   src={item.image}
@@ -336,21 +336,21 @@ const SimilarListings = ({
               </div>
 
               {/* Content */}
-              <div className="p-4 space-y-2">
+              <div className="p-3 space-y-1">
                 {/* Price */}
                 <div className="text-right">
-                  <span className="text-2xl font-bold text-foreground">
+                  <span className="text-lg font-bold text-foreground">
                     {item.price}
                   </span>
                 </div>
                 
                 {/* Address/Subtitle */}
-                <p className="text-sm text-foreground text-right line-clamp-1">
+                <p className="text-xs text-foreground text-right line-clamp-1">
                   {item.subtitle}
                 </p>
 
                 {/* Details */}
-                <p className="text-sm text-muted-foreground text-right">
+                <p className="text-xs text-muted-foreground text-right">
                   {item.details}
                 </p>
               </div>
