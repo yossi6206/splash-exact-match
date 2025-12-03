@@ -311,7 +311,7 @@ const SimilarListings = ({
           <Link
             key={item.id}
             to={getItemLink(item.id)}
-            className="block group"
+            className="block group cursor-pointer"
           >
             <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow duration-300 bg-card h-full" dir="rtl">
               {/* Image with Heart */}
