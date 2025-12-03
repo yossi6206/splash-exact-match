@@ -1,11 +1,9 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-
-import { Badge } from "@/components/ui/badge";
-import { X, ChevronDown, ChevronUp } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Home, DollarSign, Maximize, MapPin, Layers, CheckSquare } from "lucide-react";
 import { useState } from "react";
 
 interface PropertySidebarFilterProps {
@@ -35,21 +33,15 @@ export interface PropertyFilters {
 
 const propertyTypes = ["דירה", "פנטהאוז", "דירת גן", "דירת גג", "בית פרטי", "דופלקס", "סטודיו"];
 const roomOptions = ["1", "2", "3", "4", "5", "6+"];
-const floorOptions = ["קרקע", "1-3", "4-7", "8+"];
 const conditions = ["חדש מקבלן", "משופץ", "במצב טוב", "דורש שיפוץ", "במצב מצוין"];
 const cities = [
   "תל אביב", "ירושלים", "חיפה", "באר שבע", "נתניה", "פתח תקווה",
-  "ראשון לציון", "אשדוד", "רחובות", "בני ברק", "הרצליה", "כפר סבא",
-  "רעננה", "מודיעין", "רמת גן", "גבעתיים", "חולון", "אשקלון"
+  "ראשון לציון", "אשדוד", "רחובות", "בני ברק", "הרצליה", "כפר סבא"
 ];
 const propertyFeatures = [
   "מעלית", "חניה", "מרפסת", "מחסן", "ממ״ד", "מרפסת שמש",
-  "נגיש לנכים", "משופץ", "אויר מרכזי", "גינה", "בריכה", "חדר כושר",
-  "שמירה", "מיזוג מרכזי", "גג משותף", "חדר מקלחת אמבטיה"
+  "נגיש לנכים", "משופץ", "מיזוג מרכזי", "גינה"
 ];
-
-const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
 export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySidebarFilterProps) => {
   const [filters, setFilters] = useState<PropertyFilters>({
@@ -67,22 +59,6 @@ export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySideba
     features: [],
   });
 
-  const [expandedSections, setExpandedSections] = useState({
-    propertyType: true,
-    rooms: true,
-    price: true,
-    size: true,
-    year: false,
-    floor: false,
-    condition: false,
-    city: false,
-    features: false,
-  });
-
-  const toggleSection = (section: keyof typeof expandedSections) => {
-    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
-  };
-
   const handleArrayFilterChange = (
     key: keyof Pick<PropertyFilters, 'propertyTypes' | 'rooms' | 'cities' | 'features' | 'floors' | 'conditions'>,
     value: string
@@ -93,12 +69,6 @@ export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySideba
       : [...currentValues, value];
     
     const newFilters = { ...filters, [key]: newValues };
-    setFilters(newFilters);
-    onFilterChange?.(newFilters);
-  };
-
-  const handleFilterChange = (key: keyof PropertyFilters, value: string | number) => {
-    const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     onFilterChange?.(newFilters);
   };
@@ -115,345 +85,224 @@ export const PropertySidebarFilter = ({ onFilterChange, counts }: PropertySideba
     onFilterChange?.(newFilters);
   };
 
-  const resetFilters = () => {
-    const defaultFilters = {
-      propertyTypes: [],
-      rooms: [],
-      priceMin: 0,
-      priceMax: 5000000,
-      sizeMin: 0,
-      sizeMax: 300,
-      yearFrom: "",
-      yearTo: "",
-      floors: [],
-      conditions: [],
-      cities: [],
-      features: [],
-    };
-    setFilters(defaultFilters);
-    onFilterChange?.(defaultFilters);
-  };
-
-  const activeFiltersCount = 
-    filters.propertyTypes.length +
-    filters.rooms.length +
-    filters.floors.length +
-    filters.conditions.length +
-    filters.cities.length +
-    filters.features.length +
-    (filters.yearFrom ? 1 : 0) +
-    (filters.yearTo ? 1 : 0);
-
-  const FilterSection = ({ 
-    title, 
-    section, 
-    children 
-  }: { 
-    title: string; 
-    section: keyof typeof expandedSections; 
-    children: React.ReactNode;
-  }) => (
-    <div className="border-b border-border last:border-b-0">
-      <button
-        onClick={() => toggleSection(section)}
-        className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors text-right"
-      >
-        {expandedSections[section] ? (
-          <ChevronUp className="h-4 w-4 text-muted-foreground" />
-        ) : (
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-        )}
-        <span className="font-semibold text-foreground flex-1 text-right">{title}</span>
-      </button>
-      {expandedSections[section] && (
-        <div className="px-4 pb-4">{children}</div>
-      )}
-    </div>
-  );
-
   return (
-    <div className="hidden lg:block">
-      <div className="sticky top-20 max-h-[calc(100vh-96px)]">
-        <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 backdrop-blur-md bg-background/95 border-2">
-        <div className="bg-card border-b border-border p-4 flex items-center justify-center relative">
-          {activeFiltersCount > 0 && (
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={resetFilters}
-              className="h-8 gap-1 absolute left-4"
-            >
-              <X className="h-3 w-3" />
-              נקה
-            </Button>
-          )}
+    <Card className="sticky top-24">
+      <CardHeader>
+        <CardTitle className="text-xl flex items-center gap-2">
+          <Home className="w-5 h-5 text-primary" />
+          סינון נכסים
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto overscroll-contain">
+        {/* Price Range */}
+        <div className="space-y-3">
           <div className="flex items-center gap-2">
-            {activeFiltersCount > 0 && (
-              <Badge variant="secondary" className="h-5">
-                {activeFiltersCount}
-              </Badge>
-            )}
-            <h3 className="font-bold text-foreground">סינון תוצאות</h3>
+            <DollarSign className="w-4 h-4 text-primary" />
+            <Label className="font-semibold">טווח מחירים</Label>
+          </div>
+          <div className="space-y-4">
+            <Slider
+              value={[filters.priceMin, filters.priceMax]}
+              onValueChange={handlePriceChange}
+              max={5000000}
+              step={50000}
+              className="w-full"
+            />
+            <div className="flex justify-between text-sm text-muted-foreground">
+              <span>₪{filters.priceMin.toLocaleString()}</span>
+              <span>₪{filters.priceMax.toLocaleString()}</span>
+            </div>
           </div>
         </div>
 
-        <div className="max-h-[calc(100vh-280px)] overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent">
-          {/* Property Type */}
-          <FilterSection title="סוג נכס" section="propertyType">
-            <div className="space-y-3">
-              {propertyTypes.map((type) => (
-                <div key={type} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`type-${type}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {type}
-                    </label>
-                    {counts?.propertyTypes?.[type] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.propertyTypes[type]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* Size Range */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Maximize className="w-4 h-4 text-primary" />
+            <Label className="font-semibold">גודל במ״ר</Label>
+          </div>
+          <div className="space-y-4">
+            <Slider
+              value={[filters.sizeMin, filters.sizeMax]}
+              onValueChange={handleSizeChange}
+              max={300}
+              step={10}
+              className="w-full"
+            />
+            <div className="flex justify-between text-sm text-muted-foreground">
+              <span>{filters.sizeMin} מ״ר</span>
+              <span>{filters.sizeMax} מ״ר</span>
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Property Type */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Home className="w-4 h-4 text-primary" />
+            סוג נכס
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {propertyTypes.map((type) => (
+              <div key={type} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`type-${type}`}
                     checked={filters.propertyTypes.includes(type)}
                     onCheckedChange={() => handleArrayFilterChange('propertyTypes', type)}
                   />
+                  <Label
+                    htmlFor={`type-${type}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {type}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+                {counts?.propertyTypes?.[type] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.propertyTypes[type]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* Rooms */}
-          <FilterSection title="מספר חדרים" section="rooms">
-            <div className="space-y-3">
-              {roomOptions.map((room) => (
-                <div key={room} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`room-${room}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {room} חדרים
-                    </label>
-                    {counts?.rooms?.[room] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.rooms[room]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* Rooms */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Layers className="w-4 h-4 text-primary" />
+            מספר חדרים
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {roomOptions.map((room) => (
+              <div key={room} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`room-${room}`}
                     checked={filters.rooms.includes(room)}
                     onCheckedChange={() => handleArrayFilterChange('rooms', room)}
                   />
-                </div>
-              ))}
-            </div>
-          </FilterSection>
-
-          {/* Price Range */}
-          <FilterSection title="טווח מחירים" section="price">
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-foreground font-medium">
-                  ₪{filters.priceMin.toLocaleString()}
-                </span>
-                <span className="text-foreground font-medium">
-                  ₪{filters.priceMax.toLocaleString()}
-                </span>
-              </div>
-              <Slider
-                value={[filters.priceMin, filters.priceMax]}
-                onValueChange={handlePriceChange}
-                min={0}
-                max={5000000}
-                step={50000}
-                className="w-full"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>₪0</span>
-                <span>₪5,000,000+</span>
-              </div>
-            </div>
-          </FilterSection>
-
-          {/* Size Range */}
-          <FilterSection title="גודל במ״ר" section="size">
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-foreground font-medium">
-                  {filters.sizeMin} מ״ר
-                </span>
-                <span className="text-foreground font-medium">
-                  {filters.sizeMax} מ״ר
-                </span>
-              </div>
-              <Slider
-                value={[filters.sizeMin, filters.sizeMax]}
-                onValueChange={handleSizeChange}
-                min={0}
-                max={300}
-                step={10}
-                className="w-full"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>0 מ״ר</span>
-                <span>300+ מ״ר</span>
-              </div>
-            </div>
-          </FilterSection>
-
-          {/* Year Range */}
-          <FilterSection title="שנת בנייה" section="year">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs text-muted-foreground mb-1 block">משנה</label>
-                <Select 
-                  value={filters.yearFrom} 
-                  onValueChange={(value) => handleFilterChange("yearFrom", value)}
-                >
-                  <SelectTrigger className="bg-background">
-                    <SelectValue placeholder="בחר" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card z-50 max-h-[200px]">
-                    {years.map((year) => (
-                      <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="text-xs text-muted-foreground mb-1 block">עד שנה</label>
-                <Select 
-                  value={filters.yearTo} 
-                  onValueChange={(value) => handleFilterChange("yearTo", value)}
-                >
-                  <SelectTrigger className="bg-background">
-                    <SelectValue placeholder="בחר" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card z-50 max-h-[200px]">
-                    {years.map((year) => (
-                      <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </FilterSection>
-
-          {/* Floor */}
-          <FilterSection title="קומה" section="floor">
-            <div className="space-y-3">
-              {floorOptions.map((floor) => (
-                <div key={floor} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`floor-${floor}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  <Label
+                    htmlFor={`room-${room}`}
+                    className="text-sm font-normal cursor-pointer"
                   >
-                    {floor}
-                  </label>
-                  <Checkbox
-                    id={`floor-${floor}`}
-                    checked={filters.floors.includes(floor)}
-                    onCheckedChange={() => handleArrayFilterChange('floors', floor)}
-                  />
+                    {room} חדרים
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+                {counts?.rooms?.[room] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.rooms[room]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* Condition */}
-          <FilterSection title="מצב הנכס" section="condition">
-            <div className="space-y-3">
-              {conditions.map((condition) => (
-                <div key={condition} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`condition-${condition}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                  >
-                    {condition}
-                  </label>
-                  <Checkbox
+        <Separator />
+
+        {/* Condition */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <CheckSquare className="w-4 h-4 text-primary" />
+            מצב הנכס
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {conditions.map((condition) => (
+              <div key={condition} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`condition-${condition}`}
                     checked={filters.conditions.includes(condition)}
                     onCheckedChange={() => handleArrayFilterChange('conditions', condition)}
                   />
+                  <Label
+                    htmlFor={`condition-${condition}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {condition}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* City */}
-          <FilterSection title="עיר" section="city">
-            <div className="space-y-3">
-              {cities.slice(0, 10).map((city) => (
-                <div key={city} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`city-${city}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {city}
-                    </label>
-                    {counts?.cities?.[city] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.cities[city]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* City */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" />
+            מיקום
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {cities.map((city) => (
+              <div key={city} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`city-${city}`}
                     checked={filters.cities.includes(city)}
                     onCheckedChange={() => handleArrayFilterChange('cities', city)}
                   />
+                  <Label
+                    htmlFor={`city-${city}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {city}
+                  </Label>
                 </div>
-              ))}
-              {cities.length > 10 && (
-                <Button variant="ghost" size="sm" className="w-full text-primary">
-                  הצג עוד ערים
-                </Button>
-              )}
-            </div>
-          </FilterSection>
+                {counts?.cities?.[city] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.cities[city]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* Features */}
-          <FilterSection title="תכונות נוספות" section="features">
-            <div className="space-y-3">
-              {propertyFeatures.slice(0, 10).map((feature) => (
-                <div key={feature} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`feature-${feature}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {feature}
-                    </label>
-                    {counts?.features?.[feature] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.features[feature]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* Features */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <CheckSquare className="w-4 h-4 text-primary" />
+            תכונות נוספות
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {propertyFeatures.map((feature) => (
+              <div key={feature} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`feature-${feature}`}
                     checked={filters.features.includes(feature)}
                     onCheckedChange={() => handleArrayFilterChange('features', feature)}
                   />
+                  <Label
+                    htmlFor={`feature-${feature}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {feature}
+                  </Label>
                 </div>
-              ))}
-              {propertyFeatures.length > 10 && (
-                <Button variant="ghost" size="sm" className="w-full text-primary">
-                  הצג עוד תכונות
-                </Button>
-              )}
-            </div>
-          </FilterSection>
+                {counts?.features?.[feature] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.features[feature]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </Card>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
