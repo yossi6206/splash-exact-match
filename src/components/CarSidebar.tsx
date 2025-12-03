@@ -224,7 +224,7 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
           </div>
         </div>
 
-        <div className="max-h-[calc(100vh-280px)] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent">
+        <div className="max-h-[calc(100vh-280px)] overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent">
           {/* Manufacturer */}
           <FilterSection title="יצרן" section="manufacturer">
             <div className="space-y-3">
