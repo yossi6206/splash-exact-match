@@ -3,6 +3,8 @@ import { toast } from "sonner";
 // Validation patterns
 const LETTERS_ONLY_PATTERN = /^[\u0590-\u05FFa-zA-Z\s\-׳'"״]+$/;
 const NUMBERS_ONLY_PATTERN = /^\d*$/;
+const PHONE_PATTERN = /^0\d{0,9}$/; // Israeli phone: starts with 0, up to 10 digits
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Field name translations for error messages
 const fieldNameTranslations: Record<string, string> = {
@@ -12,9 +14,12 @@ const fieldNameTranslations: Record<string, string> = {
   company_name: "שם החברה",
   full_name: "שם מלא",
   house_number: "מספר בית",
+  seller_phone: "טלפון",
+  phone: "טלפון",
+  email: "אימייל",
 };
 
-type ValidationRule = "letters" | "numbers";
+type ValidationRule = "letters" | "numbers" | "phone" | "email";
 
 interface FieldValidationConfig {
   [fieldName: string]: ValidationRule;
@@ -43,6 +48,27 @@ export const validateField = (
   if (rule === "numbers") {
     if (!NUMBERS_ONLY_PATTERN.test(value)) {
       toast.error(`בשדה ${displayName} ניתן להזין רק מספרים`);
+      return false;
+    }
+  }
+
+  if (rule === "phone") {
+    // Allow only digits and must start with 0
+    if (!PHONE_PATTERN.test(value)) {
+      toast.error("מספר טלפון חייב להכיל רק ספרות ולהתחיל ב-0");
+      return false;
+    }
+    // Check max length (10 digits for Israeli mobile)
+    if (value.length > 10) {
+      toast.error("מספר טלפון יכול להכיל עד 10 ספרות");
+      return false;
+    }
+  }
+
+  if (rule === "email") {
+    // Only validate format if there's a complete-looking email
+    if (value.includes("@") && !EMAIL_PATTERN.test(value)) {
+      toast.error("כתובת אימייל לא תקינה");
       return false;
     }
   }
@@ -84,21 +110,25 @@ export const propertyValidationConfig: FieldValidationConfig = {
   location: "letters",
   seller_name: "letters",
   house_number: "numbers",
+  seller_phone: "phone",
 };
 
 export const carValidationConfig: FieldValidationConfig = {
   location: "letters",
   seller_name: "letters",
+  seller_phone: "phone",
 };
 
 export const laptopValidationConfig: FieldValidationConfig = {
   location: "letters",
   seller_name: "letters",
+  seller_phone: "phone",
 };
 
 export const secondhandValidationConfig: FieldValidationConfig = {
   location: "letters",
   seller_name: "letters",
+  seller_phone: "phone",
 };
 
 export const jobValidationConfig: FieldValidationConfig = {
@@ -113,4 +143,5 @@ export const freelancerValidationConfig: FieldValidationConfig = {
 export const businessValidationConfig: FieldValidationConfig = {
   location: "letters",
   seller_name: "letters",
+  seller_phone: "phone",
 };
