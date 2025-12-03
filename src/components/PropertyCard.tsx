@@ -132,7 +132,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
               <div className="text-3xl font-bold text-foreground">
                 ₪{property.price}
               </div>
-              <div className="text-sm text-muted-foreground">{property.location}</div>
             </div>
           </div>
         </div>
