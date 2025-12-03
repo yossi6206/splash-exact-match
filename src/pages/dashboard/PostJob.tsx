@@ -57,9 +57,23 @@ const PostJob = () => {
   const [benefits, setBenefits] = useState<string[]>([""]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    // Validate location and company_name - only letters (Hebrew/English), spaces, and hyphens allowed
+    if (name === "location" || name === "company_name") {
+      if (value && !/^[\u0590-\u05FFa-zA-Z\s\-׳'"״]+$/.test(value)) {
+        const fieldNames: Record<string, string> = {
+          location: "מיקום",
+          company_name: "שם החברה"
+        };
+        toast.error(`בשדה ${fieldNames[name]} ניתן להזין רק אותיות`);
+        return;
+      }
+    }
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
