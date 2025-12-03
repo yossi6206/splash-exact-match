@@ -4,7 +4,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CloudflareImage } from "@/components/CloudflareImage";
-import { Heart } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Heart, Calendar, Gauge, HandMetal } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 // Default images for fallbacks
@@ -34,6 +35,10 @@ interface SimilarItem {
   price: string;
   location: string;
   details: string;
+  // Car-specific fields for badges
+  year?: number;
+  km?: number;
+  hand?: number;
 }
 
 const SimilarListings = ({
@@ -105,6 +110,9 @@ const SimilarListings = ({
                 price: c.price ? `₪ ${parseFloat(c.price.replace(/,/g, "")).toLocaleString("he-IL")}` : "לא צוין מחיר",
                 location: c.location,
                 details: `${c.year} • ${c.km?.toLocaleString()} ק"מ • יד ${c.hand}`,
+                year: c.year,
+                km: c.km,
+                hand: c.hand,
               }));
             }
             break;
@@ -336,7 +344,7 @@ const SimilarListings = ({
               </div>
 
               {/* Content */}
-              <div className="p-3 space-y-1">
+              <div className="p-3 space-y-2">
                 {/* Price */}
                 <div className="text-right">
                   <span className="text-lg font-bold text-foreground">
@@ -349,10 +357,27 @@ const SimilarListings = ({
                   {item.subtitle}
                 </p>
 
-                {/* Details */}
-                <p className="text-xs text-muted-foreground text-right">
-                  {item.details}
-                </p>
+                {/* Car Badges or Details */}
+                {itemType === "car" && item.year && item.km !== undefined && item.hand !== undefined ? (
+                  <div className="flex flex-wrap gap-1.5 justify-end">
+                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      {item.year}
+                    </Badge>
+                    <Badge variant="outline" className="bg-secondary/80 text-secondary-foreground border-secondary text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <Gauge className="h-3 w-3" />
+                      {item.km?.toLocaleString()} ק״מ
+                    </Badge>
+                    <Badge variant="outline" className="bg-accent/50 text-accent-foreground border-accent text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <HandMetal className="h-3 w-3" />
+                      יד {item.hand}
+                    </Badge>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground text-right">
+                    {item.details}
+                  </p>
+                )}
               </div>
             </Card>
           </Link>
