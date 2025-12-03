@@ -271,27 +271,6 @@ const Jobs = () => {
       </section>
 
       <main className="container mx-auto px-4 py-4 md:py-6">
-        {/* Category Tabs */}
-        <div className="flex gap-2 md:gap-4 mb-4 md:mb-6 overflow-x-auto pb-2 -mx-4 px-4">
-          <button className="px-4 md:px-6 py-2 md:py-3 bg-primary text-primary-foreground rounded-lg font-medium whitespace-nowrap text-sm md:text-base">
-            כל המשרות
-          </button>
-          <button className="px-4 md:px-6 py-2 md:py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80 text-sm md:text-base">
-            היי-טק
-          </button>
-          <button className="px-4 md:px-6 py-2 md:py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80 text-sm md:text-base">
-            שיווק
-          </button>
-          <button className="px-4 md:px-6 py-2 md:py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80 text-sm md:text-base">
-            מכירות
-          </button>
-          <button className="px-4 md:px-6 py-2 md:py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80 text-sm md:text-base">
-            פיננסים
-          </button>
-          <button className="px-4 md:px-6 py-2 md:py-3 bg-muted text-foreground rounded-lg font-medium whitespace-nowrap hover:bg-muted/80 text-sm md:text-base">
-            ניהול
-          </button>
-        </div>
 
         {/* Results Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0 mb-4 md:mb-6 mt-4 md:mt-8">
