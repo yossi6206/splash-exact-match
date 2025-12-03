@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Heart, Phone, MessageSquare, MapPin, Calendar, Gauge, Hand, Sparkles, Loader2, Shield, Users, Eye, FileCheck, AlertCircle } from "lucide-react";
+import { Heart, Phone, MessageSquare, MapPin, Calendar, Gauge, Layers, Sparkles, Loader2, Shield, Users, Eye, FileCheck, AlertCircle, Fuel } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
@@ -386,34 +386,34 @@ const CarDetails = () => {
                 </div>
 
                 {/* Key Stats */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mt-4 sm:mt-6 mb-4 sm:mb-6">
-                  <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-muted">
-                    <Gauge className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
-                    <div className="min-w-0">
-                      <div className="text-xs sm:text-sm text-muted-foreground">ק״מ</div>
-                      <div className="font-bold text-foreground text-sm sm:text-base truncate">{carDetails.km.toLocaleString()}</div>
+                <div className="grid grid-cols-4 gap-2 sm:gap-4 mt-4 sm:mt-6 mb-4 sm:mb-6">
+                  <div className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl bg-muted/50">
+                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground mb-1">
+                      <span>ק״מ</span>
+                      <Gauge className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
                     </div>
+                    <div className="font-bold text-foreground text-sm sm:text-lg">{carDetails.km.toLocaleString()}</div>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-muted">
-                    <Hand className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
-                    <div>
-                      <div className="text-xs sm:text-sm text-muted-foreground">יד</div>
-                      <div className="font-bold text-foreground text-sm sm:text-base">{carDetails.hand}</div>
+                  <div className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl bg-muted/50">
+                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground mb-1">
+                      <span>יד</span>
+                      <Layers className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
                     </div>
+                    <div className="font-bold text-foreground text-sm sm:text-lg">{carDetails.hand}</div>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-muted">
-                    <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
-                    <div>
-                      <div className="text-xs sm:text-sm text-muted-foreground">שנה</div>
-                      <div className="font-bold text-foreground text-sm sm:text-base">{carDetails.year}</div>
+                  <div className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl bg-muted/50">
+                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground mb-1">
+                      <span>שנה</span>
+                      <Calendar className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
                     </div>
+                    <div className="font-bold text-foreground text-sm sm:text-lg">{carDetails.year}</div>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-muted">
-                    <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
-                    <div className="min-w-0">
-                      <div className="text-xs sm:text-sm text-muted-foreground">מיקום</div>
-                      <div className="font-bold text-foreground text-sm sm:text-base truncate">{carDetails.location}</div>
+                  <div className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl bg-muted/50">
+                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground mb-1">
+                      <span>דלק</span>
+                      <Fuel className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
                     </div>
+                    <div className="font-bold text-foreground text-sm sm:text-lg truncate max-w-full">{carDetails.fuel_type}</div>
                   </div>
                 </div>
 
