@@ -51,9 +51,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       isPromoted ? 'ring-2 ring-primary/50 shadow-primary/10' : ''
     }`} dir="rtl">
       <Link to={`/properties/${property.id}`} onClick={handleClick}>
-        <div className="flex flex-col sm:flex-row-reverse">
+        <div className="flex flex-col sm:flex-row-reverse p-2">
           {/* Image */}
-          <div className="w-full sm:w-72 h-48 sm:h-auto sm:self-stretch overflow-hidden flex-shrink-0 relative">
+          <div className="w-full sm:w-72 h-48 sm:h-auto sm:self-stretch overflow-hidden flex-shrink-0 relative rounded-lg">
             <div className="absolute top-2 left-2 z-10 flex gap-2">
               {property.listing_type && (
                 <Badge className="bg-primary text-primary-foreground font-semibold">
