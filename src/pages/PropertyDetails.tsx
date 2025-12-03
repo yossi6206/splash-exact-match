@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Heart, Home, MapPin, Bed, Square, Calendar, Shield, Phone, MessageSquare, Loader2, Maximize2, ChevronLeft, ChevronRight, ParkingCircle, Wind, Building2, Warehouse, DoorOpen, Trees, Sparkles, CheckCircle2, Users, Eye, FileCheck, AlertCircle, Layers } from "lucide-react";
+import { Heart, Home, MapPin, BedDouble, Ruler, CalendarDays, Shield, Phone, MessageSquare, Loader2, Maximize2, ChevronLeft, ChevronRight, ParkingCircle, Wind, Building2, Building, Warehouse, DoorOpen, Trees, Sparkles, CheckCircle2, Users, Eye, FileCheck, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import AIReport from "@/components/AIReport";
@@ -253,7 +253,7 @@ const PropertyDetails = () => {
             <Card className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="flex items-center gap-3">
-                  <Bed className="h-5 w-5 text-muted-foreground" />
+                  <BedDouble className="h-5 w-5 text-muted-foreground" />
                   <div>
                     <div className="text-sm text-muted-foreground">חדרים</div>
                     <div className="font-semibold">{property.rooms}</div>
@@ -261,7 +261,7 @@ const PropertyDetails = () => {
                 </div>
                 {property.size && (
                   <div className="flex items-center gap-3">
-                    <Square className="h-5 w-5 text-muted-foreground" />
+                    <Ruler className="h-5 w-5 text-muted-foreground" />
                     <div>
                       <div className="text-sm text-muted-foreground">מ"ר</div>
                       <div className="font-semibold">{property.size}</div>
@@ -270,7 +270,7 @@ const PropertyDetails = () => {
                 )}
                 {property.floor !== null && property.floor !== undefined && (
                   <div className="flex items-center gap-3">
-                    <Layers className="h-5 w-5 text-muted-foreground" />
+                    <Building className="h-5 w-5 text-muted-foreground" />
                     <div>
                       <div className="text-sm text-muted-foreground">קומה</div>
                       <div className="font-semibold">{property.floor}{property.total_floors ? `/${property.total_floors}` : ''}</div>
@@ -279,7 +279,7 @@ const PropertyDetails = () => {
                 )}
                 {property.year && (
                   <div className="flex items-center gap-3">
-                    <Calendar className="h-5 w-5 text-muted-foreground" />
+                    <CalendarDays className="h-5 w-5 text-muted-foreground" />
                     <div>
                       <div className="text-sm text-muted-foreground">שנת בנייה</div>
                       <div className="font-semibold">{property.year}</div>
