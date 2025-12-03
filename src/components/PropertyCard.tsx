@@ -126,7 +126,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             {/* Price */}
             <div className="mt-auto text-right">
               <div className="text-3xl font-bold text-foreground">
-                ₪{property.price}
+                ₪{Number(property.price).toLocaleString()}
               </div>
             </div>
           </div>
