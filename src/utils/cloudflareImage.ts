@@ -1,6 +1,8 @@
 // Cloudflare Image Resizing utility
 // Docs: https://developers.cloudflare.com/images/image-resizing/url-format/
 
+const CLOUDFLARE_DOMAIN = 'https://secondhandpro.co.il';
+
 export interface CloudflareImageOptions {
   width?: number;
   height?: number;
@@ -12,20 +14,8 @@ export interface CloudflareImageOptions {
 }
 
 /**
- * Get the current domain dynamically
- */
-const getCurrentDomain = (): string => {
-  if (typeof window !== 'undefined') {
-    return window.location.origin;
-  }
-  return 'https://secondhandpro.co.il';
-};
-
-/**
  * Generate a Cloudflare Image Resizing URL
- * @param originalUrl - The original image URL (can be external like Supabase)
- * @param options - Cloudflare image transformation options
- * @returns Optimized image URL via Cloudflare CDN
+ * Uses secondhandpro.co.il as the Cloudflare domain
  */
 export const getCloudflareImageUrl = (
   originalUrl: string,
@@ -41,7 +31,6 @@ export const getCloudflareImageUrl = (
     return originalUrl;
   }
 
-  // Default options for optimal performance
   const {
     width,
     height,
@@ -65,24 +54,16 @@ export const getCloudflareImageUrl = (
 
   const optionsString = params.join(',');
 
-  // Use current domain dynamically
-  const domain = getCurrentDomain();
-
-  // Return the Cloudflare Image Resizing URL
-  return `${domain}/cdn-cgi/image/${optionsString}/${originalUrl}`;
+  return `${CLOUDFLARE_DOMAIN}/cdn-cgi/image/${optionsString}/${originalUrl}`;
 };
 
 /**
  * Generate responsive srcSet for different screen sizes
- * @param originalUrl - The original image URL
- * @param sizes - Array of widths to generate
- * @returns srcSet string for responsive images
  */
 export const getCloudflareImageSrcSet = (
   originalUrl: string,
   sizes: number[] = [400, 800, 1200, 1600]
 ): string => {
-  // Skip if not an external URL
   if (!originalUrl || !originalUrl.startsWith('http')) {
     return '';
   }
