@@ -387,7 +387,7 @@ const Properties = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
           {/* Sidebar - Hidden on mobile, shown in sheet */}
-          <div className="hidden lg:block self-start sticky top-20">
+          <div className="hidden lg:block">
             <PropertySidebarFilter onFilterChange={handleSidebarFilterChange} counts={filterCounts} />
           </div>
           

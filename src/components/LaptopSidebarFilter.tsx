@@ -1,9 +1,9 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Badge } from "@/components/ui/badge";
-import { X, ChevronDown, ChevronUp } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Laptop, DollarSign, Cpu, HardDrive, Monitor, MapPin } from "lucide-react";
 import { useState } from "react";
 
 interface LaptopSidebarFilterProps {
@@ -55,21 +55,6 @@ export const LaptopSidebarFilter = ({ onFilterChange, counts }: LaptopSidebarFil
     cities: [],
   });
 
-  const [expandedSections, setExpandedSections] = useState({
-    brands: true,
-    processors: true,
-    ram: true,
-    storage: true,
-    screenSize: true,
-    price: true,
-    condition: true,
-    city: true,
-  });
-
-  const toggleSection = (section: keyof typeof expandedSections) => {
-    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
-  };
-
   const handleArrayFilterChange = (
     key: keyof Pick<LaptopFilters, 'brands' | 'processors' | 'ramOptions' | 'storageOptions' | 'screenSizes' | 'conditions' | 'cities'>,
     value: string
@@ -90,309 +75,240 @@ export const LaptopSidebarFilter = ({ onFilterChange, counts }: LaptopSidebarFil
     onFilterChange?.(newFilters);
   };
 
-  const resetFilters = () => {
-    const defaultFilters = {
-      brands: [],
-      processors: [],
-      ramOptions: [],
-      storageOptions: [],
-      screenSizes: [],
-      priceMin: 0,
-      priceMax: 20000,
-      conditions: [],
-      cities: [],
-    };
-    setFilters(defaultFilters);
-    onFilterChange?.(defaultFilters);
-  };
-
-  const activeFiltersCount = 
-    filters.brands.length +
-    filters.processors.length +
-    filters.ramOptions.length +
-    filters.storageOptions.length +
-    filters.screenSizes.length +
-    filters.conditions.length +
-    filters.cities.length;
-
-  const FilterSection = ({ 
-    title, 
-    section, 
-    children 
-  }: { 
-    title: string; 
-    section: keyof typeof expandedSections; 
-    children: React.ReactNode;
-  }) => (
-    <div className="border-b border-border last:border-b-0">
-      <button
-        onClick={() => toggleSection(section)}
-        className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors text-right"
-      >
-        {expandedSections[section] ? (
-          <ChevronUp className="h-4 w-4 text-muted-foreground" />
-        ) : (
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-        )}
-        <span className="font-semibold text-foreground flex-1 text-right">{title}</span>
-      </button>
-      {expandedSections[section] && (
-        <div className="px-4 pb-4">{children}</div>
-      )}
-    </div>
-  );
-
   return (
-    <div className="hidden lg:block">
-      <div className="sticky top-20 max-h-[calc(100vh-96px)]">
-        <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 backdrop-blur-md bg-background/95 border-2">
-        <div className="bg-card border-b border-border p-4 flex items-center justify-center relative">
-          {activeFiltersCount > 0 && (
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={resetFilters}
-              className="h-8 gap-1 absolute left-4"
-            >
-              <X className="h-3 w-3" />
-              נקה
-            </Button>
-          )}
+    <Card className="sticky top-24">
+      <CardHeader>
+        <CardTitle className="text-xl flex items-center gap-2">
+          <Laptop className="w-5 h-5 text-primary" />
+          סינון מחשבים
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto overscroll-contain">
+        {/* Price Range */}
+        <div className="space-y-3">
           <div className="flex items-center gap-2">
-            {activeFiltersCount > 0 && (
-              <Badge variant="secondary" className="h-5">
-                {activeFiltersCount}
-              </Badge>
-            )}
-            <h3 className="font-bold text-foreground">סינון תוצאות</h3>
+            <DollarSign className="w-4 h-4 text-primary" />
+            <Label className="font-semibold">טווח מחירים</Label>
+          </div>
+          <div className="space-y-4">
+            <Slider
+              value={[filters.priceMin, filters.priceMax]}
+              onValueChange={handlePriceChange}
+              max={20000}
+              step={500}
+              className="w-full"
+            />
+            <div className="flex justify-between text-sm text-muted-foreground">
+              <span>₪{filters.priceMin.toLocaleString()}</span>
+              <span>₪{filters.priceMax.toLocaleString()}</span>
+            </div>
           </div>
         </div>
 
-        <div className="max-h-[calc(100vh-280px)] overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent">
-          {/* Brands */}
-          <FilterSection title="יצרן" section="brands">
-            <div className="space-y-3">
-              {brands.slice(0, 7).map((brand) => (
-                <div key={brand} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`brand-${brand}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {brand}
-                    </label>
-                    {counts?.brands?.[brand] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.brands[brand]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* Brands */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Laptop className="w-4 h-4 text-primary" />
+            יצרן
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {brands.map((brand) => (
+              <div key={brand} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`brand-${brand}`}
                     checked={filters.brands.includes(brand)}
                     onCheckedChange={() => handleArrayFilterChange('brands', brand)}
                   />
+                  <Label
+                    htmlFor={`brand-${brand}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {brand}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+                {counts?.brands?.[brand] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.brands[brand]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* Processors */}
-          <FilterSection title="מעבד" section="processors">
-            <div className="space-y-3">
-              {processors.slice(0, 7).map((processor) => (
-                <div key={processor} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`processor-${processor}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {processor}
-                    </label>
-                    {counts?.processors?.[processor] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.processors[processor]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* Processors */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Cpu className="w-4 h-4 text-primary" />
+            מעבד
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {processors.map((processor) => (
+              <div key={processor} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`processor-${processor}`}
                     checked={filters.processors.includes(processor)}
                     onCheckedChange={() => handleArrayFilterChange('processors', processor)}
                   />
+                  <Label
+                    htmlFor={`processor-${processor}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {processor}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+                {counts?.processors?.[processor] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.processors[processor]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* RAM */}
-          <FilterSection title="זיכרון RAM" section="ram">
-            <div className="space-y-3">
-              {ramOptions.slice(0, 7).map((ram) => (
-                <div key={ram} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`ram-${ram}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {ram}
-                    </label>
-                    {counts?.ramOptions?.[ram] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.ramOptions[ram]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* RAM */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <HardDrive className="w-4 h-4 text-primary" />
+            זיכרון RAM
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {ramOptions.map((ram) => (
+              <div key={ram} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`ram-${ram}`}
                     checked={filters.ramOptions.includes(ram)}
                     onCheckedChange={() => handleArrayFilterChange('ramOptions', ram)}
                   />
+                  <Label
+                    htmlFor={`ram-${ram}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {ram}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+                {counts?.ramOptions?.[ram] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.ramOptions[ram]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* Storage */}
-          <FilterSection title="נפח אחסון" section="storage">
-            <div className="space-y-3">
-              {storageOptions.slice(0, 7).map((storage) => (
-                <div key={storage} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`storage-${storage}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {storage}
-                    </label>
-                    {counts?.storageOptions?.[storage] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.storageOptions[storage]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
-                    id={`storage-${storage}`}
-                    checked={filters.storageOptions.includes(storage)}
-                    onCheckedChange={() => handleArrayFilterChange('storageOptions', storage)}
-                  />
-                </div>
-              ))}
-            </div>
-          </FilterSection>
+        <Separator />
 
-          {/* Screen Size */}
-          <FilterSection title="גודל מסך" section="screenSize">
-            <div className="space-y-3">
-              {screenSizes.slice(0, 7).map((size) => (
-                <div key={size} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`size-${size}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {size}
-                    </label>
-                    {counts?.screenSizes?.[size] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.screenSizes[size]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        {/* Screen Size */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Monitor className="w-4 h-4 text-primary" />
+            גודל מסך
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {screenSizes.map((size) => (
+              <div key={size} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`size-${size}`}
                     checked={filters.screenSizes.includes(size)}
                     onCheckedChange={() => handleArrayFilterChange('screenSizes', size)}
                   />
+                  <Label
+                    htmlFor={`size-${size}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {size}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
-
-          {/* Price Range */}
-          <FilterSection title="טווח מחירים" section="price">
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-foreground font-medium">
-                  ₪{filters.priceMin.toLocaleString()}
-                </span>
-                <span className="text-foreground font-medium">
-                  ₪{filters.priceMax.toLocaleString()}
-                </span>
+                {counts?.screenSizes?.[size] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.screenSizes[size]})
+                  </span>
+                )}
               </div>
-              <Slider
-                value={[filters.priceMin, filters.priceMax]}
-                onValueChange={handlePriceChange}
-                min={0}
-                max={20000}
-                step={500}
-                className="w-full"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>₪0</span>
-                <span>₪20,000+</span>
-              </div>
-            </div>
-          </FilterSection>
+            ))}
+          </div>
+        </div>
 
-          {/* Condition */}
-          <FilterSection title="מצב המוצר" section="condition">
-            <div className="space-y-3">
-              {conditions.slice(0, 7).map((condition) => (
-                <div key={condition} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`condition-${condition}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {condition}
-                    </label>
-                    {counts?.conditions?.[condition] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.conditions[condition]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* Condition */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Laptop className="w-4 h-4 text-primary" />
+            מצב המוצר
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {conditions.map((condition) => (
+              <div key={condition} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`condition-${condition}`}
                     checked={filters.conditions.includes(condition)}
                     onCheckedChange={() => handleArrayFilterChange('conditions', condition)}
                   />
+                  <Label
+                    htmlFor={`condition-${condition}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {condition}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+                {counts?.conditions?.[condition] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.conditions[condition]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* City */}
-          <FilterSection title="עיר" section="city">
-            <div className="space-y-3">
-              {cities.slice(0, 7).map((city) => (
-                <div key={city} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`city-${city}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {city}
-                    </label>
-                    {counts?.cities?.[city] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.cities[city]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* City */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" />
+            מיקום
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {cities.map((city) => (
+              <div key={city} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`city-${city}`}
                     checked={filters.cities.includes(city)}
                     onCheckedChange={() => handleArrayFilterChange('cities', city)}
                   />
+                  <Label
+                    htmlFor={`city-${city}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {city}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+                {counts?.cities?.[city] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.cities[city]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </Card>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };

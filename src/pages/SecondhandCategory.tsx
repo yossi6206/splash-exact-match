@@ -499,7 +499,7 @@ const SecondhandCategory = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
           {/* Sidebar Filters - Desktop */}
-          <div className="hidden lg:block self-start sticky top-20">
+          <div className="hidden lg:block">
             <SecondhandSidebarFilter 
               counts={filterCounts}
               onFilterChange={handleFilterChange}

@@ -1,12 +1,9 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { X, ChevronDown, ChevronUp } from "lucide-react";
+import { Car, DollarSign, Fuel, Settings, MapPin, Gauge } from "lucide-react";
 import { useState } from "react";
 
 interface CarSidebarProps {
@@ -39,33 +36,12 @@ export interface SidebarFilters {
 
 const manufacturers = [
   "טויוטה", "מזדה", "יונדאי", "קיה", "הונדה", "ניסאן", 
-  "פולקסווגן", "שקודה", "סיאט", "ב מ וו", "מרצדס", "אאודי",
-  "רנו", "פיג'ו", "סיטרואן", "פורד", "שברולט", "מיצובישי"
+  "פולקסווגן", "שקודה", "סיאט", "ב מ וו", "מרצדס", "אאודי"
 ];
-
 const fuelTypes = ["בנזין", "דיזל", "היבריד", "חשמלי", "היבריד פלאג-אין"];
 const transmissionTypes = ["אוטומט", "ידני", "רובוטרון", "טיפטרוניק"];
 const handOptions = ["יד ראשונה", "יד שנייה", "יד שלישית", "יד 4+"];
-const vehicleTypes = [
-  "רכב פרטי", "רכב מסחרי", "משאיות", "מסחריות", "טרקטורים", 
-  "אוטובוסים", "אופנועים", "קטנועים", "אופני שטח"
-];
-const conditions = [
-  "רכב חדש", "רכב משומש", "קבוצת קנייה"
-];
-const categories = [
-  "אופנועים חדשים", "אופנועים משומשים", 
-  "אביזרים - גלגלים וחישוקים", "אביזרים - מערכות שמע", 
-  "אביזרים - אביזרי קישוט", "אביזרים - ציוד בטיחות",
-  "שירותים - מוסכים", "שירותים - מכוני שירות", 
-  "שירותים - גרירה", "שירותים - ביטוח רכב"
-];
-const popularFeatures = [
-  "מצלמת רוורס", "חיישני רוורס", "בקרת שיוט", "גג פנורמי",
-  "מושבים מחוממים", "הגה מחומם", "מערכת ניווט", "מערכת שמע",
-  "מושבי עור", "חיישני גשם", "פתיחה ללא מפתח", "התנעה ללא מפתח",
-  "מושבים חשמליים", "דרייב אסיסט", "נקודה עיוורת", "שמירת נתיב"
-];
+const vehicleTypes = ["רכב פרטי", "רכב מסחרי", "משאיות", "אופנועים"];
 
 export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
   const [filters, setFilters] = useState<SidebarFilters>({
@@ -85,27 +61,6 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
     categories: [],
   });
 
-  const [expandedSections, setExpandedSections] = useState({
-    manufacturer: true,
-    vehicleType: true,
-    condition: true,
-    year: true,
-    price: true,
-    fuel: true,
-    transmission: true,
-    hand: false,
-    km: false,
-    features: false,
-    categories: false,
-  });
-
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 25 }, (_, i) => currentYear - i);
-
-  const toggleSection = (section: keyof typeof expandedSections) => {
-    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
-  };
-
   const handleArrayFilterChange = (
     key: keyof Pick<SidebarFilters, 'manufacturers' | 'fuelTypes' | 'transmissions' | 'hands' | 'features' | 'vehicleTypes' | 'conditions' | 'categories'>,
     value: string
@@ -116,12 +71,6 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
       : [...currentValues, value];
     
     const newFilters = { ...filters, [key]: newValues };
-    setFilters(newFilters);
-    onFilterChange?.(newFilters);
-  };
-
-  const handleFilterChange = (key: keyof SidebarFilters, value: string | number) => {
-    const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     onFilterChange?.(newFilters);
   };
@@ -138,398 +87,226 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
     onFilterChange?.(newFilters);
   };
 
-  const resetFilters = () => {
-    const defaultFilters = {
-      manufacturers: [],
-      yearFrom: "",
-      yearTo: "",
-      priceMin: 0,
-      priceMax: 300000,
-      fuelTypes: [],
-      transmissions: [],
-      hands: [],
-      kmMin: 0,
-      kmMax: 300000,
-      features: [],
-      vehicleTypes: [],
-      conditions: [],
-      categories: [],
-    };
-    setFilters(defaultFilters);
-    onFilterChange?.(defaultFilters);
-  };
-
-  const activeFiltersCount = 
-    filters.manufacturers.length +
-    filters.fuelTypes.length +
-    filters.transmissions.length +
-    filters.hands.length +
-    filters.features.length +
-    filters.vehicleTypes.length +
-    filters.conditions.length +
-    filters.categories.length +
-    (filters.yearFrom ? 1 : 0) +
-    (filters.yearTo ? 1 : 0);
-
-  const FilterSection = ({ 
-    title, 
-    section, 
-    children 
-  }: { 
-    title: string; 
-    section: keyof typeof expandedSections; 
-    children: React.ReactNode;
-  }) => (
-    <div className="border-b border-border last:border-b-0">
-      <button
-        onClick={() => toggleSection(section)}
-        className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors text-right"
-      >
-        {expandedSections[section] ? (
-          <ChevronUp className="h-4 w-4 text-muted-foreground" />
-        ) : (
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-        )}
-        <span className="font-semibold text-foreground flex-1 text-right">{title}</span>
-      </button>
-      {expandedSections[section] && (
-        <div className="px-4 pb-4">{children}</div>
-      )}
-    </div>
-  );
-
   return (
-    <div>
-      <div className="max-h-[calc(100vh-96px)]">
-        <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 backdrop-blur-md bg-background/95 border-2">
-        <div className="bg-card border-b border-border p-4 flex items-center justify-between">
-          {activeFiltersCount > 0 && (
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={resetFilters}
-              className="h-8 gap-1"
-            >
-              <X className="h-3 w-3" />
-              נקה
-            </Button>
-          )}
-          <div className="flex items-center gap-2 mr-auto">
-            {activeFiltersCount > 0 && (
-              <Badge variant="secondary" className="h-5">
-                {activeFiltersCount}
-              </Badge>
-            )}
-            <h3 className="font-bold text-foreground">סינון תוצאות</h3>
+    <Card className="sticky top-24">
+      <CardHeader>
+        <CardTitle className="text-xl flex items-center gap-2">
+          <Car className="w-5 h-5 text-primary" />
+          סינון רכבים
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto overscroll-contain">
+        {/* Price Range */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <DollarSign className="w-4 h-4 text-primary" />
+            <Label className="font-semibold">טווח מחירים</Label>
+          </div>
+          <div className="space-y-4">
+            <Slider
+              value={[filters.priceMin, filters.priceMax]}
+              onValueChange={handlePriceChange}
+              max={300000}
+              step={5000}
+              className="w-full"
+            />
+            <div className="flex justify-between text-sm text-muted-foreground">
+              <span>₪{filters.priceMin.toLocaleString()}</span>
+              <span>₪{filters.priceMax.toLocaleString()}</span>
+            </div>
           </div>
         </div>
 
-        <div className="max-h-[calc(100vh-280px)] overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-track]:bg-transparent">
-          {/* Manufacturer */}
-          <FilterSection title="יצרן" section="manufacturer">
-            <div className="space-y-3">
-              {manufacturers.slice(0, 8).map((brand) => (
-                <div key={brand} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`brand-${brand}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {brand}
-                    </label>
-                    {counts?.manufacturers?.[brand] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.manufacturers[brand]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* Kilometers */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Gauge className="w-4 h-4 text-primary" />
+            <Label className="font-semibold">קילומטראז׳</Label>
+          </div>
+          <div className="space-y-4">
+            <Slider
+              value={[filters.kmMin, filters.kmMax]}
+              onValueChange={handleKmChange}
+              max={300000}
+              step={5000}
+              className="w-full"
+            />
+            <div className="flex justify-between text-sm text-muted-foreground">
+              <span>{filters.kmMin.toLocaleString()} ק״מ</span>
+              <span>{filters.kmMax.toLocaleString()} ק״מ</span>
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Manufacturer */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Car className="w-4 h-4 text-primary" />
+            יצרן
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {manufacturers.map((brand) => (
+              <div key={brand} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`brand-${brand}`}
                     checked={filters.manufacturers.includes(brand)}
                     onCheckedChange={() => handleArrayFilterChange('manufacturers', brand)}
                   />
-                </div>
-              ))}
-              {manufacturers.length > 8 && (
-                <Button variant="ghost" size="sm" className="w-full text-primary">
-                  הצג עוד יצרנים
-                </Button>
-              )}
-            </div>
-          </FilterSection>
-
-          {/* Vehicle Type */}
-          <FilterSection title="סוג רכב" section="vehicleType">
-            <div className="space-y-3">
-              {vehicleTypes.map((type) => (
-                <div key={type} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`vehicle-type-${type}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  <Label
+                    htmlFor={`brand-${brand}`}
+                    className="text-sm font-normal cursor-pointer"
                   >
-                    {type}
-                  </label>
-                  <Checkbox
-                    id={`vehicle-type-${type}`}
+                    {brand}
+                  </Label>
+                </div>
+                {counts?.manufacturers?.[brand] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.manufacturers[brand]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Vehicle Type */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Car className="w-4 h-4 text-primary" />
+            סוג רכב
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {vehicleTypes.map((type) => (
+              <div key={type} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
+                    id={`vehicle-${type}`}
                     checked={filters.vehicleTypes.includes(type)}
                     onCheckedChange={() => handleArrayFilterChange('vehicleTypes', type)}
                   />
-                </div>
-              ))}
-            </div>
-          </FilterSection>
-
-          {/* Condition */}
-          <FilterSection title="מצב רכב" section="condition">
-            <div className="space-y-3">
-              {conditions.map((condition) => (
-                <div key={condition} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`condition-${condition}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  <Label
+                    htmlFor={`vehicle-${type}`}
+                    className="text-sm font-normal cursor-pointer"
                   >
-                    {condition}
-                  </label>
-                  <Checkbox
-                    id={`condition-${condition}`}
-                    checked={filters.conditions.includes(condition)}
-                    onCheckedChange={() => handleArrayFilterChange('conditions', condition)}
-                  />
+                    {type}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* Year Range */}
-          <FilterSection title="שנת ייצור" section="year">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs text-muted-foreground mb-1 block">משנה</label>
-                <Select 
-                  value={filters.yearFrom} 
-                  onValueChange={(value) => handleFilterChange("yearFrom", value)}
-                >
-                  <SelectTrigger className="bg-background">
-                    <SelectValue placeholder="בחר" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card z-50 max-h-[200px]">
-                    {years.map((year) => (
-                      <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="text-xs text-muted-foreground mb-1 block">עד שנה</label>
-                <Select 
-                  value={filters.yearTo} 
-                  onValueChange={(value) => handleFilterChange("yearTo", value)}
-                >
-                  <SelectTrigger className="bg-background">
-                    <SelectValue placeholder="בחר" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card z-50 max-h-[200px]">
-                    {years.map((year) => (
-                      <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </FilterSection>
+        <Separator />
 
-          {/* Price Range */}
-          <FilterSection title="טווח מחירים" section="price">
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-foreground font-medium">
-                  ₪{filters.priceMin.toLocaleString()}
-                </span>
-                <span className="text-foreground font-medium">
-                  ₪{filters.priceMax.toLocaleString()}
-                </span>
-              </div>
-              <Slider
-                value={[filters.priceMin, filters.priceMax]}
-                onValueChange={handlePriceChange}
-                min={0}
-                max={300000}
-                step={5000}
-                className="w-full"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>₪0</span>
-                <span>₪300,000+</span>
-              </div>
-            </div>
-          </FilterSection>
-
-          {/* Fuel Type */}
-          <FilterSection title="סוג דלק" section="fuel">
-            <div className="space-y-3">
-              {fuelTypes.map((fuel) => (
-                <div key={fuel} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`fuel-${fuel}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {fuel}
-                    </label>
-                    {counts?.fuelTypes?.[fuel] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.fuelTypes[fuel]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        {/* Fuel Type */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Fuel className="w-4 h-4 text-primary" />
+            סוג דלק
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {fuelTypes.map((fuel) => (
+              <div key={fuel} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`fuel-${fuel}`}
                     checked={filters.fuelTypes.includes(fuel)}
                     onCheckedChange={() => handleArrayFilterChange('fuelTypes', fuel)}
                   />
+                  <Label
+                    htmlFor={`fuel-${fuel}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {fuel}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+                {counts?.fuelTypes?.[fuel] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.fuelTypes[fuel]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* Transmission */}
-          <FilterSection title="תיבת הילוכים" section="transmission">
-            <div className="space-y-3">
-              {transmissionTypes.map((trans) => (
-                <div key={trans} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`trans-${trans}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {trans}
-                    </label>
-                    {counts?.transmissions?.[trans] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.transmissions[trans]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* Transmission */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Settings className="w-4 h-4 text-primary" />
+            תיבת הילוכים
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {transmissionTypes.map((trans) => (
+              <div key={trans} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`trans-${trans}`}
                     checked={filters.transmissions.includes(trans)}
                     onCheckedChange={() => handleArrayFilterChange('transmissions', trans)}
                   />
+                  <Label
+                    htmlFor={`trans-${trans}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {trans}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+                {counts?.transmissions?.[trans] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.transmissions[trans]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* Hand */}
-          <FilterSection title="יד" section="hand">
-            <div className="space-y-3">
-              {handOptions.map((hand) => (
-                <div key={hand} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`hand-${hand}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {hand}
-                    </label>
-                    {counts?.hands?.[hand] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.hands[hand]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
+        <Separator />
+
+        {/* Hand */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" />
+            יד
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {handOptions.map((hand) => (
+              <div key={hand} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
                     id={`hand-${hand}`}
                     checked={filters.hands.includes(hand)}
                     onCheckedChange={() => handleArrayFilterChange('hands', hand)}
                   />
-                </div>
-              ))}
-            </div>
-          </FilterSection>
-
-          {/* Kilometers */}
-          <FilterSection title="קילומטראז'" section="km">
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-foreground font-medium">
-                  {filters.kmMin.toLocaleString()} ק״מ
-                </span>
-                <span className="text-foreground font-medium">
-                  {filters.kmMax.toLocaleString()} ק״מ
-                </span>
-              </div>
-              <Slider
-                value={[filters.kmMin, filters.kmMax]}
-                onValueChange={handleKmChange}
-                min={0}
-                max={300000}
-                step={5000}
-                className="w-full"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>0 ק״מ</span>
-                <span>300,000+ ק״מ</span>
-              </div>
-            </div>
-          </FilterSection>
-
-          {/* Features */}
-          <FilterSection title="תכונות נוספות" section="features">
-            <div className="space-y-3">
-              {popularFeatures.slice(0, 10).map((feature) => (
-                <div key={feature} className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <label
-                      htmlFor={`feature-${feature}`}
-                      className="text-sm text-foreground cursor-pointer flex-1 text-right"
-                    >
-                      {feature}
-                    </label>
-                    {counts?.features?.[feature] !== undefined && (
-                      <Badge variant="outline" className="h-5 text-xs px-1.5">
-                        {counts.features[feature]}
-                      </Badge>
-                    )}
-                  </div>
-                  <Checkbox
-                    id={`feature-${feature}`}
-                    checked={filters.features.includes(feature)}
-                    onCheckedChange={() => handleArrayFilterChange('features', feature)}
-                  />
-                </div>
-              ))}
-              {popularFeatures.length > 10 && (
-                <Button variant="ghost" size="sm" className="w-full text-primary">
-                  הצג עוד תכונות
-                </Button>
-              )}
-            </div>
-          </FilterSection>
-
-          {/* Categories */}
-          <FilterSection title="קטגוריות נוספות" section="categories">
-            <div className="space-y-3">
-              {categories.map((category) => (
-                <div key={category} className="flex items-center justify-between gap-2">
-                  <label
-                    htmlFor={`category-${category}`}
-                    className="text-sm text-foreground cursor-pointer flex-1 text-right"
+                  <Label
+                    htmlFor={`hand-${hand}`}
+                    className="text-sm font-normal cursor-pointer"
                   >
-                    {category}
-                  </label>
-                  <Checkbox
-                    id={`category-${category}`}
-                    checked={filters.categories.includes(category)}
-                    onCheckedChange={() => handleArrayFilterChange('categories', category)}
-                  />
+                    {hand}
+                  </Label>
                 </div>
-              ))}
-            </div>
-          </FilterSection>
+                {counts?.hands?.[hand] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.hands[hand]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </Card>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
+
+export default CarSidebar;
