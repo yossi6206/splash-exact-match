@@ -28,6 +28,11 @@ const Jobs = () => {
   const { saveSearch } = useSaveSearch();
   const itemsPerPage = 10;
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   // Calculate counts for filter options
   const filterCounts = useMemo(() => {
     const counts = {
@@ -351,7 +356,7 @@ const Jobs = () => {
                   <PaginationContent className="gap-1">
                     <PaginationItem>
                       <PaginationPrevious 
-                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                         className={`${currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"} h-8 md:h-10 text-sm`}
                       />
                     </PaginationItem>
@@ -369,7 +374,7 @@ const Jobs = () => {
                       return (
                         <PaginationItem key={page}>
                           <PaginationLink
-                            onClick={() => setCurrentPage(page)}
+                            onClick={() => handlePageChange(page)}
                             isActive={currentPage === page}
                             className="cursor-pointer h-8 w-8 md:h-10 md:w-10 text-sm"
                           >
@@ -380,7 +385,7 @@ const Jobs = () => {
                     })}
                     <PaginationItem>
                       <PaginationNext
-                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                         className={`${currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"} h-8 md:h-10 text-sm`}
                       />
                     </PaginationItem>

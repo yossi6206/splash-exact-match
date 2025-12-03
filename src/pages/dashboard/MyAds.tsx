@@ -71,6 +71,11 @@ const MyAds = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   useEffect(() => {
     if (!user) {
       navigate("/auth");
@@ -247,7 +252,7 @@ const MyAds = () => {
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious 
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
               className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
             />
           </PaginationItem>
@@ -263,7 +268,7 @@ const MyAds = () => {
               return (
                 <PaginationItem key={pageNum}>
                   <PaginationLink
-                    onClick={() => setCurrentPage(pageNum)}
+                    onClick={() => handlePageChange(pageNum)}
                     isActive={currentPage === pageNum}
                     className="cursor-pointer"
                   >
@@ -286,7 +291,7 @@ const MyAds = () => {
 
           <PaginationItem>
             <PaginationNext 
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
               className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
             />
           </PaginationItem>
