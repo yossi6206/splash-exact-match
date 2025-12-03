@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CloudflareImage } from "@/components/CloudflareImage";
-import { MapPin, Bed, Calendar, Gauge, Briefcase, Building2 } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 // Default images for fallbacks
@@ -15,7 +16,6 @@ import jobImage from "@/assets/item-job.jpg";
 interface SimilarListingsProps {
   itemType: "property" | "car" | "laptop" | "secondhand" | "job" | "business" | "freelancer";
   currentItemId: string;
-  // Optional filters for better matching
   location?: string;
   propertyType?: string;
   rooms?: number;
@@ -29,10 +29,12 @@ interface SimilarListingsProps {
 interface SimilarItem {
   id: string;
   title: string;
+  subtitle: string;
   image: string;
-  price: string | number;
+  price: string;
   location: string;
-  extraInfo: string;
+  condition?: string;
+  badges?: string[];
 }
 
 const SimilarListings = ({
@@ -41,7 +43,6 @@ const SimilarListings = ({
   location,
   propertyType,
   rooms,
-  priceRange,
   manufacturer,
   brand,
   category,
@@ -60,35 +61,26 @@ const SimilarListings = ({
           case "property": {
             let query = supabase
               .from("properties")
-              .select("id, title, images, price, location, property_type, rooms, street, house_number")
+              .select("id, title, images, price, location, property_type, rooms, street, house_number, size, condition, features")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
 
-            // Priority: same location first
-            if (location) {
-              query = query.eq("location", location);
-            }
-            // Then same property type
-            if (propertyType) {
-              query = query.eq("property_type", propertyType);
-            }
-            // Similar rooms (±1)
-            if (rooms) {
-              query = query.gte("rooms", rooms - 1).lte("rooms", rooms + 1);
-            }
+            if (location) query = query.eq("location", location);
+            if (propertyType) query = query.eq("property_type", propertyType);
+            if (rooms) query = query.gte("rooms", rooms - 1).lte("rooms", rooms + 1);
 
             const { data: properties, error } = await query;
             if (!error && properties) {
               data = properties.map((p) => ({
                 id: p.id,
-                title: p.street && p.house_number 
-                  ? `${p.street} ${p.house_number}` 
-                  : p.title,
+                title: p.street && p.house_number ? `${p.street} ${p.house_number}` : p.title,
+                subtitle: `${p.rooms} חדרים • ${p.size || 0} מ"ר • ${p.property_type}`,
                 image: p.images?.[0] || property1,
                 price: `₪${p.price?.toLocaleString("he-IL") || 0}`,
                 location: p.location,
-                extraInfo: `${p.rooms} חדרים • ${p.property_type}`,
+                condition: p.condition || undefined,
+                badges: p.features?.slice(0, 3) || [],
               }));
             }
             break;
@@ -97,27 +89,25 @@ const SimilarListings = ({
           case "car": {
             let query = supabase
               .from("cars")
-              .select("id, manufacturer, model, images, price, location, year, km")
+              .select("id, manufacturer, model, images, price, location, year, km, hand, condition, features")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
 
-            if (manufacturer) {
-              query = query.eq("manufacturer", manufacturer);
-            }
-            if (location) {
-              query = query.eq("location", location);
-            }
+            if (manufacturer) query = query.eq("manufacturer", manufacturer);
+            if (location) query = query.eq("location", location);
 
             const { data: cars, error } = await query;
             if (!error && cars) {
               data = cars.map((c) => ({
                 id: c.id,
                 title: `${c.manufacturer || ""} ${c.model}`,
+                subtitle: `${c.year} • ${c.km?.toLocaleString()} ק"מ • יד ${c.hand}`,
                 image: c.images?.[0] || carImage,
                 price: c.price ? `₪${parseFloat(c.price.replace(/,/g, "")).toLocaleString("he-IL")}` : "לא צוין מחיר",
                 location: c.location,
-                extraInfo: `${c.year} • ${c.km?.toLocaleString()} ק"מ`,
+                condition: c.condition || undefined,
+                badges: c.features?.slice(0, 3) || [],
               }));
             }
             break;
@@ -126,27 +116,25 @@ const SimilarListings = ({
           case "laptop": {
             let query = supabase
               .from("laptops")
-              .select("id, brand, model, images, price, location, condition, ram, storage")
+              .select("id, brand, model, images, price, location, condition, ram, storage, processor, features")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
 
-            if (brand) {
-              query = query.eq("brand", brand);
-            }
-            if (location) {
-              query = query.eq("location", location);
-            }
+            if (brand) query = query.eq("brand", brand);
+            if (location) query = query.eq("location", location);
 
             const { data: laptops, error } = await query;
             if (!error && laptops) {
               data = laptops.map((l) => ({
                 id: l.id,
                 title: `${l.brand} ${l.model}`,
+                subtitle: `${l.processor || ""} ${l.ram}GB ${l.storage}GB`.trim(),
                 image: l.images?.[0] || laptopImage,
                 price: `₪${l.price?.toLocaleString("he-IL") || 0}`,
                 location: l.location,
-                extraInfo: `${l.condition} • ${l.ram}GB RAM`,
+                condition: l.condition || undefined,
+                badges: l.features?.slice(0, 3) || [],
               }));
             }
             break;
@@ -155,27 +143,25 @@ const SimilarListings = ({
           case "secondhand": {
             let query = supabase
               .from("secondhand_items")
-              .select("id, title, images, price, location, category, condition")
+              .select("id, title, images, price, location, category, condition, brand, features")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
 
-            if (category) {
-              query = query.eq("category", category);
-            }
-            if (location) {
-              query = query.eq("location", location);
-            }
+            if (category) query = query.eq("category", category);
+            if (location) query = query.eq("location", location);
 
             const { data: items, error } = await query;
             if (!error && items) {
               data = items.map((i) => ({
                 id: i.id,
                 title: i.title,
+                subtitle: `${i.category}${i.brand ? ` • ${i.brand}` : ""}`,
                 image: i.images?.[0] || laptopImage,
                 price: `₪${i.price?.toLocaleString("he-IL") || 0}`,
                 location: i.location,
-                extraInfo: `${i.category} • ${i.condition}`,
+                condition: i.condition || undefined,
+                badges: i.features?.slice(0, 3) || [],
               }));
             }
             break;
@@ -184,29 +170,26 @@ const SimilarListings = ({
           case "job": {
             let query = supabase
               .from("jobs")
-              .select("id, title, company_name, location, job_type, salary_min, salary_max")
+              .select("id, title, company_name, location, job_type, salary_min, salary_max, scope, benefits")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
 
-            if (jobType) {
-              query = query.eq("job_type", jobType);
-            }
-            if (location) {
-              query = query.eq("location", location);
-            }
+            if (jobType) query = query.eq("job_type", jobType);
+            if (location) query = query.eq("location", location);
 
             const { data: jobs, error } = await query;
             if (!error && jobs) {
               data = jobs.map((j) => ({
                 id: j.id,
                 title: j.title,
+                subtitle: `${j.company_name} • ${j.job_type} • ${j.scope}`,
                 image: jobImage,
                 price: j.salary_min && j.salary_max 
                   ? `₪${j.salary_min.toLocaleString("he-IL")} - ₪${j.salary_max.toLocaleString("he-IL")}`
                   : "שכר לא צוין",
                 location: j.location,
-                extraInfo: `${j.company_name} • ${j.job_type}`,
+                badges: j.benefits?.slice(0, 3) || [],
               }));
             }
             break;
@@ -215,27 +198,24 @@ const SimilarListings = ({
           case "business": {
             let query = supabase
               .from("businesses")
-              .select("id, title, images, price, location, category, business_type")
+              .select("id, title, images, price, location, category, business_type, years_operating, includes")
               .eq("status", "active")
               .neq("id", currentItemId)
               .limit(6);
 
-            if (category) {
-              query = query.eq("category", category);
-            }
-            if (location) {
-              query = query.eq("location", location);
-            }
+            if (category) query = query.eq("category", category);
+            if (location) query = query.eq("location", location);
 
             const { data: businesses, error } = await query;
             if (!error && businesses) {
               data = businesses.map((b) => ({
                 id: b.id,
                 title: b.title,
+                subtitle: `${b.category} • ${b.business_type}${b.years_operating ? ` • ${b.years_operating} שנים` : ""}`,
                 image: b.images?.[0] || jobImage,
                 price: `₪${b.price?.toLocaleString("he-IL") || 0}`,
                 location: b.location,
-                extraInfo: `${b.category} • ${b.business_type}`,
+                badges: b.includes?.slice(0, 3) || [],
               }));
             }
             break;
@@ -244,27 +224,24 @@ const SimilarListings = ({
           case "freelancer": {
             let query = supabase
               .from("freelancers")
-              .select("id, full_name, title, avatar_url, hourly_rate, location, category, rating")
+              .select("id, full_name, title, avatar_url, hourly_rate, location, category, rating, skills")
               .eq("availability", "available")
               .neq("id", currentItemId)
               .limit(6);
 
-            if (category) {
-              query = query.eq("category", category);
-            }
-            if (location) {
-              query = query.eq("location", location);
-            }
+            if (category) query = query.eq("category", category);
+            if (location) query = query.eq("location", location);
 
             const { data: freelancers, error } = await query;
             if (!error && freelancers) {
               data = freelancers.map((f) => ({
                 id: f.id,
                 title: f.full_name,
+                subtitle: `${f.title} • ${f.category}${f.rating ? ` • ⭐ ${f.rating}` : ""}`,
                 image: f.avatar_url || jobImage,
                 price: `₪${f.hourly_rate}/שעה`,
                 location: f.location || "לא צוין",
-                extraInfo: `${f.title} • ${f.category}`,
+                badges: f.skills?.slice(0, 3) || [],
               }));
             }
             break;
@@ -294,39 +271,26 @@ const SimilarListings = ({
     return routes[itemType];
   };
 
-  const getIcon = () => {
-    switch (itemType) {
-      case "property":
-        return <Bed className="h-3.5 w-3.5" />;
-      case "car":
-        return <Gauge className="h-3.5 w-3.5" />;
-      case "job":
-        return <Briefcase className="h-3.5 w-3.5" />;
-      case "business":
-        return <Building2 className="h-3.5 w-3.5" />;
-      default:
-        return <Calendar className="h-3.5 w-3.5" />;
-    }
-  };
-
   if (loading) {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-end gap-3">
-          <Skeleton className="h-8 w-40" />
+          <h2 className="text-2xl font-bold text-foreground">מודעות דומות</h2>
           <div className="h-1 w-10 bg-primary rounded-full" />
         </div>
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
             <Card key={i} className="overflow-hidden" dir="rtl">
-              <div className="flex flex-col sm:flex-row-reverse p-2">
-                <Skeleton className="w-full sm:w-72 h-48 rounded-lg" />
-                <div className="flex-1 p-4 space-y-3">
-                  <Skeleton className="h-6 w-3/4 mr-auto" />
-                  <Skeleton className="h-4 w-1/2 mr-auto" />
-                  <Skeleton className="h-4 w-1/3 mr-auto" />
-                  <Skeleton className="h-8 w-32 mr-auto mt-auto" />
+              <Skeleton className="aspect-[4/3] w-full" />
+              <div className="p-4 space-y-3">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-6 w-16" />
+                  <Skeleton className="h-6 w-16" />
                 </div>
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-8 w-32" />
               </div>
             </Card>
           ))}
@@ -346,47 +310,67 @@ const SimilarListings = ({
         <div className="h-1 w-10 bg-primary rounded-full" />
       </div>
       
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item) => (
           <Link
             key={item.id}
             to={getItemLink(item.id)}
-            className="block"
+            className="block group"
           >
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow bg-card border-border" dir="rtl">
-              <div className="flex flex-col sm:flex-row-reverse p-2">
-                {/* Image */}
-                <div className="w-full sm:w-72 h-48 sm:h-auto sm:self-stretch overflow-hidden flex-shrink-0 relative rounded-lg">
-                  <CloudflareImage
-                    src={item.image}
-                    alt={item.title}
-                    preset="card"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
+            <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 bg-card border-border h-full" dir="rtl">
+              {/* Image */}
+              <div className="aspect-[4/3] relative overflow-hidden bg-muted">
+                {item.condition && (
+                  <Badge className="absolute top-3 right-3 z-10 bg-background/95 text-foreground border-0 shadow-sm">
+                    {item.condition}
+                  </Badge>
+                )}
+                <CloudflareImage
+                  src={item.image}
+                  alt={item.title}
+                  preset="card"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+
+              {/* Content */}
+              <div className="p-5 space-y-3">
+                {/* Title */}
+                <h3 className="text-lg font-bold text-foreground text-center group-hover:text-primary transition-colors line-clamp-1">
+                  {item.title}
+                </h3>
+                
+                {/* Subtitle */}
+                <p className="text-sm text-muted-foreground text-center line-clamp-1">
+                  {item.subtitle}
+                </p>
+
+                {/* Badges */}
+                {item.badges && item.badges.length > 0 && (
+                  <div className="flex flex-wrap justify-center gap-2 pt-2">
+                    {item.badges.map((badge, index) => (
+                      <Badge 
+                        key={index} 
+                        variant="outline" 
+                        className="text-xs bg-muted/50 border-border"
+                      >
+                        {badge}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+
+                {/* Location */}
+                <div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground pt-2 border-t border-border/50">
+                  <MapPin className="h-4 w-4" />
+                  <span>{item.location}</span>
                 </div>
 
-                {/* Content */}
-                <div className="flex-1 flex flex-col p-4">
-                  <div className="mb-3 text-right space-y-1">
-                    <h3 className="text-xl font-bold text-foreground">
-                      {item.title}
-                    </h3>
-                    <div className="flex items-center justify-end gap-2 text-sm text-muted-foreground">
-                      <span>{item.location}</span>
-                      <MapPin className="h-4 w-4" />
-                    </div>
-                    <div className="flex items-center justify-end gap-2 text-sm text-muted-foreground">
-                      <span>{item.extraInfo}</span>
-                      {getIcon()}
-                    </div>
-                  </div>
-
-                  {/* Price */}
-                  <div className="mt-auto text-right">
-                    <div className="text-2xl font-bold text-foreground">
-                      {item.price}
-                    </div>
-                  </div>
+                {/* Price */}
+                <div className="text-center pt-2">
+                  <span className="text-2xl font-bold text-foreground">
+                    {item.price}
+                  </span>
                 </div>
               </div>
             </Card>
