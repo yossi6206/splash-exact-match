@@ -97,7 +97,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <div className="flex-1 flex flex-col p-4">
             <div className="mb-3 text-right">
               <h3 className="text-lg font-bold text-foreground mb-1">
-                {property.propertyType} • {property.rooms} חד' • קומה {property.floor} • {property.size} מ"ר • {property.location} {property.street && `${property.street}`}{property.house_number && ` ${property.house_number}`}
+                {property.propertyType}{property.street && ` • ${property.street}`}{property.house_number && ` ${property.house_number}`} • {property.location} • קומה {property.floor} • {property.size} מ"ר
               </h3>
             </div>
 
