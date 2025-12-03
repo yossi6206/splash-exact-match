@@ -22,7 +22,9 @@ const propertySchema = z.object({
   size: z.number().int().min(1, "שטח חייב להיות חיובי").max(10000, "שטח גבוה מדי").optional(),
   floor: z.number().int().min(-5, "קומה לא תקינה").max(200, "קומה גבוהה מדי").optional(),
   price: z.number().int().min(1, "מחיר חובה").max(1000000000, "מחיר גבוה מדי"),
-  location: z.string().trim().min(2, "מיקום חובה"),
+  location: z.string().trim().min(2, "עיר/אזור חובה"),
+  street: z.string().trim().min(2, "רחוב חובה"),
+  house_number: z.string().trim().min(1, "מס׳ בית חובה"),
   description: z.string().trim().min(20, "תיאור חייב להכיל לפחות 20 תווים").max(10000, "תיאור ארוך מדי"),
   seller_name: z.string().trim().min(2, "שם מוכר חובה"),
   seller_phone: z.string().trim().regex(/^05\d{8}$/, "מספר טלפון לא תקין (צריך להיות 05XXXXXXXX)"),
@@ -44,6 +46,8 @@ const PostProperty = () => {
     year: "",
     price: "",
     location: "",
+    street: "",
+    house_number: "",
     condition: "",
     description: "",
     seller_name: "",
@@ -106,6 +110,8 @@ const PostProperty = () => {
         floor: formData.floor ? parseInt(formData.floor) : undefined,
         price: parseInt(formData.price),
         location: formData.location,
+        street: formData.street,
+        house_number: formData.house_number,
         description: formData.description,
         seller_name: formData.seller_name,
         seller_phone: formData.seller_phone,
@@ -137,6 +143,8 @@ const PostProperty = () => {
         year: formData.year ? parseInt(formData.year) : null,
         price: parseInt(formData.price),
         location: formData.location,
+        street: formData.street,
+        house_number: formData.house_number,
         condition: formData.condition || null,
         description: formData.description,
         features: selectedFeatures,
@@ -330,7 +338,7 @@ const PostProperty = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="location">מיקום *</Label>
+                <Label htmlFor="location">עיר / אזור *</Label>
                 <Input
                   id="location"
                   name="location"
@@ -338,6 +346,31 @@ const PostProperty = () => {
                   onChange={handleInputChange}
                   required
                   placeholder="תל אביב - יפו"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="street">רחוב *</Label>
+                <Input
+                  id="street"
+                  name="street"
+                  value={formData.street}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="רוטשילד"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="house_number">מס׳ בית *</Label>
+                <Input
+                  id="house_number"
+                  name="house_number"
+                  value={formData.house_number}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="15"
                 />
               </div>
             </div>
