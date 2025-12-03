@@ -584,12 +584,15 @@ const LaptopDetails = () => {
 
             <AIReport itemType="laptop" itemData={{ brand: laptop.brand, model: laptop.model, price: laptop.price, condition: laptop.condition }} />
 
-            <SimilarListings 
-              itemType="laptop"
-              currentItemId={id!}
-              location={laptop.location}
-              brand={laptop.brand}
-            />
+            {/* Similar Listings - minimal spacing */}
+            <div className="-mt-2">
+              <SimilarListings 
+                itemType="laptop"
+                currentItemId={id!}
+                location={laptop.location}
+                brand={laptop.brand}
+              />
+            </div>
           </div>
         </div>
       </main>

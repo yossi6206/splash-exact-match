@@ -673,13 +673,15 @@ const CarDetails = () => {
             {/* AI Report */}
             <AIReport itemType="car" itemData={carDetails} />
 
-            {/* Similar Listings */}
-            <SimilarListings 
-              itemType="car"
-              currentItemId={id!}
-              location={carData.location}
-              manufacturer={carData.manufacturer || undefined}
-            />
+            {/* Similar Listings - minimal spacing */}
+            <div className="-mt-2">
+              <SimilarListings 
+                itemType="car"
+                currentItemId={id!}
+                location={carData.location}
+                manufacturer={carData.manufacturer || undefined}
+              />
+            </div>
           </div>
         </div>
       </main>
