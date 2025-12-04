@@ -65,7 +65,7 @@ const HeroSection = () => {
           {/* Content */}
           <div className="order-2 md:order-1 flex flex-col items-end text-right">
             <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-foreground mb-6 leading-tight">פחות עומס, יותר רווח</h1>
-            <p className="text-2xl md:text-3xl lg:text-4xl text-foreground/80 mb-10 font-medium">פרסום שמביא תוצאותלמכור ביד2 ולהרוויח בקלות</p>
+            <p className="text-2xl md:text-3xl lg:text-4xl text-foreground/80 mb-10 font-medium">פרסום שמביא תוצאות אמיתיות</p>
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xl px-16 py-8 rounded-full shadow-lg hover:shadow-xl transition-all">
               לפרסם מודעה
             </Button>
