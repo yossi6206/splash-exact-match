@@ -1,6 +1,6 @@
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package, Building2, User, PlusCircle, ArrowRight } from "lucide-react";
+import { BarChart3, Heart, Eye, Clock, Menu, Bell, MessageSquare, LayoutGrid, Edit3, Search, Lightbulb, Settings, LogOut, Phone, Briefcase, Plus, Car, Home, Laptop, Package, Building2, User, PlusCircle, ArrowRight, Building } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavLink } from "@/components/NavLink";
@@ -10,6 +10,7 @@ import PostJob from "./dashboard/PostJob";
 import MyJobs from "./dashboard/MyJobs";
 import PostCar from "./dashboard/PostCar";
 import PostProperty from "./dashboard/PostProperty";
+import PostProject from "./dashboard/PostProject";
 import PostLaptop from "./dashboard/PostLaptop";
 import PostSecondhand from "./dashboard/PostSecondhand";
 import PostBusiness from "./dashboard/PostBusiness";
@@ -39,6 +40,7 @@ const Dashboard = () => {
     { title: "פרסם משרה", icon: Plus, path: "/dashboard/post-job" },
     { title: "פרסם רכב", icon: Plus, path: "/dashboard/post-car" },
     { title: "פרסם נדל״ן", icon: Plus, path: "/dashboard/post-property" },
+    { title: "פרסם פרויקט", icon: Building, path: "/dashboard/post-project" },
     { title: "פרסם מחשב", icon: Plus, path: "/dashboard/post-laptop" },
     { title: "פרסם יד שנייה", icon: Plus, path: "/dashboard/post-secondhand" },
     { title: "פרסם עסק", icon: Plus, path: "/dashboard/post-business" },
@@ -192,6 +194,7 @@ const Dashboard = () => {
             <Route path="/my-jobs" element={<MyJobs />} />
             <Route path="/post-car" element={<PostCar />} />
             <Route path="/post-property" element={<PostProperty />} />
+            <Route path="/post-project" element={<PostProject />} />
             <Route path="/post-laptop" element={<PostLaptop />} />
             <Route path="/post-secondhand" element={<PostSecondhand />} />
             <Route path="/post-business" element={<PostBusiness />} />
