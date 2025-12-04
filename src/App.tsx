@@ -35,6 +35,7 @@ import NotFound from "./pages/NotFound";
 import MobileNav from "./components/MobileNav";
 import TawkToChat from "./components/TawkToChat";
 import ScrollToTop from "./components/ScrollToTop";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -74,9 +75,9 @@ const AppContent = () => {
         <Route path="/projects/:id" element={<ProjectDetails />} />
         <Route path="/tips" element={<TipsGuidesPage />} />
         <Route path="/tips/:id" element={<TipDetails />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/dashboard/*" element={<Dashboard />} />
+        <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+        <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+        <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<NotFound />} />
