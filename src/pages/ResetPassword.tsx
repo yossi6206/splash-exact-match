@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import logoNew from "@/assets/logo-new.png";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -136,9 +137,11 @@ const ResetPassword = () => {
     <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
       {/* Logo in top right corner */}
       <Link to="/" className="absolute top-6 right-6 z-10">
-        <div className="flex h-12 w-auto items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md px-3">
-          <span className="text-sm font-extrabold text-primary-foreground">SecondHandPro</span>
-        </div>
+        <img 
+          src={logoNew} 
+          alt="SecondHandPro" 
+          className="h-12 w-auto object-contain"
+        />
       </Link>
 
       <div className="w-full max-w-md">
