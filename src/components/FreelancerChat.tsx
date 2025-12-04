@@ -533,17 +533,20 @@ export const FreelancerChat = ({
 
   const chatContent = (
     <>
-      <div className="p-4 border-b flex items-center gap-3 flex-shrink-0">
-        <Avatar className="h-10 w-10">
-          <AvatarImage src={displayAvatar || ""} alt={displayName} />
-          <AvatarFallback className="bg-primary/10 text-primary">
-            {getInitials(displayName)}
-          </AvatarFallback>
-        </Avatar>
-        <div>
-          <h3 className="font-semibold">{displayName}</h3>
+      {/* Header - Only show when not embedded (Messages.tsx handles its own header) */}
+      {!embedded && (
+        <div className="p-4 border-b flex items-center gap-3 flex-shrink-0">
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={displayAvatar || ""} alt={displayName} />
+            <AvatarFallback className="bg-primary/10 text-primary">
+              {getInitials(displayName)}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <h3 className="font-semibold">{displayName}</h3>
+          </div>
         </div>
-      </div>
+      )}
 
       <ScrollArea className="flex-1 p-4 min-h-0">
         <div ref={scrollRef} className="space-y-4">
