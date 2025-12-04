@@ -559,10 +559,16 @@ const Cars = () => {
               </div>
             ) : (
               currentCars.map((car) => {
+                // Prevent duplicate manufacturer in title if model already contains it
+                const modelContainsManufacturer = car.manufacturer && car.model.toLowerCase().includes(car.manufacturer.toLowerCase());
+                const title = modelContainsManufacturer 
+                  ? car.model 
+                  : `${car.manufacturer || ''} ${car.model}`.trim();
+                
                 const carForCard = {
                   id: car.id,
                   image: car.images && car.images.length > 0 ? car.images[0] : carImage1,
-                  title: `${car.manufacturer || ''} ${car.model}`.trim(),
+                  title,
                   subtitle: `${car.transmission || ''} ${car.fuel_type || ''}`,
                   manufacturer: car.manufacturer,
                   model: car.model,
