@@ -19,6 +19,7 @@ type CategoryData = {
   icon: LucideIcon;
   image?: string;
   slug: string;
+  link?: string; // Optional direct link override
   subcategories: {
     title: string;
     items: string[];
@@ -78,6 +79,7 @@ const secondhandCategories: CategoryData[] = [
     title: "מחשבים",
     icon: Laptop,
     slug: "laptops",
+    link: "/laptops",
     subcategories: [
       {
         title: "מחשבים ניידים",
@@ -259,7 +261,7 @@ const SecondhandMegaMenu = ({ hoveredMenu, setHoveredMenu }: SecondhandMegaMenuP
                 {activeCategoryData && activeCategoryData.subcategories.length > 0 ? (
                   <>
                     <Link 
-                      to={`/secondhand/${activeCategoryData.slug}`}
+                      to={activeCategoryData.link || `/secondhand/${activeCategoryData.slug}`}
                       className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors mb-5 pb-2 border-b-2 border-primary/20"
                     >
                       <activeCategoryData.icon className="h-4 w-4" />
@@ -274,7 +276,7 @@ const SecondhandMegaMenu = ({ hoveredMenu, setHoveredMenu }: SecondhandMegaMenuP
                             {subcategory.items.map((item, itemIndex) => (
                               <li key={itemIndex}>
                                 <Link 
-                                  to={`/secondhand/${activeCategoryData.slug}`}
+                                  to={activeCategoryData.link || `/secondhand/${activeCategoryData.slug}`}
                                   className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1 hover:underline"
                                 >
                                   {item}
