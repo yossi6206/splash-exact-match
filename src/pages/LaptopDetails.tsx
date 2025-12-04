@@ -425,8 +425,19 @@ const LaptopDetails = () => {
                     </div>
                   </div>
                 </div>
-              </CardContent>
+                </CardContent>
             </Card>
+
+            {/* Similar Listings - Desktop */}
+            <div className="hidden lg:block mt-8">
+              <SimilarListings 
+                itemType="laptop"
+                currentItemId={id!}
+                location={laptop.location}
+                brand={laptop.brand}
+                priceRange={{ min: laptop.price, max: laptop.price }}
+              />
+            </div>
           </div>
 
           {/* Right Column - Sidebar */}
