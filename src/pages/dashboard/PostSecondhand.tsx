@@ -15,6 +15,7 @@ import { z } from "zod";
 import { ImageUpload } from "@/components/ImageUpload";
 import { createValidatedChangeHandler, secondhandValidationConfig, createPriceChangeHandler, parsePriceToNumber } from "@/utils/formValidation";
 import { getPhoneManufacturers, getModelsForPhoneManufacturer } from "@/data/phoneManufacturersModels";
+import { getComputerManufacturers, getModelsForComputerManufacturer } from "@/data/computerManufacturersModels";
 
 const secondhandSchema = z.object({
   title: z.string().trim().min(3, "כותרת חייבת להכיל לפחות 3 תווים").max(200, "כותרת ארוכה מדי"),
@@ -74,8 +75,7 @@ const fashionSizes = ["XS", "S", "M", "L", "XL", "XXL", "36", "37", "38", "39", 
 const babySizes = ["0-6 חודשים", "6-12 חודשים", "1-2 שנים", "2-4 שנים", "4-6 שנים", "6-8 שנים", "8-12 שנים"];
 const colors = ["לבן", "שחור", "אפור", "חום", "בז'", "כחול", "ירוק", "אדום", "ורוד", "סגול", "צהוב", "כתום", "כסוף", "זהב", "צבעוני"];
 
-// Computer brands and options
-const computerBrands = ["Apple", "Lenovo", "HP", "Dell", "Asus", "Acer", "MSI", "Microsoft", "Samsung", "LG", "Razer", "אחר"];
+// Computer options
 const processors = ["Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "AMD Ryzen 3", "AMD Ryzen 5", "AMD Ryzen 7", "AMD Ryzen 9", "Apple M1", "Apple M2", "Apple M3", "אחר"];
 const ramOptions = ["4GB", "8GB", "16GB", "32GB", "64GB"];
 const storageOptions = ["128GB", "256GB", "512GB", "1TB", "2TB"];
@@ -118,12 +118,16 @@ const PostSecondhand = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [availablePhoneModels, setAvailablePhoneModels] = useState<string[]>([]);
   const [showCustomPhoneModel, setShowCustomPhoneModel] = useState(false);
+  const [availableComputerModels, setAvailableComputerModels] = useState<string[]>([]);
+  const [showCustomComputerModel, setShowCustomComputerModel] = useState(false);
 
   const handleCategoryChange = (value: string) => {
     setFormData({ ...formData, category: value, subcategory: "", brand: "", size: "" });
     setAvailableSubcategories(categories[value as keyof typeof categories] || []);
     setAvailablePhoneModels([]);
     setShowCustomPhoneModel(false);
+    setAvailableComputerModels([]);
+    setShowCustomComputerModel(false);
   };
 
   const handlePhoneBrandChange = (value: string) => {
@@ -139,6 +143,23 @@ const PostSecondhand = () => {
       setFormData({ ...formData, size: "" });
     } else {
       setShowCustomPhoneModel(false);
+      setFormData({ ...formData, size: value });
+    }
+  };
+
+  const handleComputerBrandChange = (value: string) => {
+    setFormData({ ...formData, brand: value, size: "" });
+    const models = getModelsForComputerManufacturer(value);
+    setAvailableComputerModels(models);
+    setShowCustomComputerModel(false);
+  };
+
+  const handleComputerModelChange = (value: string) => {
+    if (value === "אחר - הזנה ידנית") {
+      setShowCustomComputerModel(true);
+      setFormData({ ...formData, size: "" });
+    } else {
+      setShowCustomComputerModel(false);
       setFormData({ ...formData, size: value });
     }
   };
@@ -484,31 +505,77 @@ const PostSecondhand = () => {
 
     // Computer fields
     if (category === "מחשבים") {
+      const computerManufacturers = getComputerManufacturers();
+      
       return (
         <>
           <div className="space-y-2">
             <Label htmlFor="brand">יצרן *</Label>
-            <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+            <Select value={formData.brand} onValueChange={handleComputerBrandChange}>
               <SelectTrigger>
                 <SelectValue placeholder="בחר יצרן" />
               </SelectTrigger>
               <SelectContent>
-                {computerBrands.map(brand => (
+                {computerManufacturers.map(brand => (
                   <SelectItem key={brand} value={brand}>{brand}</SelectItem>
                 ))}
+                <SelectItem value="אחר">אחר</SelectItem>
               </SelectContent>
             </Select>
           </div>
+          
           <div className="space-y-2">
             <Label htmlFor="size">דגם *</Label>
-            <Input
-              id="size"
-              name="size"
-              value={formData.size}
-              onChange={handleInputChange}
-              placeholder="לדוגמה: MacBook Pro 14, ThinkPad X1 Carbon"
-            />
+            {!showCustomComputerModel ? (
+              <Select 
+                value={formData.size} 
+                onValueChange={handleComputerModelChange}
+                disabled={!formData.brand || formData.brand === "אחר"}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={formData.brand ? "בחר דגם" : "בחר יצרן תחילה"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableComputerModels.map(model => (
+                    <SelectItem key={model} value={model}>{model}</SelectItem>
+                  ))}
+                  <SelectItem value="אחר - הזנה ידנית">אחר - הזנה ידנית</SelectItem>
+                </SelectContent>
+              </Select>
+            ) : (
+              <div className="space-y-2">
+                <Input
+                  id="size"
+                  name="size"
+                  value={formData.size}
+                  onChange={handleInputChange}
+                  placeholder="הזן שם דגם"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setShowCustomComputerModel(false);
+                    setFormData({ ...formData, size: "" });
+                  }}
+                >
+                  חזור לבחירה מרשימה
+                </Button>
+              </div>
+            )}
+            {formData.brand === "אחר" && (
+              <Input
+                id="size"
+                name="size"
+                value={formData.size}
+                onChange={handleInputChange}
+                placeholder="הזן שם דגם"
+                className="mt-2"
+              />
+            )}
           </div>
+
           <div className="space-y-2">
             <Label htmlFor="material">מעבד</Label>
             <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
