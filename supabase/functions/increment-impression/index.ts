@@ -5,6 +5,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Allowed tables whitelist for security
+const ALLOWED_TABLES = ['cars', 'properties', 'laptops', 'businesses', 'freelancers', 'jobs', 'secondhand_items', 'projects'];
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
@@ -12,6 +15,25 @@ Deno.serve(async (req) => {
 
   try {
     const { table, id } = await req.json()
+
+    // Validate table name against whitelist
+    if (!table || !ALLOWED_TABLES.includes(table)) {
+      console.error(`Invalid table name attempted: ${table}`)
+      return new Response(
+        JSON.stringify({ error: 'Invalid table name' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+      )
+    }
+
+    // Validate id is a valid UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!id || !uuidRegex.test(id)) {
+      console.error(`Invalid id format: ${id}`)
+      return new Response(
+        JSON.stringify({ error: 'Invalid id format' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+      )
+    }
 
     console.log(`Incrementing impression for ${table} with id ${id}`)
     
