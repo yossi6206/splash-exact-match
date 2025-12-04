@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 
 interface Conversation {
   id: string;
@@ -24,6 +25,7 @@ interface Conversation {
 
 interface FreelancerDetails {
   id: string;
+  user_id: string;
   full_name: string;
   title: string;
   category: string;
@@ -52,6 +54,9 @@ export default function Messages() {
   } | null>(null);
   const [freelancerDetails, setFreelancerDetails] = useState<FreelancerDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // Track freelancer online status
+  const { isOnline: isFreelancerOnline } = useOnlineStatus(freelancerDetails?.user_id);
 
   // Check if we were navigated here with a specific seller or freelancer
   useEffect(() => {
@@ -515,6 +520,14 @@ export default function Messages() {
                       )}
                       <h3 className="font-bold text-lg">{freelancerDetails.full_name}</h3>
                       <p className="text-sm text-muted-foreground">{freelancerDetails.title}</p>
+                      
+                      {/* Online Status */}
+                      <div className="flex items-center justify-center gap-2 mt-2">
+                        <span className={`w-2.5 h-2.5 rounded-full ${isFreelancerOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
+                        <span className={`text-sm ${isFreelancerOnline ? 'text-green-600' : 'text-muted-foreground'}`}>
+                          {isFreelancerOnline ? 'מחובר' : 'לא מחובר'}
+                        </span>
+                      </div>
                       
                       {/* Rating - Prominent display */}
                       <div className="flex items-center justify-center gap-1 mt-2">
