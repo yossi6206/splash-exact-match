@@ -1,5 +1,4 @@
 import { useState } from "react";
-import logoNew from "@/assets/logo-new.png";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -168,11 +167,9 @@ const Auth = () => {
       {/* Logo */}
       <div className="absolute top-6 right-6">
         <Link to="/" className="flex items-center gap-2">
-          <img 
-            src={logoNew} 
-            alt="SecondHandPro" 
-            className="h-10 w-auto object-contain"
-          />
+          <div className="flex h-10 w-auto px-3 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
+            <span className="text-sm font-extrabold text-primary-foreground">SecondHandPro</span>
+          </div>
         </Link>
       </div>
 
