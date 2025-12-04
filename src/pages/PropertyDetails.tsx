@@ -348,6 +348,8 @@ const PropertyDetails = () => {
                 location={property.location}
                 propertyType={property.property_type}
                 rooms={property.rooms}
+                size={property.size}
+                priceRange={{ min: property.price, max: property.price }}
               />
             </div>
           </div>

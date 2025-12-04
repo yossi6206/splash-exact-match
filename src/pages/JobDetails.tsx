@@ -606,6 +606,7 @@ const JobDetails = () => {
             currentItemId={id!}
             location={jobData.location}
             jobType={jobData.job_type}
+            priceRange={jobData.salary_min ? { min: jobData.salary_min, max: jobData.salary_max || jobData.salary_min } : undefined}
           />
         </section>
       </main>

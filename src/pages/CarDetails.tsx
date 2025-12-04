@@ -680,6 +680,8 @@ const CarDetails = () => {
                 currentItemId={id!}
                 location={carData.location}
                 manufacturer={carData.manufacturer || undefined}
+                year={carData.year}
+                priceRange={carData.price ? { min: parseInt(carData.price), max: parseInt(carData.price) } : undefined}
               />
             </div>
           </div>

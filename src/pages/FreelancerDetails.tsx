@@ -641,6 +641,7 @@ const FreelancerDetails = () => {
             currentItemId={id!}
             location={freelancer.location || undefined}
             category={freelancer.category}
+            priceRange={{ min: freelancer.hourly_rate, max: freelancer.hourly_rate }}
           />
         </div>
       </div>
