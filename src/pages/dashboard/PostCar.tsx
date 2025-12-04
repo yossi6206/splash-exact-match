@@ -49,6 +49,8 @@ const PostCar = () => {
     vehicle_type: "",
     condition: "",
     category: "",
+    color: "",
+    test_until: "",
     price: "",
     location: "",
     description: "",
@@ -187,6 +189,8 @@ const PostCar = () => {
         vehicle_type: formData.vehicle_type || "רכב פרטי",
         condition: formData.condition,
         category: formData.category || null,
+        color: formData.color || null,
+        test_until: formData.test_until || null,
         price: formData.price,
         location: formData.location,
         description: formData.description,
@@ -424,6 +428,64 @@ const PostCar = () => {
                   </SelectContent>
                 </Select>
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="color">צבע הרכב</Label>
+                <Select
+                  value={formData.color}
+                  onValueChange={(value) => setFormData({ ...formData, color: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר צבע" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="לבן">לבן</SelectItem>
+                    <SelectItem value="שחור">שחור</SelectItem>
+                    <SelectItem value="כסף">כסף</SelectItem>
+                    <SelectItem value="אפור">אפור</SelectItem>
+                    <SelectItem value="אדום">אדום</SelectItem>
+                    <SelectItem value="כחול">כחול</SelectItem>
+                    <SelectItem value="ירוק">ירוק</SelectItem>
+                    <SelectItem value="חום">חום</SelectItem>
+                    <SelectItem value="בז׳">בז׳</SelectItem>
+                    <SelectItem value="זהב">זהב</SelectItem>
+                    <SelectItem value="כתום">כתום</SelectItem>
+                    <SelectItem value="צהוב">צהוב</SelectItem>
+                    <SelectItem value="סגול">סגול</SelectItem>
+                    <SelectItem value="ורוד">ורוד</SelectItem>
+                    <SelectItem value="טורקיז">טורקיז</SelectItem>
+                    <SelectItem value="אחר">אחר</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="test_until">טסט עד</Label>
+                <Select
+                  value={formData.test_until}
+                  onValueChange={(value) => setFormData({ ...formData, test_until: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר תוקף טסט" />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[300px]">
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const date = new Date();
+                      date.setMonth(date.getMonth() + i);
+                      const month = String(date.getMonth() + 1).padStart(2, '0');
+                      const year = date.getFullYear();
+                      const value = `${year}-${month}-01`;
+                      const label = `${month}/${year}`;
+                      return (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="category">קטגוריה</Label>
                 <Select
