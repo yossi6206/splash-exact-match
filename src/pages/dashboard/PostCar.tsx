@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
 import { ImageUpload } from "@/components/ImageUpload";
 import { createValidatedChangeHandler, carValidationConfig, createPriceChangeHandler, parsePriceToNumber } from "@/utils/formValidation";
+import { getManufacturers, getModelsForManufacturer } from "@/data/carManufacturersModels";
 
 const carSchema = z.object({
   manufacturer: z.string().trim().min(2, "יצרן חובה"),
@@ -77,6 +78,19 @@ const PostCar = () => {
   ];
 
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+
+  // Get manufacturers list
+  const manufacturers = useMemo(() => getManufacturers(), []);
+  
+  // Get models based on selected manufacturer
+  const availableModels = useMemo(() => {
+    if (!formData.manufacturer) return [];
+    return getModelsForManufacturer(formData.manufacturer);
+  }, [formData.manufacturer]);
+
+  const handleManufacturerChange = (value: string) => {
+    setFormData({ ...formData, manufacturer: value, model: "" }); // Reset model when manufacturer changes
+  };
 
   const handleInputChange = createValidatedChangeHandler(setFormData, formData, carValidationConfig);
 
@@ -213,43 +227,38 @@ const PostCar = () => {
                 <Label htmlFor="manufacturer">יצרן *</Label>
                 <Select
                   value={formData.manufacturer}
-                  onValueChange={(value) => setFormData({ ...formData, manufacturer: value })}
+                  onValueChange={handleManufacturerChange}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="בחר יצרן" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="טויוטה">טויוטה</SelectItem>
-                    <SelectItem value="מזדה">מזדה</SelectItem>
-                    <SelectItem value="יונדאי">יונדאי</SelectItem>
-                    <SelectItem value="קיה">קיה</SelectItem>
-                    <SelectItem value="הונדה">הונדה</SelectItem>
-                    <SelectItem value="ניסאן">ניסאן</SelectItem>
-                    <SelectItem value="פולקסווגן">פולקסווגן</SelectItem>
-                    <SelectItem value="שקודה">שקודה</SelectItem>
-                    <SelectItem value="סיאט">סיאט</SelectItem>
-                    <SelectItem value="ב מ וו">ב מ וו</SelectItem>
-                    <SelectItem value="מרצדס">מרצדס</SelectItem>
-                    <SelectItem value="אאודי">אאודי</SelectItem>
-                    <SelectItem value="רנו">רנו</SelectItem>
-                    <SelectItem value="פיג'ו">פיג'ו</SelectItem>
-                    <SelectItem value="סיטרואן">סיטרואן</SelectItem>
-                    <SelectItem value="פורד">פורד</SelectItem>
-                    <SelectItem value="שברולט">שברולט</SelectItem>
-                    <SelectItem value="מיצובישי">מיצובישי</SelectItem>
+                  <SelectContent className="max-h-[300px]">
+                    {manufacturers.map((manufacturer) => (
+                      <SelectItem key={manufacturer} value={manufacturer}>
+                        {manufacturer}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="model">דגם הרכב *</Label>
-                <Input
-                  id="model"
-                  name="model"
+                <Select
                   value={formData.model}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="קורולה"
-                />
+                  onValueChange={(value) => setFormData({ ...formData, model: value })}
+                  disabled={!formData.manufacturer}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={formData.manufacturer ? "בחר דגם" : "בחר יצרן קודם"} />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[300px]">
+                    {availableModels.map((model) => (
+                      <SelectItem key={model} value={model}>
+                        {model}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
