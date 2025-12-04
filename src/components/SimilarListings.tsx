@@ -745,67 +745,67 @@ const SimilarListings = ({
 
   return (
     <div className="mt-8">
-      <h3 className="text-xl font-bold mb-4">{getTitle()}</h3>
-      <div className="relative">
-        {/* Navigation Arrows */}
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xl font-bold">{getTitle()}</h3>
+        {/* Navigation Arrows in Header */}
         {items.length > 4 && (
-          <>
+          <div className="flex items-center gap-2">
             <Button
-              variant="ghost"
-              size="icon"
-              onClick={handlePrev}
-              disabled={currentPage === 0}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 bg-background/90 hover:bg-background shadow-lg rounded-full hidden md:flex disabled:opacity-50"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </Button>
-            <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
               onClick={handleNext}
               disabled={currentPage >= totalPages - 1}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-background/90 hover:bg-background shadow-lg rounded-full hidden md:flex disabled:opacity-50"
+              className="h-8 w-8 rounded-full border-border hover:bg-muted disabled:opacity-40"
             >
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-4 w-4" />
             </Button>
-          </>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handlePrev}
+              disabled={currentPage === 0}
+              className="h-8 w-8 rounded-full border-border hover:bg-muted disabled:opacity-40"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         )}
-
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {displayedItems.map((item) => (
-            <Link key={item.id} to={getItemLink(item.id)}>
-              <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
-                <div className="relative h-40">
-                  <CloudflareImage
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                  />
-                  {item.matchReasons.length > 0 && (
-                    <div className="absolute top-2 right-2 flex flex-wrap gap-1 max-w-[90%]">
-                      {item.matchReasons.slice(0, 2).map((reason, idx) => (
-                        <Badge 
-                          key={idx} 
-                          variant="secondary" 
-                          className="bg-primary/90 text-primary-foreground text-xs px-2 py-0.5"
-                        >
-                          {reason}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className="p-4" dir="rtl">
-                  <h4 className="font-bold text-foreground truncate">{item.title}</h4>
-                  <p className="text-sm text-muted-foreground truncate">{item.subtitle}</p>
-                  <p className="text-sm text-muted-foreground truncate">{item.details}</p>
-                  <p className="font-bold text-primary mt-2">{item.price}</p>
-                </div>
-              </Card>
-            </Link>
-          ))}
-        </div>
+      </div>
+      
+      {/* Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {displayedItems.map((item) => (
+          <Link key={item.id} to={getItemLink(item.id)}>
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+              <div className="relative h-40">
+                <CloudflareImage
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover"
+                />
+                {item.matchReasons.length > 0 && (
+                  <div className="absolute top-2 right-2 flex flex-wrap gap-1 max-w-[90%]">
+                    {item.matchReasons.slice(0, 2).map((reason, idx) => (
+                      <Badge 
+                        key={idx} 
+                        variant="secondary" 
+                        className="bg-primary/90 text-primary-foreground text-xs px-2 py-0.5"
+                      >
+                        {reason}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="p-4" dir="rtl">
+                <h4 className="font-bold text-foreground truncate">{item.title}</h4>
+                <p className="text-sm text-muted-foreground truncate">{item.subtitle}</p>
+                <p className="text-sm text-muted-foreground truncate">{item.details}</p>
+                <p className="font-bold text-primary mt-2">{item.price}</p>
+              </div>
+            </Card>
+          </Link>
+        ))}
       </div>
     </div>
   );
