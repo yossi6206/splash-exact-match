@@ -21,11 +21,6 @@ import {
   Bike,
   Wrench,
   Settings2,
-  Laptop,
-  Monitor,
-  Cpu,
-  Mouse,
-  FileCode,
   Sofa,
   Zap,
   Dumbbell,
@@ -122,35 +117,6 @@ const megaMenuData: MegaMenuData = {
         title: "שירותים",
         icon: Settings2,
         items: ["מוסכים", "מכוני שירות", "גרירה", "ביטוח רכב"]
-      }
-    ]
-  },
-  "מחשבים": {
-    columns: [
-      {
-        title: "מחשבים ניידים",
-        icon: Laptop,
-        items: ["מחשבי גיימינג", "מחשבים לעבודה", "מקבוק", "אולטרה בוק", "טאבלטים"]
-      },
-      {
-        title: "מחשבים נייחים",
-        icon: Monitor,
-        items: ["מחשבי גיימינג", "תחנות עבודה", "מחשבי all-in-one", "מחשבים מורכבים"]
-      },
-      {
-        title: "רכיבי מחשב",
-        icon: Cpu,
-        items: ["כרטיסי מסך", "מעבדים", "זיכרון RAM", "כוננים", "לוחות אם"]
-      },
-      {
-        title: "אביזרים",
-        icon: Mouse,
-        items: ["מסכים", "מקלדות", "עכברים", "אוזניות", "מצלמות"]
-      },
-      {
-        title: "תוכנות",
-        icon: FileCode,
-        items: ["מערכות הפעלה", "תוכנות משרד", "תוכנות עיצוב", "אנטי וירוס"]
       }
     ]
   },
@@ -394,46 +360,7 @@ const Header = () => {
                 )}
               </div>
 
-              <div 
-                className="relative"
-                onMouseEnter={() => setHoveredMenu("מחשבים")}
-                onMouseLeave={() => setHoveredMenu(null)}
-              >
-                <Button variant="ghost" className="text-sm font-medium" asChild>
-                  <Link to="/laptops">מחשבים</Link>
-                </Button>
-                
-                {hoveredMenu === "מחשבים" && megaMenuData["מחשבים"] && (
-                  <div className="absolute top-full right-0 pt-2 z-50">
-                    <div className="bg-white border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)' }}>
-                      <div className="grid grid-cols-5 gap-6">
-                        {megaMenuData["מחשבים"].columns.map((column, index) => (
-                          <div key={index}>
-                            <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20 group">
-                              <column.icon className="h-4 w-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
-                              <h3 className="transition-colors group-hover:text-primary/80 whitespace-nowrap">{column.title}</h3>
-                            </div>
-                            <ul className="space-y-1.5">
-                              {column.items.map((item, itemIndex) => (
-                                <li key={itemIndex}>
-                                  <a 
-                                    href="#" 
-                                    className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
-                                  >
-                                    {item}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <SecondhandMegaMenu 
+              <SecondhandMegaMenu
                 hoveredMenu={hoveredMenu}
                 setHoveredMenu={setHoveredMenu}
               />
