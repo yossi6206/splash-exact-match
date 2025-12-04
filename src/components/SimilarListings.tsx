@@ -767,7 +767,7 @@ const SimilarListings = ({
               size="icon"
               onClick={handlePrev}
               disabled={currentPage === 0}
-              className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white/90 shadow-lg border border-border hover:bg-white disabled:opacity-0 disabled:pointer-events-none transition-opacity"
+              className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white/90 shadow-lg border border-border hover:bg-white disabled:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none transition-all"
             >
               <ChevronRight className="h-5 w-5 text-foreground" />
             </Button>
@@ -778,7 +778,7 @@ const SimilarListings = ({
               size="icon"
               onClick={handleNext}
               disabled={currentPage >= totalPages - 1}
-              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white/90 shadow-lg border border-border hover:bg-white disabled:opacity-0 disabled:pointer-events-none transition-opacity"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white/90 shadow-lg border border-border hover:bg-white disabled:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none transition-all"
             >
               <ChevronLeft className="h-5 w-5 text-foreground" />
             </Button>
