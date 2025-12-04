@@ -26,6 +26,8 @@ import Freelancers from "./pages/Freelancers";
 import FreelancerDetails from "./pages/FreelancerDetails";
 import Businesses from "./pages/Businesses";
 import BusinessDetails from "./pages/BusinessDetails";
+import Projects from "./pages/Projects";
+import ProjectDetails from "./pages/ProjectDetails";
 import SellerProfile from "./pages/SellerProfile";
 import Messages from "./pages/Messages";
 import Favorites from "./pages/Favorites";
@@ -66,6 +68,8 @@ const AppContent = () => {
         <Route path="/freelancers/:id" element={<FreelancerDetails />} />
         <Route path="/businesses" element={<Businesses />} />
         <Route path="/businesses/:id" element={<BusinessDetails />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/projects/:id" element={<ProjectDetails />} />
         <Route path="/tips" element={<TipsGuidesPage />} />
         <Route path="/tips/:id" element={<TipDetails />} />
         <Route path="/messages" element={<Messages />} />

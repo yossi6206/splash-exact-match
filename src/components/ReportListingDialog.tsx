@@ -17,7 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface ReportListingDialogProps {
   itemId: string;
-  itemType: "car" | "property" | "laptop" | "secondhand" | "job" | "business" | "freelancer";
+  itemType: "car" | "property" | "laptop" | "secondhand" | "job" | "business" | "freelancer" | "project";
 }
 
 const reportReasons = [
