@@ -1,16 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import RecommendedCard from "./RecommendedCard";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MapPin, Building2, Calendar } from "lucide-react";
-import { CloudflareImage } from "@/components/CloudflareImage";
 import itemPhone from "@/assets/item-phone.jpg";
 import itemLaptop from "@/assets/item-laptop.jpg";
 import itemCar from "@/assets/item-car.jpg";
+import itemJob from "@/assets/item-job.jpg";
 
-const staticItems = [
+const items = [
   {
     id: 1,
     image: itemPhone,
@@ -38,29 +32,18 @@ const staticItems = [
     category: "רכב",
     timeAgo: "לפני יום",
   },
+  {
+    id: 4,
+    image: itemJob,
+    title: "מפתח/ת Full Stack - חברת הייטק מובילה",
+    price: "25,000",
+    location: "תל אביב",
+    category: "דרושים",
+    timeAgo: "לפני יומיים",
+  },
 ];
 
 const RecommendedItems = () => {
-  const { data: projects } = useQuery({
-    queryKey: ["homepage-projects"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .eq("status", "active")
-        .order("created_at", { ascending: false })
-        .limit(2);
-      
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const formatPrice = (price: number | null) => {
-    if (!price) return "לא צוין";
-    return price.toLocaleString("he-IL");
-  };
-
   return (
     <section className="py-8 md:py-12 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -78,57 +61,9 @@ const RecommendedItems = () => {
             </svg>
           </a>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 lg:gap-6">
-          {/* Static items */}
-          {staticItems.map((item) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
+          {items.map((item) => (
             <RecommendedCard key={item.id} {...item} />
-          ))}
-          
-          {/* Dynamic projects */}
-          {projects?.map((project) => (
-            <Link key={project.id} to={`/projects/${project.id}`}>
-              <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group h-full">
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <CloudflareImage
-                    src={project.images?.[0] || "/placeholder.svg"}
-                    alt={project.title}
-                    preset="card"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground text-[10px]">
-                    פרויקט חדש
-                  </Badge>
-                </div>
-                <div className="p-3">
-                  <h3 className="font-semibold text-sm text-foreground line-clamp-2 mb-1">
-                    {project.title}
-                  </h3>
-                  <div className="flex items-center gap-1 text-muted-foreground text-xs mb-2">
-                    <MapPin className="h-3 w-3" />
-                    <span>{project.location}</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-muted-foreground text-xs mb-2">
-                    <Building2 className="h-3 w-3" />
-                    <span>{project.developer_name}</span>
-                  </div>
-                  {project.delivery_date && (
-                    <div className="flex items-center gap-1 text-muted-foreground text-xs mb-2">
-                      <Calendar className="h-3 w-3" />
-                      <span>אכלוס: {project.delivery_date}</span>
-                    </div>
-                  )}
-                  <div className="text-primary font-bold text-sm">
-                    {project.min_price && project.max_price ? (
-                      `₪${formatPrice(project.min_price)} - ₪${formatPrice(project.max_price)}`
-                    ) : project.min_price ? (
-                      `החל מ-₪${formatPrice(project.min_price)}`
-                    ) : (
-                      "צור קשר למחיר"
-                    )}
-                  </div>
-                </div>
-              </Card>
-            </Link>
           ))}
         </div>
       </div>
