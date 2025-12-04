@@ -299,8 +299,8 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-2 border-gray-200 bg-white dark:bg-background shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1)] hidden md:block overflow-hidden">
-      <div className="container mx-auto px-6">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-gray-200 bg-white dark:bg-background shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1)] hidden md:block">
+      <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-8">
