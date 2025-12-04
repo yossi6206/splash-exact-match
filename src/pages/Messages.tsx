@@ -515,6 +515,18 @@ export default function Messages() {
                       )}
                       <h3 className="font-bold text-lg">{freelancerDetails.full_name}</h3>
                       <p className="text-sm text-muted-foreground">{freelancerDetails.title}</p>
+                      
+                      {/* Rating - Prominent display */}
+                      <div className="flex items-center justify-center gap-1 mt-2">
+                        <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                        <span className="font-bold text-lg">
+                          {freelancerDetails.rating ? Number(freelancerDetails.rating).toFixed(1) : "0.0"}
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          ({freelancerDetails.total_reviews || 0} ביקורות)
+                        </span>
+                      </div>
+                      
                       <Badge variant="secondary" className="mt-2">{freelancerDetails.category}</Badge>
                     </div>
 
