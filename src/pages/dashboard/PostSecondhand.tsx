@@ -512,17 +512,14 @@ const PostSecondhand = () => {
         <>
           <div className="space-y-2">
             <Label htmlFor="brand">יצרן *</Label>
-            <Select value={formData.brand} onValueChange={handleComputerBrandChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="בחר יצרן" />
-              </SelectTrigger>
-              <SelectContent>
-                {computerManufacturers.map(brand => (
-                  <SelectItem key={brand} value={brand}>{brand}</SelectItem>
-                ))}
-                <SelectItem value="אחר">אחר</SelectItem>
-              </SelectContent>
-            </Select>
+            <SearchableSelect
+              value={formData.brand}
+              onValueChange={handleComputerBrandChange}
+              options={[...computerManufacturers, "אחר"]}
+              placeholder="בחר יצרן"
+              searchPlaceholder="חפש יצרן..."
+              emptyText="לא נמצאו יצרנים"
+            />
           </div>
           
           <div className="space-y-2">
@@ -665,17 +662,14 @@ const PostSecondhand = () => {
         <>
           <div className="space-y-2">
             <Label htmlFor="brand">יצרן *</Label>
-            <Select value={formData.brand} onValueChange={handlePhoneBrandChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="בחר יצרן" />
-              </SelectTrigger>
-              <SelectContent>
-                {phoneManufacturers.map(brand => (
-                  <SelectItem key={brand} value={brand}>{brand}</SelectItem>
-                ))}
-                <SelectItem value="אחר">אחר</SelectItem>
-              </SelectContent>
-            </Select>
+            <SearchableSelect
+              value={formData.brand}
+              onValueChange={handlePhoneBrandChange}
+              options={[...phoneManufacturers, "אחר"]}
+              placeholder="בחר יצרן"
+              searchPlaceholder="חפש יצרן..."
+              emptyText="לא נמצאו יצרנים"
+            />
           </div>
           
           <div className="space-y-2">

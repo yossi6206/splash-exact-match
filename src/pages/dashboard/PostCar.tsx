@@ -15,6 +15,7 @@ import { z } from "zod";
 import { ImageUpload } from "@/components/ImageUpload";
 import { createValidatedChangeHandler, carValidationConfig, createPriceChangeHandler, parsePriceToNumber } from "@/utils/formValidation";
 import { getManufacturers, getModelsForManufacturer } from "@/data/carManufacturersModels";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 
 const carSchema = z.object({
   manufacturer: z.string().trim().min(2, "יצרן חובה"),
@@ -241,21 +242,14 @@ const PostCar = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="manufacturer">יצרן *</Label>
-                <Select
+                <SearchableSelect
                   value={formData.manufacturer}
                   onValueChange={handleManufacturerChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="בחר יצרן" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[300px]">
-                    {manufacturers.map((manufacturer) => (
-                      <SelectItem key={manufacturer} value={manufacturer}>
-                        {manufacturer}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  options={manufacturers}
+                  placeholder="בחר יצרן"
+                  searchPlaceholder="חפש יצרן..."
+                  emptyText="לא נמצאו יצרנים"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="model">דגם הרכב *</Label>
@@ -282,27 +276,21 @@ const PostCar = () => {
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
-                ) : (
-                  <Select
+                ) : formData.manufacturer ? (
+                  <SearchableSelect
                     value={formData.model}
                     onValueChange={handleModelChange}
-                    disabled={!formData.manufacturer}
-                  >
+                    options={[...availableModels, "__custom__"]}
+                    placeholder="בחר דגם"
+                    searchPlaceholder="חפש דגם..."
+                    emptyText="לא נמצאו דגמים"
+                  />
+                ) : (
+                  <Select disabled>
                     <SelectTrigger>
-                      <SelectValue placeholder={formData.manufacturer ? "בחר דגם" : "בחר יצרן קודם"} />
+                      <SelectValue placeholder="בחר יצרן קודם" />
                     </SelectTrigger>
-                    <SelectContent className="max-h-[300px]">
-                      {availableModels.map((model) => (
-                        <SelectItem key={model} value={model}>
-                          {model}
-                        </SelectItem>
-                      ))}
-                      {formData.manufacturer && (
-                        <SelectItem value="__custom__" className="text-primary font-medium border-t mt-1 pt-2">
-                          אחר - הזנה ידנית
-                        </SelectItem>
-                      )}
-                    </SelectContent>
+                    <SelectContent />
                   </Select>
                 )}
               </div>
