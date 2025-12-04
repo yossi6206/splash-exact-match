@@ -591,6 +591,7 @@ const LaptopDetails = () => {
                 currentItemId={id!}
                 location={laptop.location}
                 brand={laptop.brand}
+                priceRange={{ min: laptop.price, max: laptop.price }}
               />
             </div>
           </div>

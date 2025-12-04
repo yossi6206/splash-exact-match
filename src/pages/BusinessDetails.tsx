@@ -540,6 +540,7 @@ const BusinessDetails = () => {
                 currentItemId={id!}
                 location={business.location}
                 category={business.category}
+                priceRange={{ min: business.price, max: business.price }}
               />
             </div>
           </div>

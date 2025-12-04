@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CloudflareImage } from "@/components/CloudflareImage";
-import { Heart } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 
 // Default images for fallbacks
@@ -20,10 +19,12 @@ interface SimilarListingsProps {
   propertyType?: string;
   rooms?: number;
   priceRange?: { min: number; max: number };
+  size?: number;
   manufacturer?: string;
   brand?: string;
   category?: string;
   jobType?: string;
+  year?: number;
 }
 
 interface SimilarItem {
@@ -34,7 +35,57 @@ interface SimilarItem {
   price: string;
   location: string;
   details: string;
+  relevanceScore: number;
+  matchReasons: string[];
 }
+
+// Relevance scoring weights
+const RELEVANCE_WEIGHTS = {
+  property: {
+    location: 35,      // מיקום - הכי חשוב
+    propertyType: 25,  // סוג נכס
+    rooms: 20,         // חדרים דומים
+    price: 15,         // מחיר דומה
+    size: 5,           // גודל דומה
+  },
+  car: {
+    manufacturer: 35,
+    location: 25,
+    price: 20,
+    year: 15,
+    km: 5,
+  },
+  laptop: {
+    brand: 35,
+    location: 25,
+    price: 25,
+    specs: 15,
+  },
+  secondhand: {
+    category: 35,
+    location: 30,
+    price: 20,
+    condition: 15,
+  },
+  job: {
+    jobType: 35,
+    location: 30,
+    salary: 20,
+    scope: 15,
+  },
+  business: {
+    category: 35,
+    location: 30,
+    price: 20,
+    businessType: 15,
+  },
+  freelancer: {
+    category: 40,
+    location: 25,
+    hourlyRate: 20,
+    skills: 15,
+  },
+};
 
 const SimilarListings = ({
   itemType,
@@ -43,657 +94,588 @@ const SimilarListings = ({
   propertyType,
   rooms,
   priceRange,
+  size,
   manufacturer,
   brand,
   category,
   jobType,
+  year,
 }: SimilarListingsProps) => {
   const [items, setItems] = useState<SimilarItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchSimilarItems = async () => {
+    const fetchAndScoreSimilarItems = async () => {
       setLoading(true);
-      let data: SimilarItem[] = [];
+      let scoredItems: SimilarItem[] = [];
       const targetCount = 4;
 
       try {
         switch (itemType) {
           case "property": {
-            // Strategy: Try multiple queries with decreasing specificity
-            const fetchedIds = new Set<string>([currentItemId]);
-            
-            // Query 1: Same location + property type + similar rooms
-            if (location && propertyType && rooms) {
-              const { data: exact } = await supabase
-                .from("properties")
-                .select("id, title, images, price, location, property_type, rooms, street, house_number, size, floor")
-                .eq("status", "active")
-                .eq("location", location)
-                .eq("property_type", propertyType)
-                .gte("rooms", rooms - 1)
-                .lte("rooms", rooms + 1)
-                .neq("id", currentItemId)
-                .limit(targetCount);
-              
-              if (exact) {
-                exact.forEach(p => {
-                  if (!fetchedIds.has(p.id) && data.length < targetCount) {
-                    fetchedIds.add(p.id);
-                    data.push(mapProperty(p));
-                  }
-                });
-              }
-            }
+            // Fetch more items and score them
+            const { data: properties } = await supabase
+              .from("properties")
+              .select("id, title, images, price, location, property_type, rooms, street, house_number, size, floor")
+              .eq("status", "active")
+              .neq("id", currentItemId)
+              .limit(50); // Fetch more to score
 
-            // Query 2: Same location + property type (ignore rooms)
-            if (data.length < targetCount && location && propertyType) {
-              const { data: byLocationType } = await supabase
-                .from("properties")
-                .select("id, title, images, price, location, property_type, rooms, street, house_number, size, floor")
-                .eq("status", "active")
-                .eq("location", location)
-                .eq("property_type", propertyType)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byLocationType) {
-                byLocationType.forEach(p => {
-                  if (!fetchedIds.has(p.id) && data.length < targetCount) {
-                    fetchedIds.add(p.id);
-                    data.push(mapProperty(p));
-                  }
+            if (properties) {
+              scoredItems = properties.map(p => {
+                const { score, reasons } = calculatePropertyRelevance(p, {
+                  location,
+                  propertyType,
+                  rooms,
+                  priceRange,
+                  size,
                 });
-              }
-            }
-
-            // Query 3: Same location only
-            if (data.length < targetCount && location) {
-              const { data: byLocation } = await supabase
-                .from("properties")
-                .select("id, title, images, price, location, property_type, rooms, street, house_number, size, floor")
-                .eq("status", "active")
-                .eq("location", location)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byLocation) {
-                byLocation.forEach(p => {
-                  if (!fetchedIds.has(p.id) && data.length < targetCount) {
-                    fetchedIds.add(p.id);
-                    data.push(mapProperty(p));
-                  }
-                });
-              }
-            }
-
-            // Query 4: Same property type (any location)
-            if (data.length < targetCount && propertyType) {
-              const { data: byType } = await supabase
-                .from("properties")
-                .select("id, title, images, price, location, property_type, rooms, street, house_number, size, floor")
-                .eq("status", "active")
-                .eq("property_type", propertyType)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byType) {
-                byType.forEach(p => {
-                  if (!fetchedIds.has(p.id) && data.length < targetCount) {
-                    fetchedIds.add(p.id);
-                    data.push(mapProperty(p));
-                  }
-                });
-              }
-            }
-
-            // Query 5: Similar price range (±30%)
-            if (data.length < targetCount && priceRange) {
-              const minPrice = Math.floor(priceRange.min * 0.7);
-              const maxPrice = Math.ceil(priceRange.max * 1.3);
-              const { data: byPrice } = await supabase
-                .from("properties")
-                .select("id, title, images, price, location, property_type, rooms, street, house_number, size, floor")
-                .eq("status", "active")
-                .gte("price", minPrice)
-                .lte("price", maxPrice)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byPrice) {
-                byPrice.forEach(p => {
-                  if (!fetchedIds.has(p.id) && data.length < targetCount) {
-                    fetchedIds.add(p.id);
-                    data.push(mapProperty(p));
-                  }
-                });
-              }
-            }
-
-            // Query 6: Fallback - any active properties
-            if (data.length < targetCount) {
-              const { data: fallback } = await supabase
-                .from("properties")
-                .select("id, title, images, price, location, property_type, rooms, street, house_number, size, floor")
-                .eq("status", "active")
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .order("created_at", { ascending: false })
-                .limit(targetCount - data.length);
-              
-              if (fallback) {
-                fallback.forEach(p => {
-                  if (!fetchedIds.has(p.id) && data.length < targetCount) {
-                    fetchedIds.add(p.id);
-                    data.push(mapProperty(p));
-                  }
-                });
-              }
+                return {
+                  ...mapProperty(p),
+                  relevanceScore: score,
+                  matchReasons: reasons,
+                };
+              });
             }
             break;
           }
 
           case "car": {
-            const fetchedIds = new Set<string>([currentItemId]);
+            const { data: cars } = await supabase
+              .from("cars")
+              .select("id, manufacturer, model, images, price, location, year, km, hand")
+              .eq("status", "active")
+              .neq("id", currentItemId)
+              .limit(50);
 
-            // Query 1: Same manufacturer + location
-            if (manufacturer && location) {
-              const { data: exact } = await supabase
-                .from("cars")
-                .select("id, manufacturer, model, images, price, location, year, km, hand")
-                .eq("status", "active")
-                .eq("manufacturer", manufacturer)
-                .eq("location", location)
-                .neq("id", currentItemId)
-                .limit(targetCount);
-              
-              if (exact) {
-                exact.forEach(c => {
-                  if (!fetchedIds.has(c.id) && data.length < targetCount) {
-                    fetchedIds.add(c.id);
-                    data.push(mapCar(c));
-                  }
+            if (cars) {
+              scoredItems = cars.map(c => {
+                const { score, reasons } = calculateCarRelevance(c, {
+                  manufacturer,
+                  location,
+                  priceRange,
+                  year,
                 });
-              }
-            }
-
-            // Query 2: Same manufacturer
-            if (data.length < targetCount && manufacturer) {
-              const { data: byManufacturer } = await supabase
-                .from("cars")
-                .select("id, manufacturer, model, images, price, location, year, km, hand")
-                .eq("status", "active")
-                .eq("manufacturer", manufacturer)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byManufacturer) {
-                byManufacturer.forEach(c => {
-                  if (!fetchedIds.has(c.id) && data.length < targetCount) {
-                    fetchedIds.add(c.id);
-                    data.push(mapCar(c));
-                  }
-                });
-              }
-            }
-
-            // Query 3: Same location
-            if (data.length < targetCount && location) {
-              const { data: byLocation } = await supabase
-                .from("cars")
-                .select("id, manufacturer, model, images, price, location, year, km, hand")
-                .eq("status", "active")
-                .eq("location", location)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byLocation) {
-                byLocation.forEach(c => {
-                  if (!fetchedIds.has(c.id) && data.length < targetCount) {
-                    fetchedIds.add(c.id);
-                    data.push(mapCar(c));
-                  }
-                });
-              }
-            }
-
-            // Fallback
-            if (data.length < targetCount) {
-              const { data: fallback } = await supabase
-                .from("cars")
-                .select("id, manufacturer, model, images, price, location, year, km, hand")
-                .eq("status", "active")
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .order("created_at", { ascending: false })
-                .limit(targetCount - data.length);
-              
-              if (fallback) {
-                fallback.forEach(c => {
-                  if (!fetchedIds.has(c.id) && data.length < targetCount) {
-                    fetchedIds.add(c.id);
-                    data.push(mapCar(c));
-                  }
-                });
-              }
+                return {
+                  ...mapCar(c),
+                  relevanceScore: score,
+                  matchReasons: reasons,
+                };
+              });
             }
             break;
           }
 
           case "laptop": {
-            const fetchedIds = new Set<string>([currentItemId]);
+            const { data: laptops } = await supabase
+              .from("laptops")
+              .select("id, brand, model, images, price, location, condition, ram, storage, processor")
+              .eq("status", "active")
+              .neq("id", currentItemId)
+              .limit(50);
 
-            // Query 1: Same brand + location
-            if (brand && location) {
-              const { data: exact } = await supabase
-                .from("laptops")
-                .select("id, brand, model, images, price, location, condition, ram, storage, processor")
-                .eq("status", "active")
-                .eq("brand", brand)
-                .eq("location", location)
-                .neq("id", currentItemId)
-                .limit(targetCount);
-              
-              if (exact) {
-                exact.forEach(l => {
-                  if (!fetchedIds.has(l.id) && data.length < targetCount) {
-                    fetchedIds.add(l.id);
-                    data.push(mapLaptop(l));
-                  }
+            if (laptops) {
+              scoredItems = laptops.map(l => {
+                const { score, reasons } = calculateLaptopRelevance(l, {
+                  brand,
+                  location,
+                  priceRange,
                 });
-              }
-            }
-
-            // Query 2: Same brand
-            if (data.length < targetCount && brand) {
-              const { data: byBrand } = await supabase
-                .from("laptops")
-                .select("id, brand, model, images, price, location, condition, ram, storage, processor")
-                .eq("status", "active")
-                .eq("brand", brand)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byBrand) {
-                byBrand.forEach(l => {
-                  if (!fetchedIds.has(l.id) && data.length < targetCount) {
-                    fetchedIds.add(l.id);
-                    data.push(mapLaptop(l));
-                  }
-                });
-              }
-            }
-
-            // Fallback
-            if (data.length < targetCount) {
-              const { data: fallback } = await supabase
-                .from("laptops")
-                .select("id, brand, model, images, price, location, condition, ram, storage, processor")
-                .eq("status", "active")
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .order("created_at", { ascending: false })
-                .limit(targetCount - data.length);
-              
-              if (fallback) {
-                fallback.forEach(l => {
-                  if (!fetchedIds.has(l.id) && data.length < targetCount) {
-                    fetchedIds.add(l.id);
-                    data.push(mapLaptop(l));
-                  }
-                });
-              }
+                return {
+                  ...mapLaptop(l),
+                  relevanceScore: score,
+                  matchReasons: reasons,
+                };
+              });
             }
             break;
           }
 
           case "secondhand": {
-            const fetchedIds = new Set<string>([currentItemId]);
+            const { data: items } = await supabase
+              .from("secondhand_items")
+              .select("id, title, images, price, location, category, condition")
+              .eq("status", "active")
+              .neq("id", currentItemId)
+              .limit(50);
 
-            // Query 1: Same category + location
-            if (category && location) {
-              const { data: exact } = await supabase
-                .from("secondhand_items")
-                .select("id, title, images, price, location, category, condition")
-                .eq("status", "active")
-                .eq("category", category)
-                .eq("location", location)
-                .neq("id", currentItemId)
-                .limit(targetCount);
-              
-              if (exact) {
-                exact.forEach(i => {
-                  if (!fetchedIds.has(i.id) && data.length < targetCount) {
-                    fetchedIds.add(i.id);
-                    data.push(mapSecondhand(i));
-                  }
+            if (items) {
+              scoredItems = items.map(i => {
+                const { score, reasons } = calculateSecondhandRelevance(i, {
+                  category,
+                  location,
+                  priceRange,
                 });
-              }
-            }
-
-            // Query 2: Same category
-            if (data.length < targetCount && category) {
-              const { data: byCategory } = await supabase
-                .from("secondhand_items")
-                .select("id, title, images, price, location, category, condition")
-                .eq("status", "active")
-                .eq("category", category)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byCategory) {
-                byCategory.forEach(i => {
-                  if (!fetchedIds.has(i.id) && data.length < targetCount) {
-                    fetchedIds.add(i.id);
-                    data.push(mapSecondhand(i));
-                  }
-                });
-              }
-            }
-
-            // Fallback
-            if (data.length < targetCount) {
-              const { data: fallback } = await supabase
-                .from("secondhand_items")
-                .select("id, title, images, price, location, category, condition")
-                .eq("status", "active")
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .order("created_at", { ascending: false })
-                .limit(targetCount - data.length);
-              
-              if (fallback) {
-                fallback.forEach(i => {
-                  if (!fetchedIds.has(i.id) && data.length < targetCount) {
-                    fetchedIds.add(i.id);
-                    data.push(mapSecondhand(i));
-                  }
-                });
-              }
+                return {
+                  ...mapSecondhand(i),
+                  relevanceScore: score,
+                  matchReasons: reasons,
+                };
+              });
             }
             break;
           }
 
           case "job": {
-            const fetchedIds = new Set<string>([currentItemId]);
+            const { data: jobs } = await supabase
+              .from("jobs")
+              .select("id, title, company_name, location, job_type, salary_min, salary_max, scope")
+              .eq("status", "active")
+              .neq("id", currentItemId)
+              .limit(50);
 
-            // Query 1: Same job type + location
-            if (jobType && location) {
-              const { data: exact } = await supabase
-                .from("jobs")
-                .select("id, title, company_name, location, job_type, salary_min, salary_max, scope")
-                .eq("status", "active")
-                .eq("job_type", jobType)
-                .eq("location", location)
-                .neq("id", currentItemId)
-                .limit(targetCount);
-              
-              if (exact) {
-                exact.forEach(j => {
-                  if (!fetchedIds.has(j.id) && data.length < targetCount) {
-                    fetchedIds.add(j.id);
-                    data.push(mapJob(j));
-                  }
+            if (jobs) {
+              scoredItems = jobs.map(j => {
+                const { score, reasons } = calculateJobRelevance(j, {
+                  jobType,
+                  location,
+                  priceRange,
                 });
-              }
-            }
-
-            // Query 2: Same job type
-            if (data.length < targetCount && jobType) {
-              const { data: byType } = await supabase
-                .from("jobs")
-                .select("id, title, company_name, location, job_type, salary_min, salary_max, scope")
-                .eq("status", "active")
-                .eq("job_type", jobType)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byType) {
-                byType.forEach(j => {
-                  if (!fetchedIds.has(j.id) && data.length < targetCount) {
-                    fetchedIds.add(j.id);
-                    data.push(mapJob(j));
-                  }
-                });
-              }
-            }
-
-            // Fallback
-            if (data.length < targetCount) {
-              const { data: fallback } = await supabase
-                .from("jobs")
-                .select("id, title, company_name, location, job_type, salary_min, salary_max, scope")
-                .eq("status", "active")
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .order("created_at", { ascending: false })
-                .limit(targetCount - data.length);
-              
-              if (fallback) {
-                fallback.forEach(j => {
-                  if (!fetchedIds.has(j.id) && data.length < targetCount) {
-                    fetchedIds.add(j.id);
-                    data.push(mapJob(j));
-                  }
-                });
-              }
+                return {
+                  ...mapJob(j),
+                  relevanceScore: score,
+                  matchReasons: reasons,
+                };
+              });
             }
             break;
           }
 
           case "business": {
-            const fetchedIds = new Set<string>([currentItemId]);
+            const { data: businesses } = await supabase
+              .from("businesses")
+              .select("id, title, images, price, location, category, business_type")
+              .eq("status", "active")
+              .neq("id", currentItemId)
+              .limit(50);
 
-            // Query 1: Same category + location
-            if (category && location) {
-              const { data: exact } = await supabase
-                .from("businesses")
-                .select("id, title, images, price, location, category, business_type")
-                .eq("status", "active")
-                .eq("category", category)
-                .eq("location", location)
-                .neq("id", currentItemId)
-                .limit(targetCount);
-              
-              if (exact) {
-                exact.forEach(b => {
-                  if (!fetchedIds.has(b.id) && data.length < targetCount) {
-                    fetchedIds.add(b.id);
-                    data.push(mapBusiness(b));
-                  }
+            if (businesses) {
+              scoredItems = businesses.map(b => {
+                const { score, reasons } = calculateBusinessRelevance(b, {
+                  category,
+                  location,
+                  priceRange,
                 });
-              }
-            }
-
-            // Query 2: Same category
-            if (data.length < targetCount && category) {
-              const { data: byCategory } = await supabase
-                .from("businesses")
-                .select("id, title, images, price, location, category, business_type")
-                .eq("status", "active")
-                .eq("category", category)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byCategory) {
-                byCategory.forEach(b => {
-                  if (!fetchedIds.has(b.id) && data.length < targetCount) {
-                    fetchedIds.add(b.id);
-                    data.push(mapBusiness(b));
-                  }
-                });
-              }
-            }
-
-            // Fallback
-            if (data.length < targetCount) {
-              const { data: fallback } = await supabase
-                .from("businesses")
-                .select("id, title, images, price, location, category, business_type")
-                .eq("status", "active")
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .order("created_at", { ascending: false })
-                .limit(targetCount - data.length);
-              
-              if (fallback) {
-                fallback.forEach(b => {
-                  if (!fetchedIds.has(b.id) && data.length < targetCount) {
-                    fetchedIds.add(b.id);
-                    data.push(mapBusiness(b));
-                  }
-                });
-              }
+                return {
+                  ...mapBusiness(b),
+                  relevanceScore: score,
+                  matchReasons: reasons,
+                };
+              });
             }
             break;
           }
 
           case "freelancer": {
-            const fetchedIds = new Set<string>([currentItemId]);
+            const { data: freelancers } = await supabase
+              .from("freelancers")
+              .select("id, full_name, title, avatar_url, hourly_rate, location, category, skills, rating")
+              .eq("availability", "available")
+              .neq("id", currentItemId)
+              .limit(50);
 
-            // Query 1: Same category + location
-            if (category && location) {
-              const { data: exact } = await supabase
-                .from("freelancers")
-                .select("id, full_name, title, avatar_url, hourly_rate, location, category, rating")
-                .eq("availability", "available")
-                .eq("category", category)
-                .eq("location", location)
-                .neq("id", currentItemId)
-                .limit(targetCount);
-              
-              if (exact) {
-                exact.forEach(f => {
-                  if (!fetchedIds.has(f.id) && data.length < targetCount) {
-                    fetchedIds.add(f.id);
-                    data.push(mapFreelancer(f));
-                  }
+            if (freelancers) {
+              scoredItems = freelancers.map(f => {
+                const { score, reasons } = calculateFreelancerRelevance(f, {
+                  category,
+                  location,
+                  priceRange,
                 });
-              }
-            }
-
-            // Query 2: Same category
-            if (data.length < targetCount && category) {
-              const { data: byCategory } = await supabase
-                .from("freelancers")
-                .select("id, full_name, title, avatar_url, hourly_rate, location, category, rating")
-                .eq("availability", "available")
-                .eq("category", category)
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .limit(targetCount - data.length);
-              
-              if (byCategory) {
-                byCategory.forEach(f => {
-                  if (!fetchedIds.has(f.id) && data.length < targetCount) {
-                    fetchedIds.add(f.id);
-                    data.push(mapFreelancer(f));
-                  }
-                });
-              }
-            }
-
-            // Fallback
-            if (data.length < targetCount) {
-              const { data: fallback } = await supabase
-                .from("freelancers")
-                .select("id, full_name, title, avatar_url, hourly_rate, location, category, rating")
-                .eq("availability", "available")
-                .not("id", "in", `(${Array.from(fetchedIds).join(",")})`)
-                .order("created_at", { ascending: false })
-                .limit(targetCount - data.length);
-              
-              if (fallback) {
-                fallback.forEach(f => {
-                  if (!fetchedIds.has(f.id) && data.length < targetCount) {
-                    fetchedIds.add(f.id);
-                    data.push(mapFreelancer(f));
-                  }
-                });
-              }
+                return {
+                  ...mapFreelancer(f),
+                  relevanceScore: score,
+                  matchReasons: reasons,
+                };
+              });
             }
             break;
           }
         }
+
+        // Sort by relevance score (highest first) and take top items
+        const topItems = scoredItems
+          .filter(item => item.relevanceScore > 0) // Only items with some relevance
+          .sort((a, b) => b.relevanceScore - a.relevanceScore)
+          .slice(0, targetCount);
+
+        // If we don't have enough relevant items, add random ones
+        if (topItems.length < targetCount) {
+          const remainingItems = scoredItems
+            .filter(item => !topItems.find(t => t.id === item.id))
+            .slice(0, targetCount - topItems.length);
+          topItems.push(...remainingItems);
+        }
+
+        setItems(topItems.slice(0, targetCount));
       } catch (error) {
         console.error("Error fetching similar items:", error);
+      } finally {
+        setLoading(false);
       }
-
-      setItems(data);
-      setLoading(false);
     };
 
-    // Helper functions for mapping data
-    const mapProperty = (p: any): SimilarItem => ({
-      id: p.id,
-      title: p.street && p.house_number ? `${p.street} ${p.house_number}` : p.title,
-      subtitle: `${p.street || ""}, ${p.location}`.trim().replace(/^,\s*/, ""),
-      image: p.images?.[0] || property1,
-      price: `₪ ${p.price?.toLocaleString("he-IL") || 0}`,
-      location: p.location,
-      details: `${p.rooms} חדרים • קומה ${p.floor || 0} • ${p.size || 0} מ"ר`,
-    });
+    fetchAndScoreSimilarItems();
+  }, [itemType, currentItemId, location, propertyType, rooms, priceRange, size, manufacturer, brand, category, jobType, year]);
 
-    const mapCar = (c: any): SimilarItem => ({
-      id: c.id,
-      title: `${c.manufacturer || ""} ${c.model}`,
-      subtitle: c.location,
-      image: c.images?.[0] || carImage,
-      price: c.price ? `₪ ${parseFloat(c.price.replace(/,/g, "")).toLocaleString("he-IL")}` : "לא צוין מחיר",
-      location: c.location,
-      details: `${c.year} • ${c.km?.toLocaleString()} ק"מ • יד ${c.hand}`,
-    });
+  // Relevance calculation functions
+  const calculatePropertyRelevance = (
+    property: any,
+    criteria: { location?: string; propertyType?: string; rooms?: number; priceRange?: { min: number; max: number }; size?: number }
+  ): { score: number; reasons: string[] } => {
+    const weights = RELEVANCE_WEIGHTS.property;
+    let score = 0;
+    const reasons: string[] = [];
 
-    const mapLaptop = (l: any): SimilarItem => ({
-      id: l.id,
-      title: `${l.brand} ${l.model}`,
-      subtitle: l.location,
-      image: l.images?.[0] || laptopImage,
-      price: `₪ ${l.price?.toLocaleString("he-IL") || 0}`,
-      location: l.location,
-      details: `${l.processor || ""} • ${l.ram}GB • ${l.storage}GB`,
-    });
+    // Location match (exact or partial city match)
+    if (criteria.location && property.location) {
+      if (property.location === criteria.location) {
+        score += weights.location;
+        reasons.push("מיקום זהה");
+      } else if (property.location.includes(criteria.location.split(" ")[0]) || 
+                 criteria.location.includes(property.location.split(" ")[0])) {
+        score += weights.location * 0.5;
+        reasons.push("אזור קרוב");
+      }
+    }
 
-    const mapSecondhand = (i: any): SimilarItem => ({
-      id: i.id,
-      title: i.title,
-      subtitle: i.location,
-      image: i.images?.[0] || laptopImage,
-      price: `₪ ${i.price?.toLocaleString("he-IL") || 0}`,
-      location: i.location,
-      details: `${i.category} • ${i.condition}`,
-    });
+    // Property type match
+    if (criteria.propertyType && property.property_type === criteria.propertyType) {
+      score += weights.propertyType;
+      reasons.push("סוג נכס זהה");
+    }
 
-    const mapJob = (j: any): SimilarItem => ({
-      id: j.id,
-      title: j.title,
-      subtitle: j.company_name,
-      image: jobImage,
-      price: j.salary_min && j.salary_max 
-        ? `₪ ${j.salary_min.toLocaleString("he-IL")} - ₪ ${j.salary_max.toLocaleString("he-IL")}`
-        : "שכר לא צוין",
-      location: j.location,
-      details: `${j.job_type} • ${j.scope} • ${j.location}`,
-    });
+    // Rooms similarity (±1 room = full points, ±2 = partial)
+    if (criteria.rooms && property.rooms) {
+      const roomsDiff = Math.abs(property.rooms - criteria.rooms);
+      if (roomsDiff === 0) {
+        score += weights.rooms;
+        reasons.push("מספר חדרים זהה");
+      } else if (roomsDiff === 1) {
+        score += weights.rooms * 0.7;
+        reasons.push("חדרים דומים");
+      } else if (roomsDiff === 2) {
+        score += weights.rooms * 0.3;
+      }
+    }
 
-    const mapBusiness = (b: any): SimilarItem => ({
-      id: b.id,
-      title: b.title,
-      subtitle: b.location,
-      image: b.images?.[0] || jobImage,
-      price: `₪ ${b.price?.toLocaleString("he-IL") || 0}`,
-      location: b.location,
-      details: `${b.category} • ${b.business_type}`,
-    });
+    // Price similarity (within percentage range)
+    if (criteria.priceRange && property.price) {
+      const avgPrice = (criteria.priceRange.min + criteria.priceRange.max) / 2;
+      const priceDiffPercent = Math.abs(property.price - avgPrice) / avgPrice;
+      if (priceDiffPercent <= 0.1) {
+        score += weights.price;
+        reasons.push("מחיר דומה");
+      } else if (priceDiffPercent <= 0.2) {
+        score += weights.price * 0.7;
+        reasons.push("טווח מחיר קרוב");
+      } else if (priceDiffPercent <= 0.3) {
+        score += weights.price * 0.4;
+      }
+    }
 
-    const mapFreelancer = (f: any): SimilarItem => ({
-      id: f.id,
-      title: f.full_name,
-      subtitle: f.title,
-      image: f.avatar_url || jobImage,
-      price: `₪ ${f.hourly_rate}/שעה`,
-      location: f.location || "לא צוין",
-      details: `${f.category}${f.rating ? ` • ⭐ ${f.rating}` : ""}`,
-    });
+    // Size similarity
+    if (criteria.size && property.size) {
+      const sizeDiffPercent = Math.abs(property.size - criteria.size) / criteria.size;
+      if (sizeDiffPercent <= 0.15) {
+        score += weights.size;
+        reasons.push("גודל דומה");
+      } else if (sizeDiffPercent <= 0.3) {
+        score += weights.size * 0.5;
+      }
+    }
 
-    fetchSimilarItems();
-  }, [itemType, currentItemId, location, propertyType, rooms, priceRange, manufacturer, brand, category, jobType]);
+    return { score, reasons };
+  };
+
+  const calculateCarRelevance = (
+    car: any,
+    criteria: { manufacturer?: string; location?: string; priceRange?: { min: number; max: number }; year?: number }
+  ): { score: number; reasons: string[] } => {
+    const weights = RELEVANCE_WEIGHTS.car;
+    let score = 0;
+    const reasons: string[] = [];
+
+    if (criteria.manufacturer && car.manufacturer === criteria.manufacturer) {
+      score += weights.manufacturer;
+      reasons.push("יצרן זהה");
+    }
+
+    if (criteria.location && car.location) {
+      if (car.location === criteria.location) {
+        score += weights.location;
+        reasons.push("מיקום זהה");
+      } else if (car.location.includes(criteria.location.split(" ")[0])) {
+        score += weights.location * 0.5;
+        reasons.push("אזור קרוב");
+      }
+    }
+
+    if (criteria.priceRange && car.price) {
+      const carPrice = parseInt(car.price) || 0;
+      const avgPrice = (criteria.priceRange.min + criteria.priceRange.max) / 2;
+      const priceDiffPercent = Math.abs(carPrice - avgPrice) / avgPrice;
+      if (priceDiffPercent <= 0.15) {
+        score += weights.price;
+        reasons.push("מחיר דומה");
+      } else if (priceDiffPercent <= 0.3) {
+        score += weights.price * 0.5;
+      }
+    }
+
+    if (criteria.year && car.year) {
+      const yearDiff = Math.abs(car.year - criteria.year);
+      if (yearDiff === 0) {
+        score += weights.year;
+        reasons.push("שנה זהה");
+      } else if (yearDiff <= 2) {
+        score += weights.year * 0.6;
+        reasons.push("שנתון קרוב");
+      } else if (yearDiff <= 4) {
+        score += weights.year * 0.3;
+      }
+    }
+
+    return { score, reasons };
+  };
+
+  const calculateLaptopRelevance = (
+    laptop: any,
+    criteria: { brand?: string; location?: string; priceRange?: { min: number; max: number } }
+  ): { score: number; reasons: string[] } => {
+    const weights = RELEVANCE_WEIGHTS.laptop;
+    let score = 0;
+    const reasons: string[] = [];
+
+    if (criteria.brand && laptop.brand === criteria.brand) {
+      score += weights.brand;
+      reasons.push("מותג זהה");
+    }
+
+    if (criteria.location && laptop.location === criteria.location) {
+      score += weights.location;
+      reasons.push("מיקום זהה");
+    }
+
+    if (criteria.priceRange && laptop.price) {
+      const avgPrice = (criteria.priceRange.min + criteria.priceRange.max) / 2;
+      const priceDiffPercent = Math.abs(laptop.price - avgPrice) / avgPrice;
+      if (priceDiffPercent <= 0.2) {
+        score += weights.price;
+        reasons.push("מחיר דומה");
+      } else if (priceDiffPercent <= 0.4) {
+        score += weights.price * 0.5;
+      }
+    }
+
+    return { score, reasons };
+  };
+
+  const calculateSecondhandRelevance = (
+    item: any,
+    criteria: { category?: string; location?: string; priceRange?: { min: number; max: number } }
+  ): { score: number; reasons: string[] } => {
+    const weights = RELEVANCE_WEIGHTS.secondhand;
+    let score = 0;
+    const reasons: string[] = [];
+
+    if (criteria.category && item.category === criteria.category) {
+      score += weights.category;
+      reasons.push("קטגוריה זהה");
+    }
+
+    if (criteria.location && item.location === criteria.location) {
+      score += weights.location;
+      reasons.push("מיקום זהה");
+    }
+
+    if (criteria.priceRange && item.price) {
+      const avgPrice = (criteria.priceRange.min + criteria.priceRange.max) / 2;
+      const priceDiffPercent = Math.abs(item.price - avgPrice) / avgPrice;
+      if (priceDiffPercent <= 0.25) {
+        score += weights.price;
+        reasons.push("מחיר דומה");
+      } else if (priceDiffPercent <= 0.5) {
+        score += weights.price * 0.5;
+      }
+    }
+
+    return { score, reasons };
+  };
+
+  const calculateJobRelevance = (
+    job: any,
+    criteria: { jobType?: string; location?: string; priceRange?: { min: number; max: number } }
+  ): { score: number; reasons: string[] } => {
+    const weights = RELEVANCE_WEIGHTS.job;
+    let score = 0;
+    const reasons: string[] = [];
+
+    if (criteria.jobType && job.job_type === criteria.jobType) {
+      score += weights.jobType;
+      reasons.push("סוג משרה זהה");
+    }
+
+    if (criteria.location && job.location === criteria.location) {
+      score += weights.location;
+      reasons.push("מיקום זהה");
+    }
+
+    if (criteria.priceRange && job.salary_min) {
+      const avgSalary = (criteria.priceRange.min + criteria.priceRange.max) / 2;
+      const jobAvgSalary = (job.salary_min + (job.salary_max || job.salary_min)) / 2;
+      const salaryDiffPercent = Math.abs(jobAvgSalary - avgSalary) / avgSalary;
+      if (salaryDiffPercent <= 0.2) {
+        score += weights.salary;
+        reasons.push("שכר דומה");
+      } else if (salaryDiffPercent <= 0.4) {
+        score += weights.salary * 0.5;
+      }
+    }
+
+    return { score, reasons };
+  };
+
+  const calculateBusinessRelevance = (
+    business: any,
+    criteria: { category?: string; location?: string; priceRange?: { min: number; max: number } }
+  ): { score: number; reasons: string[] } => {
+    const weights = RELEVANCE_WEIGHTS.business;
+    let score = 0;
+    const reasons: string[] = [];
+
+    if (criteria.category && business.category === criteria.category) {
+      score += weights.category;
+      reasons.push("קטגוריה זהה");
+    }
+
+    if (criteria.location && business.location === criteria.location) {
+      score += weights.location;
+      reasons.push("מיקום זהה");
+    }
+
+    if (criteria.priceRange && business.price) {
+      const avgPrice = (criteria.priceRange.min + criteria.priceRange.max) / 2;
+      const priceDiffPercent = Math.abs(business.price - avgPrice) / avgPrice;
+      if (priceDiffPercent <= 0.25) {
+        score += weights.price;
+        reasons.push("מחיר דומה");
+      } else if (priceDiffPercent <= 0.5) {
+        score += weights.price * 0.5;
+      }
+    }
+
+    return { score, reasons };
+  };
+
+  const calculateFreelancerRelevance = (
+    freelancer: any,
+    criteria: { category?: string; location?: string; priceRange?: { min: number; max: number } }
+  ): { score: number; reasons: string[] } => {
+    const weights = RELEVANCE_WEIGHTS.freelancer;
+    let score = 0;
+    const reasons: string[] = [];
+
+    if (criteria.category && freelancer.category === criteria.category) {
+      score += weights.category;
+      reasons.push("תחום זהה");
+    }
+
+    if (criteria.location && freelancer.location === criteria.location) {
+      score += weights.location;
+      reasons.push("מיקום זהה");
+    }
+
+    if (criteria.priceRange && freelancer.hourly_rate) {
+      const avgRate = (criteria.priceRange.min + criteria.priceRange.max) / 2;
+      const rateDiffPercent = Math.abs(freelancer.hourly_rate - avgRate) / avgRate;
+      if (rateDiffPercent <= 0.3) {
+        score += weights.hourlyRate;
+        reasons.push("תעריף דומה");
+      } else if (rateDiffPercent <= 0.5) {
+        score += weights.hourlyRate * 0.5;
+      }
+    }
+
+    return { score, reasons };
+  };
+
+  // Mapping functions
+  const mapProperty = (p: any): Omit<SimilarItem, 'relevanceScore' | 'matchReasons'> => ({
+    id: p.id,
+    title: p.street && p.house_number ? `${p.street} ${p.house_number}` : p.title,
+    subtitle: `${p.property_type} ב${p.location}`,
+    image: p.images?.[0] || property1,
+    price: `₪${p.price?.toLocaleString()}`,
+    location: p.location,
+    details: `${p.rooms} חדרים${p.size ? ` | ${p.size} מ"ר` : ""}${p.floor ? ` | קומה ${p.floor}` : ""}`,
+  });
+
+  const mapCar = (c: any): Omit<SimilarItem, 'relevanceScore' | 'matchReasons'> => ({
+    id: c.id,
+    title: `${c.manufacturer || ""} ${c.model}`.trim(),
+    subtitle: `${c.year} | יד ${c.hand}`,
+    image: c.images?.[0] || carImage,
+    price: c.price ? `₪${parseInt(c.price).toLocaleString()}` : "לא צוין",
+    location: c.location,
+    details: `${c.km?.toLocaleString()} ק"מ`,
+  });
+
+  const mapLaptop = (l: any): Omit<SimilarItem, 'relevanceScore' | 'matchReasons'> => ({
+    id: l.id,
+    title: `${l.brand} ${l.model}`,
+    subtitle: l.condition,
+    image: l.images?.[0] || laptopImage,
+    price: `₪${l.price?.toLocaleString()}`,
+    location: l.location,
+    details: `${l.ram ? `${l.ram}GB RAM` : ""} ${l.storage ? `| ${l.storage}GB` : ""}`.trim(),
+  });
+
+  const mapSecondhand = (i: any): Omit<SimilarItem, 'relevanceScore' | 'matchReasons'> => ({
+    id: i.id,
+    title: i.title,
+    subtitle: i.category,
+    image: i.images?.[0] || property1,
+    price: `₪${i.price?.toLocaleString()}`,
+    location: i.location,
+    details: i.condition,
+  });
+
+  const mapJob = (j: any): Omit<SimilarItem, 'relevanceScore' | 'matchReasons'> => ({
+    id: j.id,
+    title: j.title,
+    subtitle: j.company_name,
+    image: jobImage,
+    price: j.salary_min && j.salary_max 
+      ? `₪${j.salary_min.toLocaleString()} - ₪${j.salary_max.toLocaleString()}`
+      : j.salary_min 
+        ? `מ-₪${j.salary_min.toLocaleString()}`
+        : "לא צוין",
+    location: j.location,
+    details: `${j.job_type} | ${j.scope}`,
+  });
+
+  const mapBusiness = (b: any): Omit<SimilarItem, 'relevanceScore' | 'matchReasons'> => ({
+    id: b.id,
+    title: b.title,
+    subtitle: b.category,
+    image: b.images?.[0] || property1,
+    price: `₪${b.price?.toLocaleString()}`,
+    location: b.location,
+    details: b.business_type,
+  });
+
+  const mapFreelancer = (f: any): Omit<SimilarItem, 'relevanceScore' | 'matchReasons'> => ({
+    id: f.id,
+    title: f.full_name,
+    subtitle: f.title,
+    image: f.avatar_url || jobImage,
+    price: `₪${f.hourly_rate}/שעה`,
+    location: f.location || "לא צוין",
+    details: f.rating ? `דירוג: ${f.rating.toFixed(1)}` : "",
+  });
 
   const getItemLink = (id: string) => {
-    const routes: Record<string, string> = {
+    const routes = {
       property: `/properties/${id}`,
       car: `/cars/${id}`,
       laptop: `/laptops/${id}`,
@@ -705,30 +687,18 @@ const SimilarListings = ({
     return routes[itemType];
   };
 
-  const getTitle = () => {
-    switch (itemType) {
-      case "property": return "נכסים דומים למה שחיפשת";
-      case "car": return "רכבים דומים למה שחיפשת";
-      case "laptop": return "מחשבים דומים למה שחיפשת";
-      case "job": return "משרות דומות למה שחיפשת";
-      case "business": return "עסקים דומים למה שחיפשת";
-      case "freelancer": return "פרילנסרים דומים למה שחיפשת";
-      default: return "מודעות דומות למה שחיפשת";
-    }
-  };
-
   if (loading) {
     return (
-      <div className="space-y-3">
-        <h2 className="text-lg font-bold text-foreground text-right">{getTitle()}</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="mt-8">
+        <h3 className="text-xl font-bold mb-4">נכסים דומים למה שחיפשת</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <Card key={i} className="overflow-hidden border-0 shadow-sm" dir="rtl">
-              <Skeleton className="aspect-[16/10] w-full" />
-              <div className="p-3 space-y-2">
-                <Skeleton className="h-6 w-24 mr-auto" />
-                <Skeleton className="h-3 w-full" />
-                <Skeleton className="h-3 w-3/4" />
+            <Card key={i} className="overflow-hidden">
+              <Skeleton className="h-40 w-full" />
+              <div className="p-4 space-y-2">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+                <Skeleton className="h-4 w-1/3" />
               </div>
             </Card>
           ))}
@@ -741,57 +711,52 @@ const SimilarListings = ({
     return null;
   }
 
+  const getTitle = () => {
+    const titles = {
+      property: "נכסים דומים למה שחיפשת",
+      car: "רכבים דומים למה שחיפשת",
+      laptop: "מחשבים דומים למה שחיפשת",
+      secondhand: "פריטים דומים למה שחיפשת",
+      job: "משרות דומות למה שחיפשת",
+      business: "עסקים דומים למה שחיפשת",
+      freelancer: "פרילנסרים דומים למה שחיפשת",
+    };
+    return titles[itemType];
+  };
+
   return (
-    <div className="space-y-3">
-      <h2 className="text-lg font-bold text-foreground text-right">{getTitle()}</h2>
-      
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="mt-8">
+      <h3 className="text-xl font-bold mb-4">{getTitle()}</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {items.map((item) => (
-          <Link
-            key={item.id}
-            to={getItemLink(item.id)}
-            className="block group"
-          >
-            <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow duration-300 bg-card h-full" dir="rtl">
-              {/* Image with Heart */}
-              <div className="aspect-[16/10] relative overflow-hidden bg-muted">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-2 right-2 z-10 bg-white/80 hover:bg-white rounded-full shadow-sm h-8 w-8"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                >
-                  <Heart className="h-4 w-4 text-muted-foreground" />
-                </Button>
+          <Link key={item.id} to={getItemLink(item.id)}>
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+              <div className="relative h-40">
                 <CloudflareImage
                   src={item.image}
                   alt={item.title}
-                  preset="card"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover"
                 />
+                {/* Relevance badges */}
+                {item.matchReasons.length > 0 && (
+                  <div className="absolute top-2 right-2 flex flex-wrap gap-1 max-w-[90%]">
+                    {item.matchReasons.slice(0, 2).map((reason, idx) => (
+                      <Badge 
+                        key={idx} 
+                        variant="secondary" 
+                        className="bg-primary/90 text-primary-foreground text-xs px-2 py-0.5"
+                      >
+                        {reason}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </div>
-
-              {/* Content */}
-              <div className="p-3 space-y-1">
-                {/* Price */}
-                <div className="text-right">
-                  <span className="text-lg font-bold text-foreground">
-                    {item.price}
-                  </span>
-                </div>
-                
-                {/* Address/Subtitle */}
-                <p className="text-xs text-foreground text-right line-clamp-1">
-                  {item.subtitle}
-                </p>
-
-                {/* Details */}
-                <p className="text-xs text-muted-foreground text-right">
-                  {item.details}
-                </p>
+              <div className="p-4" dir="rtl">
+                <h4 className="font-bold text-foreground truncate">{item.title}</h4>
+                <p className="text-sm text-muted-foreground truncate">{item.subtitle}</p>
+                <p className="text-sm text-muted-foreground truncate">{item.details}</p>
+                <p className="font-bold text-primary mt-2">{item.price}</p>
               </div>
             </Card>
           </Link>
