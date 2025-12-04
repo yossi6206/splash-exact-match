@@ -416,6 +416,17 @@ const SecondhandDetails = () => {
                 </>
               )}
             </Card>
+
+            {/* Similar Listings - Desktop */}
+            <div className="hidden lg:block mt-8">
+              <SimilarListings 
+                itemType="secondhand"
+                currentItemId={id!}
+                location={item.location}
+                category={item.category}
+                priceRange={{ min: item.price, max: item.price }}
+              />
+            </div>
           </div>
 
           {/* Right Column - Sidebar */}
