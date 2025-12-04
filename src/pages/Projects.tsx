@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
-import { Search, SlidersHorizontal, Building2 } from "lucide-react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { Search, SlidersHorizontal, Building2, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
@@ -65,7 +65,8 @@ const Projects = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [displayCount, setDisplayCount] = useState(12);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>({
     listingType: [],
     projectType: [],
@@ -76,7 +77,7 @@ const Projects = () => {
     amenities: [],
   });
 
-  const itemsPerPage = 12;
+  const loaderRef = useRef<HTMLDivElement>(null);
   const { saveSearch } = useSaveSearch();
 
   useEffect(() => {
@@ -95,6 +96,11 @@ const Projects = () => {
       saveSearch({ searchQuery: debouncedSearchQuery, category: "projects" });
     }
   }, [debouncedSearchQuery, saveSearch]);
+
+  // Reset display count when filters change
+  useEffect(() => {
+    setDisplayCount(12);
+  }, [activeCategory, debouncedSearchQuery, sidebarFilters]);
 
   const fetchProjects = async () => {
     try {
@@ -180,21 +186,39 @@ const Projects = () => {
     return filtered;
   }, [projects, activeCategory, debouncedSearchQuery, sidebarFilters]);
 
-  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentProjects = filteredProjects.slice(
-    startIndex,
-    startIndex + itemsPerPage
+  const displayedProjects = filteredProjects.slice(0, displayCount);
+  const hasMore = displayCount < filteredProjects.length;
+
+  // Infinite scroll observer
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [target] = entries;
+      if (target.isIntersecting && hasMore && !loadingMore) {
+        setLoadingMore(true);
+        setTimeout(() => {
+          setDisplayCount((prev) => prev + 12);
+          setLoadingMore(false);
+        }, 500);
+      }
+    },
+    [hasMore, loadingMore]
   );
+
+  useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: "200px",
+      threshold: 0,
+    };
+    const observer = new IntersectionObserver(handleObserver, option);
+    if (loaderRef.current) observer.observe(loaderRef.current);
+    return () => {
+      if (loaderRef.current) observer.unobserve(loaderRef.current);
+    };
+  }, [handleObserver]);
 
   const handleSidebarFilterChange = (filters: SidebarFilters) => {
     setSidebarFilters(filters);
-    setCurrentPage(1);
-  };
-
-  const handlePageChange = (page: number) => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setCurrentPage(page);
   };
 
   const filterCounts = useMemo(() => {
@@ -242,7 +266,6 @@ const Projects = () => {
                 key={cat.id}
                 onClick={() => {
                   setActiveCategory(cat.id);
-                  setCurrentPage(1);
                 }}
                 className={`px-4 py-2 rounded-full text-sm md:text-base transition-all ${
                   activeCategory === cat.id
@@ -333,58 +356,26 @@ const Projects = () => {
                   </div>
                 ))}
               </div>
-            ) : currentProjects.length > 0 ? (
+            ) : displayedProjects.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {currentProjects.map((project) => (
+                  {displayedProjects.map((project) => (
                     <ProjectCard key={project.id} project={project} />
                   ))}
                 </div>
 
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex justify-center gap-2 mt-8">
-                    <Button
-                      variant="outline"
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                    >
-                      הקודם
-                    </Button>
-                    {Array.from({ length: Math.min(5, totalPages) }).map(
-                      (_, i) => {
-                        let pageNum;
-                        if (totalPages <= 5) {
-                          pageNum = i + 1;
-                        } else if (currentPage <= 3) {
-                          pageNum = i + 1;
-                        } else if (currentPage >= totalPages - 2) {
-                          pageNum = totalPages - 4 + i;
-                        } else {
-                          pageNum = currentPage - 2 + i;
-                        }
-                        return (
-                          <Button
-                            key={pageNum}
-                            variant={
-                              currentPage === pageNum ? "default" : "outline"
-                            }
-                            onClick={() => handlePageChange(pageNum)}
-                          >
-                            {pageNum}
-                          </Button>
-                        );
-                      }
-                    )}
-                    <Button
-                      variant="outline"
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                    >
-                      הבא
-                    </Button>
-                  </div>
-                )}
+                {/* Infinite Scroll Loader */}
+                <div ref={loaderRef} className="flex justify-center py-8">
+                  {loadingMore && (
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <span>טוען עוד פרויקטים...</span>
+                    </div>
+                  )}
+                  {!hasMore && filteredProjects.length > 12 && (
+                    <p className="text-muted-foreground">הגעת לסוף הרשימה</p>
+                  )}
+                </div>
               </>
             ) : (
               <div className="text-center py-16">
