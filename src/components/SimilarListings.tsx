@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { getCarTitle, getLaptopTitle } from "@/utils/titleUtils";
 
 // Default images for fallbacks
 import property1 from "@/assets/property-1.jpg";
@@ -616,7 +617,7 @@ const SimilarListings = ({
 
   const mapCar = (c: any): Omit<SimilarItem, 'relevanceScore' | 'matchReasons'> => ({
     id: c.id,
-    title: `${c.manufacturer || ""} ${c.model}`.trim(),
+    title: getCarTitle(c.manufacturer, c.model),
     subtitle: `${c.year} | יד ${c.hand}`,
     image: c.images?.[0] || carImage,
     price: c.price ? `₪${parseInt(c.price).toLocaleString()}` : "לא צוין",
@@ -626,7 +627,7 @@ const SimilarListings = ({
 
   const mapLaptop = (l: any): Omit<SimilarItem, 'relevanceScore' | 'matchReasons'> => ({
     id: l.id,
-    title: `${l.brand} ${l.model}`,
+    title: getLaptopTitle(l.brand, l.model),
     subtitle: l.condition,
     image: l.images?.[0] || laptopImage,
     price: `₪${l.price?.toLocaleString()}`,

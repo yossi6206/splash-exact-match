@@ -7,6 +7,7 @@ import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Cart
 import { Eye, MousePointer, Phone, TrendingUp, Car, Home, Laptop, Briefcase, Loader2, Calendar as CalendarIcon, Filter, X, Package, Users, Download, Zap, BarChart as BarChartIcon, MessageSquare, MousePointerClick } from "lucide-react";
 import * as XLSX from 'xlsx';
 import { useAuth } from "@/contexts/AuthContext";
+import { getCarTitle, getLaptopTitle } from "@/utils/titleUtils";
 import { useCountUp } from "@/hooks/useCountUp";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -129,7 +130,7 @@ const Statistics = () => {
       let allAds: AdStats[] = [
         ...(cars || []).map(c => ({
           id: c.id,
-          title: `${c.manufacturer} ${c.model}`,
+          title: getCarTitle(c.manufacturer, c.model),
           category: "רכבים",
           views: c.views_count || 0,
           clicks: c.clicks_count || 0,
@@ -153,7 +154,7 @@ const Statistics = () => {
         })),
         ...(laptops || []).map(l => ({
           id: l.id,
-          title: `${l.brand} ${l.model}`,
+          title: getLaptopTitle(l.brand, l.model),
           category: "מחשבים",
           views: l.views_count || 0,
           clicks: l.clicks_count || 0,
