@@ -3,6 +3,7 @@ import MobileHeader from "@/components/MobileHeader";
 import HeroSection from "@/components/HeroSection";
 import Categories from "@/components/Categories";
 import FeaturedListings from "@/components/FeaturedListings";
+import FeaturedProjects from "@/components/FeaturedProjects";
 import PromoBanner from "@/components/PromoBanner";
 import FeaturedSearches from "@/components/FeaturedSearches";
 import RecommendedItems from "@/components/RecommendedItems";
@@ -19,6 +20,7 @@ const Index = () => {
         <HeroSection />
         <Categories />
         <FeaturedListings />
+        <FeaturedProjects />
         <PromoBanner />
         <FeaturedSearches />
         <RecommendedItems />
