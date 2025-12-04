@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
@@ -162,117 +162,133 @@ interface SecondhandMegaMenuProps {
 
 const SecondhandMegaMenu = ({ hoveredMenu, setHoveredMenu }: SecondhandMegaMenuProps) => {
   const [activeCategory, setActiveCategory] = useState<string>("אלקטרוניקה");
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const activeCategoryData = secondhandCategories.find(cat => cat.title === activeCategory);
+
+  const handleMouseEnter = useCallback(() => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setHoveredMenu("יד שניה");
+  }, [setHoveredMenu]);
+
+  const handleMouseLeave = useCallback(() => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setHoveredMenu(null);
+      setActiveCategory("אלקטרוניקה");
+    }, 150);
+  }, [setHoveredMenu]);
 
   return (
     <div 
       className="relative"
-      onMouseEnter={() => setHoveredMenu("יד שניה")}
-      onMouseLeave={() => {
-        setHoveredMenu(null);
-        setActiveCategory("אלקטרוניקה");
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Button variant="ghost" className="text-sm font-medium" asChild>
         <Link to="/secondhand">יד שניה</Link>
       </Button>
       
       {hoveredMenu === "יד שניה" && (
-        <>
-          {/* Invisible bridge to prevent menu from closing when moving mouse */}
-          <div className="absolute top-full left-0 right-0 h-4 bg-transparent" />
-          <div className="fixed inset-x-0 top-16 pt-2 z-50 flex justify-center px-4 pointer-events-none">
-            <div 
-              className="bg-white border border-primary/20 rounded-lg animate-fade-in flex max-h-[70vh] w-full max-w-[900px] pointer-events-auto overflow-hidden" 
-              style={{ boxShadow: 'var(--shadow-dropdown)' }}
-            >
-              {/* Right side - Categories list */}
-              <div className="w-56 border-l border-primary/10 bg-muted/20 overflow-y-auto">
-                <div className="p-4 border-b border-primary/10">
-                  <Link 
-                    to="/secondhand"
-                    className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors"
-                  >
-                    <span>כל יד שנייה</span>
-                    <ChevronLeft className="h-4 w-4" />
-                  </Link>
-                </div>
-                <div className="py-2">
-                  {secondhandCategories.map((category) => {
-                    const Icon = category.icon;
-                    return (
-                      <div
-                        key={category.slug}
-                        className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-all ${
-                          activeCategory === category.title 
-                            ? 'bg-white border-r-2 border-primary' 
-                            : 'hover:bg-white/70'
-                        }`}
-                        onMouseEnter={() => setActiveCategory(category.title)}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icon className={`h-4 w-4 ${activeCategory === category.title ? 'text-primary' : 'text-muted-foreground'}`} />
-                          <span className={`text-sm font-medium ${activeCategory === category.title ? 'text-primary' : 'text-foreground'}`}>
-                            {category.title}
-                          </span>
-                        </div>
-                        {category.subcategories.length > 0 && (
-                          <ChevronLeft className={`h-4 w-4 ${activeCategory === category.title ? 'text-primary' : 'text-muted-foreground'}`} />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+        <div 
+          className="fixed inset-x-0 top-0 pt-16 z-50 flex justify-center px-4"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {/* Invisible top area to bridge to header */}
+          <div className="absolute top-0 left-0 right-0 h-16" />
+          
+          <div 
+            className="bg-white border border-primary/20 rounded-lg animate-fade-in flex max-h-[70vh] w-full max-w-[900px] overflow-hidden mt-2" 
+            style={{ boxShadow: 'var(--shadow-dropdown)' }}
+          >
+            {/* Right side - Categories list */}
+            <div className="w-56 border-l border-primary/10 bg-muted/20 overflow-y-auto">
+              <div className="p-4 border-b border-primary/10">
+                <Link 
+                  to="/secondhand"
+                  className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors"
+                >
+                  <span>כל יד שנייה</span>
+                  <ChevronLeft className="h-4 w-4" />
+                </Link>
               </div>
-
-              {/* Left side - Subcategories */}
-              <div className="flex-1 p-6 overflow-y-auto">
-                {activeCategoryData && activeCategoryData.subcategories.length > 0 ? (
-                  <>
-                    <Link 
-                      to={`/secondhand/${activeCategoryData.slug}`}
-                      className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors mb-5 pb-2 border-b-2 border-primary/20"
+              <div className="py-2">
+                {secondhandCategories.map((category) => {
+                  const Icon = category.icon;
+                  return (
+                    <div
+                      key={category.slug}
+                      className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-all ${
+                        activeCategory === category.title 
+                          ? 'bg-white border-r-2 border-primary' 
+                          : 'hover:bg-white/70'
+                      }`}
+                      onMouseEnter={() => setActiveCategory(category.title)}
                     >
-                      <activeCategoryData.icon className="h-4 w-4" />
-                      <span>כל {activeCategoryData.title}</span>
-                      <ChevronLeft className="h-4 w-4" />
-                    </Link>
-                    <div className="grid grid-cols-4 gap-6">
-                      {activeCategoryData.subcategories.map((subcategory, index) => (
-                        <div key={index}>
-                          <h4 className="text-sm font-bold text-foreground mb-3">{subcategory.title}</h4>
-                          <ul className="space-y-1.5">
-                            {subcategory.items.map((item, itemIndex) => (
-                              <li key={itemIndex}>
-                                <Link 
-                                  to={`/secondhand/${activeCategoryData.slug}`}
-                                  className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1 hover:underline"
-                                >
-                                  {item}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
+                      <div className="flex items-center gap-2">
+                        <Icon className={`h-4 w-4 ${activeCategory === category.title ? 'text-primary' : 'text-muted-foreground'}`} />
+                        <span className={`text-sm font-medium ${activeCategory === category.title ? 'text-primary' : 'text-foreground'}`}>
+                          {category.title}
+                        </span>
+                      </div>
+                      {category.subcategories.length > 0 && (
+                        <ChevronLeft className={`h-4 w-4 ${activeCategory === category.title ? 'text-primary' : 'text-muted-foreground'}`} />
+                      )}
                     </div>
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full py-8">
-                    <Trophy className="h-12 w-12 text-primary mb-4" />
-                    <Link 
-                      to={`/secondhand/${activeCategoryData?.slug || ''}`}
-                      className="text-primary font-medium hover:underline"
-                    >
-                      צפה בכל המוצרים המומלצים
-                    </Link>
-                  </div>
-                )}
+                  );
+                })}
               </div>
             </div>
+
+            {/* Left side - Subcategories */}
+            <div className="flex-1 p-6 overflow-y-auto">
+              {activeCategoryData && activeCategoryData.subcategories.length > 0 ? (
+                <>
+                  <Link 
+                    to={`/secondhand/${activeCategoryData.slug}`}
+                    className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors mb-5 pb-2 border-b-2 border-primary/20"
+                  >
+                    <activeCategoryData.icon className="h-4 w-4" />
+                    <span>כל {activeCategoryData.title}</span>
+                    <ChevronLeft className="h-4 w-4" />
+                  </Link>
+                  <div className="grid grid-cols-4 gap-6">
+                    {activeCategoryData.subcategories.map((subcategory, index) => (
+                      <div key={index}>
+                        <h4 className="text-sm font-bold text-foreground mb-3">{subcategory.title}</h4>
+                        <ul className="space-y-1.5">
+                          {subcategory.items.map((item, itemIndex) => (
+                            <li key={itemIndex}>
+                              <Link 
+                                to={`/secondhand/${activeCategoryData.slug}`}
+                                className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1 hover:underline"
+                              >
+                                {item}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full py-8">
+                  <Trophy className="h-12 w-12 text-primary mb-4" />
+                  <Link 
+                    to={`/secondhand/${activeCategoryData?.slug || ''}`}
+                    className="text-primary font-medium hover:underline"
+                  >
+                    צפה בכל המוצרים המומלצים
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
