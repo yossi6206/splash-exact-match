@@ -244,7 +244,7 @@ const ProjectDetails = () => {
               <Badge className="bg-primary text-primary-foreground text-sm px-3 py-1 shadow-lg">
                 {project.listing_type}
               </Badge>
-              <Badge variant="secondary" className="text-sm px-3 py-1 shadow-lg bg-muted/80 backdrop-blur-sm">
+              <Badge variant="secondary" className="text-sm px-3 py-1 shadow-lg bg-background/90 backdrop-blur-sm">
                 {project.project_type}
               </Badge>
             </div>
@@ -273,7 +273,7 @@ const ProjectDetails = () => {
                 <Button
                   variant="secondary"
                   size="icon"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-muted/70 backdrop-blur-sm hover:bg-muted shadow-lg h-12 w-12"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover:bg-background shadow-lg h-12 w-12"
                   onClick={prevImage}
                 >
                   <ChevronRight className="h-6 w-6" />
@@ -281,7 +281,7 @@ const ProjectDetails = () => {
                 <Button
                   variant="secondary"
                   size="icon"
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-muted/70 backdrop-blur-sm hover:bg-muted shadow-lg h-12 w-12"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover:bg-background shadow-lg h-12 w-12"
                   onClick={nextImage}
                 >
                   <ChevronLeft className="h-6 w-6" />
@@ -325,7 +325,7 @@ const ProjectDetails = () => {
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {project.buildings_count && (
-                <Card className="border-0 shadow-sm bg-muted/20">
+                <Card className="border-0 shadow-md bg-gradient-to-br from-background to-muted/30">
                   <CardContent className="p-5 text-center">
                     <div className="w-12 h-12 rounded-full bg-primary/10 mx-auto mb-3 flex items-center justify-center">
                       <Layers className="h-6 w-6 text-primary" />
@@ -336,7 +336,7 @@ const ProjectDetails = () => {
                 </Card>
               )}
               {project.floors_count && (
-                <Card className="border-0 shadow-sm bg-muted/20">
+                <Card className="border-0 shadow-md bg-gradient-to-br from-background to-muted/30">
                   <CardContent className="p-5 text-center">
                     <div className="w-12 h-12 rounded-full bg-primary/10 mx-auto mb-3 flex items-center justify-center">
                       <Building2 className="h-6 w-6 text-primary" />
@@ -347,7 +347,7 @@ const ProjectDetails = () => {
                 </Card>
               )}
               {project.total_units && (
-                <Card className="border-0 shadow-sm bg-muted/20">
+                <Card className="border-0 shadow-md bg-gradient-to-br from-background to-muted/30">
                   <CardContent className="p-5 text-center">
                     <div className="w-12 h-12 rounded-full bg-primary/10 mx-auto mb-3 flex items-center justify-center">
                       <Home className="h-6 w-6 text-primary" />
@@ -358,7 +358,7 @@ const ProjectDetails = () => {
                 </Card>
               )}
               {project.delivery_date && (
-                <Card className="border-0 shadow-sm bg-muted/20">
+                <Card className="border-0 shadow-md bg-gradient-to-br from-background to-muted/30">
                   <CardContent className="p-5 text-center">
                     <div className="w-12 h-12 rounded-full bg-primary/10 mx-auto mb-3 flex items-center justify-center">
                       <Calendar className="h-6 w-6 text-primary" />
@@ -372,8 +372,8 @@ const ProjectDetails = () => {
 
             {/* Description */}
             {project.description && (
-              <Card className="border-0 shadow-sm overflow-hidden bg-card/80">
-                <CardHeader className="bg-muted/20 border-b">
+              <Card className="border-0 shadow-md overflow-hidden">
+                <CardHeader className="bg-muted/30 border-b">
                   <CardTitle className="flex items-center gap-2 text-xl">
                     <Building2 className="h-5 w-5 text-primary" />
                     אודות הפרויקט
@@ -389,8 +389,8 @@ const ProjectDetails = () => {
 
             {/* Features */}
             {project.features && project.features.length > 0 && (
-              <Card className="border-0 shadow-sm overflow-hidden bg-card/80">
-                <CardHeader className="bg-muted/20 border-b">
+              <Card className="border-0 shadow-md overflow-hidden">
+                <CardHeader className="bg-muted/30 border-b">
                   <CardTitle className="flex items-center gap-2 text-xl">
                     <CheckCircle2 className="h-5 w-5 text-primary" />
                     מאפייני הפרויקט
@@ -401,7 +401,7 @@ const ProjectDetails = () => {
                     {project.features.map((feature, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-3 p-3 rounded-lg bg-muted/20"
+                        className="flex items-center gap-3 p-3 rounded-lg bg-muted/30"
                       >
                         <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
                         <span className="text-sm">{feature}</span>
@@ -414,8 +414,8 @@ const ProjectDetails = () => {
 
             {/* Amenities */}
             {project.amenities && project.amenities.length > 0 && (
-              <Card className="border-0 shadow-sm overflow-hidden bg-card/80">
-                <CardHeader className="bg-muted/20 border-b">
+              <Card className="border-0 shadow-md overflow-hidden">
+                <CardHeader className="bg-muted/30 border-b">
                   <CardTitle className="flex items-center gap-2 text-xl">
                     <Sparkles className="h-5 w-5 text-primary" />
                     מתקנים ושירותים
@@ -439,8 +439,8 @@ const ProjectDetails = () => {
 
             {/* Included in Price */}
             {(project.parking_included || project.storage_included) && (
-              <Card className="border-0 shadow-sm overflow-hidden bg-card/80">
-                <CardHeader className="bg-muted/20 border-b">
+              <Card className="border-0 shadow-md overflow-hidden">
+                <CardHeader className="bg-muted/30 border-b">
                   <CardTitle className="flex items-center gap-2 text-xl">
                     <Package className="h-5 w-5 text-primary" />
                     כלול במחיר
@@ -469,7 +469,7 @@ const ProjectDetails = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Price Card */}
-            <Card className="sticky top-20 border-0 shadow-lg overflow-hidden bg-card/90">
+            <Card className="sticky top-20 border-0 shadow-xl overflow-hidden">
               {/* Price Header */}
               <div className="bg-gradient-to-r from-primary to-primary/80 p-6 text-primary-foreground">
                 <p className="text-sm opacity-90 mb-1">טווח מחירים</p>
@@ -486,7 +486,7 @@ const ProjectDetails = () => {
               <CardContent className="p-6 space-y-5">
                 {/* Available Units */}
                 {project.available_units && project.total_units && (
-                  <div className="bg-muted/30 rounded-xl p-4">
+                  <div className="bg-muted/50 rounded-xl p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm text-muted-foreground">יחידות פנויות</span>
                       <Users className="h-4 w-4 text-muted-foreground" />
@@ -506,7 +506,7 @@ const ProjectDetails = () => {
                 )}
 
                 {project.delivery_date && (
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/20">
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
                     <Clock className="h-5 w-5 text-primary" />
                     <div>
                       <p className="text-xs text-muted-foreground">מועד אכלוס משוער</p>
