@@ -6,7 +6,7 @@ import categoryJobs from "@/assets/category-jobs.png";
 import categorySecondhand from "@/assets/category-secondhand.png";
 import categoryCars from "@/assets/category-cars.png";
 import categoryRealestate from "@/assets/category-realestate.png";
-import categoryNewApartments from "@/assets/category-new-apartments.png";
+import categoryApartments from "@/assets/category-apartments.png";
 
 const categories = [
   { name: "עסקים למכירה", image: categoryBusiness, items: "2,345", link: "/secondhand?category=business" },
@@ -15,7 +15,7 @@ const categories = [
   { name: "יד שניה", image: categorySecondhand, items: "12,456", link: "/secondhand" },
   { name: "רכב", image: categoryCars, items: "9,234", link: "/cars" },
   { name: "נדל״ן", image: categoryRealestate, items: "7,891", link: "/properties" },
-  { name: "דירות חדשות", image: categoryNewApartments, items: "3,567", link: "/projects" },
+  { name: "דירות חדשות", image: categoryApartments, items: "3,567", link: "/projects" },
 ];
 
 const Categories = () => {
