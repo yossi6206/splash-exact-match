@@ -375,7 +375,7 @@ const Header = () => {
                 </Button>
                 
                 {hoveredMenu === "דרושים" && megaMenuData["דרושים"] && (
-                  <div className="absolute top-full left-0 pt-2 z-50">
+                  <div className="absolute top-full right-0 pt-2 z-50">
                     <div className="bg-white border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)' }}>
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["דרושים"].columns.map((column, index) => (
@@ -414,7 +414,7 @@ const Header = () => {
                 </Button>
                 
                 {hoveredMenu === "פרילנסרים" && megaMenuData["פרילנסרים"] && (
-                  <div className="absolute top-full left-0 pt-2 z-50">
+                  <div className="absolute top-full right-0 pt-2 z-50">
                     <div className="bg-white border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)' }}>
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["פרילנסרים"].columns.map((column, index) => (
@@ -453,7 +453,7 @@ const Header = () => {
                 </Button>
                 
                 {hoveredMenu === "עסקים למכירה" && megaMenuData["עסקים למכירה"] && (
-                  <div className="absolute top-full left-0 pt-2 z-50">
+                  <div className="absolute top-full right-0 pt-2 z-50">
                     <div className="bg-white border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)' }}>
                       <div className="grid grid-cols-5 gap-6">
                         {megaMenuData["עסקים למכירה"].columns.map((column, index) => (
