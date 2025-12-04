@@ -391,17 +391,42 @@ export default function Messages() {
         <div className={`${!selectedConversation ? 'hidden md:flex' : 'flex'} flex-1 flex-col min-h-0`}>
           {selectedConversation ? (
             <div className="w-full h-full flex flex-col min-h-0">
-              {/* Mobile Back Button */}
-              <div className="md:hidden flex items-center gap-2 p-3 border-b bg-background flex-shrink-0">
+              {/* Chat Header - Shows who you're talking to */}
+              <div className="flex items-center gap-3 p-4 border-b bg-card flex-shrink-0">
+                {/* Mobile Back Button */}
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="md:hidden"
                   onClick={() => setSelectedConversation(null)}
                 >
                   <ArrowRight className="h-5 w-5" />
                 </Button>
-                <span className="font-medium">{selectedConversation.otherUserName}</span>
+                
+                {/* Avatar */}
+                {selectedConversation.otherUserAvatar ? (
+                  <img 
+                    src={selectedConversation.otherUserAvatar} 
+                    alt={selectedConversation.otherUserName}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-medium text-primary">
+                      {selectedConversation.otherUserName.slice(0, 2)}
+                    </span>
+                  </div>
+                )}
+                
+                {/* Name and status */}
+                <div className="flex flex-col">
+                  <span className="font-semibold text-foreground">{selectedConversation.otherUserName}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {selectedConversation.isFreelancerView ? "לקוח" : "בעל מקצוע"}
+                  </span>
+                </div>
               </div>
+              
               <div className="flex-1 min-h-0">
                 <FreelancerChat
                   conversationId={selectedConversation.conversationId}
