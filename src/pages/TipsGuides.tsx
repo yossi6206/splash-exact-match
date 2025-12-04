@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Header from "@/components/Header";
 import MobileHeader from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
@@ -104,14 +105,20 @@ const allTips = [
 ];
 
 const categories = [
-  { id: "all", label: "הכל" },
-  { id: "selling", label: "מכירה" },
-  { id: "buying", label: "קנייה" },
-  { id: "security", label: "אבטחה" },
-  { id: "ads", label: "מודעות" },
+  { id: "all", label: "הכל", categoryName: null },
+  { id: "selling", label: "מכירה", categoryName: "מכירה" },
+  { id: "buying", label: "קנייה", categoryName: "קנייה" },
+  { id: "security", label: "אבטחה", categoryName: "אבטחה" },
+  { id: "ads", label: "מודעות", categoryName: "מודעות" },
 ];
 
 const TipsGuidesPage = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const filteredTips = selectedCategory
+    ? allTips.filter((tip) => tip.category === selectedCategory)
+    : allTips;
+
   return (
     <div className="min-h-screen bg-background">
       <MobileHeader />
@@ -150,7 +157,12 @@ const TipsGuidesPage = () => {
               {categories.map((category) => (
                 <button
                   key={category.id}
-                  className="px-6 py-2 rounded-full bg-white dark:bg-background border-2 border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-accent/50 text-foreground font-medium text-sm whitespace-nowrap transition-all duration-200 hover:shadow-md"
+                  onClick={() => setSelectedCategory(category.categoryName)}
+                  className={`px-6 py-2 rounded-full border-2 font-medium text-sm whitespace-nowrap transition-all duration-200 hover:shadow-md ${
+                    selectedCategory === category.categoryName
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-white dark:bg-background border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-accent/50 text-foreground"
+                  }`}
                 >
                   {category.label}
                 </button>
@@ -163,7 +175,7 @@ const TipsGuidesPage = () => {
         <section className="py-8 md:py-12 bg-background">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
-              {allTips.map((tip, index) => (
+              {filteredTips.map((tip, index) => (
                 <TipCard
                   key={index}
                   image={tip.image}

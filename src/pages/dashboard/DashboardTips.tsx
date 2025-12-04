@@ -1,3 +1,4 @@
+import { useState } from "react";
 import TipCard from "@/components/TipCard";
 import tipSelling from "@/assets/tip-selling-new.jpg";
 import tipBuying from "@/assets/tip-buying-new.jpg";
@@ -100,14 +101,20 @@ const allTips = [
 ];
 
 const categories = [
-  { id: "all", label: "הכל" },
-  { id: "selling", label: "מכירה" },
-  { id: "buying", label: "קנייה" },
-  { id: "security", label: "אבטחה" },
-  { id: "ads", label: "מודעות" },
+  { id: "all", label: "הכל", categoryName: null },
+  { id: "selling", label: "מכירה", categoryName: "מכירה" },
+  { id: "buying", label: "קנייה", categoryName: "קנייה" },
+  { id: "security", label: "אבטחה", categoryName: "אבטחה" },
+  { id: "ads", label: "מודעות", categoryName: "מודעות" },
 ];
 
 const DashboardTips = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const filteredTips = selectedCategory
+    ? allTips.filter((tip) => tip.category === selectedCategory)
+    : allTips;
+
   return (
     <div className="max-w-7xl mx-auto">
       <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">טיפים ומדריכים</h1>
@@ -118,7 +125,12 @@ const DashboardTips = () => {
         {categories.map((category) => (
           <button
             key={category.id}
-            className="px-6 py-2 rounded-full bg-white dark:bg-card border-2 border-border hover:bg-muted/50 text-foreground font-medium text-sm whitespace-nowrap transition-all duration-200 hover:shadow-md"
+            onClick={() => setSelectedCategory(category.categoryName)}
+            className={`px-6 py-2 rounded-full border-2 font-medium text-sm whitespace-nowrap transition-all duration-200 hover:shadow-md ${
+              selectedCategory === category.categoryName
+                ? "bg-primary text-primary-foreground border-primary"
+                : "bg-white dark:bg-card border-border hover:bg-muted/50 text-foreground"
+            }`}
           >
             {category.label}
           </button>
@@ -127,7 +139,7 @@ const DashboardTips = () => {
 
       {/* Tips Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
-        {allTips.map((tip, index) => (
+        {filteredTips.map((tip, index) => (
           <TipCard
             key={index}
             image={tip.image}
