@@ -19,6 +19,8 @@ interface CloudflareImageProps extends React.ImgHTMLAttributes<HTMLImageElement>
   responsiveSizes?: number[];
   /** sizes attribute for responsive images */
   sizes?: string;
+  /** Display width hint for optimization */
+  displayWidth?: number;
 }
 
 /**
@@ -26,6 +28,7 @@ interface CloudflareImageProps extends React.ImgHTMLAttributes<HTMLImageElement>
  * 
  * Automatically optimizes images through Cloudflare's Image Resizing CDN.
  * Falls back to original URL if Cloudflare fails.
+ * For Unsplash images, uses their native optimization parameters.
  */
 export const CloudflareImage: React.FC<CloudflareImageProps> = ({
   src,
@@ -37,18 +40,20 @@ export const CloudflareImage: React.FC<CloudflareImageProps> = ({
   sizes = '100vw',
   className = '',
   loading = 'lazy',
+  displayWidth,
   onError,
   ...props
 }) => {
   const [useFallback, setUseFallback] = useState(false);
 
-  // Merge preset options with custom options
-  const options = {
+  // Merge preset options with custom options, including displayWidth
+  const options: CloudflareImageOptions = {
     ...(preset ? imagePresets[preset] : {}),
+    ...(displayWidth ? { width: displayWidth } : {}),
     ...cfOptions,
   };
 
-  // Use original URL if fallback is triggered, otherwise try Cloudflare
+  // Use original URL if fallback is triggered, otherwise try optimization
   const optimizedSrc = useFallback ? src : getCloudflareImageUrl(src, options);
 
   // Generate srcSet if responsive (only if not in fallback mode)
@@ -57,9 +62,9 @@ export const CloudflareImage: React.FC<CloudflareImageProps> = ({
     : undefined;
 
   const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    // If Cloudflare URL failed and we haven't tried fallback yet
+    // If optimized URL failed and we haven't tried fallback yet
     if (!useFallback && optimizedSrc !== src) {
-      console.log('Cloudflare image failed, falling back to original:', src);
+      console.log('Image optimization failed, falling back to original:', src);
       setUseFallback(true);
     }
     // Call original onError if provided

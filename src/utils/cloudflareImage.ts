@@ -14,6 +14,33 @@ export interface CloudflareImageOptions {
 }
 
 /**
+ * Optimize Unsplash URLs with their native parameters
+ */
+export const getOptimizedUnsplashUrl = (
+  url: string,
+  width?: number,
+  quality: number = 80
+): string => {
+  if (!url.includes('images.unsplash.com')) {
+    return url;
+  }
+
+  try {
+    const urlObj = new URL(url);
+    // Set optimal parameters for Unsplash
+    if (width) {
+      urlObj.searchParams.set('w', width.toString());
+    }
+    urlObj.searchParams.set('fm', 'webp'); // Use WebP format
+    urlObj.searchParams.set('q', quality.toString()); // Set quality
+    urlObj.searchParams.set('auto', 'format'); // Auto format selection
+    return urlObj.toString();
+  } catch {
+    return url;
+  }
+};
+
+/**
  * Generate a Cloudflare Image Resizing URL
  * Uses secondhandpro.co.il as the Cloudflare domain
  */
@@ -29,6 +56,11 @@ export const getCloudflareImageUrl = (
   // Only process external URLs (http/https) - return local paths unchanged
   if (!originalUrl.startsWith('http://') && !originalUrl.startsWith('https://')) {
     return originalUrl;
+  }
+
+  // For Unsplash URLs, use their native optimization
+  if (originalUrl.includes('images.unsplash.com')) {
+    return getOptimizedUnsplashUrl(originalUrl, options.width, options.quality);
   }
 
   const {
@@ -66,6 +98,13 @@ export const getCloudflareImageSrcSet = (
 ): string => {
   if (!originalUrl || !originalUrl.startsWith('http')) {
     return '';
+  }
+  
+  // For Unsplash, use their native srcset
+  if (originalUrl.includes('images.unsplash.com')) {
+    return sizes
+      .map(size => `${getOptimizedUnsplashUrl(originalUrl, size)} ${size}w`)
+      .join(', ');
   }
   
   return sizes

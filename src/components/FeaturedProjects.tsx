@@ -130,6 +130,7 @@ const FeaturedProjects = () => {
                   <CloudflareImage
                     src={project.images?.[0] || "/placeholder.svg"}
                     alt={project.title}
+                    displayWidth={400}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   {/* Gradient Overlay */}
