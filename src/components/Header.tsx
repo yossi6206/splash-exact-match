@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import logoBlob from "@/assets/logo-secondhandpro-blob.png";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import PostAdDialog from "@/components/PostAdDialog";
@@ -270,10 +271,12 @@ const Header = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-10 w-auto px-3 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
-                <span className="text-sm font-extrabold text-primary-foreground">SecondHandPro</span>
-              </div>
+            <Link to="/" className="flex items-center">
+              <img 
+                src={logoBlob} 
+                alt="SecondHandPro" 
+                className="h-12 w-auto object-contain"
+              />
             </Link>
 
             {/* Navigation */}
