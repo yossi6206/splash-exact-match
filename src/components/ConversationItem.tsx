@@ -4,6 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { he } from "date-fns/locale";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface ConversationItemProps {
   id: string;
@@ -47,8 +58,7 @@ export const ConversationItem = ({
     }
   };
 
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleConfirmDelete = () => {
     if (onDelete) {
       onDelete(id);
     }
@@ -57,19 +67,40 @@ export const ConversationItem = ({
   return (
     <div
       onClick={onClick}
-      className={`group flex items-start gap-3 p-4 cursor-pointer transition-colors hover:bg-accent/50 border-b relative ${
-        isSelected ? "bg-accent" : ""
+      className={`group flex items-start gap-3 p-4 cursor-pointer border-b relative ${
+        isSelected ? "bg-accent" : "hover:bg-accent/50"
       }`}
     >
       {onDelete && (
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleDelete}
-          className="absolute left-2 top-2 h-8 w-8 hover:bg-destructive hover:text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => e.stopPropagation()}
+              className="absolute left-2 top-2 h-8 w-8 hover:bg-destructive hover:text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity z-10"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent dir="rtl">
+            <AlertDialogHeader>
+              <AlertDialogTitle>מחיקת שיחה</AlertDialogTitle>
+              <AlertDialogDescription>
+                האם אתה בטוח שברצונך למחוק את השיחה עם {otherUserName}? פעולה זו לא ניתנת לביטול.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex-row-reverse gap-2">
+              <AlertDialogCancel>ביטול</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleConfirmDelete}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                מחק שיחה
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
       <Avatar className="h-12 w-12 flex-shrink-0">
         <AvatarImage src={otherUserAvatar || ""} alt={otherUserName} />
