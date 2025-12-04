@@ -12,11 +12,12 @@ import {
   User,
   ArrowRight,
   ArrowLeft,
-  Check
+  Check,
+  Building
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-type Category = 'car' | 'property' | 'laptop' | 'secondhand' | 'job' | 'business' | 'freelancer' | null;
+type Category = 'car' | 'property' | 'laptop' | 'secondhand' | 'job' | 'business' | 'freelancer' | 'project' | null;
 
 const PostWizard = () => {
   const navigate = useNavigate();
@@ -39,6 +40,14 @@ const PostWizard = () => {
       icon: Home,
       gradient: 'from-green-500 to-green-600',
       route: '/dashboard/post-property'
+    },
+    {
+      id: 'project' as const,
+      title: 'פרויקט חדש',
+      description: 'פרסם פרויקט בנייה חדש מקבלן/יזם',
+      icon: Building,
+      gradient: 'from-cyan-500 to-cyan-600',
+      route: '/dashboard/post-project'
     },
     {
       id: 'business' as const,
