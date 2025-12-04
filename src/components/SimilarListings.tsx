@@ -106,8 +106,6 @@ const SimilarListings = ({
   const [items, setItems] = useState<SimilarItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
   const itemsPerPage = 4;
 
   useEffect(() => {
@@ -734,24 +732,14 @@ const SimilarListings = ({
   const displayedItems = items.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
   const handleNext = () => {
-    if (currentPage < totalPages - 1 && !isAnimating) {
-      setIsAnimating(true);
-      setSlideDirection('left');
-      setTimeout(() => {
-        setCurrentPage(currentPage + 1);
-        setIsAnimating(false);
-      }, 300);
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
     }
   };
 
   const handlePrev = () => {
-    if (currentPage > 0 && !isAnimating) {
-      setIsAnimating(true);
-      setSlideDirection('right');
-      setTimeout(() => {
-        setCurrentPage(currentPage - 1);
-        setIsAnimating(false);
-      }, 300);
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
@@ -797,15 +785,7 @@ const SimilarListings = ({
           </>
         )}
 
-        <div 
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-300 ease-out ${
-            isAnimating 
-              ? slideDirection === 'left' 
-                ? 'opacity-0 -translate-x-4' 
-                : 'opacity-0 translate-x-4'
-              : 'opacity-100 translate-x-0'
-          }`}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {displayedItems.map((item) => (
             <Link key={item.id} to={getItemLink(item.id)}>
               <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
