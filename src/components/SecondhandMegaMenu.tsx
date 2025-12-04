@@ -61,7 +61,7 @@ const secondhandCategories: CategoryData[] = [
     subcategories: [
       {
         title: "מוצרי חשמל לבית",
-        items: ["טלוויזיות", "מכונות כביסה", "מייבשי כביסה", "מדיחי כלים", "תנורי אפייה", "כירות וכיריים", "מקררים", "מקפיאים", "מאווררים", "מוצרי חימום", "מזגנים", "מיקרוגלים", "טוסטרים", "תנורי פיצה", "שואבי אבק", "מכונות קפה ואספרסו", "מכשירי סודה", "מסחטות מיץ"]
+        items: ["טלוויזיות", "מכונות כביסה", "מייבשי כביסה", "מדיחי כלים", "תנורי אפייה", "כירות וכיריים", "מקררים", "מקפיאים", "מאווררים", "מוצרי חימום", "מזגנים", "מיקרוגלים"]
       },
       {
         title: "צילום",
@@ -69,7 +69,7 @@ const secondhandCategories: CategoryData[] = [
       },
       {
         title: "מערכות וידאו ואודיו",
-        items: ["רמקולים", "מערכות קולנוע ביתי", "רסיברים לוידאו ואודיו", "ערכות קריוקי", "מערכות דיג׳י", "מקרנים", "נגני מדיה ביתיים וסטרימינג", "סרטי DVD וקלטות וידאו", "מערכות סטראו", "מיקרופונים", "מגברי אודיו"]
+        items: ["רמקולים", "מערכות קולנוע ביתי", "רסיברים", "מערכות דיג׳י", "מקרנים"]
       }
     ]
   },
@@ -108,7 +108,7 @@ const secondhandCategories: CategoryData[] = [
     ]
   },
   {
-    title: "ביגוד, קוסמטיקה ואקססוריז",
+    title: "ביגוד ואקססוריז",
     icon: Shirt,
     slug: "fashion",
     subcategories: [
@@ -184,86 +184,93 @@ const SecondhandMegaMenu = ({ hoveredMenu, setHoveredMenu }: SecondhandMegaMenuP
           <div className="absolute top-full left-0 right-0 h-4 bg-transparent" />
           <div className="fixed inset-x-0 top-16 pt-2 z-50 flex justify-center px-4 pointer-events-none">
             <div 
-              className="bg-white border border-border rounded-lg animate-fade-in flex max-h-[70vh] w-full max-w-[900px] pointer-events-auto"
-            style={{ boxShadow: 'var(--shadow-dropdown)' }}
-          >
-            {/* Right side - Categories list */}
-            <div className="w-72 border-l border-border bg-muted/30 overflow-y-auto">
-              <div className="p-4 border-b border-border sticky top-0 bg-muted/30">
-                <Link 
-                  to="/secondhand"
-                  className="flex items-center justify-between text-base font-semibold text-foreground hover:text-primary transition-colors"
-                >
-                  <span>עמוד בית יד שנייה</span>
-                </Link>
-              </div>
-              <div className="py-2">
-                {secondhandCategories.map((category) => (
-                  <div
-                    key={category.slug}
-                    className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-colors ${
-                      activeCategory === category.title 
-                        ? 'bg-white' 
-                        : 'hover:bg-white/50'
-                    }`}
-                    onMouseEnter={() => setActiveCategory(category.title)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm font-medium text-foreground">{category.title}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {category.subcategories.length > 0 && (
-                        <ChevronLeft className="h-4 w-4 text-muted-foreground" />
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Left side - Subcategories */}
-            <div className="flex-1 p-6 overflow-y-auto">
-              {activeCategoryData && activeCategoryData.subcategories.length > 0 ? (
-                <>
+              className="bg-white border border-primary/20 rounded-lg animate-fade-in flex max-h-[70vh] w-full max-w-[900px] pointer-events-auto overflow-hidden" 
+              style={{ boxShadow: 'var(--shadow-dropdown)' }}
+            >
+              {/* Right side - Categories list */}
+              <div className="w-56 border-l border-primary/10 bg-muted/20 overflow-y-auto">
+                <div className="p-4 border-b border-primary/10">
                   <Link 
-                    to={`/secondhand/${activeCategoryData.slug}`}
-                    className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-primary transition-colors mb-6"
+                    to="/secondhand"
+                    className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors"
                   >
+                    <span>כל יד שנייה</span>
                     <ChevronLeft className="h-4 w-4" />
-                    <span>לכל {activeCategoryData.title}</span>
-                  </Link>
-                  <div className="grid grid-cols-4 gap-8">
-                    {activeCategoryData.subcategories.map((subcategory, index) => (
-                      <div key={index}>
-                        <h4 className="text-sm font-bold text-foreground mb-3">{subcategory.title}</h4>
-                        <ul className="space-y-2">
-                          {subcategory.items.map((item, itemIndex) => (
-                            <li key={itemIndex}>
-                              <Link 
-                                to={`/secondhand/${activeCategoryData.slug}`}
-                                className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                              >
-                                {item}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <div className="flex items-center justify-center h-full text-muted-foreground">
-                  <Link 
-                    to={`/secondhand/${activeCategoryData?.slug || ''}`}
-                    className="text-primary hover:underline"
-                  >
-                    צפה בכל המוצרים המומלצים
                   </Link>
                 </div>
-              )}
+                <div className="py-2">
+                  {secondhandCategories.map((category) => {
+                    const Icon = category.icon;
+                    return (
+                      <div
+                        key={category.slug}
+                        className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-all ${
+                          activeCategory === category.title 
+                            ? 'bg-white border-r-2 border-primary' 
+                            : 'hover:bg-white/70'
+                        }`}
+                        onMouseEnter={() => setActiveCategory(category.title)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Icon className={`h-4 w-4 ${activeCategory === category.title ? 'text-primary' : 'text-muted-foreground'}`} />
+                          <span className={`text-sm font-medium ${activeCategory === category.title ? 'text-primary' : 'text-foreground'}`}>
+                            {category.title}
+                          </span>
+                        </div>
+                        {category.subcategories.length > 0 && (
+                          <ChevronLeft className={`h-4 w-4 ${activeCategory === category.title ? 'text-primary' : 'text-muted-foreground'}`} />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Left side - Subcategories */}
+              <div className="flex-1 p-6 overflow-y-auto">
+                {activeCategoryData && activeCategoryData.subcategories.length > 0 ? (
+                  <>
+                    <Link 
+                      to={`/secondhand/${activeCategoryData.slug}`}
+                      className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors mb-5 pb-2 border-b-2 border-primary/20"
+                    >
+                      <activeCategoryData.icon className="h-4 w-4" />
+                      <span>כל {activeCategoryData.title}</span>
+                      <ChevronLeft className="h-4 w-4" />
+                    </Link>
+                    <div className="grid grid-cols-4 gap-6">
+                      {activeCategoryData.subcategories.map((subcategory, index) => (
+                        <div key={index}>
+                          <h4 className="text-sm font-bold text-foreground mb-3">{subcategory.title}</h4>
+                          <ul className="space-y-1.5">
+                            {subcategory.items.map((item, itemIndex) => (
+                              <li key={itemIndex}>
+                                <Link 
+                                  to={`/secondhand/${activeCategoryData.slug}`}
+                                  className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1 hover:underline"
+                                >
+                                  {item}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full py-8">
+                    <Trophy className="h-12 w-12 text-primary mb-4" />
+                    <Link 
+                      to={`/secondhand/${activeCategoryData?.slug || ''}`}
+                      className="text-primary font-medium hover:underline"
+                    >
+                      צפה בכל המוצרים המומלצים
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
           </div>
         </>
       )}
