@@ -53,7 +53,7 @@ export function SearchableSelect({
           )}
           disabled={disabled}
         >
-          {value || placeholder}
+          {value ? (value === "__custom__" ? "אחר - הזנה ידנית" : value) : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -63,26 +63,29 @@ export function SearchableSelect({
           <CommandList>
             <CommandEmpty>{emptyText}</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => (
-                <CommandItem
-                  key={option}
-                  value={option}
-                  onSelect={() => {
-                    onValueChange(option);
-                    setOpen(false);
-                  }}
-                  className="text-right"
-                  dir="rtl"
-                >
-                  <Check
-                    className={cn(
-                      "ml-2 h-4 w-4",
-                      value === option ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {option}
-                </CommandItem>
-              ))}
+              {options.map((option) => {
+                const displayLabel = option === "__custom__" ? "אחר - הזנה ידנית" : option;
+                return (
+                  <CommandItem
+                    key={option}
+                    value={option}
+                    onSelect={() => {
+                      onValueChange(option);
+                      setOpen(false);
+                    }}
+                    className="text-right"
+                    dir="rtl"
+                  >
+                    <Check
+                      className={cn(
+                        "ml-2 h-4 w-4",
+                        value === option ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {displayLabel}
+                  </CommandItem>
+                );
+              })}
             </CommandGroup>
           </CommandList>
         </Command>
