@@ -458,6 +458,18 @@ const CarDetails = () => {
                 )}
               </CardContent>
             </Card>
+
+            {/* Similar Listings - Desktop */}
+            <div className="hidden lg:block mt-8">
+              <SimilarListings 
+                itemType="car"
+                currentItemId={id!}
+                location={carData.location}
+                manufacturer={carData.manufacturer || undefined}
+                year={carData.year}
+                priceRange={carData.price ? { min: parseInt(carData.price), max: parseInt(carData.price) } : undefined}
+              />
+            </div>
           </div>
 
           {/* Sidebar - Hidden on mobile, content shown above */}
