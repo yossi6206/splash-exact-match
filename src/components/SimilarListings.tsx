@@ -749,68 +749,76 @@ const SimilarListings = ({
     <div className="mt-8">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-bold">{getTitle()}</h3>
-        {/* Navigation Arrows in Header */}
         {showNavigation && (
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">
-              {currentPage + 1}/{totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handlePrev}
-              disabled={currentPage === 0}
-              className="h-8 w-8 rounded-full border-border hover:bg-muted disabled:opacity-40"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleNext}
-              disabled={currentPage >= totalPages - 1}
-              className="h-8 w-8 rounded-full border-border hover:bg-muted disabled:opacity-40"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-          </div>
+          <span className="text-sm text-muted-foreground">
+            {currentPage + 1}/{totalPages}
+          </span>
         )}
       </div>
       
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {displayedItems.map((item) => (
-          <Link key={item.id} to={getItemLink(item.id)}>
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
-              <div className="relative h-40">
-                <CloudflareImage
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                />
-                {item.matchReasons.length > 0 && (
-                  <div className="absolute top-2 right-2 flex flex-wrap gap-1 max-w-[90%]">
-                    {item.matchReasons.slice(0, 2).map((reason, idx) => (
-                      <Badge 
-                        key={idx} 
-                        variant="secondary" 
-                        className="bg-primary/90 text-primary-foreground text-xs px-2 py-0.5"
-                      >
-                        {reason}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="p-4" dir="rtl">
-                <h4 className="font-bold text-foreground truncate">{item.title}</h4>
-                <p className="text-sm text-muted-foreground truncate">{item.subtitle}</p>
-                <p className="text-sm text-muted-foreground truncate">{item.details}</p>
-                <p className="font-bold text-primary mt-2">{item.price}</p>
-              </div>
-            </Card>
-          </Link>
-        ))}
+      {/* Grid with Overlay Navigation */}
+      <div className="relative">
+        {/* Navigation Arrows - Overlay on Cards */}
+        {showNavigation && (
+          <>
+            {/* Right Arrow (Previous in RTL) */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handlePrev}
+              disabled={currentPage === 0}
+              className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white/90 shadow-lg border border-border hover:bg-white disabled:opacity-0 disabled:pointer-events-none transition-opacity"
+            >
+              <ChevronRight className="h-5 w-5 text-foreground" />
+            </Button>
+            
+            {/* Left Arrow (Next in RTL) */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleNext}
+              disabled={currentPage >= totalPages - 1}
+              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white/90 shadow-lg border border-border hover:bg-white disabled:opacity-0 disabled:pointer-events-none transition-opacity"
+            >
+              <ChevronLeft className="h-5 w-5 text-foreground" />
+            </Button>
+          </>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {displayedItems.map((item) => (
+            <Link key={item.id} to={getItemLink(item.id)}>
+              <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+                <div className="relative h-40">
+                  <CloudflareImage
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                  />
+                  {item.matchReasons.length > 0 && (
+                    <div className="absolute top-2 right-2 flex flex-wrap gap-1 max-w-[90%]">
+                      {item.matchReasons.slice(0, 2).map((reason, idx) => (
+                        <Badge 
+                          key={idx} 
+                          variant="secondary" 
+                          className="bg-primary/90 text-primary-foreground text-xs px-2 py-0.5"
+                        >
+                          {reason}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="p-4" dir="rtl">
+                  <h4 className="font-bold text-foreground truncate">{item.title}</h4>
+                  <p className="text-sm text-muted-foreground truncate">{item.subtitle}</p>
+                  <p className="text-sm text-muted-foreground truncate">{item.details}</p>
+                  <p className="font-bold text-primary mt-2">{item.price}</p>
+                </div>
+              </Card>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
