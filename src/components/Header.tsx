@@ -351,6 +351,10 @@ const Header = () => {
                 )}
               </div>
 
+              <Button variant="ghost" className="text-sm font-medium" asChild>
+                <Link to="/projects">פרויקטים חדשים</Link>
+              </Button>
+
               <div 
                 className="relative"
                 onMouseEnter={() => setHoveredMenu("רכב")}

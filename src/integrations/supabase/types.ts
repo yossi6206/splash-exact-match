@@ -902,6 +902,129 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          amenities: string[] | null
+          available_units: number | null
+          buildings_count: number | null
+          clicks_count: number | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          contacts_count: number | null
+          created_at: string
+          delivery_date: string | null
+          description: string | null
+          developer_name: string
+          features: string[] | null
+          floors_count: number | null
+          id: string
+          images: string[] | null
+          is_promoted: boolean | null
+          last_top_position_at: string | null
+          listing_type: string
+          location: string
+          max_price: number | null
+          max_rooms: number | null
+          min_price: number | null
+          min_rooms: number | null
+          neighborhood: string | null
+          parking_included: boolean | null
+          project_type: string
+          promotion_end_date: string | null
+          promotion_impressions: number | null
+          promotion_start_date: string | null
+          status: string
+          storage_included: boolean | null
+          title: string
+          total_units: number | null
+          updated_at: string
+          user_id: string
+          views_count: number | null
+          website_url: string | null
+        }
+        Insert: {
+          amenities?: string[] | null
+          available_units?: number | null
+          buildings_count?: number | null
+          clicks_count?: number | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          contacts_count?: number | null
+          created_at?: string
+          delivery_date?: string | null
+          description?: string | null
+          developer_name: string
+          features?: string[] | null
+          floors_count?: number | null
+          id?: string
+          images?: string[] | null
+          is_promoted?: boolean | null
+          last_top_position_at?: string | null
+          listing_type?: string
+          location: string
+          max_price?: number | null
+          max_rooms?: number | null
+          min_price?: number | null
+          min_rooms?: number | null
+          neighborhood?: string | null
+          parking_included?: boolean | null
+          project_type?: string
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
+          status?: string
+          storage_included?: boolean | null
+          title: string
+          total_units?: number | null
+          updated_at?: string
+          user_id: string
+          views_count?: number | null
+          website_url?: string | null
+        }
+        Update: {
+          amenities?: string[] | null
+          available_units?: number | null
+          buildings_count?: number | null
+          clicks_count?: number | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          contacts_count?: number | null
+          created_at?: string
+          delivery_date?: string | null
+          description?: string | null
+          developer_name?: string
+          features?: string[] | null
+          floors_count?: number | null
+          id?: string
+          images?: string[] | null
+          is_promoted?: boolean | null
+          last_top_position_at?: string | null
+          listing_type?: string
+          location?: string
+          max_price?: number | null
+          max_rooms?: number | null
+          min_price?: number | null
+          min_rooms?: number | null
+          neighborhood?: string | null
+          parking_included?: boolean | null
+          project_type?: string
+          promotion_end_date?: string | null
+          promotion_impressions?: number | null
+          promotion_start_date?: string | null
+          status?: string
+          storage_included?: boolean | null
+          title?: string
+          total_units?: number | null
+          updated_at?: string
+          user_id?: string
+          views_count?: number | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       promotion_impressions_log: {
         Row: {
           city: string | null
