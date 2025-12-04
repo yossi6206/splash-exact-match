@@ -58,6 +58,7 @@ const PostCar = () => {
 
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [features, setFeatures] = useState<string[]>([""]);
+  const [isCustomModel, setIsCustomModel] = useState(false);
   
   const carFeatures = [
     "מזגן אוטומטי",
@@ -89,7 +90,18 @@ const PostCar = () => {
   }, [formData.manufacturer]);
 
   const handleManufacturerChange = (value: string) => {
-    setFormData({ ...formData, manufacturer: value, model: "" }); // Reset model when manufacturer changes
+    setFormData({ ...formData, manufacturer: value, model: "" });
+    setIsCustomModel(false);
+  };
+
+  const handleModelChange = (value: string) => {
+    if (value === "__custom__") {
+      setIsCustomModel(true);
+      setFormData({ ...formData, model: "" });
+    } else {
+      setIsCustomModel(false);
+      setFormData({ ...formData, model: value });
+    }
   };
 
   const handleInputChange = createValidatedChangeHandler(setFormData, formData, carValidationConfig);
@@ -243,22 +255,52 @@ const PostCar = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="model">דגם הרכב *</Label>
-                <Select
-                  value={formData.model}
-                  onValueChange={(value) => setFormData({ ...formData, model: value })}
-                  disabled={!formData.manufacturer}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={formData.manufacturer ? "בחר דגם" : "בחר יצרן קודם"} />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[300px]">
-                    {availableModels.map((model) => (
-                      <SelectItem key={model} value={model}>
-                        {model}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {isCustomModel ? (
+                  <div className="flex gap-2">
+                    <Input
+                      id="model"
+                      name="model"
+                      value={formData.model}
+                      onChange={handleInputChange}
+                      placeholder="הזן שם דגם"
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={() => {
+                        setIsCustomModel(false);
+                        setFormData({ ...formData, model: "" });
+                      }}
+                      title="חזור לרשימה"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <Select
+                    value={formData.model}
+                    onValueChange={handleModelChange}
+                    disabled={!formData.manufacturer}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={formData.manufacturer ? "בחר דגם" : "בחר יצרן קודם"} />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px]">
+                      {availableModels.map((model) => (
+                        <SelectItem key={model} value={model}>
+                          {model}
+                        </SelectItem>
+                      ))}
+                      {formData.manufacturer && (
+                        <SelectItem value="__custom__" className="text-primary font-medium border-t mt-1 pt-2">
+                          אחר - הזנה ידנית
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
             </div>
 
