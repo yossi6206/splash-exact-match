@@ -13,6 +13,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useSaveSearch } from "@/hooks/useSaveSearch";
+import { getCarTitle } from "@/utils/carUtils";
 import carImage1 from "@/assets/item-car.jpg";
 
 interface Car {
@@ -559,16 +560,10 @@ const Cars = () => {
               </div>
             ) : (
               currentCars.map((car) => {
-                // Prevent duplicate manufacturer in title if model already contains it
-                const modelContainsManufacturer = car.manufacturer && car.model.toLowerCase().includes(car.manufacturer.toLowerCase());
-                const title = modelContainsManufacturer 
-                  ? car.model 
-                  : `${car.manufacturer || ''} ${car.model}`.trim();
-                
                 const carForCard = {
                   id: car.id,
                   image: car.images && car.images.length > 0 ? car.images[0] : carImage1,
-                  title,
+                  title: getCarTitle(car.manufacturer, car.model),
                   subtitle: `${car.transmission || ''} ${car.fuel_type || ''}`,
                   manufacturer: car.manufacturer,
                   model: car.model,

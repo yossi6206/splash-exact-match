@@ -19,6 +19,7 @@ import SimilarListings from "@/components/SimilarListings";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import { CloudflareImage } from "@/components/CloudflareImage";
+import { getCarTitle } from "@/utils/carUtils";
 
 interface CarData {
   id: string;
@@ -268,7 +269,7 @@ const CarDetails = () => {
                   </div>
                   <div className="flex gap-2">
                     <ShareMenu 
-                      title={`${carDetails.manufacturer} ${carDetails.model}`}
+                      title={getCarTitle(carDetails.manufacturer, carDetails.model)}
                       variant="outline"
                     />
                     <ReportListingDialog itemId={id!} itemType="car" />
@@ -353,7 +354,7 @@ const CarDetails = () => {
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                   <div>
                     <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-1 sm:mb-2">
-                      {carDetails.manufacturer} {carDetails.model}
+                      {getCarTitle(carDetails.manufacturer, carDetails.model)}
                     </h1>
                     <p className="text-sm sm:text-base lg:text-lg text-muted-foreground line-clamp-2 sm:line-clamp-none">
                       {carDetails.description}
@@ -378,7 +379,7 @@ const CarDetails = () => {
                       <Heart className="h-5 w-5" />
                     </Button>
                     <ShareMenu 
-                      title={`${carDetails.manufacturer} ${carDetails.model}`}
+                      title={getCarTitle(carDetails.manufacturer, carDetails.model)}
                       variant="outline"
                     />
                     <ReportListingDialog itemId={id!} itemType="car" />
