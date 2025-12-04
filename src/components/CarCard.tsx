@@ -20,6 +20,8 @@ interface CarCardProps {
     fuel_type?: string | null;
     transmission?: string | null;
     condition?: string | null;
+    color?: string | null;
+    test_until?: string | null;
     price: number;
     location?: string;
     features: string[];
@@ -103,6 +105,21 @@ export const CarCard = ({ car }: CarCardProps) => {
                   <>
                     <span>•</span>
                     <span>{car.location}</span>
+                  </>
+                )}
+                {car.color && (
+                  <>
+                    <span>•</span>
+                    <span>{car.color}</span>
+                  </>
+                )}
+                {car.test_until && (
+                  <>
+                    <span>•</span>
+                    <span>טסט: {(() => {
+                      const date = new Date(car.test_until);
+                      return `${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+                    })()}</span>
                   </>
                 )}
               </div>

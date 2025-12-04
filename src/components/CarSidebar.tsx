@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Car, DollarSign, Fuel, Settings, MapPin, Gauge, RotateCcw } from "lucide-react";
+import { Car, DollarSign, Fuel, Settings, MapPin, Gauge, RotateCcw, Palette } from "lucide-react";
 import { useState } from "react";
 
 interface CarSidebarProps {
@@ -15,6 +15,7 @@ interface CarSidebarProps {
     transmissions?: Record<string, number>;
     hands?: Record<string, number>;
     features?: Record<string, number>;
+    colors?: Record<string, number>;
   };
 }
 
@@ -33,6 +34,7 @@ export interface SidebarFilters {
   vehicleTypes: string[];
   conditions: string[];
   categories: string[];
+  colors: string[];
 }
 
 const manufacturers = [
@@ -43,6 +45,7 @@ const fuelTypes = ["בנזין", "דיזל", "היבריד", "חשמלי", "הי
 const transmissionTypes = ["אוטומט", "ידני", "רובוטרון", "טיפטרוניק"];
 const handOptions = ["יד ראשונה", "יד שנייה", "יד שלישית", "יד 4+"];
 const vehicleTypes = ["רכב פרטי", "רכב מסחרי", "משאיות", "אופנועים"];
+const colorOptions = ["לבן", "שחור", "כסף", "אפור", "אדום", "כחול", "ירוק", "חום", "בז׳", "זהב", "כתום", "צהוב", "סגול", "ורוד", "טורקיז", "אחר"];
 
 export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
   const [filters, setFilters] = useState<SidebarFilters>({
@@ -60,10 +63,11 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
     vehicleTypes: [],
     conditions: [],
     categories: [],
+    colors: [],
   });
 
   const handleArrayFilterChange = (
-    key: keyof Pick<SidebarFilters, 'manufacturers' | 'fuelTypes' | 'transmissions' | 'hands' | 'features' | 'vehicleTypes' | 'conditions' | 'categories'>,
+    key: keyof Pick<SidebarFilters, 'manufacturers' | 'fuelTypes' | 'transmissions' | 'hands' | 'features' | 'vehicleTypes' | 'conditions' | 'categories' | 'colors'>,
     value: string
   ) => {
     const currentValues = filters[key] as string[];
@@ -104,6 +108,7 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
       vehicleTypes: [],
       conditions: [],
       categories: [],
+      colors: [],
     };
     setFilters(defaultFilters);
     onFilterChange?.(defaultFilters);
@@ -324,6 +329,40 @@ export const CarSidebar = ({ onFilterChange, counts }: CarSidebarProps) => {
                 {counts?.hands?.[hand] && (
                   <span className="text-xs text-muted-foreground">
                     ({counts.hands[hand]})
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Color */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Palette className="w-4 h-4 text-primary" />
+            צבע
+          </Label>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {colorOptions.map((color) => (
+              <div key={color} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
+                    id={`color-${color}`}
+                    checked={filters.colors.includes(color)}
+                    onCheckedChange={() => handleArrayFilterChange('colors', color)}
+                  />
+                  <Label
+                    htmlFor={`color-${color}`}
+                    className="text-sm font-normal cursor-pointer"
+                  >
+                    {color}
+                  </Label>
+                </div>
+                {counts?.colors?.[color] && (
+                  <span className="text-xs text-muted-foreground">
+                    ({counts.colors[color]})
                   </span>
                 )}
               </div>

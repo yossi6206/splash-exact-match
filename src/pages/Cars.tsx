@@ -28,6 +28,8 @@ interface Car {
   condition: string | null;
   category: string | null;
   vehicle_type: string | null;
+  color: string | null;
+  test_until: string | null;
   price: string | null;
   location: string;
   description: string | null;
@@ -65,6 +67,7 @@ const Cars = () => {
     vehicleTypes: [],
     conditions: [],
     categories: [],
+    colors: [],
   });
   const itemsPerPage = 10;
 
@@ -345,6 +348,11 @@ const Cars = () => {
         return false;
       }
       
+      // Color filter
+      if (sidebarFilters.colors.length > 0 && !sidebarFilters.colors.some(c => car.color === c)) {
+        return false;
+      }
+      
       // Features filter
       if (sidebarFilters.features.length > 0 && car.features) {
         const hasFeature = sidebarFilters.features.some(f => 
@@ -573,6 +581,8 @@ const Cars = () => {
                   fuel_type: car.fuel_type,
                   transmission: car.transmission,
                   condition: car.condition,
+                  color: car.color,
+                  test_until: car.test_until,
                   price: parseFloat((car.price || "0").replace(/,/g, "")),
                   location: car.location,
                   features: car.features || [],
