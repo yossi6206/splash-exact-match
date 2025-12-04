@@ -24,15 +24,15 @@ const Categories = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-8 md:mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground">קטגוריות פופולריות</h2>
-          <a 
-            href="#" 
+          <Link 
+            to="/secondhand"
             className="text-sm md:text-base font-semibold text-primary hover:text-primary/80 transition-colors duration-200 flex items-center gap-2"
           >
             צפה בכל
             <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-          </a>
+          </Link>
         </div>
         <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
           {categories.map((category) => (
