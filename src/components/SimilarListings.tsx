@@ -698,9 +698,9 @@ const SimilarListings = ({
     return (
       <div className="mt-8">
         <h3 className="text-xl font-bold mb-4">נכסים דומים למה שחיפשת</h3>
-        <div className="flex gap-4 overflow-hidden px-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <Card key={i} className="overflow-hidden min-w-[250px] flex-shrink-0">
+            <Card key={i} className="overflow-hidden">
               <Skeleton className="h-40 w-full" />
               <div className="p-4 space-y-2">
                 <Skeleton className="h-4 w-3/4" />
@@ -734,55 +734,57 @@ const SimilarListings = ({
   return (
     <div className="mt-8">
       <h3 className="text-xl font-bold mb-4">{getTitle()}</h3>
-      <div className="relative px-12">
-        <Carousel
-          opts={{
-            align: "start",
-            direction: "rtl",
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-2 md:-ml-4">
-            {items.map((item) => (
-              <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
-                <Link to={getItemLink(item.id)}>
-                  <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
-                    <div className="relative h-40">
-                      <CloudflareImage
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover"
-                      />
-                      {/* Relevance badges */}
-                      {item.matchReasons.length > 0 && (
-                        <div className="absolute top-2 right-2 flex flex-wrap gap-1 max-w-[90%]">
-                          {item.matchReasons.slice(0, 2).map((reason, idx) => (
-                            <Badge 
-                              key={idx} 
-                              variant="secondary" 
-                              className="bg-primary/90 text-primary-foreground text-xs px-2 py-0.5"
-                            >
-                              {reason}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-4" dir="rtl">
-                      <h4 className="font-bold text-foreground truncate">{item.title}</h4>
-                      <p className="text-sm text-muted-foreground truncate">{item.subtitle}</p>
-                      <p className="text-sm text-muted-foreground truncate">{item.details}</p>
-                      <p className="font-bold text-primary mt-2">{item.price}</p>
-                    </div>
-                  </Card>
-                </Link>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="absolute -left-4 top-1/2 -translate-y-1/2" />
-          <CarouselNext className="absolute -right-4 top-1/2 -translate-y-1/2" />
-        </Carousel>
-      </div>
+      <Carousel
+        opts={{
+          align: "start",
+          direction: "rtl",
+          slidesToScroll: 1,
+        }}
+        className="w-full"
+      >
+        <CarouselContent className="-ml-4">
+          {items.map((item) => (
+            <CarouselItem key={item.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/4">
+              <Link to={getItemLink(item.id)}>
+                <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+                  <div className="relative h-40">
+                    <CloudflareImage
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                    {item.matchReasons.length > 0 && (
+                      <div className="absolute top-2 right-2 flex flex-wrap gap-1 max-w-[90%]">
+                        {item.matchReasons.slice(0, 2).map((reason, idx) => (
+                          <Badge 
+                            key={idx} 
+                            variant="secondary" 
+                            className="bg-primary/90 text-primary-foreground text-xs px-2 py-0.5"
+                          >
+                            {reason}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4" dir="rtl">
+                    <h4 className="font-bold text-foreground truncate">{item.title}</h4>
+                    <p className="text-sm text-muted-foreground truncate">{item.subtitle}</p>
+                    <p className="text-sm text-muted-foreground truncate">{item.details}</p>
+                    <p className="font-bold text-primary mt-2">{item.price}</p>
+                  </div>
+                </Card>
+              </Link>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        {items.length > 4 && (
+          <>
+            <CarouselPrevious className="-left-4 md:-left-5" />
+            <CarouselNext className="-right-4 md:-right-5" />
+          </>
+        )}
+      </Carousel>
     </div>
   );
 };
