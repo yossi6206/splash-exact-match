@@ -179,10 +179,10 @@ const SecondhandMegaMenu = ({ hoveredMenu, setHoveredMenu }: SecondhandMegaMenuP
       </Button>
       
       {hoveredMenu === "יד שניה" && (
-        <div className="absolute top-full left-0 pt-2 z-50">
+        <div className="fixed inset-x-0 top-16 pt-2 z-50 flex justify-center px-4">
           <div 
-            className="bg-white border border-border rounded-lg animate-fade-in flex max-h-[70vh]" 
-            style={{ boxShadow: 'var(--shadow-dropdown)', minWidth: '900px' }}
+            className="bg-white border border-border rounded-lg animate-fade-in flex max-h-[70vh] w-full max-w-[900px]" 
+            style={{ boxShadow: 'var(--shadow-dropdown)' }}
           >
             {/* Right side - Categories list */}
             <div className="w-72 border-l border-border bg-muted/30 overflow-y-auto">
