@@ -1,4 +1,5 @@
 import { Menu, Bell, MessageSquare, Search, User, LogOut, Heart, LayoutGrid, Settings, Home, Car, Building2, Laptop, Package, Briefcase, Users, Store, ChevronLeft } from "lucide-react";
+import logoNew from "@/assets/logo-new.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -85,9 +86,11 @@ const MobileHeader = () => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-3">
-                  <div className="flex h-10 w-auto px-3 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
-                    <span className="text-sm font-extrabold text-primary-foreground">SecondHandPro</span>
-                  </div>
+                  <img 
+                    src={logoNew} 
+                    alt="SecondHandPro" 
+                    className="h-10 w-auto object-contain"
+                  />
                   <Button
                     className="w-full mt-2"
                     onClick={() => navigate("/auth")}
@@ -165,9 +168,11 @@ const MobileHeader = () => {
         </Sheet>
 
         <Link to="/" className="flex items-center">
-          <div className="flex h-8 w-auto px-2 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md">
-            <span className="text-xs font-extrabold text-primary-foreground">SecondHandPro</span>
-          </div>
+          <img 
+            src={logoNew} 
+            alt="SecondHandPro" 
+            className="h-8 w-auto object-contain"
+          />
         </Link>
 
         {/* Actions */}

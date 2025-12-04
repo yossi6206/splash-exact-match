@@ -1,4 +1,5 @@
 import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Send } from "lucide-react";
+import logoNew from "@/assets/logo-new.png";
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -93,9 +94,11 @@ const Footer = () => {
           {/* Brand & Social - Center */}
           <div className="lg:col-span-1 text-center space-y-6">
             <div>
-              <div className="flex h-12 w-auto px-4 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary shadow-md mx-auto mb-3">
-                <span className="text-lg font-extrabold text-primary-foreground">SecondHandPro</span>
-              </div>
+              <img 
+                src={logoNew} 
+                alt="SecondHandPro" 
+                className="h-12 w-auto object-contain mx-auto mb-3"
+              />
               <p className="text-foreground/70 text-sm leading-relaxed max-w-xs mx-auto">
                 הפלטפורמה המובילה למכירה וקנייה בישראל. מחברים בין אלפי משתמשים מדי יום.
               </p>
