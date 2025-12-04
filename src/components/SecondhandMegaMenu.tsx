@@ -179,14 +179,14 @@ const SecondhandMegaMenu = ({ hoveredMenu, setHoveredMenu }: SecondhandMegaMenuP
       </Button>
       
       {hoveredMenu === "יד שניה" && (
-        <div className="absolute top-full right-0 pt-2 z-50">
+        <div className="absolute top-full left-0 pt-2 z-50">
           <div 
-            className="bg-white border border-border rounded-lg animate-fade-in flex" 
+            className="bg-white border border-border rounded-lg animate-fade-in flex max-h-[70vh]" 
             style={{ boxShadow: 'var(--shadow-dropdown)', minWidth: '900px' }}
           >
             {/* Right side - Categories list */}
-            <div className="w-72 border-l border-border bg-muted/30">
-              <div className="p-4 border-b border-border">
+            <div className="w-72 border-l border-border bg-muted/30 overflow-y-auto">
+              <div className="p-4 border-b border-border sticky top-0 bg-muted/30">
                 <Link 
                   to="/secondhand"
                   className="flex items-center justify-between text-base font-semibold text-foreground hover:text-primary transition-colors"
@@ -219,7 +219,7 @@ const SecondhandMegaMenu = ({ hoveredMenu, setHoveredMenu }: SecondhandMegaMenuP
             </div>
 
             {/* Left side - Subcategories */}
-            <div className="flex-1 p-6">
+            <div className="flex-1 p-6 overflow-y-auto">
               {activeCategoryData && activeCategoryData.subcategories.length > 0 ? (
                 <>
                   <Link 
