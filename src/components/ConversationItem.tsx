@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { he } from "date-fns/locale";
-import { useState } from "react";
 
 interface ConversationItemProps {
   id: string;
@@ -30,7 +29,6 @@ export const ConversationItem = ({
   onClick,
   onDelete,
 }: ConversationItemProps) => {
-  const [isHovered, setIsHovered] = useState(false);
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -59,18 +57,16 @@ export const ConversationItem = ({
   return (
     <div
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`flex items-start gap-3 p-4 cursor-pointer transition-colors hover:bg-accent/50 border-b relative ${
+      className={`group flex items-start gap-3 p-4 cursor-pointer transition-colors hover:bg-accent/50 border-b relative ${
         isSelected ? "bg-accent" : ""
       }`}
     >
-      {isHovered && onDelete && (
+      {onDelete && (
         <Button
           variant="ghost"
           size="icon"
           onClick={handleDelete}
-          className="absolute left-2 top-2 h-8 w-8 hover:bg-destructive hover:text-destructive-foreground"
+          className="absolute left-2 top-2 h-8 w-8 hover:bg-destructive hover:text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity"
         >
           <Trash2 className="h-4 w-4" />
         </Button>
