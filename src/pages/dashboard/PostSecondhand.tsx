@@ -16,6 +16,7 @@ import { ImageUpload } from "@/components/ImageUpload";
 import { createValidatedChangeHandler, secondhandValidationConfig, createPriceChangeHandler, parsePriceToNumber } from "@/utils/formValidation";
 import { getPhoneManufacturers, getModelsForPhoneManufacturer } from "@/data/phoneManufacturersModels";
 import { getComputerManufacturers, getModelsForComputerManufacturer } from "@/data/computerManufacturersModels";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 
 const secondhandSchema = z.object({
   title: z.string().trim().min(3, "כותרת חייבת להכיל לפחות 3 תווים").max(200, "כותרת ארוכה מדי"),
@@ -527,21 +528,32 @@ const PostSecondhand = () => {
           <div className="space-y-2">
             <Label htmlFor="size">דגם *</Label>
             {!showCustomComputerModel ? (
-              <Select 
-                value={formData.size} 
-                onValueChange={handleComputerModelChange}
-                disabled={!formData.brand || formData.brand === "אחר"}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={formData.brand ? "בחר דגם" : "בחר יצרן תחילה"} />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableComputerModels.map(model => (
-                    <SelectItem key={model} value={model}>{model}</SelectItem>
-                  ))}
-                  <SelectItem value="אחר - הזנה ידנית">אחר - הזנה ידנית</SelectItem>
-                </SelectContent>
-              </Select>
+              formData.brand && formData.brand !== "אחר" ? (
+                <div className="space-y-2">
+                  <SearchableSelect
+                    value={formData.size}
+                    onValueChange={(value) => {
+                      if (value === "אחר - הזנה ידנית") {
+                        setShowCustomComputerModel(true);
+                        setFormData({ ...formData, size: "" });
+                      } else {
+                        setFormData({ ...formData, size: value });
+                      }
+                    }}
+                    options={[...availableComputerModels, "אחר - הזנה ידנית"]}
+                    placeholder="בחר דגם"
+                    searchPlaceholder="חפש דגם..."
+                    emptyText="לא נמצאו דגמים"
+                  />
+                </div>
+              ) : (
+                <Select disabled>
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר יצרן תחילה" />
+                  </SelectTrigger>
+                  <SelectContent />
+                </Select>
+              )
             ) : (
               <div className="space-y-2">
                 <Input
@@ -669,21 +681,32 @@ const PostSecondhand = () => {
           <div className="space-y-2">
             <Label htmlFor="size">דגם *</Label>
             {!showCustomPhoneModel ? (
-              <Select 
-                value={formData.size} 
-                onValueChange={handlePhoneModelChange}
-                disabled={!formData.brand || formData.brand === "אחר"}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={formData.brand ? "בחר דגם" : "בחר יצרן תחילה"} />
-                </SelectTrigger>
-                <SelectContent>
-                  {availablePhoneModels.map(model => (
-                    <SelectItem key={model} value={model}>{model}</SelectItem>
-                  ))}
-                  <SelectItem value="אחר - הזנה ידנית">אחר - הזנה ידנית</SelectItem>
-                </SelectContent>
-              </Select>
+              formData.brand && formData.brand !== "אחר" ? (
+                <div className="space-y-2">
+                  <SearchableSelect
+                    value={formData.size}
+                    onValueChange={(value) => {
+                      if (value === "אחר - הזנה ידנית") {
+                        setShowCustomPhoneModel(true);
+                        setFormData({ ...formData, size: "" });
+                      } else {
+                        setFormData({ ...formData, size: value });
+                      }
+                    }}
+                    options={[...availablePhoneModels, "אחר - הזנה ידנית"]}
+                    placeholder="בחר דגם"
+                    searchPlaceholder="חפש דגם..."
+                    emptyText="לא נמצאו דגמים"
+                  />
+                </div>
+              ) : (
+                <Select disabled>
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר יצרן תחילה" />
+                  </SelectTrigger>
+                  <SelectContent />
+                </Select>
+              )
             ) : (
               <div className="space-y-2">
                 <Input
