@@ -743,22 +743,18 @@ const SimilarListings = ({
     }
   };
 
+  const showNavigation = totalPages > 1;
+
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-bold">{getTitle()}</h3>
         {/* Navigation Arrows in Header */}
-        {items.length > 4 && (
+        {showNavigation && (
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleNext}
-              disabled={currentPage >= totalPages - 1}
-              className="h-8 w-8 rounded-full border-border hover:bg-muted disabled:opacity-40"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
+            <span className="text-sm text-muted-foreground">
+              {currentPage + 1}/{totalPages}
+            </span>
             <Button
               variant="outline"
               size="icon"
@@ -767,6 +763,15 @@ const SimilarListings = ({
               className="h-8 w-8 rounded-full border-border hover:bg-muted disabled:opacity-40"
             >
               <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleNext}
+              disabled={currentPage >= totalPages - 1}
+              className="h-8 w-8 rounded-full border-border hover:bg-muted disabled:opacity-40"
+            >
+              <ChevronLeft className="h-4 w-4" />
             </Button>
           </div>
         )}
