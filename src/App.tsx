@@ -34,6 +34,7 @@ import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
 import MobileNav from "./components/MobileNav";
 import TawkToChat from "./components/TawkToChat";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const AppContent = () => {
 
   return (
     <>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/cars" element={<Cars />} />
