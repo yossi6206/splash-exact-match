@@ -37,6 +37,16 @@ const categories = {
     "תנורים", "כיריים", "מיקרוגל", "מזגנים", "מאווררים",
     "מדיחי כלים", "שואבי אבק", "מערכות סטריאו", "טלוויזיות"
   ],
+  "מחשבים": [
+    "מחשבים ניידים", "מחשבים נייחים", "מחשבי גיימינג", "מחשבים לעבודה",
+    "מקבוק", "אולטרה בוק", "טאבלטים", "מסכים", "מקלדות", "עכברים",
+    "אוזניות", "כרטיסי מסך", "מעבדים", "זיכרון RAM", "כוננים", "לוחות אם"
+  ],
+  "מכשירים סלולריים": [
+    "אייפון", "סמסונג גלקסי", "שיאומי", "וואווי", "אופו", "וואן פלוס",
+    "גוגל פיקסל", "נוקיה", "מוטורולה", "שעונים חכמים", "אוזניות אלחוטיות",
+    "מטענים", "כיסויים", "מגני מסך", "סוללות חיצוניות"
+  ],
   "ספורט ופנאי": [
     "אופני כביש", "אופני הרים", "אופניים חשמליים", "קורקינטים",
     "ציוד כושר ביתי", "משקולות", "הליכונים", "אופני כושר",
@@ -62,6 +72,19 @@ const fashionBrands = ["Zara", "H&M", "Mango", "Castro", "Fox", "TNT", "Golf", "
 const fashionSizes = ["XS", "S", "M", "L", "XL", "XXL", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"];
 const babySizes = ["0-6 חודשים", "6-12 חודשים", "1-2 שנים", "2-4 שנים", "4-6 שנים", "6-8 שנים", "8-12 שנים"];
 const colors = ["לבן", "שחור", "אפור", "חום", "בז'", "כחול", "ירוק", "אדום", "ורוד", "סגול", "צהוב", "כתום", "כסוף", "זהב", "צבעוני"];
+
+// Computer brands and options
+const computerBrands = ["Apple", "Lenovo", "HP", "Dell", "Asus", "Acer", "MSI", "Microsoft", "Samsung", "LG", "Razer", "אחר"];
+const processors = ["Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "AMD Ryzen 3", "AMD Ryzen 5", "AMD Ryzen 7", "AMD Ryzen 9", "Apple M1", "Apple M2", "Apple M3", "אחר"];
+const ramOptions = ["4GB", "8GB", "16GB", "32GB", "64GB"];
+const storageOptions = ["128GB", "256GB", "512GB", "1TB", "2TB"];
+const storageTypes = ["SSD", "HDD", "SSD + HDD"];
+const screenSizes = ["11.6\"", "13.3\"", "14\"", "15.6\"", "16\"", "17.3\"", "24\"", "27\"", "32\""];
+
+// Phone brands and options
+const phoneBrands = ["Apple", "Samsung", "Xiaomi", "Huawei", "Oppo", "OnePlus", "Google", "Nokia", "Motorola", "Sony", "אחר"];
+const phoneStorageOptions = ["32GB", "64GB", "128GB", "256GB", "512GB", "1TB"];
+const phoneConditions = ["חדש באריזה", "כמו חדש", "מצב מעולה", "מצב טוב", "מצב סביר", "לחלקי חילוף"];
 
 const PostSecondhand = () => {
   const navigate = useNavigate();
@@ -433,6 +456,182 @@ const PostSecondhand = () => {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+        </>
+      );
+    }
+
+    // Computer fields
+    if (category === "מחשבים") {
+      return (
+        <>
+          <div className="space-y-2">
+            <Label htmlFor="brand">יצרן *</Label>
+            <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר יצרן" />
+              </SelectTrigger>
+              <SelectContent>
+                {computerBrands.map(brand => (
+                  <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="size">דגם *</Label>
+            <Input
+              id="size"
+              name="size"
+              value={formData.size}
+              onChange={handleInputChange}
+              placeholder="לדוגמה: MacBook Pro 14, ThinkPad X1 Carbon"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="material">מעבד</Label>
+            <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר מעבד" />
+              </SelectTrigger>
+              <SelectContent>
+                {processors.map(proc => (
+                  <SelectItem key={proc} value={proc}>{proc}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="dimensions">זיכרון RAM</Label>
+            <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר זיכרון" />
+              </SelectTrigger>
+              <SelectContent>
+                {ramOptions.map(ram => (
+                  <SelectItem key={ram} value={ram}>{ram}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="weight">נפח אחסון</Label>
+            <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר נפח" />
+              </SelectTrigger>
+              <SelectContent>
+                {storageOptions.map(storage => (
+                  <SelectItem key={storage} value={storage}>{storage}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="age">גודל מסך</Label>
+            <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר גודל מסך" />
+              </SelectTrigger>
+              <SelectContent>
+                {screenSizes.map(size => (
+                  <SelectItem key={size} value={size}>{size}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="color">צבע</Label>
+            <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר צבע" />
+              </SelectTrigger>
+              <SelectContent>
+                {colors.map(color => (
+                  <SelectItem key={color} value={color}>{color}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </>
+      );
+    }
+
+    // Phone fields
+    if (category === "מכשירים סלולריים") {
+      return (
+        <>
+          <div className="space-y-2">
+            <Label htmlFor="brand">יצרן *</Label>
+            <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר יצרן" />
+              </SelectTrigger>
+              <SelectContent>
+                {phoneBrands.map(brand => (
+                  <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="size">דגם *</Label>
+            <Input
+              id="size"
+              name="size"
+              value={formData.size}
+              onChange={handleInputChange}
+              placeholder="לדוגמה: iPhone 15 Pro, Galaxy S24 Ultra"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="weight">נפח אחסון *</Label>
+            <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר נפח אחסון" />
+              </SelectTrigger>
+              <SelectContent>
+                {phoneStorageOptions.map(storage => (
+                  <SelectItem key={storage} value={storage}>{storage}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="color">צבע *</Label>
+            <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר צבע" />
+              </SelectTrigger>
+              <SelectContent>
+                {colors.map(color => (
+                  <SelectItem key={color} value={color}>{color}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="year_manufactured">שנת ייצור</Label>
+            <Input
+              id="year_manufactured"
+              name="year_manufactured"
+              type="number"
+              value={formData.year_manufactured}
+              onChange={handleInputChange}
+              placeholder="2024"
+              min="2015"
+              max={new Date().getFullYear()}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="warranty">אחריות</Label>
+            <Input
+              id="warranty"
+              name="warranty"
+              value={formData.warranty}
+              onChange={handleInputChange}
+              placeholder="אחריות יבואן רשמי, 6 חודשים..."
+            />
           </div>
         </>
       );

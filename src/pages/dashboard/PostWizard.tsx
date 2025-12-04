@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { 
   Car, 
   Home, 
-  Laptop, 
   Package, 
   Briefcase, 
   Building2, 
@@ -17,7 +16,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-type Category = 'car' | 'property' | 'laptop' | 'secondhand' | 'job' | 'business' | 'freelancer' | 'project' | null;
+type Category = 'car' | 'property' | 'secondhand' | 'job' | 'business' | 'freelancer' | 'project' | null;
 
 const PostWizard = () => {
   const navigate = useNavigate();
@@ -58,17 +57,9 @@ const PostWizard = () => {
       route: '/dashboard/post-business'
     },
     {
-      id: 'laptop' as const,
-      title: 'מחשבים',
-      description: 'מחשב נייד, נייח, טאבלט או אביזרים',
-      icon: Laptop,
-      gradient: 'from-purple-500 to-purple-600',
-      route: '/dashboard/post-laptop'
-    },
-    {
       id: 'secondhand' as const,
       title: 'יד שנייה',
-      description: 'ריהוט, מוצרי חשמל, ספורט ועוד',
+      description: 'ריהוט, מוצרי חשמל, מחשבים, טלפונים ועוד',
       icon: Package,
       gradient: 'from-orange-500 to-orange-600',
       route: '/dashboard/post-secondhand'
