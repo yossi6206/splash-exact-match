@@ -34,6 +34,8 @@ interface CarData {
   vehicle_type: string | null;
   condition: string | null;
   category: string | null;
+  color: string | null;
+  test_until: string | null;
   location: string;
   price: string | null;
   features: string[] | null;
@@ -104,6 +106,14 @@ const CarDetails = () => {
 
   const images = carData?.images || [carImage1];
 
+  const formatTestDate = (dateStr: string | null) => {
+    if (!dateStr) return null;
+    const date = new Date(dateStr);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${year}`;
+  };
+
   const carDetails = carData ? {
     manufacturer: carData.manufacturer || "לא צוין",
     model: carData.model,
@@ -115,6 +125,8 @@ const CarDetails = () => {
     transmission: carData.transmission || "לא צוין",
     vehicle_type: carData.vehicle_type || "רכב פרטי",
     condition: carData.condition || "לא צוין",
+    color: carData.color || null,
+    test_until: formatTestDate(carData.test_until),
     location: carData.location,
     price: carData.price || "לא ציין מחיר",
     features: carData.features || []
@@ -419,7 +431,7 @@ const CarDetails = () => {
                 </div>
 
                 {/* Additional Info */}
-                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4 mb-4 sm:mb-6">
                   <div className="p-3 sm:p-4 rounded-lg bg-muted/50">
                     <div className="text-xs sm:text-sm text-muted-foreground mb-1">סוג דלק</div>
                     <div className="font-bold text-foreground text-sm sm:text-base">{carDetails.fuel_type}</div>
@@ -432,6 +444,18 @@ const CarDetails = () => {
                     <div className="text-xs sm:text-sm text-muted-foreground mb-1">מצב</div>
                     <div className="font-bold text-foreground text-sm sm:text-base">{carDetails.condition}</div>
                   </div>
+                  {carDetails.color && (
+                    <div className="p-3 sm:p-4 rounded-lg bg-muted/50">
+                      <div className="text-xs sm:text-sm text-muted-foreground mb-1">צבע</div>
+                      <div className="font-bold text-foreground text-sm sm:text-base">{carDetails.color}</div>
+                    </div>
+                  )}
+                  {carDetails.test_until && (
+                    <div className="p-3 sm:p-4 rounded-lg bg-muted/50">
+                      <div className="text-xs sm:text-sm text-muted-foreground mb-1">טסט עד</div>
+                      <div className="font-bold text-foreground text-sm sm:text-base">{carDetails.test_until}</div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Description */}
