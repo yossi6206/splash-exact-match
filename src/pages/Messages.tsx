@@ -5,8 +5,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { ConversationsList } from "@/components/ConversationsList";
 import { FreelancerChat } from "@/components/FreelancerChat";
 import MobileHeader from "@/components/MobileHeader";
-import { MessageSquare, ArrowRight } from "lucide-react";
+import { MessageSquare, ArrowRight, MapPin, Calendar, Star, Briefcase, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 interface Conversation {
   id: string;
@@ -17,6 +20,22 @@ interface Conversation {
   last_message_at: string | null;
   unread_count?: number;
   is_freelancer_view?: boolean;
+}
+
+interface FreelancerDetails {
+  id: string;
+  full_name: string;
+  title: string;
+  category: string;
+  location: string | null;
+  hourly_rate: number;
+  rating: number | null;
+  total_reviews: number | null;
+  experience_years: number | null;
+  skills: string[];
+  languages: string[] | null;
+  avatar_url: string | null;
+  created_at: string;
 }
 
 export default function Messages() {
@@ -31,6 +50,7 @@ export default function Messages() {
     otherUserAvatar: string | null;
     isFreelancerView: boolean;
   } | null>(null);
+  const [freelancerDetails, setFreelancerDetails] = useState<FreelancerDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Check if we were navigated here with a specific seller or freelancer
@@ -68,6 +88,37 @@ export default function Messages() {
       subscribeToConversations();
     }
   }, [user]);
+
+  // Fetch freelancer details when conversation is selected
+  useEffect(() => {
+    const fetchFreelancerDetails = async () => {
+      if (!selectedConversation || selectedConversation.isFreelancerView) {
+        setFreelancerDetails(null);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("freelancers")
+          .select("*")
+          .eq("id", selectedConversation.otherUserId)
+          .single();
+
+        if (error) {
+          console.error("Error fetching freelancer details:", error);
+          setFreelancerDetails(null);
+          return;
+        }
+
+        setFreelancerDetails(data);
+      } catch (error) {
+        console.error("Error fetching freelancer details:", error);
+        setFreelancerDetails(null);
+      }
+    };
+
+    fetchFreelancerDetails();
+  }, [selectedConversation]);
 
   const loadConversations = async () => {
     if (!user) return;
@@ -388,57 +439,188 @@ export default function Messages() {
         </div>
 
         {/* Chat Area - Full width on mobile when conversation selected */}
-        <div className={`${!selectedConversation ? 'hidden md:flex' : 'flex'} flex-1 flex-col min-h-0`}>
+        <div className={`${!selectedConversation ? 'hidden md:flex' : 'flex'} flex-1 min-h-0`}>
           {selectedConversation ? (
-            <div className="w-full h-full flex flex-col min-h-0">
-              {/* Chat Header - Shows who you're talking to */}
-              <div className="flex items-center gap-3 p-4 border-b bg-card flex-shrink-0">
-                {/* Mobile Back Button */}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden"
-                  onClick={() => setSelectedConversation(null)}
-                >
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
-                
-                {/* Avatar */}
-                {selectedConversation.otherUserAvatar ? (
-                  <img 
-                    src={selectedConversation.otherUserAvatar} 
-                    alt={selectedConversation.otherUserName}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-sm font-medium text-primary">
-                      {selectedConversation.otherUserName.slice(0, 2)}
+            <div className="w-full h-full flex min-h-0">
+              {/* Main Chat Section */}
+              <div className="flex-1 flex flex-col min-h-0">
+                {/* Chat Header - Shows who you're talking to */}
+                <div className="flex items-center gap-3 p-4 border-b bg-card flex-shrink-0">
+                  {/* Mobile Back Button */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden"
+                    onClick={() => setSelectedConversation(null)}
+                  >
+                    <ArrowRight className="h-5 w-5" />
+                  </Button>
+                  
+                  {/* Avatar */}
+                  {selectedConversation.otherUserAvatar ? (
+                    <img 
+                      src={selectedConversation.otherUserAvatar} 
+                      alt={selectedConversation.otherUserName}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="text-sm font-medium text-primary">
+                        {selectedConversation.otherUserName.slice(0, 2)}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {/* Name and status */}
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-foreground">{selectedConversation.otherUserName}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {selectedConversation.isFreelancerView ? "לקוח" : "בעל מקצוע"}
                     </span>
                   </div>
-                )}
+                </div>
                 
-                {/* Name and status */}
-                <div className="flex flex-col">
-                  <span className="font-semibold text-foreground">{selectedConversation.otherUserName}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {selectedConversation.isFreelancerView ? "לקוח" : "בעל מקצוע"}
-                  </span>
+                <div className="flex-1 min-h-0">
+                  <FreelancerChat
+                    conversationId={selectedConversation.conversationId}
+                    otherUserId={selectedConversation.otherUserId}
+                    otherUserName={selectedConversation.otherUserName}
+                    otherUserAvatar={selectedConversation.otherUserAvatar}
+                    isFreelancerView={selectedConversation.isFreelancerView}
+                    open={true}
+                    onOpenChange={() => setSelectedConversation(null)}
+                    embedded={true}
+                  />
                 </div>
               </div>
-              
-              <div className="flex-1 min-h-0">
-                <FreelancerChat
-                  conversationId={selectedConversation.conversationId}
-                  otherUserId={selectedConversation.otherUserId}
-                  otherUserName={selectedConversation.otherUserName}
-                  otherUserAvatar={selectedConversation.otherUserAvatar}
-                  isFreelancerView={selectedConversation.isFreelancerView}
-                  open={true}
-                  onOpenChange={() => setSelectedConversation(null)}
-                  embedded={true}
-                />
-              </div>
+
+              {/* Freelancer Details Sidebar - Desktop only */}
+              {freelancerDetails && !selectedConversation.isFreelancerView && (
+                <div className="hidden lg:block w-80 border-r bg-card overflow-y-auto">
+                  <div className="p-4 space-y-4">
+                    {/* Header */}
+                    <div className="text-center">
+                      {freelancerDetails.avatar_url ? (
+                        <img 
+                          src={freelancerDetails.avatar_url} 
+                          alt={freelancerDetails.full_name}
+                          className="w-20 h-20 rounded-full object-cover mx-auto mb-3"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                          <span className="text-2xl font-medium text-primary">
+                            {freelancerDetails.full_name.slice(0, 2)}
+                          </span>
+                        </div>
+                      )}
+                      <h3 className="font-bold text-lg">{freelancerDetails.full_name}</h3>
+                      <p className="text-sm text-muted-foreground">{freelancerDetails.title}</p>
+                      <Badge variant="secondary" className="mt-2">{freelancerDetails.category}</Badge>
+                    </div>
+
+                    <Separator />
+
+                    {/* Details */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-sm">אודות {freelancerDetails.full_name}</h4>
+                      
+                      {freelancerDetails.location && (
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground flex items-center gap-2">
+                            <MapPin className="h-4 w-4" />
+                            מיקום
+                          </span>
+                          <span className="font-medium">{freelancerDetails.location}</span>
+                        </div>
+                      )}
+
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground flex items-center gap-2">
+                          <Calendar className="h-4 w-4" />
+                          חבר מאז
+                        </span>
+                        <span className="font-medium">
+                          {new Date(freelancerDetails.created_at).toLocaleDateString('he-IL', { 
+                            month: 'short', 
+                            year: 'numeric' 
+                          })}
+                        </span>
+                      </div>
+
+                      {freelancerDetails.experience_years && (
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground flex items-center gap-2">
+                            <Briefcase className="h-4 w-4" />
+                            ניסיון
+                          </span>
+                          <span className="font-medium">{freelancerDetails.experience_years} שנים</span>
+                        </div>
+                      )}
+
+                      {freelancerDetails.languages && freelancerDetails.languages.length > 0 && (
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground flex items-center gap-2">
+                            <Globe className="h-4 w-4" />
+                            שפות
+                          </span>
+                          <span className="font-medium">{freelancerDetails.languages.join(", ")}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <Separator />
+
+                    {/* Stats */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-sm">נתונים</h4>
+                      
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">תעריף שעתי</span>
+                        <span className="font-medium">₪{freelancerDetails.hourly_rate}</span>
+                      </div>
+
+                      {freelancerDetails.rating !== null && freelancerDetails.rating > 0 && (
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">דירוג</span>
+                          <span className="font-medium flex items-center gap-1">
+                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                            {Number(freelancerDetails.rating).toFixed(1)}
+                            {freelancerDetails.total_reviews && freelancerDetails.total_reviews > 0 && (
+                              <span className="text-muted-foreground">
+                                ({freelancerDetails.total_reviews})
+                              </span>
+                            )}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Skills */}
+                    {freelancerDetails.skills && freelancerDetails.skills.length > 0 && (
+                      <>
+                        <Separator />
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-sm">מיומנויות</h4>
+                          <div className="flex flex-wrap gap-1">
+                            {freelancerDetails.skills.slice(0, 6).map((skill, index) => (
+                              <Badge key={index} variant="outline" className="text-xs">
+                                {skill}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {/* View Profile Button */}
+                    <Link to={`/freelancers/${freelancerDetails.id}`}>
+                      <Button variant="outline" className="w-full mt-4">
+                        צפה בפרופיל מלא
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex-1 flex items-center justify-center">
