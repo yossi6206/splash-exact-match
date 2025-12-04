@@ -179,9 +179,12 @@ const SecondhandMegaMenu = ({ hoveredMenu, setHoveredMenu }: SecondhandMegaMenuP
       </Button>
       
       {hoveredMenu === "יד שניה" && (
-        <div className="fixed inset-x-0 top-16 pt-2 z-50 flex justify-center px-4">
-          <div 
-            className="bg-white border border-border rounded-lg animate-fade-in flex max-h-[70vh] w-full max-w-[900px]" 
+        <>
+          {/* Invisible bridge to prevent menu from closing when moving mouse */}
+          <div className="absolute top-full left-0 right-0 h-4 bg-transparent" />
+          <div className="fixed inset-x-0 top-16 pt-2 z-50 flex justify-center px-4 pointer-events-none">
+            <div 
+              className="bg-white border border-border rounded-lg animate-fade-in flex max-h-[70vh] w-full max-w-[900px] pointer-events-auto"
             style={{ boxShadow: 'var(--shadow-dropdown)' }}
           >
             {/* Right side - Categories list */}
@@ -261,7 +264,8 @@ const SecondhandMegaMenu = ({ hoveredMenu, setHoveredMenu }: SecondhandMegaMenuP
               )}
             </div>
           </div>
-        </div>
+          </div>
+        </>
       )}
     </div>
   );
