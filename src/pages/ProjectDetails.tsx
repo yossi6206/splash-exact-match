@@ -13,9 +13,10 @@ import {
   Package,
   ChevronRight,
   ChevronLeft,
-  Share2,
-  Flag,
   Sparkles,
+  CheckCircle2,
+  Users,
+  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +31,14 @@ import CloudflareImage from "@/components/CloudflareImage";
 import { ShareMenu } from "@/components/ShareMenu";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface Project {
   id: string;
@@ -118,6 +127,17 @@ const ProjectDetails = () => {
     return "צור קשר למחיר";
   };
 
+  const getRoomsDisplay = () => {
+    if (!project) return null;
+    if (project.min_rooms && project.max_rooms) {
+      if (project.min_rooms === project.max_rooms) {
+        return `${project.min_rooms} חדרים`;
+      }
+      return `${project.min_rooms}-${project.max_rooms} חדרים`;
+    }
+    return null;
+  };
+
   const images = project?.images || [];
 
   const nextImage = () => {
@@ -134,15 +154,15 @@ const ProjectDetails = () => {
         <Header />
         <MobileHeader />
         <div className="container mx-auto px-4 py-8">
-          <Skeleton className="h-96 w-full rounded-lg mb-6" />
-          <Skeleton className="h-8 w-1/2 mb-4" />
+          <Skeleton className="h-[500px] w-full rounded-2xl mb-6" />
+          <Skeleton className="h-10 w-1/2 mb-4" />
           <Skeleton className="h-6 w-1/3 mb-8" />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-4">
-              <Skeleton className="h-48 w-full" />
-              <Skeleton className="h-32 w-full" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              <Skeleton className="h-48 w-full rounded-xl" />
+              <Skeleton className="h-32 w-full rounded-xl" />
             </div>
-            <Skeleton className="h-64 w-full" />
+            <Skeleton className="h-96 w-full rounded-xl" />
           </div>
         </div>
         <Footer />
@@ -156,14 +176,18 @@ const ProjectDetails = () => {
       <div className="min-h-screen bg-background" dir="rtl">
         <Header />
         <MobileHeader />
-        <div className="container mx-auto px-4 py-16 text-center">
-          <Building2 className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h1 className="text-2xl font-bold mb-2">הפרויקט לא נמצא</h1>
-          <p className="text-muted-foreground mb-4">
-            הפרויקט שחיפשת אינו קיים או שהוסר
+        <div className="container mx-auto px-4 py-20 text-center">
+          <div className="bg-muted/30 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+            <Building2 className="h-12 w-12 text-muted-foreground" />
+          </div>
+          <h1 className="text-3xl font-bold mb-3">הפרויקט לא נמצא</h1>
+          <p className="text-muted-foreground mb-6 text-lg">
+            הפרויקט שחיפשת אינו קיים או שהוסר מהמערכת
           </p>
           <Link to="/projects">
-            <Button>חזרה לפרויקטים</Button>
+            <Button size="lg" className="px-8">
+              חזרה לפרויקטים
+            </Button>
           </Link>
         </div>
         <Footer />
@@ -179,83 +203,110 @@ const ProjectDetails = () => {
 
       <main className="container mx-auto px-4 py-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-          <Link to="/" className="hover:text-primary">
-            ראשי
-          </Link>
-          <ChevronLeft className="h-4 w-4" />
-          <Link to="/projects" className="hover:text-primary">
-            פרויקטים חדשים
-          </Link>
-          <ChevronLeft className="h-4 w-4" />
-          <span className="text-foreground">{project.title}</span>
-        </nav>
+        <Breadcrumb className="mb-6">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/">ראשי</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>
+              <ChevronLeft className="h-4 w-4" />
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/projects">פרויקטים חדשים</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>
+              <ChevronLeft className="h-4 w-4" />
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage>{project.title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-        {/* Image Gallery */}
+        {/* Hero Image Gallery */}
         {images.length > 0 && (
-          <div className="relative h-[300px] md:h-[500px] rounded-xl overflow-hidden mb-6">
+          <div className="relative h-[350px] md:h-[550px] rounded-2xl overflow-hidden mb-6 shadow-xl">
             <CloudflareImage
               src={images[currentImageIndex]}
               alt={project.title}
               className="w-full h-full object-cover"
             />
+            
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
+            {/* Badges */}
+            <div className="absolute top-4 right-4 flex gap-2">
+              <Badge className="bg-primary text-primary-foreground text-sm px-3 py-1 shadow-lg">
+                {project.listing_type}
+              </Badge>
+              <Badge variant="secondary" className="text-sm px-3 py-1 shadow-lg bg-background/90 backdrop-blur-sm">
+                {project.project_type}
+              </Badge>
+            </div>
+
+            {/* Title on Image */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+              <div className="flex items-center gap-2 text-white/90 mb-2">
+                <MapPin className="h-4 w-4" />
+                <span className="text-sm md:text-base">
+                  {project.neighborhood
+                    ? `${project.location}, ${project.neighborhood}`
+                    : project.location}
+                </span>
+              </div>
+              <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">
+                {project.title}
+              </h1>
+              <p className="text-white/80 text-base md:text-lg">
+                מבית <span className="font-semibold text-white">{project.developer_name}</span>
+              </p>
+            </div>
+
+            {/* Navigation Arrows */}
             {images.length > 1 && (
               <>
                 <Button
                   variant="secondary"
                   size="icon"
-                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover:bg-background shadow-lg h-12 w-12"
                   onClick={prevImage}
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronRight className="h-6 w-6" />
                 </Button>
                 <Button
                   variant="secondary"
                   size="icon"
-                  className="absolute left-4 top-1/2 -translate-y-1/2"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover:bg-background shadow-lg h-12 w-12"
                   onClick={nextImage}
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                  <ChevronLeft className="h-6 w-6" />
                 </Button>
 
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {images.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentImageIndex(idx)}
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        idx === currentImageIndex
-                          ? "bg-white w-6"
-                          : "bg-white/50"
-                      }`}
-                    />
-                  ))}
+                {/* Image Counter */}
+                <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-sm">
+                  {currentImageIndex + 1} / {images.length}
                 </div>
               </>
             )}
-
-            {/* Badges */}
-            <div className="absolute top-4 right-4 flex gap-2">
-              <Badge className="bg-primary text-primary-foreground">
-                {project.listing_type}
-              </Badge>
-              <Badge variant="secondary">{project.project_type}</Badge>
-            </div>
           </div>
         )}
 
         {/* Thumbnail Gallery */}
         {images.length > 1 && (
-          <div className="flex gap-2 overflow-x-auto pb-4 mb-6">
+          <div className="flex gap-3 overflow-x-auto pb-4 mb-8 scrollbar-hide">
             {images.map((img, idx) => (
               <button
                 key={idx}
                 onClick={() => setCurrentImageIndex(idx)}
-                className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                className={`flex-shrink-0 w-24 h-24 md:w-28 md:h-28 rounded-xl overflow-hidden transition-all duration-200 ${
                   idx === currentImageIndex
-                    ? "border-primary"
-                    : "border-transparent"
+                    ? "ring-2 ring-primary ring-offset-2 ring-offset-background scale-105"
+                    : "opacity-70 hover:opacity-100"
                 }`}
               >
                 <CloudflareImage
@@ -268,62 +319,52 @@ const ProjectDetails = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Title & Developer */}
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold mb-2">
-                {project.title}
-              </h1>
-              <p className="text-lg text-muted-foreground mb-2">
-                מבית {project.developer_name}
-              </p>
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <MapPin className="h-5 w-5" />
-                <span>
-                  {project.neighborhood
-                    ? `${project.location}, ${project.neighborhood}`
-                    : project.location}
-                </span>
-              </div>
-            </div>
-
-            {/* Quick Stats */}
+            {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {project.buildings_count && (
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Layers className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <p className="font-bold text-lg">{project.buildings_count}</p>
+                <Card className="border-0 shadow-md bg-gradient-to-br from-background to-muted/30">
+                  <CardContent className="p-5 text-center">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 mx-auto mb-3 flex items-center justify-center">
+                      <Layers className="h-6 w-6 text-primary" />
+                    </div>
+                    <p className="font-bold text-2xl">{project.buildings_count}</p>
                     <p className="text-sm text-muted-foreground">בניינים</p>
                   </CardContent>
                 </Card>
               )}
               {project.floors_count && (
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Building2 className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <p className="font-bold text-lg">{project.floors_count}</p>
+                <Card className="border-0 shadow-md bg-gradient-to-br from-background to-muted/30">
+                  <CardContent className="p-5 text-center">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 mx-auto mb-3 flex items-center justify-center">
+                      <Building2 className="h-6 w-6 text-primary" />
+                    </div>
+                    <p className="font-bold text-2xl">{project.floors_count}</p>
                     <p className="text-sm text-muted-foreground">קומות</p>
                   </CardContent>
                 </Card>
               )}
               {project.total_units && (
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Home className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <p className="font-bold text-lg">{project.total_units}</p>
-                    <p className="text-sm text-muted-foreground">יחידות</p>
+                <Card className="border-0 shadow-md bg-gradient-to-br from-background to-muted/30">
+                  <CardContent className="p-5 text-center">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 mx-auto mb-3 flex items-center justify-center">
+                      <Home className="h-6 w-6 text-primary" />
+                    </div>
+                    <p className="font-bold text-2xl">{project.total_units}</p>
+                    <p className="text-sm text-muted-foreground">יחידות דיור</p>
                   </CardContent>
                 </Card>
               )}
               {project.delivery_date && (
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Calendar className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <p className="font-bold text-lg">{project.delivery_date}</p>
-                    <p className="text-sm text-muted-foreground">אכלוס</p>
+                <Card className="border-0 shadow-md bg-gradient-to-br from-background to-muted/30">
+                  <CardContent className="p-5 text-center">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 mx-auto mb-3 flex items-center justify-center">
+                      <Calendar className="h-6 w-6 text-primary" />
+                    </div>
+                    <p className="font-bold text-xl">{project.delivery_date}</p>
+                    <p className="text-sm text-muted-foreground">מועד אכלוס</p>
                   </CardContent>
                 </Card>
               )}
@@ -331,12 +372,15 @@ const ProjectDetails = () => {
 
             {/* Description */}
             {project.description && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>על הפרויקט</CardTitle>
+              <Card className="border-0 shadow-md overflow-hidden">
+                <CardHeader className="bg-muted/30 border-b">
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                    <Building2 className="h-5 w-5 text-primary" />
+                    אודות הפרויקט
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground whitespace-pre-line">
+                <CardContent className="p-6">
+                  <p className="text-muted-foreground leading-relaxed whitespace-pre-line text-base">
                     {project.description}
                   </p>
                 </CardContent>
@@ -345,16 +389,23 @@ const ProjectDetails = () => {
 
             {/* Features */}
             {project.features && project.features.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>מאפיינים</CardTitle>
+              <Card className="border-0 shadow-md overflow-hidden">
+                <CardHeader className="bg-muted/30 border-b">
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                    <CheckCircle2 className="h-5 w-5 text-primary" />
+                    מאפייני הפרויקט
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
+                <CardContent className="p-6">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {project.features.map((feature, idx) => (
-                      <Badge key={idx} variant="secondary">
-                        {feature}
-                      </Badge>
+                      <div
+                        key={idx}
+                        className="flex items-center gap-3 p-3 rounded-lg bg-muted/30"
+                      >
+                        <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                        <span className="text-sm">{feature}</span>
+                      </div>
                     ))}
                   </div>
                 </CardContent>
@@ -363,22 +414,22 @@ const ProjectDetails = () => {
 
             {/* Amenities */}
             {project.amenities && project.amenities.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+              <Card className="border-0 shadow-md overflow-hidden">
+                <CardHeader className="bg-muted/30 border-b">
+                  <CardTitle className="flex items-center gap-2 text-xl">
                     <Sparkles className="h-5 w-5 text-primary" />
                     מתקנים ושירותים
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-6">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {project.amenities.map((amenity, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-2 text-muted-foreground"
+                        className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10"
                       >
-                        <div className="w-2 h-2 rounded-full bg-primary" />
-                        <span>{amenity}</span>
+                        <Sparkles className="h-4 w-4 text-primary flex-shrink-0" />
+                        <span className="text-sm">{amenity}</span>
                       </div>
                     ))}
                   </div>
@@ -386,24 +437,27 @@ const ProjectDetails = () => {
               </Card>
             )}
 
-            {/* Included */}
+            {/* Included in Price */}
             {(project.parking_included || project.storage_included) && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>כלול במחיר</CardTitle>
+              <Card className="border-0 shadow-md overflow-hidden">
+                <CardHeader className="bg-muted/30 border-b">
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                    <Package className="h-5 w-5 text-primary" />
+                    כלול במחיר
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-6">
                   <div className="flex flex-wrap gap-4">
                     {project.parking_included && (
-                      <div className="flex items-center gap-2">
-                        <Car className="h-5 w-5 text-primary" />
-                        <span>חניה</span>
+                      <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                        <Car className="h-5 w-5 text-green-600" />
+                        <span className="font-medium text-green-700">חניה</span>
                       </div>
                     )}
                     {project.storage_included && (
-                      <div className="flex items-center gap-2">
-                        <Package className="h-5 w-5 text-primary" />
-                        <span>מחסן</span>
+                      <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                        <Package className="h-5 w-5 text-green-600" />
+                        <span className="font-medium text-green-700">מחסן</span>
                       </div>
                     )}
                   </div>
@@ -415,63 +469,75 @@ const ProjectDetails = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Price Card */}
-            <Card className="sticky top-20">
-              <CardContent className="p-6">
-                <div className="text-center mb-6">
-                  <p className="text-sm text-muted-foreground mb-1">
-                    טווח מחירים
+            <Card className="sticky top-20 border-0 shadow-xl overflow-hidden">
+              {/* Price Header */}
+              <div className="bg-gradient-to-r from-primary to-primary/80 p-6 text-primary-foreground">
+                <p className="text-sm opacity-90 mb-1">טווח מחירים</p>
+                <p className="text-2xl md:text-3xl font-bold">
+                  {getPriceDisplay()}
+                </p>
+                {getRoomsDisplay() && (
+                  <p className="text-sm opacity-90 mt-2">
+                    {getRoomsDisplay()}
                   </p>
-                  <p className="text-2xl md:text-3xl font-bold text-primary">
-                    {getPriceDisplay()}
-                  </p>
-                  {project.min_rooms && project.max_rooms && (
-                    <p className="text-sm text-muted-foreground mt-2">
-                      {project.min_rooms === project.max_rooms
-                        ? `${project.min_rooms} חדרים`
-                        : `${project.min_rooms}-${project.max_rooms} חדרים`}
-                    </p>
-                  )}
-                </div>
+                )}
+              </div>
 
+              <CardContent className="p-6 space-y-5">
+                {/* Available Units */}
                 {project.available_units && project.total_units && (
-                  <div className="bg-muted rounded-lg p-4 mb-6 text-center">
-                    <p className="text-2xl font-bold text-primary">
-                      {project.available_units}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      יחידות פנויות מתוך {project.total_units}
-                    </p>
+                  <div className="bg-muted/50 rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-muted-foreground">יחידות פנויות</span>
+                      <Users className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-bold text-primary">{project.available_units}</span>
+                      <span className="text-muted-foreground">מתוך {project.total_units}</span>
+                    </div>
+                    {/* Progress bar */}
+                    <div className="mt-3 h-2 bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-primary rounded-full transition-all"
+                        style={{ width: `${(project.available_units / project.total_units) * 100}%` }}
+                      />
+                    </div>
                   </div>
                 )}
 
-                <Separator className="my-4" />
+                {project.delivery_date && (
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
+                    <Clock className="h-5 w-5 text-primary" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">מועד אכלוס משוער</p>
+                      <p className="font-semibold">{project.delivery_date}</p>
+                    </div>
+                  </div>
+                )}
+
+                <Separator />
 
                 {/* Contact Info */}
                 <div className="space-y-3">
                   {project.contact_name && (
-                    <p className="font-medium text-center">
-                      {project.contact_name}
-                    </p>
+                    <div className="text-center pb-2">
+                      <p className="text-sm text-muted-foreground">איש קשר</p>
+                      <p className="font-semibold text-lg">{project.contact_name}</p>
+                    </div>
                   )}
 
                   {project.contact_phone && (
-                    <a
-                      href={`tel:${project.contact_phone}`}
-                      className="flex items-center justify-center gap-2 w-full"
-                    >
-                      <Button className="w-full gap-2">
-                        <Phone className="h-4 w-4" />
+                    <a href={`tel:${project.contact_phone}`}>
+                      <Button className="w-full gap-2 h-12 text-base shadow-lg" size="lg">
+                        <Phone className="h-5 w-5" />
                         {project.contact_phone}
                       </Button>
                     </a>
                   )}
 
                   {project.contact_email && (
-                    <a
-                      href={`mailto:${project.contact_email}`}
-                      className="flex items-center justify-center gap-2 w-full"
-                    >
-                      <Button variant="outline" className="w-full gap-2">
+                    <a href={`mailto:${project.contact_email}`}>
+                      <Button variant="outline" className="w-full gap-2 h-11" size="lg">
                         <Mail className="h-4 w-4" />
                         שלח מייל
                       </Button>
@@ -483,9 +549,8 @@ const ProjectDetails = () => {
                       href={project.website_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full"
                     >
-                      <Button variant="outline" className="w-full gap-2">
+                      <Button variant="outline" className="w-full gap-2 h-11" size="lg">
                         <Globe className="h-4 w-4" />
                         אתר הפרויקט
                       </Button>
@@ -493,7 +558,7 @@ const ProjectDetails = () => {
                   )}
                 </div>
 
-                <Separator className="my-4" />
+                <Separator />
 
                 {/* Actions */}
                 <div className="flex gap-2">
