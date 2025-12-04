@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import PostAdDialog from "@/components/PostAdDialog";
-
+import SecondhandMegaMenu from "@/components/SecondhandMegaMenu";
 import { 
   MessageSquare, 
   Heart, 
@@ -433,57 +433,10 @@ const Header = () => {
                 )}
               </div>
 
-              <div 
-                className="relative"
-                onMouseEnter={() => setHoveredMenu("יד שניה")}
-                onMouseLeave={() => setHoveredMenu(null)}
-              >
-                <Button variant="ghost" className="text-sm font-medium" asChild>
-                  <Link to="/secondhand">יד שניה</Link>
-                </Button>
-                
-                {hoveredMenu === "יד שניה" && megaMenuData["יד שניה"] && (
-                  <div className="absolute top-full right-0 pt-2 z-50">
-                    <div className="bg-white border border-primary/20 rounded-lg p-6 w-[800px] animate-fade-in" style={{ boxShadow: 'var(--shadow-dropdown)' }}>
-                      <div className="grid grid-cols-5 gap-6">
-                        {megaMenuData["יד שניה"].columns.map((column, index) => {
-                          const categorySlugMap: Record<string, string> = {
-                            "ריהוט": "furniture",
-                            "מוצרי חשמל": "electronics",
-                            "ספורט ופנאי": "sports",
-                            "אופנה": "fashion",
-                            "תינוקות וילדים": "kids"
-                          };
-                          
-                          return (
-                            <div key={index}>
-                              <Link 
-                                to={`/secondhand/${categorySlugMap[column.title]}`}
-                                className="flex items-center gap-2 text-sm font-bold text-primary mb-3 pb-2 border-b-2 border-primary/20 group hover:text-primary/80 transition-colors"
-                              >
-                                <column.icon className="h-4 w-4 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
-                                <h3 className="whitespace-nowrap">{column.title}</h3>
-                              </Link>
-                              <ul className="space-y-1.5">
-                                {column.items.map((item, itemIndex) => (
-                                  <li key={itemIndex}>
-                                    <Link 
-                                      to={`/secondhand/${categorySlugMap[column.title]}`}
-                                      className="text-sm text-foreground hover:text-primary transition-colors block py-1.5 hover:underline"
-                                    >
-                                      {item}
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <SecondhandMegaMenu 
+                hoveredMenu={hoveredMenu}
+                setHoveredMenu={setHoveredMenu}
+              />
 
               <div 
                 className="relative"
