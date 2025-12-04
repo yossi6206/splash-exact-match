@@ -13,7 +13,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useSaveSearch } from "@/hooks/useSaveSearch";
-import { getCarTitle } from "@/utils/carUtils";
+import { getCarTitle } from "@/utils/titleUtils";
 import carImage1 from "@/assets/item-car.jpg";
 
 interface Car {

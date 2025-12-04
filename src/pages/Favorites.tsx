@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/hooks/useFavorites";
 import { CloudflareImage } from "@/components/CloudflareImage";
+import { getCarTitle, getLaptopTitle } from "@/utils/titleUtils";
 
 // Unified card component for all favorite types
 const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
@@ -33,9 +34,9 @@ const UnifiedFavoriteCard = ({ favorite }: { favorite: any }) => {
   const getTitle = () => {
     const data = favorite.itemData;
     switch (favorite.item_type) {
-      case 'car': return `${data.manufacturer || ''} ${data.model || ''}`.trim();
+      case 'car': return getCarTitle(data.manufacturer, data.model || '');
       case 'property': return data.title;
-      case 'laptop': return `${data.brand} ${data.model}`;
+      case 'laptop': return getLaptopTitle(data.brand, data.model);
       case 'job': return data.title;
       case 'freelancer': return data.full_name;
       case 'business': return data.title;

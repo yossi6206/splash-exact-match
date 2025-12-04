@@ -15,6 +15,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { useCountUp } from "@/hooks/useCountUp";
 import { supabase } from "@/integrations/supabase/client";
 import { useSaveSearch } from "@/hooks/useSaveSearch";
+import { getLaptopTitle } from "@/utils/titleUtils";
 import laptopImage from "@/assets/item-laptop.jpg";
 import phoneImage from "@/assets/item-phone.jpg";
 import heroLaptopImage from "@/assets/hero-laptop.jpg";
@@ -366,7 +367,7 @@ const Laptops = () => {
                   const laptopForCard = {
                     id: laptop.id,
                     image: laptop.images && laptop.images.length > 0 ? laptop.images[0] : laptopImage,
-                    title: `${laptop.brand} ${laptop.model}`,
+                    title: getLaptopTitle(laptop.brand, laptop.model),
                     subtitle: `${laptop.processor || ''} ${laptop.ram ? laptop.ram + 'GB' : ''} ${laptop.storage ? laptop.storage + 'GB' : ''}`.trim(),
                     price: laptop.price,
                     condition: laptop.condition,

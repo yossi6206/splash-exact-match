@@ -29,6 +29,7 @@ import {
   Phone,
   Users
 } from "lucide-react";
+import { getCarTitle, getLaptopTitle } from "@/utils/titleUtils";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -101,7 +102,7 @@ const MyAds = () => {
       const allListings: Listing[] = [
         ...(carsRes.data || []).map(car => ({
           ...car,
-          title: `${car.manufacturer || ''} ${car.model}`.trim(),
+          title: getCarTitle(car.manufacturer, car.model),
           type: 'car' as const
         })),
         ...(propsRes.data || []).map(prop => ({
@@ -110,7 +111,7 @@ const MyAds = () => {
         })),
         ...(laptopsRes.data || []).map(laptop => ({
           ...laptop,
-          title: `${laptop.brand} ${laptop.model}`,
+          title: getLaptopTitle(laptop.brand, laptop.model),
           type: 'laptop' as const
         })),
         ...(secondhandRes.data || []).map(item => ({

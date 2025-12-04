@@ -19,7 +19,7 @@ import SimilarListings from "@/components/SimilarListings";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import { CloudflareImage } from "@/components/CloudflareImage";
-import { getCarTitle } from "@/utils/carUtils";
+import { getCarTitle } from "@/utils/titleUtils";
 
 interface CarData {
   id: string;

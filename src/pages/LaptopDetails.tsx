@@ -21,6 +21,7 @@ import SimilarListings from "@/components/SimilarListings";
 import { ReportListingDialog } from "@/components/ReportListingDialog";
 import { ShareMenu } from "@/components/ShareMenu";
 import { CloudflareImage } from "@/components/CloudflareImage";
+import { getLaptopTitle } from "@/utils/titleUtils";
 
 const LaptopDetails = () => {
   const { id } = useParams();
@@ -141,7 +142,7 @@ const LaptopDetails = () => {
           <span className="mx-2">/</span>
           <span className="hover:text-foreground cursor-pointer">מחשבים ניידים</span>
           <span className="mx-2">/</span>
-          <span className="text-foreground">{laptop.brand} {laptop.model}</span>
+          <span className="text-foreground">{getLaptopTitle(laptop.brand, laptop.model)}</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
@@ -154,7 +155,7 @@ const LaptopDetails = () => {
                 <div className="relative aspect-[4/3] bg-muted">
                   <CloudflareImage
                     src={images[selectedImage]}
-                    alt={`${laptop.brand} ${laptop.model}`}
+                    alt={getLaptopTitle(laptop.brand, laptop.model)}
                     preset="hero"
                     className="w-full h-full object-contain p-8"
                   />
@@ -213,7 +214,7 @@ const LaptopDetails = () => {
             {/* Title and Info */}
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-foreground mb-3">{laptop.brand} {laptop.model}</h1>
+                <h1 className="text-3xl font-bold text-foreground mb-3">{getLaptopTitle(laptop.brand, laptop.model)}</h1>
                 <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <MapPin className="h-4 w-4" />
@@ -244,7 +245,7 @@ const LaptopDetails = () => {
                   <Heart className="h-5 w-5" />
                 </Button>
                 <ShareMenu 
-                  title={`${laptop.brand} ${laptop.model}`}
+                  title={getLaptopTitle(laptop.brand, laptop.model)}
                   variant="outline"
                 />
                 <ReportListingDialog itemId={id!} itemType="laptop" />
