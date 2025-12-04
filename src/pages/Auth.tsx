@@ -49,13 +49,28 @@ const Auth = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleGoogleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/`
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/`
+        }
+      });
+      if (error) {
+        toast({
+          title: "שגיאה בהתחברות",
+          description: "לא ניתן להתחבר דרך Google כרגע. נסה שוב.",
+          variant: "destructive"
+        });
+        console.error('Error signing in with Google:', error);
       }
-    });
-    if (error) console.error('Error signing in with Google:', error);
+    } catch (error) {
+      toast({
+        title: "שגיאה",
+        description: "אירעה שגיאה בהתחברות. נסה שוב.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
