@@ -120,6 +120,7 @@ export type Database = {
         Row: {
           category: string | null
           clicks_count: number | null
+          color: string | null
           condition: string | null
           contacts_count: number | null
           created_at: string
@@ -142,6 +143,7 @@ export type Database = {
           seller_name: string | null
           seller_phone: string | null
           status: string
+          test_until: string | null
           transmission: string | null
           updated_at: string
           user_id: string
@@ -152,6 +154,7 @@ export type Database = {
         Insert: {
           category?: string | null
           clicks_count?: number | null
+          color?: string | null
           condition?: string | null
           contacts_count?: number | null
           created_at?: string
@@ -174,6 +177,7 @@ export type Database = {
           seller_name?: string | null
           seller_phone?: string | null
           status?: string
+          test_until?: string | null
           transmission?: string | null
           updated_at?: string
           user_id: string
@@ -184,6 +188,7 @@ export type Database = {
         Update: {
           category?: string | null
           clicks_count?: number | null
+          color?: string | null
           condition?: string | null
           contacts_count?: number | null
           created_at?: string
@@ -206,6 +211,7 @@ export type Database = {
           seller_name?: string | null
           seller_phone?: string | null
           status?: string
+          test_until?: string | null
           transmission?: string | null
           updated_at?: string
           user_id?: string
