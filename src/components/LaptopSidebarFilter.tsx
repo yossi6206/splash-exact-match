@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Laptop, DollarSign, Cpu, HardDrive, Monitor, MapPin, RotateCcw } from "lucide-react";
+import { Laptop, DollarSign, Cpu, HardDrive, Monitor, MapPin, RotateCcw, Wifi, Battery, MonitorSmartphone, Settings } from "lucide-react";
 import { useState } from "react";
 
 interface LaptopSidebarFilterProps {
@@ -14,9 +14,14 @@ interface LaptopSidebarFilterProps {
     processors?: Record<string, number>;
     ramOptions?: Record<string, number>;
     storageOptions?: Record<string, number>;
+    storageTypes?: Record<string, number>;
     screenSizes?: Record<string, number>;
+    resolutions?: Record<string, number>;
+    graphicsCards?: Record<string, number>;
+    operatingSystems?: Record<string, number>;
     conditions?: Record<string, number>;
     cities?: Record<string, number>;
+    features?: Record<string, number>;
   };
 }
 
@@ -25,22 +30,127 @@ export interface LaptopFilters {
   processors: string[];
   ramOptions: string[];
   storageOptions: string[];
+  storageTypes: string[];
   screenSizes: string[];
+  resolutions: string[];
+  graphicsCards: string[];
+  operatingSystems: string[];
   priceMin: number;
   priceMax: number;
   conditions: string[];
   cities: string[];
+  features: string[];
 }
 
-const brands = ["Apple", "Lenovo", "HP", "Dell", "ASUS", "Microsoft", "MSI", "Acer"];
-const processors = ["Intel Core i9", "Intel Core i7", "Intel Core i5", "AMD Ryzen 9", "AMD Ryzen 7", "Apple M3", "Apple M2", "Apple M1"];
-const ramOptions = ["4GB", "8GB", "16GB", "32GB", "64GB+"];
+// יצרנים - תואמים לטופס PostLaptop
+const brands = ["Dell", "HP", "Lenovo", "Apple", "Asus", "Acer", "MSI", "Microsoft", "אחר"];
+
+// מעבדים
+const processors = [
+  "Intel Core i9", 
+  "Intel Core i7", 
+  "Intel Core i5", 
+  "Intel Core i3",
+  "AMD Ryzen 9", 
+  "AMD Ryzen 7", 
+  "AMD Ryzen 5",
+  "AMD Ryzen 3",
+  "Apple M3 Pro",
+  "Apple M3",
+  "Apple M2 Pro", 
+  "Apple M2", 
+  "Apple M1"
+];
+
+// זיכרון RAM - תואם לטופס
+const ramOptions = ["4GB", "8GB", "16GB", "32GB", "64GB"];
+
+// נפח אחסון
 const storageOptions = ["128GB", "256GB", "512GB", "1TB", "2TB+"];
-const screenSizes = ['עד 13"', '13"-14"', '14"-15"', '15"-16"', '16"+'];
-const conditions = ["חדש באריזה", "כמו חדש", "משומש - במצב טוב", "משומש - במצב סביר"];
+
+// סוג אחסון - תואם לטופס
+const storageTypes = ["SSD", "HDD", "SSD + HDD"];
+
+// גודל מסך - תואם לטופס
+const screenSizes = ['13.3"', '14"', '15.6"', '17.3"'];
+
+// רזולוציות נפוצות
+const resolutions = [
+  "1366 x 768 (HD)",
+  "1920 x 1080 (Full HD)",
+  "2560 x 1440 (QHD)",
+  "2560 x 1600",
+  "3840 x 2160 (4K)",
+  "2880 x 1800 (Retina)"
+];
+
+// כרטיסי גרפיקה נפוצים
+const graphicsCards = [
+  "Intel Integrated",
+  "Intel Iris Xe",
+  "AMD Radeon Integrated",
+  "NVIDIA GTX 1650",
+  "NVIDIA GTX 1660",
+  "NVIDIA RTX 3050",
+  "NVIDIA RTX 3060",
+  "NVIDIA RTX 3070",
+  "NVIDIA RTX 3080",
+  "NVIDIA RTX 4050",
+  "NVIDIA RTX 4060",
+  "NVIDIA RTX 4070",
+  "NVIDIA RTX 4080",
+  "NVIDIA RTX 4090",
+  "AMD Radeon RX 6600",
+  "AMD Radeon RX 6700",
+  "Apple M1/M2/M3 GPU"
+];
+
+// מערכות הפעלה
+const operatingSystems = [
+  "Windows 11 Pro",
+  "Windows 11 Home",
+  "Windows 10 Pro",
+  "Windows 10 Home",
+  "macOS Sonoma",
+  "macOS Ventura",
+  "Chrome OS",
+  "Linux",
+  "ללא מערכת הפעלה"
+];
+
+// מצב המוצר - תואם לטופס
+const conditions = [
+  "חדש באריזה", 
+  "כמו חדש", 
+  "משומש במצב מצוין", 
+  "משומש במצב טוב", 
+  "משומש"
+];
+
+// ערים
 const cities = [
   "תל אביב", "ירושלים", "חיפה", "באר שבע", "נתניה", "פתח תקווה",
-  "ראשון לציון", "אשדוד", "רחובות", "בני ברק", "הרצליה", "כפר סבא"
+  "ראשון לציון", "אשדוד", "רחובות", "בני ברק", "הרצליה", "כפר סבא",
+  "רעננה", "מודיעין", "אילת", "נהריה"
+];
+
+// תכונות - תואמות לטופס
+const features = [
+  "מסך מגע",
+  "תאורת מקלדת",
+  "מצלמת אינטרנט",
+  "Bluetooth",
+  "Wi-Fi 6",
+  "USB-C",
+  "HDMI",
+  "חיישן טביעת אצבע",
+  "גרפיקה ייעודית",
+  "מעבד Intel",
+  "מעבד AMD",
+  "כונן SSD",
+  "כונן HDD",
+  "מקלדת נומרית",
+  "רמקולים איכותיים"
 ];
 
 export const LaptopSidebarFilter = ({ onFilterChange, counts }: LaptopSidebarFilterProps) => {
@@ -49,15 +159,20 @@ export const LaptopSidebarFilter = ({ onFilterChange, counts }: LaptopSidebarFil
     processors: [],
     ramOptions: [],
     storageOptions: [],
+    storageTypes: [],
     screenSizes: [],
+    resolutions: [],
+    graphicsCards: [],
+    operatingSystems: [],
     priceMin: 0,
-    priceMax: 20000,
+    priceMax: 30000,
     conditions: [],
     cities: [],
+    features: [],
   });
 
   const handleArrayFilterChange = (
-    key: keyof Pick<LaptopFilters, 'brands' | 'processors' | 'ramOptions' | 'storageOptions' | 'screenSizes' | 'conditions' | 'cities'>,
+    key: keyof Omit<LaptopFilters, 'priceMin' | 'priceMax'>,
     value: string
   ) => {
     const currentValues = filters[key] as string[];
@@ -82,22 +197,69 @@ export const LaptopSidebarFilter = ({ onFilterChange, counts }: LaptopSidebarFil
       processors: [],
       ramOptions: [],
       storageOptions: [],
+      storageTypes: [],
       screenSizes: [],
+      resolutions: [],
+      graphicsCards: [],
+      operatingSystems: [],
       priceMin: 0,
-      priceMax: 20000,
+      priceMax: 30000,
       conditions: [],
       cities: [],
+      features: [],
     };
     setFilters(defaultFilters);
     onFilterChange?.(defaultFilters);
   };
+
+  const renderFilterSection = (
+    title: string,
+    icon: React.ReactNode,
+    options: string[],
+    filterKey: keyof Omit<LaptopFilters, 'priceMin' | 'priceMax'>,
+    countsKey?: keyof NonNullable<typeof counts>
+  ) => (
+    <>
+      <div className="space-y-3">
+        <Label className="font-semibold flex items-center gap-2">
+          {icon}
+          {title}
+        </Label>
+        <div className="space-y-2 max-h-48 overflow-y-auto">
+          {options.map((option) => (
+            <div key={option} className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 space-x-reverse">
+                <Checkbox 
+                  id={`${filterKey}-${option}`}
+                  checked={(filters[filterKey] as string[]).includes(option)}
+                  onCheckedChange={() => handleArrayFilterChange(filterKey, option)}
+                />
+                <Label
+                  htmlFor={`${filterKey}-${option}`}
+                  className="text-sm font-normal cursor-pointer"
+                >
+                  {option}
+                </Label>
+              </div>
+              {countsKey && counts?.[countsKey]?.[option] && (
+                <span className="text-xs text-muted-foreground">
+                  ({counts[countsKey][option]})
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      <Separator />
+    </>
+  );
 
   return (
     <Card className="sticky top-24">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl flex items-center gap-2">
           <Laptop className="w-5 h-5 text-primary" />
-          סינון מחשבים
+          סינון מחשבים ניידים
         </CardTitle>
         <Button variant="ghost" size="sm" onClick={resetFilters} className="h-8 px-2 text-muted-foreground hover:text-foreground">
           <RotateCcw className="w-4 h-4 ml-1" />
@@ -115,7 +277,7 @@ export const LaptopSidebarFilter = ({ onFilterChange, counts }: LaptopSidebarFil
             <Slider
               value={[filters.priceMin, filters.priceMax]}
               onValueChange={handlePriceChange}
-              max={20000}
+              max={30000}
               step={500}
               className="w-full"
             />
@@ -128,177 +290,40 @@ export const LaptopSidebarFilter = ({ onFilterChange, counts }: LaptopSidebarFil
 
         <Separator />
 
-        {/* Brands */}
-        <div className="space-y-3">
-          <Label className="font-semibold flex items-center gap-2">
-            <Laptop className="w-4 h-4 text-primary" />
-            יצרן
-          </Label>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            {brands.map((brand) => (
-              <div key={brand} className="flex items-center justify-between">
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <Checkbox 
-                    id={`brand-${brand}`}
-                    checked={filters.brands.includes(brand)}
-                    onCheckedChange={() => handleArrayFilterChange('brands', brand)}
-                  />
-                  <Label
-                    htmlFor={`brand-${brand}`}
-                    className="text-sm font-normal cursor-pointer"
-                  >
-                    {brand}
-                  </Label>
-                </div>
-                {counts?.brands?.[brand] && (
-                  <span className="text-xs text-muted-foreground">
-                    ({counts.brands[brand]})
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Brands - יצרן */}
+        {renderFilterSection("יצרן", <Laptop className="w-4 h-4 text-primary" />, brands, 'brands', 'brands')}
 
-        <Separator />
+        {/* Condition - מצב */}
+        {renderFilterSection("מצב המוצר", <Settings className="w-4 h-4 text-primary" />, conditions, 'conditions', 'conditions')}
 
-        {/* Processors */}
-        <div className="space-y-3">
-          <Label className="font-semibold flex items-center gap-2">
-            <Cpu className="w-4 h-4 text-primary" />
-            מעבד
-          </Label>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            {processors.map((processor) => (
-              <div key={processor} className="flex items-center justify-between">
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <Checkbox 
-                    id={`processor-${processor}`}
-                    checked={filters.processors.includes(processor)}
-                    onCheckedChange={() => handleArrayFilterChange('processors', processor)}
-                  />
-                  <Label
-                    htmlFor={`processor-${processor}`}
-                    className="text-sm font-normal cursor-pointer"
-                  >
-                    {processor}
-                  </Label>
-                </div>
-                {counts?.processors?.[processor] && (
-                  <span className="text-xs text-muted-foreground">
-                    ({counts.processors[processor]})
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <Separator />
+        {/* Processors - מעבד */}
+        {renderFilterSection("מעבד", <Cpu className="w-4 h-4 text-primary" />, processors, 'processors', 'processors')}
 
         {/* RAM */}
-        <div className="space-y-3">
-          <Label className="font-semibold flex items-center gap-2">
-            <HardDrive className="w-4 h-4 text-primary" />
-            זיכרון RAM
-          </Label>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            {ramOptions.map((ram) => (
-              <div key={ram} className="flex items-center justify-between">
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <Checkbox 
-                    id={`ram-${ram}`}
-                    checked={filters.ramOptions.includes(ram)}
-                    onCheckedChange={() => handleArrayFilterChange('ramOptions', ram)}
-                  />
-                  <Label
-                    htmlFor={`ram-${ram}`}
-                    className="text-sm font-normal cursor-pointer"
-                  >
-                    {ram}
-                  </Label>
-                </div>
-                {counts?.ramOptions?.[ram] && (
-                  <span className="text-xs text-muted-foreground">
-                    ({counts.ramOptions[ram]})
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+        {renderFilterSection("זיכרון RAM", <HardDrive className="w-4 h-4 text-primary" />, ramOptions, 'ramOptions', 'ramOptions')}
 
-        <Separator />
+        {/* Storage - נפח אחסון */}
+        {renderFilterSection("נפח אחסון", <HardDrive className="w-4 h-4 text-primary" />, storageOptions, 'storageOptions', 'storageOptions')}
 
-        {/* Screen Size */}
-        <div className="space-y-3">
-          <Label className="font-semibold flex items-center gap-2">
-            <Monitor className="w-4 h-4 text-primary" />
-            גודל מסך
-          </Label>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            {screenSizes.map((size) => (
-              <div key={size} className="flex items-center justify-between">
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <Checkbox 
-                    id={`size-${size}`}
-                    checked={filters.screenSizes.includes(size)}
-                    onCheckedChange={() => handleArrayFilterChange('screenSizes', size)}
-                  />
-                  <Label
-                    htmlFor={`size-${size}`}
-                    className="text-sm font-normal cursor-pointer"
-                  >
-                    {size}
-                  </Label>
-                </div>
-                {counts?.screenSizes?.[size] && (
-                  <span className="text-xs text-muted-foreground">
-                    ({counts.screenSizes[size]})
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Storage Type - סוג אחסון */}
+        {renderFilterSection("סוג אחסון", <HardDrive className="w-4 h-4 text-primary" />, storageTypes, 'storageTypes', 'storageTypes')}
 
-        <Separator />
+        {/* Screen Size - גודל מסך */}
+        {renderFilterSection("גודל מסך", <Monitor className="w-4 h-4 text-primary" />, screenSizes, 'screenSizes', 'screenSizes')}
 
-        {/* Condition */}
-        <div className="space-y-3">
-          <Label className="font-semibold flex items-center gap-2">
-            <Laptop className="w-4 h-4 text-primary" />
-            מצב המוצר
-          </Label>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            {conditions.map((condition) => (
-              <div key={condition} className="flex items-center justify-between">
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <Checkbox 
-                    id={`condition-${condition}`}
-                    checked={filters.conditions.includes(condition)}
-                    onCheckedChange={() => handleArrayFilterChange('conditions', condition)}
-                  />
-                  <Label
-                    htmlFor={`condition-${condition}`}
-                    className="text-sm font-normal cursor-pointer"
-                  >
-                    {condition}
-                  </Label>
-                </div>
-                {counts?.conditions?.[condition] && (
-                  <span className="text-xs text-muted-foreground">
-                    ({counts.conditions[condition]})
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Resolution - רזולוציה */}
+        {renderFilterSection("רזולוציה", <Monitor className="w-4 h-4 text-primary" />, resolutions, 'resolutions', 'resolutions')}
 
-        <Separator />
+        {/* Graphics Card - כרטיס גרפי */}
+        {renderFilterSection("כרטיס גרפי", <MonitorSmartphone className="w-4 h-4 text-primary" />, graphicsCards, 'graphicsCards', 'graphicsCards')}
 
-        {/* City */}
+        {/* Operating System - מערכת הפעלה */}
+        {renderFilterSection("מערכת הפעלה", <Settings className="w-4 h-4 text-primary" />, operatingSystems, 'operatingSystems', 'operatingSystems')}
+
+        {/* Features - תכונות */}
+        {renderFilterSection("תכונות", <Wifi className="w-4 h-4 text-primary" />, features, 'features', 'features')}
+
+        {/* City - מיקום */}
         <div className="space-y-3">
           <Label className="font-semibold flex items-center gap-2">
             <MapPin className="w-4 h-4 text-primary" />
