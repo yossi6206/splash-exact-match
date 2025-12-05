@@ -122,9 +122,69 @@ const dishwasherCapacity = ["9 מערכות", "12 מערכות", "14 מערכו�
 
 const vacuumTypes = ["שואב אבק רובוטי", "שואב אבק אלחוטי", "שואב אבק עם שקית", "שואב אבק ללא שקית", "שואב אבק מים"];
 const sportsBrands = ["Nike", "Adidas", "Puma", "Giant", "Trek", "Specialized", "Decathlon", "Reebok", "Under Armour"];
+
+// Sports subcategory-specific options
+const bikeBrands = ["Giant", "Trek", "Specialized", "Cannondale", "Scott", "Merida", "BMC", "Cube", "אחר"];
+const bikeTypes = ["אופני כביש", "אופני הרים", "אופניים היברידיים", "אופני עיר", "אופני BMX", "אופני ילדים"];
+const bikeSizes = ["XS (14-15\")", "S (15-17\")", "M (17-19\")", "L (19-21\")", "XL (21-23\")", "גלגל 20\"", "גלגל 24\"", "גלגל 26\"", "גלגל 27.5\"", "גלגל 29\""];
+const bikeFeatures = ["מתלים קדמיים", "מתלים מלאים", "בלמי דיסק", "חשמלי", "קרבון", "אלומיניום"];
+
+const eBikeBrands = ["Bosch", "Shimano Steps", "Bafang", "Yamaha", "Kalkhoff", "Cube", "אחר"];
+const eBikeBattery = ["250Wh", "400Wh", "500Wh", "625Wh", "750Wh", "מעל 750Wh"];
+const eBikeRange = ["עד 50 ק״מ", "50-80 ק״מ", "80-120 ק״מ", "מעל 120 ק״מ"];
+
+const scooterTypes = ["קורקינט חשמלי", "קורקינט רגיל", "קורקינט ספורט"];
+const scooterSpeed = ["עד 25 קמ״ש", "25-35 קמ״ש", "מעל 35 קמ״ש"];
+
+const gymEquipTypes = ["הליכון", "אופני כושר", "אליפטיקל", "חתירה", "מכונת משקולות", "ספסל אימון", "משקולות חופשיות"];
+const gymBrands = ["Life Fitness", "Technogym", "NordicTrack", "Bowflex", "Kettler", "Horizon", "אחר"];
+
+const instrumentTypes = ["גיטרה אקוסטית", "גיטרה חשמלית", "גיטרה בס", "פסנתר אקוסטי", "פסנתר חשמלי", "קלידים", "תופים אקוסטיים", "תופים חשמליים", "כינור", "חליל", "סקסופון"];
+const instrumentBrands = ["Yamaha", "Fender", "Gibson", "Roland", "Casio", "Ibanez", "Pearl", "אחר"];
+const instrumentConditions = ["חדש", "כמו חדש", "משומש - מצב מעולה", "משומש - מצב טוב", "דורש תיקון"];
+
 const fashionBrands = ["Zara", "H&M", "Mango", "Castro", "Fox", "TNT", "Golf", "American Eagle", "Banana Republic"];
 const fashionSizes = ["XS", "S", "M", "L", "XL", "XXL", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"];
+
+// Fashion subcategory-specific options
+const clothingConditions = ["חדש עם תווית", "חדש ללא תווית", "לבוש פעם אחת", "משומש - מצב מעולה", "משומש - מצב טוב"];
+const shirtTypes = ["חולצת טי", "חולצה מכופתרת", "פולו", "סווטשירט", "קפוצ׳ון", "גופיה"];
+const pantsTypes = ["ג׳ינס", "מכנסי בד", "מכנסי ספורט", "מכנסיים קצרים", "לגינס"];
+const dressTypes = ["שמלת ערב", "שמלת קז׳ואל", "שמלת מקסי", "שמלת מיני", "שמלת מידי"];
+const coatTypes = ["מעיל חורף", "ג׳קט", "מעיל גשם", "מעיל קל", "בלייזר", "וסט"];
+
+const shoeBrands = ["Nike", "Adidas", "New Balance", "Puma", "Converse", "Vans", "Dr. Martens", "Steve Madden", "אחר"];
+const shoeSizes = ["35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46"];
+const shoeTypes = ["נעלי ספורט", "נעלי עקב", "סנדלים", "מגפיים", "נעלי בלט", "נעלי אוקספורד", "כפכפים", "נעלי עבודה"];
+
+const bagTypes = ["תיק יד", "תיק צד", "תיק גב", "ארנק", "תיק מסמכים", "תיק ערב"];
+const bagBrands = ["Michael Kors", "Coach", "Guess", "Longchamp", "Kipling", "Samsonite", "אחר"];
+const bagMaterials = ["עור אמיתי", "עור סינטטי", "בד", "ניילון", "קנבס"];
+
+const jewelryTypes = ["שרשרת", "צמיד", "טבעת", "עגילים", "שעון", "סיכה"];
+const jewelryMaterials = ["זהב", "כסף", "פלטינה", "נירוסטה", "ציפוי זהב", "תכשיט אופנה"];
+
 const babySizes = ["0-6 חודשים", "6-12 חודשים", "1-2 שנים", "2-4 שנים", "4-6 שנים", "6-8 שנים", "8-12 שנים"];
+
+// Baby subcategory-specific options
+const strollerBrands = ["Bugaboo", "Maxi-Cosi", "Chicco", "Baby Jogger", "UPPAbaby", "Cybex", "Britax", "אחר"];
+const strollerTypes = ["עגלת תינוק פול סייז", "טיולון", "עגלה כפולה", "עגלת רוץ", "עגלה קלה"];
+const strollerFeatures = ["מתקפל ביד אחת", "ידית הפיכה", "גלגלים גדולים", "סלקל", "קל משקל"];
+
+const cribTypes = ["מיטת תינוק", "עריסה", "מיטת מעבר", "מיטה ניידת", "לול"];
+const cribSizes = ["120x60 ס״מ", "140x70 ס״מ", "160x80 ס״מ"];
+const cribFeatures = ["מגן ראש", "מזרן כלול", "גלגלים", "מתכווננת גובה", "ארגז אחסון"];
+
+const carSeatTypes = ["סלקל (0-13 ק״ג)", "כיסא בטיחות (9-18 ק״ג)", "בוסטר (15-36 ק״ג)", "כיסא משולב"];
+const carSeatBrands = ["Maxi-Cosi", "Cybex", "Britax", "Chicco", "Joie", "Nuna", "אחר"];
+const carSeatFeatures = ["איזופיקס", "מסתובב 360", "מונע שכחה", "מתכוונן"];
+
+const highChairTypes = ["כיסא אוכל קלאסי", "כיסא אוכל מודולרי", "בוסטר לכיסא", "כיסא מתקפל"];
+const feedingBrands = ["Stokke", "Chicco", "Inglesina", "BabyBjörn", "IKEA", "אחר"];
+
+const toyAgeGroups = ["0-6 חודשים", "6-12 חודשים", "1-2 שנים", "2-3 שנים", "3-5 שנים", "5+ שנים"];
+const toyTypes = ["צעצועי התפתחות", "משחקי בנייה", "בובות", "משחקי תפקידים", "משחקי חוץ", "משחקי קופסא"];
+const toyBrands = ["Fisher-Price", "LEGO", "Playmobil", "Melissa & Doug", "VTech", "אחר"];
 const colors = ["לבן", "שחור", "אפור", "חום", "בז'", "כחול", "ירוק", "אדום", "ורוד", "סגול", "צהוב", "כתום", "כסוף", "זהב", "צבעוני"];
 
 // Computer options
@@ -1162,8 +1222,305 @@ const PostSecondhand = () => {
       );
     }
 
-    // Sports fields
+    // Sports fields - with subcategory-specific fields
     if (category === "ספורט ופנאי") {
+      const { subcategory } = formData;
+      
+      // Bicycles
+      if (subcategory === "אופני כביש" || subcategory === "אופני הרים") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מותג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bikeBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג אופניים</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bikeTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">מידה</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מידה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bikeSizes.map(size => (
+                    <SelectItem key={size} value={size}>{size}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bikeFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Electric bikes
+      if (subcategory === "אופניים חשמליים") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג מנוע</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מותג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {eBikeBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">קיבולת סוללה</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר קיבולת" />
+                </SelectTrigger>
+                <SelectContent>
+                  {eBikeBattery.map(bat => (
+                    <SelectItem key={bat} value={bat}>{bat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">טווח נסיעה</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר טווח" />
+                </SelectTrigger>
+                <SelectContent>
+                  {eBikeRange.map(range => (
+                    <SelectItem key={range} value={range}>{range}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Scooters
+      if (subcategory === "קורקינטים") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג קורקינט</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {scooterTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">מהירות מקסימלית</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מהירות" />
+                </SelectTrigger>
+                <SelectContent>
+                  {scooterSpeed.map(speed => (
+                    <SelectItem key={speed} value={speed}>{speed}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Gym equipment
+      if (subcategory === "ציוד כושר ביתי" || subcategory === "משקולות" || subcategory === "הליכונים" || subcategory === "אופני כושר") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג ציוד</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {gymEquipTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מותג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {gymBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="weight">משקל</Label>
+              <Input
+                id="weight"
+                name="weight"
+                value={formData.weight}
+                onChange={handleInputChange}
+                placeholder="50 ק״ג"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">מידות (אורך x רוחב x גובה ס״מ)</Label>
+              <Input
+                id="dimensions"
+                name="dimensions"
+                value={formData.dimensions}
+                onChange={handleInputChange}
+                placeholder='לדוגמה: 180x80x140'
+              />
+            </div>
+          </>
+        );
+      }
+      
+      // Musical instruments
+      if (subcategory === "גיטרות" || subcategory === "פסנתרים" || subcategory === "תופים") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג כלי</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {instrumentTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מותג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {instrumentBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">מצב</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מצב" />
+                </SelectTrigger>
+                <SelectContent>
+                  {instrumentConditions.map(cond => (
+                    <SelectItem key={cond} value={cond}>{cond}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Default sports fields
       return (
         <>
           <div className="space-y-2">
@@ -1203,22 +1560,289 @@ const PostSecondhand = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="weight">משקל</Label>
-            <Input
-              id="weight"
-              name="weight"
-              value={formData.weight}
-              onChange={handleInputChange}
-              placeholder="10 ק״ג"
-            />
-          </div>
         </>
       );
     }
 
-    // Fashion fields
+    // Fashion fields - with subcategory-specific fields
     if (category === "אופנה") {
+      const { subcategory } = formData;
+      
+      // Clothing (shirts, pants, dresses, etc.)
+      if (subcategory === "חולצות" || subcategory === "מכנסיים" || subcategory === "שמלות" || subcategory === "חצאיות" || subcategory === "מעילים") {
+        const getTypeOptions = () => {
+          if (subcategory === "חולצות") return shirtTypes;
+          if (subcategory === "מכנסיים") return pantsTypes;
+          if (subcategory === "שמלות") return dressTypes;
+          if (subcategory === "מעילים") return coatTypes;
+          return [];
+        };
+        
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מותג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fashionBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                  <SelectItem value="אחר">אחר</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {getTypeOptions().length > 0 && (
+              <div className="space-y-2">
+                <Label htmlFor="material">סוג</Label>
+                <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר סוג" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getTypeOptions().map(type => (
+                      <SelectItem key={type} value={type}>{type}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="size">מידה *</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מידה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fashionSizes.map(size => (
+                    <SelectItem key={size} value={size}>{size}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">מצב</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מצב" />
+                </SelectTrigger>
+                <SelectContent>
+                  {clothingConditions.map(cond => (
+                    <SelectItem key={cond} value={cond}>{cond}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע *</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Shoes
+      if (subcategory === "נעלי ספורט" || subcategory === "נעלי עקב" || subcategory === "סנדלים" || subcategory === "מגפיים") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מותג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {shoeBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג נעליים</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {shoeTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">מידה *</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מידה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {shoeSizes.map(size => (
+                    <SelectItem key={size} value={size}>{size}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">מצב</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מצב" />
+                </SelectTrigger>
+                <SelectContent>
+                  {clothingConditions.map(cond => (
+                    <SelectItem key={cond} value={cond}>{cond}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע *</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Bags
+      if (subcategory === "תיקי יד" || subcategory === "תיקי גב") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מותג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bagBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג תיק</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bagTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">חומר</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר חומר" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bagMaterials.map(mat => (
+                    <SelectItem key={mat} value={mat}>{mat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע *</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Jewelry & Watches
+      if (subcategory === "שעונים" || subcategory === "תכשיטים") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {jewelryTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">חומר</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר חומר" />
+                </SelectTrigger>
+                <SelectContent>
+                  {jewelryMaterials.map(mat => (
+                    <SelectItem key={mat} value={mat}>{mat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Input
+                id="brand"
+                name="brand"
+                value={formData.brand}
+                onChange={handleInputChange}
+                placeholder="מותג..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Default fashion fields
       return (
         <>
           <div className="space-y-2">
@@ -1265,8 +1889,305 @@ const PostSecondhand = () => {
       );
     }
 
-    // Baby items fields
+    // Baby items fields - with subcategory-specific fields
     if (category === "תינוקות וילדים") {
+      const { subcategory } = formData;
+      
+      // Strollers
+      if (subcategory === "עגלות" || subcategory === "טיולונים") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מותג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {strollerBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג עגלה</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {strollerTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">תכונות</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {strollerFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Cribs and beds
+      if (subcategory === "מיטות תינוק" || subcategory === "עריסות") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {cribTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">מידה</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מידה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {cribSizes.map(size => (
+                    <SelectItem key={size} value={size}>{size}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {cribFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Input
+                id="brand"
+                name="brand"
+                value={formData.brand}
+                onChange={handleInputChange}
+                placeholder="מותג..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Car seats
+      if (subcategory === "כיסאות אוכל") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מותג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {feedingBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג כיסא</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {highChairTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">גיל מומלץ</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר גיל" />
+                </SelectTrigger>
+                <SelectContent>
+                  {babySizes.map(age => (
+                    <SelectItem key={age} value={age}>{age}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Toys
+      if (subcategory === "צעצועי התפתחות" || subcategory === "משחקי בנייה") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מותג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {toyBrands.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג צעצוע</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {toyTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">גיל מומלץ *</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר גיל" />
+                </SelectTrigger>
+                <SelectContent>
+                  {toyAgeGroups.map(age => (
+                    <SelectItem key={age} value={age}>{age}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Baby clothes
+      if (subcategory === "בגדי תינוקות (0-2)" || subcategory === "בגדי ילדים (2-6)" || subcategory === "בגדי ילדים (6-12)") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג</Label>
+              <Input
+                id="brand"
+                name="brand"
+                value={formData.brand}
+                onChange={handleInputChange}
+                placeholder="Carter's, H&M Kids, Zara Kids..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">גיל/מידה *</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר גיל" />
+                </SelectTrigger>
+                <SelectContent>
+                  {babySizes.map(age => (
+                    <SelectItem key={age} value={age}>{age}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">מצב</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מצב" />
+                </SelectTrigger>
+                <SelectContent>
+                  {clothingConditions.map(cond => (
+                    <SelectItem key={cond} value={cond}>{cond}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Default baby fields
       return (
         <>
           <div className="space-y-2">
