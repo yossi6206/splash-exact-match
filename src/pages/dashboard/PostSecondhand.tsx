@@ -239,12 +239,66 @@ const babyClothBrands = ["Carter's", "H&M Kids", "Zara Kids", "GAP Kids", "Next"
 
 const colors = ["לבן", "שחור", "אפור", "אפור כהה", "חום", "בז'", "קרם", "כחול", "כחול כהה", "תכלת", "ירוק", "ירוק כהה", "אדום", "בורדו", "ורוד", "סגול", "צהוב", "כתום", "כסוף", "זהב", "נחושת", "טורקיז", "צבעוני", "מנומר/דוגמה"];
 
-// Computer options
-const processors = ["Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "AMD Ryzen 3", "AMD Ryzen 5", "AMD Ryzen 7", "AMD Ryzen 9", "Apple M1", "Apple M2", "Apple M3", "אחר"];
-const ramOptions = ["4GB", "8GB", "16GB", "32GB", "64GB"];
-const storageOptions = ["128GB", "256GB", "512GB", "1TB", "2TB"];
-const storageTypes = ["SSD", "HDD", "SSD + HDD"];
-const screenSizes = ["11.6\"", "13.3\"", "14\"", "15.6\"", "16\"", "17.3\"", "24\"", "27\"", "32\""];
+// Computer options - General
+const processors = ["Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "Intel Celeron", "Intel Pentium", "AMD Ryzen 3", "AMD Ryzen 5", "AMD Ryzen 7", "AMD Ryzen 9", "Apple M1", "Apple M2", "Apple M3", "Apple M4", "אחר"];
+const ramOptions = ["4GB", "8GB", "16GB", "32GB", "64GB", "128GB"];
+const storageOptions = ["128GB", "256GB", "512GB", "1TB", "2TB", "4TB"];
+const storageTypes = ["SSD", "HDD", "SSD + HDD", "NVMe SSD"];
+const screenSizes = ["11.6\"", "13.3\"", "14\"", "15.6\"", "16\"", "17.3\""];
+const graphicsCards = ["Intel UHD", "Intel Iris", "NVIDIA GeForce GTX 1650", "NVIDIA GeForce GTX 1660", "NVIDIA GeForce RTX 3050", "NVIDIA GeForce RTX 3060", "NVIDIA GeForce RTX 3070", "NVIDIA GeForce RTX 3080", "NVIDIA GeForce RTX 4060", "NVIDIA GeForce RTX 4070", "NVIDIA GeForce RTX 4080", "NVIDIA GeForce RTX 4090", "AMD Radeon RX 6600", "AMD Radeon RX 6700", "AMD Radeon RX 7600", "Apple GPU", "ללא כרטיס ייעודי"];
+const operatingSystems = ["Windows 11", "Windows 10", "macOS Sonoma", "macOS Ventura", "Chrome OS", "Linux Ubuntu", "Linux", "ללא מערכת הפעלה"];
+
+// Computer - Laptops
+const laptopTypes = ["מחשב נייד רגיל", "אולטרה בוק", "מחשב נייד גיימינג", "מחשב נייד לעבודה", "מקבוק", "2-in-1 / טאבלט-מחשב", "נטבוק"];
+const laptopFeatures = ["מסך מגע", "מקלדת עברית", "מקלדת מוארת", "קורא טביעת אצבע", "מצלמת רשת HD", "Thunderbolt", "USB-C", "HDMI", "Wi-Fi 6", "Bluetooth 5.0", "סוללה מורחבת"];
+const laptopWeights = ["עד 1 ק״ג", "1-1.5 ק״ג", "1.5-2 ק״ג", "2-2.5 ק״ג", "מעל 2.5 ק״ג"];
+
+// Computer - Desktops
+const desktopTypes = ["מחשב נייח רגיל", "מחשב גיימינג", "מחשב All-in-One", "מחשב מיני/קומפקטי", "תחנת עבודה", "שרת ביתי"];
+const desktopCases = ["מגדל מלא (Full Tower)", "מגדל בינוני (Mid Tower)", "מגדל קטן (Mini Tower)", "קומפקטי (SFF)", "HTPC"];
+const desktopFeatures = ["RGB תאורה", "מקורר מים", "מקורר אוויר", "שקט במיוחד", "Wi-Fi מובנה", "Bluetooth מובנה"];
+
+// Computer - Monitors
+const monitorBrands = ["Samsung", "LG", "Dell", "Asus", "Acer", "BenQ", "AOC", "ViewSonic", "HP", "Philips", "MSI", "Gigabyte", "אחר"];
+const monitorSizes = ["22\"", "24\"", "27\"", "32\"", "34\" Ultrawide", "38\" Ultrawide", "49\" Super Ultrawide"];
+const monitorResolutions = ["Full HD (1920x1080)", "QHD (2560x1440)", "4K UHD (3840x2160)", "WQHD Ultrawide (3440x1440)", "5K", "8K"];
+const monitorPanels = ["IPS", "VA", "TN", "OLED", "Mini-LED"];
+const monitorRefreshRates = ["60Hz", "75Hz", "100Hz", "144Hz", "165Hz", "240Hz", "360Hz"];
+const monitorFeatures = ["G-Sync", "FreeSync", "HDR", "HDR10", "HDR400", "HDR600", "USB-C / PD", "רמקולים מובנים", "מעמד מתכוונן גובה", "VESA Mount", "Curved", "Anti-Glare"];
+
+// Computer - Components
+const componentTypes = ["כרטיס מסך", "מעבד (CPU)", "זיכרון RAM", "כונן SSD", "כונן HDD", "לוח אם", "ספק כוח", "מארז", "מאוורר/קירור", "כרטיס קול", "כרטיס רשת"];
+const gpuBrands = ["NVIDIA", "AMD", "Intel Arc"];
+const gpuModels = ["RTX 4090", "RTX 4080", "RTX 4070 Ti", "RTX 4070", "RTX 4060 Ti", "RTX 4060", "RTX 3090", "RTX 3080", "RTX 3070", "RTX 3060", "RX 7900 XTX", "RX 7900 XT", "RX 7800 XT", "RX 7700 XT", "RX 7600", "אחר"];
+const gpuVram = ["4GB", "6GB", "8GB", "10GB", "12GB", "16GB", "24GB"];
+const cpuSockets = ["LGA 1700", "LGA 1200", "LGA 1151", "AM5", "AM4", "אחר"];
+const ramTypes = ["DDR5", "DDR4", "DDR3"];
+const ramSpeeds = ["3200MHz", "3600MHz", "4000MHz", "4800MHz", "5200MHz", "5600MHz", "6000MHz"];
+const storageSizes = ["128GB", "256GB", "500GB", "512GB", "1TB", "2TB", "4TB", "8TB"];
+const storageInterfaces = ["SATA III", "NVMe PCIe 3.0", "NVMe PCIe 4.0", "NVMe PCIe 5.0", "USB 3.0/3.1"];
+const motherboardSizes = ["ATX", "Micro-ATX", "Mini-ITX", "E-ATX"];
+const motherboardChipsets = ["Intel Z790", "Intel B760", "Intel Z690", "Intel B660", "AMD X670", "AMD B650", "AMD X570", "AMD B550", "אחר"];
+const psuWattages = ["450W", "550W", "650W", "750W", "850W", "1000W", "1200W", "מעל 1200W"];
+const psuRatings = ["80+ White", "80+ Bronze", "80+ Silver", "80+ Gold", "80+ Platinum", "80+ Titanium"];
+const componentConditions = ["חדש באריזה", "כמו חדש", "משומש - עובד מעולה", "משומש - עובד", "לחלקים"];
+
+// Computer - Peripherals
+const peripheralBrands = ["Logitech", "Razer", "SteelSeries", "Corsair", "HyperX", "Microsoft", "Apple", "Sony", "JBL", "Bose", "Creative", "Blue", "Elgato", "אחר"];
+const keyboardTypes = ["מכאנית", "ממברנה", "אופטית-מכאנית", "Low Profile"];
+const keyboardSwitches = ["Cherry MX Red", "Cherry MX Blue", "Cherry MX Brown", "Gateron", "Kailh", "אחר"];
+const keyboardFeatures = ["RGB", "מקלדת עברית", "נומרית", "TKL (ללא נומרית)", "אלחוטי", "מתכווננת", "ארגונומית"];
+const mouseTypes = ["גיימינג", "ארגונומי", "אנכי", "נייד/קומפקטי", "משרדי"];
+const mouseFeatures = ["אלחוטי Bluetooth", "אלחוטי USB", "חוטי", "RGB", "משקולות מתכווננות", "כפתורים ניתנים לתכנות"];
+const headsetTypes = ["Over-ear", "On-ear", "In-ear", "Open-back", "Closed-back"];
+const headsetFeatures = ["7.1 סראונד", "מבטל רעשים ANC", "מיקרופון נשלף", "אלחוטי", "RGB", "חיבור USB", "חיבור 3.5mm"];
+const peripheralConnectivity = ["אלחוטי Bluetooth", "אלחוטי USB 2.4GHz", "חוטי USB", "חוטי 3.5mm", "USB-C"];
+
+// Computer - Tablets
+const tabletBrands = ["Apple", "Samsung", "Lenovo", "Huawei", "Microsoft", "Amazon", "Xiaomi", "אחר"];
+const tabletSizes = ["7-8\"", "9-10\"", "11-12\"", "12\"+"];
+const tabletStorage = ["32GB", "64GB", "128GB", "256GB", "512GB", "1TB"];
+const tabletConnectivity = ["WiFi בלבד", "WiFi + Cellular (LTE/5G)"];
+const tabletFeatures = ["עט סטיילוס", "מקלדת נלווית", "Face ID", "Touch ID", "USB-C", "שמע סטריאו"];
 
 // Phone storage options
 const phoneStorageOptions = ["32GB", "64GB", "128GB", "256GB", "512GB", "1TB"];
@@ -2685,147 +2739,304 @@ const PostSecondhand = () => {
     // Computer fields
     if (category === "מחשבים") {
       const computerManufacturers = getComputerManufacturers();
+      const { subcategory } = formData;
       
+      // Monitors
+      if (subcategory === "מסכים") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">יצרן *</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger><SelectValue placeholder="בחר יצרן" /></SelectTrigger>
+                <SelectContent>{monitorBrands.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">גודל מסך *</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger><SelectValue placeholder="בחר גודל" /></SelectTrigger>
+                <SelectContent>{monitorSizes.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">רזולוציה *</Label>
+              <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+                <SelectTrigger><SelectValue placeholder="בחר רזולוציה" /></SelectTrigger>
+                <SelectContent>{monitorResolutions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג פאנל</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger><SelectValue placeholder="בחר סוג פאנל" /></SelectTrigger>
+                <SelectContent>{monitorPanels.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="weight">קצב רענון</Label>
+              <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
+                <SelectTrigger><SelectValue placeholder="בחר קצב רענון" /></SelectTrigger>
+                <SelectContent>{monitorRefreshRates.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+
+      // Components (GPU, CPU, RAM, Storage, Motherboard)
+      if (["כרטיסי מסך", "מעבדים", "זיכרון RAM", "כוננים", "לוחות אם"].includes(subcategory)) {
+        return (
+          <>
+            {subcategory === "כרטיסי מסך" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="brand">יצרן GPU *</Label>
+                  <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר יצרן" /></SelectTrigger>
+                    <SelectContent>{gpuBrands.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="size">דגם *</Label>
+                  <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר דגם" /></SelectTrigger>
+                    <SelectContent>{gpuModels.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dimensions">זיכרון VRAM</Label>
+                  <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר נפח" /></SelectTrigger>
+                    <SelectContent>{gpuVram.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
+            {subcategory === "מעבדים" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="brand">יצרן *</Label>
+                  <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר יצרן" /></SelectTrigger>
+                    <SelectContent>{["Intel", "AMD"].map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="material">דגם מעבד *</Label>
+                  <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר דגם" /></SelectTrigger>
+                    <SelectContent>{processors.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="size">סוקט</Label>
+                  <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר סוקט" /></SelectTrigger>
+                    <SelectContent>{cpuSockets.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
+            {subcategory === "זיכרון RAM" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="brand">סוג RAM *</Label>
+                  <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר סוג" /></SelectTrigger>
+                    <SelectContent>{ramTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dimensions">נפח *</Label>
+                  <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר נפח" /></SelectTrigger>
+                    <SelectContent>{ramOptions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="size">מהירות</Label>
+                  <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר מהירות" /></SelectTrigger>
+                    <SelectContent>{ramSpeeds.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
+            {subcategory === "כוננים" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="brand">סוג כונן *</Label>
+                  <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר סוג" /></SelectTrigger>
+                    <SelectContent>{storageTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dimensions">נפח *</Label>
+                  <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר נפח" /></SelectTrigger>
+                    <SelectContent>{storageSizes.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="size">ממשק</Label>
+                  <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר ממשק" /></SelectTrigger>
+                    <SelectContent>{storageInterfaces.map(i => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
+            {subcategory === "לוחות אם" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="brand">יצרן *</Label>
+                  <SearchableSelect value={formData.brand} onValueChange={handleComputerBrandChange} options={[...computerManufacturers, "אחר"]} placeholder="בחר יצרן" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="size">גודל לוח</Label>
+                  <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר גודל" /></SelectTrigger>
+                    <SelectContent>{motherboardSizes.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="material">צ׳יפסט</Label>
+                  <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר צ׳יפסט" /></SelectTrigger>
+                    <SelectContent>{motherboardChipsets.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="warranty">מצב רכיב *</Label>
+              <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
+                <SelectTrigger><SelectValue placeholder="בחר מצב" /></SelectTrigger>
+                <SelectContent>{componentConditions.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+
+      // Peripherals (Keyboards, Mice, Headsets)
+      if (["מקלדות", "עכברים", "אוזניות"].includes(subcategory)) {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">מותג *</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger><SelectValue placeholder="בחר מותג" /></SelectTrigger>
+                <SelectContent>{peripheralBrands.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            {subcategory === "מקלדות" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="size">סוג מקלדת</Label>
+                  <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                    <SelectTrigger><SelectValue placeholder="בחר סוג" /></SelectTrigger>
+                    <SelectContent>{keyboardTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
+            {subcategory === "עכברים" && (
+              <div className="space-y-2">
+                <Label htmlFor="size">סוג עכבר</Label>
+                <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                  <SelectTrigger><SelectValue placeholder="בחר סוג" /></SelectTrigger>
+                  <SelectContent>{mouseTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+            )}
+            {subcategory === "אוזניות" && (
+              <div className="space-y-2">
+                <Label htmlFor="size">סוג אוזניות</Label>
+                <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                  <SelectTrigger><SelectValue placeholder="בחר סוג" /></SelectTrigger>
+                  <SelectContent>{headsetTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="material">קישוריות</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger><SelectValue placeholder="בחר קישוריות" /></SelectTrigger>
+                <SelectContent>{peripheralConnectivity.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger><SelectValue placeholder="בחר צבע" /></SelectTrigger>
+                <SelectContent>{colors.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+
+      // Default: Laptops and Desktops
       return (
         <>
           <div className="space-y-2">
             <Label htmlFor="brand">יצרן *</Label>
-            <SearchableSelect
-              value={formData.brand}
-              onValueChange={handleComputerBrandChange}
-              options={[...computerManufacturers, "אחר"]}
-              placeholder="בחר יצרן"
-              searchPlaceholder="חפש יצרן..."
-              emptyText="לא נמצאו יצרנים"
-            />
+            <SearchableSelect value={formData.brand} onValueChange={handleComputerBrandChange} options={[...computerManufacturers, "אחר"]} placeholder="בחר יצרן" searchPlaceholder="חפש יצרן..." emptyText="לא נמצאו יצרנים" />
           </div>
-          
           <div className="space-y-2">
             <Label htmlFor="size">דגם *</Label>
-            {!showCustomComputerModel ? (
-              formData.brand && formData.brand !== "אחר" ? (
-                <div className="space-y-2">
-                  <SearchableSelect
-                    value={formData.size}
-                    onValueChange={(value) => {
-                      if (value === "אחר - הזנה ידנית") {
-                        setShowCustomComputerModel(true);
-                        setFormData({ ...formData, size: "" });
-                      } else {
-                        setFormData({ ...formData, size: value });
-                      }
-                    }}
-                    options={[...availableComputerModels, "אחר - הזנה ידנית"]}
-                    placeholder="בחר דגם"
-                    searchPlaceholder="חפש דגם..."
-                    emptyText="לא נמצאו דגמים"
-                  />
-                </div>
-              ) : (
-                <Select disabled>
-                  <SelectTrigger>
-                    <SelectValue placeholder="בחר יצרן תחילה" />
-                  </SelectTrigger>
-                  <SelectContent />
-                </Select>
-              )
-            ) : (
+            {!showCustomComputerModel && formData.brand && formData.brand !== "אחר" ? (
+              <SearchableSelect value={formData.size} onValueChange={(value) => value === "אחר - הזנה ידנית" ? (setShowCustomComputerModel(true), setFormData({ ...formData, size: "" })) : setFormData({ ...formData, size: value })} options={[...availableComputerModels, "אחר - הזנה ידנית"]} placeholder="בחר דגם" />
+            ) : showCustomComputerModel ? (
               <div className="space-y-2">
-                <Input
-                  id="size"
-                  name="size"
-                  value={formData.size}
-                  onChange={handleInputChange}
-                  placeholder="הזן שם דגם"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setShowCustomComputerModel(false);
-                    setFormData({ ...formData, size: "" });
-                  }}
-                >
-                  חזור לבחירה מרשימה
-                </Button>
+                <Input id="size" name="size" value={formData.size} onChange={handleInputChange} placeholder="הזן שם דגם" />
+                <Button type="button" variant="outline" size="sm" onClick={() => { setShowCustomComputerModel(false); setFormData({ ...formData, size: "" }); }}>חזור לבחירה מרשימה</Button>
               </div>
-            )}
-            {formData.brand === "אחר" && (
-              <Input
-                id="size"
-                name="size"
-                value={formData.size}
-                onChange={handleInputChange}
-                placeholder="הזן שם דגם"
-                className="mt-2"
-              />
-            )}
+            ) : <Input id="size" name="size" value={formData.size} onChange={handleInputChange} placeholder={formData.brand === "אחר" ? "הזן שם דגם" : "בחר יצרן תחילה"} disabled={!formData.brand} />}
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="material">מעבד</Label>
             <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="בחר מעבד" />
-              </SelectTrigger>
-              <SelectContent>
-                {processors.map(proc => (
-                  <SelectItem key={proc} value={proc}>{proc}</SelectItem>
-                ))}
-              </SelectContent>
+              <SelectTrigger><SelectValue placeholder="בחר מעבד" /></SelectTrigger>
+              <SelectContent>{processors.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}</SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="dimensions">זיכרון RAM</Label>
             <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="בחר זיכרון" />
-              </SelectTrigger>
-              <SelectContent>
-                {ramOptions.map(ram => (
-                  <SelectItem key={ram} value={ram}>{ram}</SelectItem>
-                ))}
-              </SelectContent>
+              <SelectTrigger><SelectValue placeholder="בחר זיכרון" /></SelectTrigger>
+              <SelectContent>{ramOptions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="weight">נפח אחסון</Label>
             <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="בחר נפח" />
-              </SelectTrigger>
-              <SelectContent>
-                {storageOptions.map(storage => (
-                  <SelectItem key={storage} value={storage}>{storage}</SelectItem>
-                ))}
-              </SelectContent>
+              <SelectTrigger><SelectValue placeholder="בחר נפח" /></SelectTrigger>
+              <SelectContent>{storageOptions.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="warranty">כרטיס מסך</Label>
+            <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
+              <SelectTrigger><SelectValue placeholder="בחר כרטיס מסך" /></SelectTrigger>
+              <SelectContent>{graphicsCards.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}</SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="age">גודל מסך</Label>
             <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="בחר גודל מסך" />
-              </SelectTrigger>
-              <SelectContent>
-                {screenSizes.map(size => (
-                  <SelectItem key={size} value={size}>{size}</SelectItem>
-                ))}
-              </SelectContent>
+              <SelectTrigger><SelectValue placeholder="בחר גודל מסך" /></SelectTrigger>
+              <SelectContent>{screenSizes.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="color">צבע</Label>
             <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="בחר צבע" />
-              </SelectTrigger>
-              <SelectContent>
-                {colors.map(color => (
-                  <SelectItem key={color} value={color}>{color}</SelectItem>
-                ))}
-              </SelectContent>
+              <SelectTrigger><SelectValue placeholder="בחר צבע" /></SelectTrigger>
+              <SelectContent>{colors.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
             </Select>
           </div>
         </>

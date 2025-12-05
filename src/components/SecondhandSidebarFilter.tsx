@@ -110,11 +110,42 @@ const filterLabels: Record<string, { label: string; icon: React.ReactNode }> = {
   tvSizes: { label: "גודל מסך", icon: <Tv className="w-4 h-4 text-primary" /> },
   os: { label: "מערכת הפעלה", icon: <Tv className="w-4 h-4 text-primary" /> },
   
-  // Computers
+  // Computers - General
   processors: { label: "מעבד", icon: <Laptop className="w-4 h-4 text-primary" /> },
   ramOptions: { label: "זיכרון RAM", icon: <Laptop className="w-4 h-4 text-primary" /> },
   storageOptions: { label: "נפח אחסון", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  storageTypes: { label: "סוג אחסון", icon: <Laptop className="w-4 h-4 text-primary" /> },
   screenSizes: { label: "גודל מסך", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  graphicsCards: { label: "כרטיס מסך", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  operatingSystems: { label: "מערכת הפעלה", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  weight: { label: "משקל", icon: <Ruler className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Desktops
+  caseTypes: { label: "סוג מארז", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Monitors
+  resolution: { label: "רזולוציה", icon: <Tv className="w-4 h-4 text-primary" /> },
+  panelType: { label: "סוג פאנל", icon: <Tv className="w-4 h-4 text-primary" /> },
+  refreshRate: { label: "קצב רענון", icon: <Tv className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Components
+  gpuBrands: { label: "יצרן GPU", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  gpuModels: { label: "דגם GPU", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  gpuVram: { label: "זיכרון VRAM", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  cpuBrands: { label: "יצרן מעבד", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  cpuSockets: { label: "סוקט מעבד", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  ramTypes: { label: "סוג RAM", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  ramSpeeds: { label: "מהירות RAM", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  storageSizes: { label: "נפח כונן", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  storageInterfaces: { label: "ממשק אחסון", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  motherboardSizes: { label: "גודל לוח אם", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  motherboardChipsets: { label: "צ׳יפסט", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  componentCondition: { label: "מצב רכיב", icon: <CheckSquare className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Peripherals
+  peripheralBrands: { label: "מותג", icon: <Tag className="w-4 h-4 text-primary" /> },
+  switches: { label: "סוויצ׳ים", icon: <Settings2 className="w-4 h-4 text-primary" /> },
+  connectivity: { label: "קישוריות", icon: <Settings2 className="w-4 h-4 text-primary" /> },
   
   // Phones
   phoneConditions: { label: "מצב מכשיר", icon: <Smartphone className="w-4 h-4 text-primary" /> },
@@ -159,7 +190,6 @@ const filterLabels: Record<string, { label: string; icon: React.ReactNode }> = {
   
   // Baby & Kids
   safety: { label: "תקן בטיחות", icon: <Baby className="w-4 h-4 text-primary" /> },
-  weight: { label: "משקל", icon: <Ruler className="w-4 h-4 text-primary" /> },
   maxAge: { label: "גיל מקסימלי", icon: <Baby className="w-4 h-4 text-primary" /> },
   
   // Baby - Cribs
