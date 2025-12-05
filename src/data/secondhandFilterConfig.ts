@@ -318,7 +318,11 @@ export const getFiltersForCategory = (category: string, subcategory?: string) =>
         processors: computersFilters.processors,
         ramOptions: computersFilters.ramOptions,
         storageOptions: computersFilters.storageOptions,
+        storageTypes: computersFilters.storageTypes,
         screenSizes: computersFilters.screenSizes,
+        graphicsCards: computersFilters.graphicsCards,
+        operatingSystems: computersFilters.operatingSystems,
+        ...getSubcategoryFilters("computers", subcategory),
       };
     case "מכשירים סלולריים":
       return {
@@ -326,6 +330,9 @@ export const getFiltersForCategory = (category: string, subcategory?: string) =>
         brands: phonesFilters.brands,
         storageOptions: phonesFilters.storageOptions,
         phoneConditions: phonesFilters.conditions,
+        ramOptions: phonesFilters.ramOptions,
+        screenSizes: phonesFilters.screenSizes,
+        ...getSubcategoryFilters("phones", subcategory),
       };
     case "ספורט ופנאי":
       return {
@@ -513,6 +520,99 @@ const getSubcategoryFilters = (category: string, subcategory?: string) => {
         brands: sportsFilters.instrumentBrands,
         instrumentConditions: sportsFilters.instrumentConditions,
         accessories: sportsFilters.instrumentAccessories,
+      };
+    }
+  }
+
+  // Computers subcategories
+  if (category === "computers") {
+    if (["מחשבים ניידים", "מקבוק", "אולטרה בוק"].includes(subcategory)) {
+      return {
+        brands: computersFilters.brands,
+        processors: computersFilters.processors,
+        ramOptions: computersFilters.ramOptions,
+        storageOptions: computersFilters.storageOptions,
+        storageTypes: computersFilters.storageTypes,
+        screenSizes: ["11.6\"", "13.3\"", "14\"", "15.6\"", "16\"", "17.3\""],
+        graphicsCards: computersFilters.graphicsCards,
+        operatingSystems: computersFilters.operatingSystems,
+      };
+    }
+    if (["מחשבים נייחים", "מחשבי גיימינג", "מחשבים לעבודה"].includes(subcategory)) {
+      return {
+        brands: computersFilters.brands,
+        processors: computersFilters.processors,
+        ramOptions: computersFilters.ramOptions,
+        storageOptions: computersFilters.storageOptions,
+        storageTypes: computersFilters.storageTypes,
+        graphicsCards: computersFilters.graphicsCards,
+        operatingSystems: computersFilters.operatingSystems,
+      };
+    }
+    if (subcategory === "מסכים") {
+      return {
+        brands: computersFilters.brands,
+        screenSizes: ["24\"", "27\"", "32\"", "34\"", "49\""],
+        resolution: ["Full HD (1080p)", "QHD (1440p)", "4K UHD", "5K", "Ultrawide"],
+        panelType: ["IPS", "VA", "TN", "OLED"],
+        refreshRate: ["60Hz", "75Hz", "144Hz", "165Hz", "240Hz"],
+        features: ["G-Sync", "FreeSync", "HDR", "USB-C", "מובנה רמקולים", "מתכוונן גובה"],
+      };
+    }
+    if (["כרטיסי מסך", "מעבדים", "זיכרון RAM", "כוננים", "לוחות אם"].includes(subcategory)) {
+      return {
+        componentBrands: ["NVIDIA", "AMD", "Intel", "Corsair", "Kingston", "Samsung", "Western Digital", "Seagate", "ASUS", "MSI", "Gigabyte", "אחר"],
+        componentCondition: ["חדש באריזה", "כמו חדש", "משומש - עובד מעולה", "משומש - עובד", "לחלקים"],
+      };
+    }
+    if (["מקלדות", "עכברים", "אוזניות"].includes(subcategory)) {
+      return {
+        peripheralBrands: ["Logitech", "Razer", "SteelSeries", "Corsair", "HyperX", "Microsoft", "Apple", "Sony", "JBL", "אחר"],
+        connectivity: ["אלחוטי Bluetooth", "אלחוטי USB", "חוטי USB", "חוטי 3.5mm"],
+        features: subcategory === "מקלדות" 
+          ? ["מכאנית", "ממברנה", "RGB", "עברית", "נומרית", "ארגונומית"]
+          : subcategory === "עכברים"
+          ? ["גיימינג", "ארגונומי", "אנכי", "מעקב אופטי", "מעקב לייזר"]
+          : ["Over-ear", "On-ear", "In-ear", "מבטלות רעש", "מיקרופון מובנה", "גיימינג"],
+      };
+    }
+    if (subcategory === "טאבלטים") {
+      return {
+        brands: ["Apple", "Samsung", "Lenovo", "Huawei", "Microsoft", "Amazon", "אחר"],
+        screenSizes: ["7-8\"", "9-10\"", "11-12\"", "12\"+"],
+        storageOptions: ["32GB", "64GB", "128GB", "256GB", "512GB", "1TB"],
+        connectivity: ["WiFi בלבד", "WiFi + Cellular"],
+      };
+    }
+  }
+
+  // Phones subcategories
+  if (category === "phones") {
+    if (["אייפון", "סמסונג גלקסי", "שיאומי", "וואווי", "אופו", "וואן פלוס", "גוגל פיקסל", "נוקיה", "מוטורולה"].includes(subcategory)) {
+      return {
+        storageOptions: phonesFilters.storageOptions,
+        phoneConditions: phonesFilters.conditions,
+        ramOptions: phonesFilters.ramOptions,
+        screenSizes: phonesFilters.screenSizes,
+      };
+    }
+    if (subcategory === "שעונים חכמים") {
+      return {
+        brands: ["Apple Watch", "Samsung Galaxy Watch", "Garmin", "Fitbit", "Huawei Watch", "Xiaomi", "אחר"],
+        features: ["GPS", "מד דופק", "מד חמצן", "תשלומים", "LTE/Cellular", "עמידות במים"],
+        connectivity: ["Bluetooth בלבד", "WiFi + Bluetooth", "LTE + WiFi + Bluetooth"],
+      };
+    }
+    if (subcategory === "אוזניות אלחוטיות") {
+      return {
+        brands: ["Apple AirPods", "Samsung Galaxy Buds", "Sony", "Jabra", "Bose", "JBL", "Beats", "אחר"],
+        type: ["True Wireless", "Neckband", "Over-ear אלחוטיות"],
+        features: ["מבטלות רעש (ANC)", "מצב שקיפות", "עמידות מים", "טעינה אלחוטית"],
+      };
+    }
+    if (["מטענים", "כיסויים", "מגני מסך", "סוללות חיצוניות"].includes(subcategory)) {
+      return {
+        compatibility: ["iPhone", "Samsung", "אוניברסלי", "USB-C", "Lightning", "Micro USB"],
       };
     }
   }
