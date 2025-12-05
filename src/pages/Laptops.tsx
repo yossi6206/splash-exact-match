@@ -170,6 +170,29 @@ const Laptops = () => {
     setLoading(false);
   };
   
+  // Sidebar filter state
+  const [sidebarFilters, setSidebarFilters] = useState<any>({
+    brands: [],
+    processors: [],
+    ramOptions: [],
+    storageOptions: [],
+    storageTypes: [],
+    screenSizes: [],
+    resolutions: [],
+    graphicsCards: [],
+    operatingSystems: [],
+    priceMin: 0,
+    priceMax: 30000,
+    conditions: [],
+    cities: [],
+    features: [],
+  });
+
+  const handleSidebarFilterChange = (filters: any) => {
+    setSidebarFilters(filters);
+    setCurrentPage(1);
+  };
+
   // Calculate counts for filter options
   const filterCounts = useMemo(() => {
     const counts = {
@@ -177,9 +200,14 @@ const Laptops = () => {
       processors: {} as Record<string, number>,
       ramOptions: {} as Record<string, number>,
       storageOptions: {} as Record<string, number>,
+      storageTypes: {} as Record<string, number>,
       screenSizes: {} as Record<string, number>,
+      resolutions: {} as Record<string, number>,
+      graphicsCards: {} as Record<string, number>,
+      operatingSystems: {} as Record<string, number>,
       conditions: {} as Record<string, number>,
       cities: {} as Record<string, number>,
+      features: {} as Record<string, number>,
     };
     
     laptops.forEach(laptop => {
@@ -187,9 +215,18 @@ const Laptops = () => {
       if (laptop.processor) counts.processors[laptop.processor] = (counts.processors[laptop.processor] || 0) + 1;
       if (laptop.ram) counts.ramOptions[`${laptop.ram}GB`] = (counts.ramOptions[`${laptop.ram}GB`] || 0) + 1;
       if (laptop.storage) counts.storageOptions[`${laptop.storage}GB`] = (counts.storageOptions[`${laptop.storage}GB`] || 0) + 1;
+      if (laptop.storage_type) counts.storageTypes[laptop.storage_type] = (counts.storageTypes[laptop.storage_type] || 0) + 1;
       if (laptop.screen_size) counts.screenSizes[`${laptop.screen_size}"`] = (counts.screenSizes[`${laptop.screen_size}"`] || 0) + 1;
+      if (laptop.resolution) counts.resolutions[laptop.resolution] = (counts.resolutions[laptop.resolution] || 0) + 1;
+      if (laptop.graphics_card) counts.graphicsCards[laptop.graphics_card] = (counts.graphicsCards[laptop.graphics_card] || 0) + 1;
+      if (laptop.operating_system) counts.operatingSystems[laptop.operating_system] = (counts.operatingSystems[laptop.operating_system] || 0) + 1;
       if (laptop.condition) counts.conditions[laptop.condition] = (counts.conditions[laptop.condition] || 0) + 1;
       if (laptop.location) counts.cities[laptop.location] = (counts.cities[laptop.location] || 0) + 1;
+      if (laptop.features) {
+        laptop.features.forEach((feature: string) => {
+          counts.features[feature] = (counts.features[feature] || 0) + 1;
+        });
+      }
     });
 
     return counts;
@@ -199,21 +236,113 @@ const Laptops = () => {
   const activeListings = useCountUp({ end: Math.floor(laptops.length * 0.85), duration: 2000, startOnView: false });
   const avgViews = useCountUp({ end: 245, duration: 1500, startOnView: false });
   
-  // Filter laptops based on search query
+  // Filter laptops based on search query and sidebar filters
   const filteredLaptops = useMemo(() => {
-    if (!debouncedSearchQuery) return laptops;
-    
-    const query = debouncedSearchQuery.toLowerCase();
-    return laptops.filter((laptop) => {
-      return (
-        laptop.brand?.toLowerCase().includes(query) ||
-        laptop.model?.toLowerCase().includes(query) ||
-        laptop.description?.toLowerCase().includes(query) ||
-        laptop.location?.toLowerCase().includes(query) ||
-        laptop.processor?.toLowerCase().includes(query)
+    let filtered = laptops;
+
+    // Text search filter
+    if (debouncedSearchQuery) {
+      const query = debouncedSearchQuery.toLowerCase();
+      filtered = filtered.filter((laptop) => {
+        return (
+          laptop.brand?.toLowerCase().includes(query) ||
+          laptop.model?.toLowerCase().includes(query) ||
+          laptop.description?.toLowerCase().includes(query) ||
+          laptop.location?.toLowerCase().includes(query) ||
+          laptop.processor?.toLowerCase().includes(query)
+        );
+      });
+    }
+
+    // Brand filter
+    if (sidebarFilters.brands.length > 0) {
+      filtered = filtered.filter(laptop => sidebarFilters.brands.includes(laptop.brand));
+    }
+
+    // Processor filter
+    if (sidebarFilters.processors.length > 0) {
+      filtered = filtered.filter(laptop => 
+        sidebarFilters.processors.some((proc: string) => laptop.processor?.includes(proc))
       );
-    });
-  }, [laptops, debouncedSearchQuery]);
+    }
+
+    // RAM filter
+    if (sidebarFilters.ramOptions.length > 0) {
+      filtered = filtered.filter(laptop => 
+        sidebarFilters.ramOptions.includes(`${laptop.ram}GB`)
+      );
+    }
+
+    // Storage filter
+    if (sidebarFilters.storageOptions.length > 0) {
+      filtered = filtered.filter(laptop => {
+        const storageStr = `${laptop.storage}GB`;
+        return sidebarFilters.storageOptions.some((opt: string) => {
+          if (opt === '2TB+') return laptop.storage >= 2000;
+          return storageStr === opt;
+        });
+      });
+    }
+
+    // Storage type filter
+    if (sidebarFilters.storageTypes.length > 0) {
+      filtered = filtered.filter(laptop => sidebarFilters.storageTypes.includes(laptop.storage_type));
+    }
+
+    // Screen size filter
+    if (sidebarFilters.screenSizes.length > 0) {
+      filtered = filtered.filter(laptop => 
+        sidebarFilters.screenSizes.includes(`${laptop.screen_size}"`)
+      );
+    }
+
+    // Resolution filter
+    if (sidebarFilters.resolutions.length > 0) {
+      filtered = filtered.filter(laptop => 
+        sidebarFilters.resolutions.some((res: string) => laptop.resolution?.includes(res.split(' ')[0]))
+      );
+    }
+
+    // Graphics card filter
+    if (sidebarFilters.graphicsCards.length > 0) {
+      filtered = filtered.filter(laptop => 
+        sidebarFilters.graphicsCards.some((gpu: string) => laptop.graphics_card?.includes(gpu))
+      );
+    }
+
+    // Operating system filter
+    if (sidebarFilters.operatingSystems.length > 0) {
+      filtered = filtered.filter(laptop => 
+        sidebarFilters.operatingSystems.some((os: string) => laptop.operating_system?.includes(os))
+      );
+    }
+
+    // Price range filter
+    if (sidebarFilters.priceMin > 0 || sidebarFilters.priceMax < 30000) {
+      filtered = filtered.filter(laptop => 
+        laptop.price >= sidebarFilters.priceMin && laptop.price <= sidebarFilters.priceMax
+      );
+    }
+
+    // Condition filter
+    if (sidebarFilters.conditions.length > 0) {
+      filtered = filtered.filter(laptop => sidebarFilters.conditions.includes(laptop.condition));
+    }
+
+    // City filter
+    if (sidebarFilters.cities.length > 0) {
+      filtered = filtered.filter(laptop => sidebarFilters.cities.includes(laptop.location));
+    }
+
+    // Features filter
+    if (sidebarFilters.features.length > 0) {
+      filtered = filtered.filter(laptop => 
+        sidebarFilters.features.every((feature: string) => laptop.features?.includes(feature))
+      );
+    }
+
+    return filtered;
+  }, [laptops, debouncedSearchQuery, sidebarFilters]);
   
   const totalPages = Math.ceil(filteredLaptops.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -319,7 +448,7 @@ const Laptops = () => {
                 <SheetTitle>סינון תוצאות</SheetTitle>
               </SheetHeader>
               <div className="mt-6">
-                <LaptopSidebarFilter counts={filterCounts} />
+                <LaptopSidebarFilter counts={filterCounts} onFilterChange={handleSidebarFilterChange} />
               </div>
             </SheetContent>
           </Sheet>
@@ -347,8 +476,8 @@ const Laptops = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
           {/* Sidebar Filters - Hidden on mobile, shown in Sheet */}
-          <div className="hidden lg:block">
-            <LaptopSidebarFilter counts={filterCounts} />
+          <div className="hidden lg:block self-start sticky top-20">
+            <LaptopSidebarFilter counts={filterCounts} onFilterChange={handleSidebarFilterChange} />
           </div>
 
           {/* Laptops Grid */}

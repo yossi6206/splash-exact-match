@@ -1,20 +1,16 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, Share2, MapPin, Calendar, Shield, Package, Truck, Phone, Mail, MessageSquare, Loader2, Monitor, Keyboard, Cpu, Camera, Fingerprint, HardDrive, Wifi, Cable, Calculator, Bluetooth, Check, Users, Eye, FileCheck, AlertCircle } from "lucide-react";
+import { Heart, MapPin, Calendar, Shield, Phone, MessageSquare, Loader2, Monitor, Keyboard, Cpu, Camera, Fingerprint, HardDrive, Wifi, Cable, Bluetooth, Check, Eye, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import laptopImage from "@/assets/item-laptop.jpg";
-import { ReviewStats } from "@/components/reviews/ReviewStats";
-import { ReviewsList } from "@/components/reviews/ReviewsList";
-import { ReviewForm } from "@/components/reviews/ReviewForm";
 import AIReport from "@/components/AIReport";
 import MobileHeader from "@/components/MobileHeader";
 import SimilarListings from "@/components/SimilarListings";
@@ -23,8 +19,38 @@ import { ShareMenu } from "@/components/ShareMenu";
 import { CloudflareImage } from "@/components/CloudflareImage";
 import { getLaptopTitle } from "@/utils/titleUtils";
 
+// Helper to get icon for feature
+const getFeatureIcon = (feature: string) => {
+  const featureLower = feature.toLowerCase();
+  
+  if (featureLower.includes('מסך מגע') || featureLower.includes('מגע')) return Monitor;
+  if (featureLower.includes('מקלדת') || featureLower.includes('תאור') || featureLower.includes('נומר')) return Keyboard;
+  if (featureLower.includes('מעבד') || featureLower.includes('intel') || featureLower.includes('amd') || featureLower.includes('processor')) return Cpu;
+  if (featureLower.includes('מצלמ') || featureLower.includes('webcam') || featureLower.includes('camera')) return Camera;
+  if (featureLower.includes('טביע') || featureLower.includes('fingerprint')) return Fingerprint;
+  if (featureLower.includes('hdd') || featureLower.includes('ssd') || featureLower.includes('כונן') || featureLower.includes('אחסון')) return HardDrive;
+  if (featureLower.includes('גרפיק') || featureLower.includes('graphics') || featureLower.includes('nvidia') || featureLower.includes('hdmi')) return Monitor;
+  if (featureLower.includes('bluetooth')) return Bluetooth;
+  if (featureLower.includes('wifi') || featureLower.includes('wi-fi')) return Wifi;
+  if (featureLower.includes('usb') || featureLower.includes('יציא')) return Cable;
+  
+  return Check;
+};
+
+// Spec row component
+const SpecRow = ({ label, value }: { label: string; value: string | number | null | undefined }) => {
+  if (!value) return null;
+  return (
+    <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+      <div className="text-muted-foreground font-medium">{label}</div>
+      <div className="text-foreground font-semibold">{value}</div>
+    </div>
+  );
+};
+
 const LaptopDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -89,7 +115,6 @@ const LaptopDetails = () => {
   const handleContactClick = async () => {
     if (!id || !laptop) return;
     
-    // Increment contacts count
     await supabase
       .from("laptops")
       .update({ contacts_count: (laptop.contacts_count || 0) + 1 })
@@ -99,6 +124,18 @@ const LaptopDetails = () => {
   const handleShowPhone = async () => {
     setShowPhone(true);
     await handleContactClick();
+  };
+
+  const handleSendMessage = () => {
+    if (!user) {
+      toast({
+        title: "נדרשת התחברות",
+        description: "יש להתחבר כדי לשלוח הודעה למוכר",
+        variant: "destructive"
+      });
+      return;
+    }
+    navigate(`/messages?seller=${laptop.user_id}&item=${id}&type=laptop`);
   };
 
   if (loading) {
@@ -129,6 +166,7 @@ const LaptopDetails = () => {
   }
 
   const images = laptop.images && laptop.images.length > 0 ? laptop.images : [laptopImage];
+  const laptopTitle = getLaptopTitle(laptop.brand, laptop.model);
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
@@ -138,11 +176,11 @@ const LaptopDetails = () => {
       <main className="container mx-auto px-4 py-6">
         {/* Breadcrumb */}
         <div className="text-sm text-muted-foreground mb-6">
-          <span className="hover:text-foreground cursor-pointer">יד שניה</span>
+          <span className="hover:text-foreground cursor-pointer" onClick={() => navigate('/')}>ראשי</span>
           <span className="mx-2">/</span>
-          <span className="hover:text-foreground cursor-pointer">מחשבים ניידים</span>
+          <span className="hover:text-foreground cursor-pointer" onClick={() => navigate('/laptops')}>מחשבים ניידים</span>
           <span className="mx-2">/</span>
-          <span className="text-foreground">{getLaptopTitle(laptop.brand, laptop.model)}</span>
+          <span className="text-foreground">{laptopTitle}</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
@@ -155,7 +193,7 @@ const LaptopDetails = () => {
                 <div className="relative aspect-[4/3] bg-muted">
                   <CloudflareImage
                     src={images[selectedImage]}
-                    alt={getLaptopTitle(laptop.brand, laptop.model)}
+                    alt={laptopTitle}
                     preset="hero"
                     className="w-full h-full object-contain p-8"
                   />
@@ -175,46 +213,42 @@ const LaptopDetails = () => {
                     >
                       <Heart className={`h-5 w-5 ${isFavorite ? 'fill-primary text-primary' : ''}`} />
                     </Button>
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      className="rounded-full bg-background/90 hover:bg-background backdrop-blur-sm"
-                    >
-                      <Share2 className="h-5 w-5" />
-                    </Button>
+                    <ShareMenu title={laptopTitle} variant="secondary" />
                   </div>
                 </div>
 
                 {/* Thumbnails */}
-                <div className="p-4 border-t bg-card">
-                  <div className="grid grid-cols-4 gap-2">
-                    {images.map((image: string, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImage(index)}
-                        className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                          selectedImage === index
-                            ? 'border-primary ring-2 ring-primary/20'
-                            : 'border-border hover:border-primary/50'
-                        }`}
-                      >
-                        <CloudflareImage
-                          src={image}
-                          alt={`תמונה ${index + 1}`}
-                          preset="thumbnail"
-                          className="w-full h-full object-cover"
-                        />
-                      </button>
-                    ))}
+                {images.length > 1 && (
+                  <div className="p-4 border-t bg-card">
+                    <div className="grid grid-cols-4 gap-2">
+                      {images.map((image: string, index: number) => (
+                        <button
+                          key={index}
+                          onClick={() => setSelectedImage(index)}
+                          className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                            selectedImage === index
+                              ? 'border-primary ring-2 ring-primary/20'
+                              : 'border-border hover:border-primary/50'
+                          }`}
+                        >
+                          <CloudflareImage
+                            src={image}
+                            alt={`תמונה ${index + 1}`}
+                            preset="thumbnail"
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </CardContent>
             </Card>
 
             {/* Title and Info */}
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-foreground mb-3">{getLaptopTitle(laptop.brand, laptop.model)}</h1>
+                <h1 className="text-3xl font-bold text-foreground mb-3">{laptopTitle}</h1>
                 <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <MapPin className="h-4 w-4" />
@@ -224,70 +258,40 @@ const LaptopDetails = () => {
                     <Calendar className="h-4 w-4" />
                     <span>{new Date(laptop.created_at).toLocaleDateString('he-IL')}</span>
                   </div>
+                  {laptop.views_count > 0 && (
+                    <div className="flex items-center gap-1">
+                      <Eye className="h-4 w-4" />
+                      <span>{laptop.views_count} צפיות</span>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex gap-2">
                 <Button 
                   variant="outline"
                   size="icon"
-                  onClick={async () => {
-                    if (!user) {
-                      toast({
-                        title: "נדרשת התחברות",
-                        description: "יש להתחבר כדי לסמן מחשבים כמועדפים",
-                        variant: "destructive"
-                      });
-                      return;
-                    }
-                    // TODO: Implement favorite toggle
-                  }}
+                  onClick={handleFavorite}
                 >
-                  <Heart className="h-5 w-5" />
+                  <Heart className={`h-5 w-5 ${isFavorite ? 'fill-primary text-primary' : ''}`} />
                 </Button>
-                <ShareMenu 
-                  title={getLaptopTitle(laptop.brand, laptop.model)}
-                  variant="outline"
-                />
+                <ShareMenu title={laptopTitle} variant="outline" />
                 <ReportListingDialog itemId={id!} itemType="laptop" />
               </div>
             </div>
 
-            {/* Features */}
+            {/* Features & Benefits - תכונות ויתרונות */}
             {laptop.features && laptop.features.length > 0 && (
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-xl">תכונות ויתרונות</CardTitle>
+                <CardHeader className="bg-gradient-to-r from-primary/10 to-secondary/10">
+                  <CardTitle className="text-xl flex items-center gap-2">
+                    <Check className="w-5 h-5 text-primary" />
+                    תכונות ויתרונות
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-4">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {laptop.features.map((feature: string, index: number) => {
-                      const featureLower = feature.toLowerCase();
-                      let Icon = Check;
-                      
-                      if (featureLower.includes('מסך מגע') || featureLower.includes('מגע')) {
-                        Icon = Monitor;
-                      } else if (featureLower.includes('מקלדת') || featureLower.includes('תאור') || featureLower.includes('נומר')) {
-                        Icon = Keyboard;
-                      } else if (featureLower.includes('מעבד') || featureLower.includes('intel') || featureLower.includes('amd') || featureLower.includes('processor')) {
-                        Icon = Cpu;
-                      } else if (featureLower.includes('מצלמ') || featureLower.includes('webcam') || featureLower.includes('camera')) {
-                        Icon = Camera;
-                      } else if (featureLower.includes('טביע') || featureLower.includes('fingerprint')) {
-                        Icon = Fingerprint;
-                      } else if (featureLower.includes('hdd') || featureLower.includes('כונן')) {
-                        Icon = HardDrive;
-                      } else if (featureLower.includes('גרפיק') || featureLower.includes('graphics') || featureLower.includes('nvidia') || featureLower.includes('amd')) {
-                        Icon = Monitor;
-                      } else if (featureLower.includes('hdmi')) {
-                        Icon = Monitor;
-                      } else if (featureLower.includes('bluetooth')) {
-                        Icon = Bluetooth;
-                      } else if (featureLower.includes('wifi') || featureLower.includes('wi-fi')) {
-                        Icon = Wifi;
-                      } else if (featureLower.includes('usb')) {
-                        Icon = Cable;
-                      }
-                      
+                      const Icon = getFeatureIcon(feature);
                       return (
                         <div
                           key={index}
@@ -305,13 +309,13 @@ const LaptopDetails = () => {
               </Card>
             )}
 
-            {/* Description */}
+            {/* Description - תיאור */}
             {laptop.description && (
               <Card>
-                <CardHeader>
+                <CardHeader className="bg-gradient-to-r from-secondary/10 to-accent/10">
                   <CardTitle className="text-xl">תיאור</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-4">
                   <p className="text-foreground/80 leading-relaxed whitespace-pre-line">
                     {laptop.description}
                   </p>
@@ -319,293 +323,173 @@ const LaptopDetails = () => {
               </Card>
             )}
 
-            {/* Technical Specifications */}
-            {(laptop.processor || laptop.ram || laptop.storage || laptop.screen_size || laptop.graphics_card || 
-              laptop.resolution || laptop.operating_system || laptop.weight || laptop.battery || laptop.connectivity || laptop.ports) && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-xl">מפרט טכני</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-0 divide-y">
-                    {laptop.processor && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">מעבד</div>
-                        <div className="text-foreground font-semibold">{laptop.processor}</div>
-                      </div>
-                    )}
-                    {laptop.ram && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">זיכרון RAM</div>
-                        <div className="text-foreground font-semibold">{laptop.ram}GB</div>
-                      </div>
-                    )}
-                    {laptop.storage && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">אחסון</div>
-                        <div className="text-foreground font-semibold">{laptop.storage}GB {laptop.storage_type || 'SSD'}</div>
-                      </div>
-                    )}
-                    {laptop.screen_size && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">גודל מסך</div>
-                        <div className="text-foreground font-semibold">{laptop.screen_size}"</div>
-                      </div>
-                    )}
-                    {laptop.resolution && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">רזולוציה</div>
-                        <div className="text-foreground font-semibold">{laptop.resolution}</div>
-                      </div>
-                    )}
-                    {laptop.graphics_card && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">כרטיס מסך</div>
-                        <div className="text-foreground font-semibold">{laptop.graphics_card}</div>
-                      </div>
-                    )}
-                    {laptop.operating_system && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">מערכת הפעלה</div>
-                        <div className="text-foreground font-semibold">{laptop.operating_system}</div>
-                      </div>
-                    )}
-                    {laptop.weight && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">משקל</div>
-                        <div className="text-foreground font-semibold">{laptop.weight}</div>
-                      </div>
-                    )}
-                    {laptop.battery && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">סוללה</div>
-                        <div className="text-foreground font-semibold">{laptop.battery}</div>
-                      </div>
-                    )}
-                    {laptop.connectivity && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">תקשורת</div>
-                        <div className="text-foreground font-semibold">{laptop.connectivity}</div>
-                      </div>
-                    )}
-                    {laptop.ports && (
-                      <div className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
-                        <div className="text-muted-foreground font-medium">יציאות</div>
-                        <div className="text-foreground font-semibold">{laptop.ports}</div>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Shipping Info */}
+            {/* Technical Specifications - מפרט טכני */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">משלוח ואיסוף</CardTitle>
+              <CardHeader className="bg-gradient-to-r from-accent/10 to-primary/10">
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <Cpu className="w-5 h-5 text-primary" />
+                  מפרט טכני
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <Truck className="h-5 w-5 text-primary mt-0.5" />
-                    <div>
-                      <div className="font-semibold mb-1">משלוח עד הבית</div>
-                      <div className="text-sm text-muted-foreground">
-                        זמין באמצעות שירותי משלוח. עלות המשלוח מוסכמת עם המוכר.
-                      </div>
-                    </div>
-                  </div>
-                  <Separator />
-                  <div className="flex items-start gap-3">
-                    <Package className="h-5 w-5 text-primary mt-0.5" />
-                    <div>
-                      <div className="font-semibold mb-1">איסוף עצמי</div>
-                      <div className="text-sm text-muted-foreground">
-                        ניתן לאסוף את המוצר ישירות מהמוכר ב{laptop.location}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                </CardContent>
-            </Card>
-
-            {/* Similar Listings - Desktop */}
-            <div className="hidden lg:block mt-8">
-              <SimilarListings 
-                itemType="laptop"
-                currentItemId={id!}
-                location={laptop.location}
-                brand={laptop.brand}
-                priceRange={{ min: laptop.price, max: laptop.price }}
-              />
-            </div>
-          </div>
-
-          {/* Right Column - Sidebar */}
-          <div className="lg:sticky lg:top-6 h-fit space-y-4">
-            {/* Price Card */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  {/* Price */}
-                  <div>
-                    <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-4xl font-bold text-foreground">
-                        ₪{laptop.price.toLocaleString('he-IL')}
-                      </span>
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  {/* Contact Buttons */}
-                  <div className="space-y-2">
-                    {!showPhone ? (
-                      <Button className="w-full" size="lg" onClick={handleShowPhone}>
-                        <Phone className="ml-2 h-4 w-4" />
-                        הצג מספר טלפון
-                      </Button>
-                    ) : (
-                      <div className="space-y-2">
-                        <Button 
-                          className="w-full" 
-                          size="lg"
-                          asChild
-                        >
-                          <a href={`tel:${laptop.seller_phone}`} dir="ltr" className="flex items-center justify-center gap-2">
-                            <Phone className="h-4 w-4 ml-2" />
-                            <span className="font-bold">{laptop.seller_phone}</span>
-                          </a>
-                        </Button>
-                        <Button 
-                          className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
-                          size="lg"
-                          asChild
-                        >
-                      <a 
-                        href={`https://wa.me/972${(laptop.seller_phone || '').replace(/^0/, '').replace(/\D/g, '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2"
-                      >
-                            <MessageSquare className="h-4 w-4 ml-2" />
-                            שלח הודעה בוואטסאפ
-                          </a>
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <Button 
-                    className="w-full"
-                    size="lg"
-                    variant="outline"
-                    onClick={() => {
-                      if (!user) {
-                        toast({
-                          title: "נדרשת התחברות",
-                          description: "יש להתחבר כדי לשלוח הודעות",
-                          variant: "destructive"
-                        });
-                        return;
-                      }
-                      if (laptop.user_id === user.id) {
-                        toast({
-                          title: "שגיאה",
-                          description: "לא ניתן לשלוח הודעה לעצמך",
-                          variant: "destructive"
-                        });
-                        return;
-                      }
-                      window.location.href = `/messages?seller=${laptop.user_id}&item=${laptop.id}`;
-                    }}
-                  >
-                    <MessageSquare className="h-4 w-4 ml-2" />
-                    שלח הודעה למוכר
-                  </Button>
-                </div>
-
-                <div className="mt-6 pt-6 border-t">
-                  <h3 className="font-semibold mb-3">פרטי המפרסם</h3>
-                  {laptop.seller_name || laptop.seller_phone ? (
-                    <div className="space-y-3">
-                      {laptop.seller_name && (
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                            <span className="font-bold text-primary">{laptop.seller_name.charAt(0)}</span>
-                          </div>
-                          <div>
-                            <div className="font-semibold text-foreground">{laptop.seller_name}</div>
-                            <div className="text-sm text-muted-foreground">מפרסם פרטי</div>
-                          </div>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <MapPin className="h-4 w-4" />
-                        <span>{laptop.location}</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-sm text-muted-foreground">
-                      צור קשר דרך הכפתורים למעלה
-                    </div>
-                  )}
+              <CardContent className="pt-4">
+                <div className="space-y-0 divide-y">
+                  <SpecRow label="יצרן" value={laptop.brand} />
+                  <SpecRow label="דגם" value={laptop.model} />
+                  <SpecRow label="מעבד" value={laptop.processor} />
+                  <SpecRow label="זיכרון RAM" value={laptop.ram ? `${laptop.ram}GB` : null} />
+                  <SpecRow label="אחסון" value={laptop.storage ? `${laptop.storage}GB ${laptop.storage_type || 'SSD'}` : null} />
+                  <SpecRow label="סוג אחסון" value={laptop.storage_type} />
+                  <SpecRow label="גודל מסך" value={laptop.screen_size ? `${laptop.screen_size}"` : null} />
+                  <SpecRow label="רזולוציה" value={laptop.resolution} />
+                  <SpecRow label="כרטיס גרפי" value={laptop.graphics_card} />
+                  <SpecRow label="מערכת הפעלה" value={laptop.operating_system} />
+                  <SpecRow label="משקל" value={laptop.weight} />
+                  <SpecRow label="סוללה" value={laptop.battery} />
+                  <SpecRow label="קישוריות" value={laptop.connectivity} />
+                  <SpecRow label="יציאות" value={laptop.ports} />
+                  <SpecRow label="מצב" value={laptop.condition} />
                 </div>
               </CardContent>
             </Card>
 
+            {/* AI Report */}
+            <AIReport
+              itemType="laptop"
+              itemData={{
+                title: laptopTitle,
+                brand: laptop.brand,
+                model: laptop.model,
+                price: laptop.price,
+                condition: laptop.condition,
+                processor: laptop.processor,
+                ram: laptop.ram,
+                storage: laptop.storage,
+                screen_size: laptop.screen_size,
+                graphics_card: laptop.graphics_card,
+                description: laptop.description
+              }}
+            />
+
+            {/* Similar Listings */}
+            <SimilarListings
+              itemType="laptop"
+              currentItemId={id!}
+              location={laptop.location}
+              brand={laptop.brand}
+              priceRange={{ min: laptop.price * 0.7, max: laptop.price * 1.3 }}
+            />
+
             {/* Safety Tips */}
-            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+            <Card className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border-amber-200 dark:border-amber-800">
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2 text-right">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Shield className="h-4 w-4 text-primary" />
-                  </div>
-                  טיפים לעסקה בטוחה
+                <CardTitle className="text-lg flex items-center gap-2 text-amber-800 dark:text-amber-200">
+                  <Shield className="h-5 w-5" />
+                  טיפים לרכישה בטוחה
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3 text-sm">
-                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
-                      <Users className="h-3.5 w-3.5 text-primary" />
-                    </div>
-                    <span className="text-foreground/80 text-right leading-relaxed">פגשו במקום ציבורי ובטוח</span>
+                <ul className="space-y-2 text-sm text-amber-900 dark:text-amber-100">
+                  <li className="flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    בדוק את המחשב פיזית לפני הרכישה
                   </li>
-                  <li className="flex items-start gap-3 text-sm">
-                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
-                      <Eye className="h-3.5 w-3.5 text-primary" />
-                    </div>
-                    <span className="text-foreground/80 text-right leading-relaxed">בדקו את המוצר לפני התשלום</span>
+                  <li className="flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    וודא שכל הרכיבים עובדים כראוי (מסך, מקלדת, סוללה)
                   </li>
-                  <li className="flex items-start gap-3 text-sm">
-                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
-                      <AlertCircle className="h-3.5 w-3.5 text-primary" />
-                    </div>
-                    <span className="text-foreground/80 text-right leading-relaxed">אל תשלמו מראש ללא בדיקה</span>
+                  <li className="flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    בקש להראות קבלה או אחריות אם קיימת
                   </li>
-                  <li className="flex items-start gap-3 text-sm">
-                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-background flex items-center justify-center">
-                      <FileCheck className="h-3.5 w-3.5 text-primary" />
-                    </div>
-                    <span className="text-foreground/80 text-right leading-relaxed">דרשו אישור עסקה בכתב</span>
+                  <li className="flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    השווה מחירים באתרים אחרים לפני הרכישה
                   </li>
                 </ul>
               </CardContent>
             </Card>
+          </div>
 
-            <AIReport itemType="laptop" itemData={{ brand: laptop.brand, model: laptop.model, price: laptop.price, condition: laptop.condition }} />
+          {/* Right Column - Sidebar */}
+          <div className="space-y-6">
+            {/* Price Card */}
+            <Card className="sticky top-24">
+              <CardHeader className="bg-gradient-to-r from-primary to-secondary text-primary-foreground rounded-t-lg">
+                <div className="text-center">
+                  <div className="text-4xl font-bold">
+                    ₪{laptop.price?.toLocaleString()}
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-6 space-y-4">
+                {/* Seller Info */}
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-lg">פרטי המוכר</h3>
+                  {laptop.seller_name && (
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <span className="font-medium text-foreground">{laptop.seller_name}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <MapPin className="h-4 w-4" />
+                    <span>{laptop.location}</span>
+                  </div>
+                </div>
 
-            {/* Similar Listings - minimal spacing */}
-            <div className="-mt-2">
-              <SimilarListings 
-                itemType="laptop"
-                currentItemId={id!}
-                location={laptop.location}
-                brand={laptop.brand}
-                priceRange={{ min: laptop.price, max: laptop.price }}
-              />
-            </div>
+                <Separator />
+
+                {/* Contact Options */}
+                <div className="space-y-3">
+                  {laptop.seller_phone ? (
+                    <>
+                      {showPhone ? (
+                        <div className="space-y-2">
+                          <a 
+                            href={`tel:${laptop.seller_phone}`}
+                            className="w-full"
+                          >
+                            <Button className="w-full" size="lg">
+                              <Phone className="ml-2 h-5 w-5" />
+                              {laptop.seller_phone}
+                            </Button>
+                          </a>
+                          <a 
+                            href={`https://wa.me/972${laptop.seller_phone.slice(1)}?text=היי, ראיתי את המודעה שלך ב-SecondHandPro: ${laptopTitle}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full"
+                          >
+                            <Button variant="outline" className="w-full bg-green-500 hover:bg-green-600 text-white border-green-500" size="lg">
+                              <MessageSquare className="ml-2 h-5 w-5" />
+                              WhatsApp
+                            </Button>
+                          </a>
+                        </div>
+                      ) : (
+                        <Button onClick={handleShowPhone} className="w-full" size="lg">
+                          <Phone className="ml-2 h-5 w-5" />
+                          הצג מספר טלפון
+                        </Button>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-sm text-muted-foreground text-center py-2">
+                      המוכר לא השאיר מספר טלפון
+                    </p>
+                  )}
+
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    size="lg"
+                    onClick={handleSendMessage}
+                  >
+                    <MessageSquare className="ml-2 h-5 w-5" />
+                    שלח הודעה למוכר
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </main>
