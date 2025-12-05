@@ -110,11 +110,78 @@ const filterLabels: Record<string, { label: string; icon: React.ReactNode }> = {
   tvSizes: { label: "גודל מסך", icon: <Tv className="w-4 h-4 text-primary" /> },
   os: { label: "מערכת הפעלה", icon: <Tv className="w-4 h-4 text-primary" /> },
   
-  // Computers
+  // Computers - General
   processors: { label: "מעבד", icon: <Laptop className="w-4 h-4 text-primary" /> },
   ramOptions: { label: "זיכרון RAM", icon: <Laptop className="w-4 h-4 text-primary" /> },
   storageOptions: { label: "נפח אחסון", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  storageTypes: { label: "סוג אחסון", icon: <Laptop className="w-4 h-4 text-primary" /> },
   screenSizes: { label: "גודל מסך", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  graphicsCards: { label: "כרטיס מסך", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  operatingSystems: { label: "מערכת הפעלה", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Laptops
+  laptopTypes: { label: "סוג מחשב נייד", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  laptopFeatures: { label: "תכונות נייד", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Desktops
+  desktopTypes: { label: "סוג מחשב נייח", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  desktopFormFactor: { label: "פורם פקטור", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Monitors
+  monitorSizes: { label: "גודל מסך", icon: <Tv className="w-4 h-4 text-primary" /> },
+  monitorResolution: { label: "רזולוציה", icon: <Tv className="w-4 h-4 text-primary" /> },
+  monitorPanelType: { label: "סוג פאנל", icon: <Tv className="w-4 h-4 text-primary" /> },
+  monitorRefreshRate: { label: "קצב רענון", icon: <Tv className="w-4 h-4 text-primary" /> },
+  monitorFeatures: { label: "תכונות מסך", icon: <Tv className="w-4 h-4 text-primary" /> },
+  
+  // Computers - GPU
+  gpuBrands: { label: "יצרן GPU", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  gpuSeries: { label: "סדרת GPU", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  gpuMemory: { label: "זיכרון GPU", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  
+  // Computers - CPU
+  cpuBrands: { label: "יצרן מעבד", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  cpuSeries: { label: "סדרת מעבד", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  cpuGeneration: { label: "דור מעבד", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  cpuSocket: { label: "סוקט", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  
+  // Computers - RAM
+  ramType: { label: "סוג RAM", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  ramSpeed: { label: "מהירות RAM", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  ramCapacity: { label: "נפח RAM", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  ramKit: { label: "ערכת RAM", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Storage
+  storageDriveType: { label: "סוג כונן", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  storageDriveCapacity: { label: "נפח כונן", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  storageDriveSpeed: { label: "מהירות כונן", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Motherboard
+  motherboardFormFactor: { label: "פורם פקטור לוח אם", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  motherboardChipset: { label: "צ׳יפסט", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  motherboardFeatures: { label: "תכונות לוח אם", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Peripherals
+  peripheralBrands: { label: "מותג", icon: <Tag className="w-4 h-4 text-primary" /> },
+  keyboardTypes: { label: "סוג מקלדת", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  keyboardSwitches: { label: "סוג מתגים", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  keyboardLayout: { label: "תצורת מקלדת", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  keyboardFeatures: { label: "תכונות מקלדת", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  mouseTypes: { label: "סוג עכבר", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  mouseSensor: { label: "סוג חיישן", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  mouseDPI: { label: "DPI", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  mouseFeatures: { label: "תכונות עכבר", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  headsetTypes: { label: "סוג אוזניות", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  headsetConnectivity: { label: "חיבור אוזניות", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  headsetFeatures: { label: "תכונות אוזניות", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  componentCondition: { label: "מצב רכיב", icon: <CheckSquare className="w-4 h-4 text-primary" /> },
+  
+  // Computers - Tablets
+  tabletBrands: { label: "מותג טאבלט", icon: <Smartphone className="w-4 h-4 text-primary" /> },
+  tabletScreenSizes: { label: "גודל מסך טאבלט", icon: <Smartphone className="w-4 h-4 text-primary" /> },
+  tabletStorage: { label: "אחסון טאבלט", icon: <Smartphone className="w-4 h-4 text-primary" /> },
+  tabletConnectivity: { label: "קישוריות טאבלט", icon: <Smartphone className="w-4 h-4 text-primary" /> },
+  tabletFeatures: { label: "תכונות טאבלט", icon: <Smartphone className="w-4 h-4 text-primary" /> },
   
   // Phones
   phoneConditions: { label: "מצב מכשיר", icon: <Smartphone className="w-4 h-4 text-primary" /> },
