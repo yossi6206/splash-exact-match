@@ -417,7 +417,7 @@ const PostSecondhand = () => {
         return (
           <>
             <div className="space-y-2">
-              <Label htmlFor="brand">סוג</Label>
+              <Label htmlFor="brand">סוג *</Label>
               <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -443,7 +443,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="size">מספר מושבים</Label>
+              <Label htmlFor="size">מספר מושבים *</Label>
               <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר מספר מושבים" />
@@ -469,7 +469,33 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="color">צבע</Label>
+              <Label htmlFor="warranty">סוג מילוי</Label>
+              <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג מילוי" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sofaFilling.map(fill => (
+                    <SelectItem key={fill} value={fill}>{fill}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="weight">סגנון</Label>
+              <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סגנון" />
+                </SelectTrigger>
+                <SelectContent>
+                  {furnitureStyle.map(style => (
+                    <SelectItem key={style} value={style}>{style}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע *</Label>
               <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר צבע" />
@@ -482,7 +508,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="dimensions">מידות (אורך x רוחב x גובה ס"מ)</Label>
+              <Label htmlFor="dimensions">מידות (אורך x רוחב x גובה ס"מ) *</Label>
               <Input
                 id="dimensions"
                 name="dimensions"
@@ -539,27 +565,14 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="dimensions">קשיחות מזרן</Label>
-              <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+              <Label htmlFor="warranty">קשיחות מזרן</Label>
+              <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר קשיחות" />
                 </SelectTrigger>
                 <SelectContent>
-                  {mattressHardness.map(h => (
-                    <SelectItem key={h} value={h}>{h}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="weight">חומר מסגרת</Label>
-              <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="בחר חומר" />
-                </SelectTrigger>
-                <SelectContent>
-                  {bedFrame.map(f => (
-                    <SelectItem key={f} value={f}>{f}</SelectItem>
+                  {mattressHardness.map(hard => (
+                    <SelectItem key={hard} value={hard}>{hard}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -578,7 +591,20 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="color">צבע</Label>
+              <Label htmlFor="weight">חומר מסגרת</Label>
+              <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר חומר" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bedFrame.map(frame => (
+                    <SelectItem key={frame} value={frame}>{frame}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע *</Label>
               <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר צבע" />
@@ -589,6 +615,16 @@ const PostSecondhand = () => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">מידות כוללות (אורך x רוחב x גובה ס"מ)</Label>
+              <Input
+                id="dimensions"
+                name="dimensions"
+                value={formData.dimensions}
+                onChange={handleInputChange}
+                placeholder='לדוגמה: 200x160x40'
+              />
             </div>
           </>
         );
@@ -970,7 +1006,7 @@ const PostSecondhand = () => {
           <>
             {brandField}
             <div className="space-y-2">
-              <Label htmlFor="material">סוג מקרר</Label>
+              <Label htmlFor="material">סוג מקרר *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -983,7 +1019,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="size">נפח</Label>
+              <Label htmlFor="size">נפח *</Label>
               <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר נפח" />
@@ -996,7 +1032,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="age">תכונות</Label>
+              <Label htmlFor="age">תכונות מתקדמות</Label>
               <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר תכונה" />
@@ -1004,6 +1040,19 @@ const PostSecondhand = () => {
                 <SelectContent>
                   {fridgeFeatures.map(feat => (
                     <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">מקור רכישה</Label>
+              <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מקור" />
+                </SelectTrigger>
+                <SelectContent>
+                  {purchaseSource.map(src => (
+                    <SelectItem key={src} value={src}>{src}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -1019,7 +1068,7 @@ const PostSecondhand = () => {
           <>
             {brandField}
             <div className="space-y-2">
-              <Label htmlFor="material">סוג מכונה</Label>
+              <Label htmlFor="material">סוג מכונה *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -1032,7 +1081,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="size">קיבולת</Label>
+              <Label htmlFor="size">קיבולת *</Label>
               <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר קיבולת" />
@@ -1058,7 +1107,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="age">תכונות</Label>
+              <Label htmlFor="age">תכונות מתקדמות</Label>
               <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר תכונה" />
@@ -1153,7 +1202,7 @@ const PostSecondhand = () => {
           <>
             {brandField}
             <div className="space-y-2">
-              <Label htmlFor="material">סוג מזגן</Label>
+              <Label htmlFor="material">סוג מזגן *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -1166,7 +1215,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="size">הספק (BTU)</Label>
+              <Label htmlFor="size">הספק (BTU) *</Label>
               <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר הספק" />
@@ -1179,7 +1228,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="age">תכונות</Label>
+              <Label htmlFor="age">תכונות מתקדמות</Label>
               <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר תכונה" />
@@ -1187,6 +1236,19 @@ const PostSecondhand = () => {
                 <SelectContent>
                   {acFeatures.map(feat => (
                     <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">מצב התקנה</Label>
+              <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מצב התקנה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {acInstallation.map(inst => (
+                    <SelectItem key={inst} value={inst}>{inst}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -1202,7 +1264,7 @@ const PostSecondhand = () => {
           <>
             {brandField}
             <div className="space-y-2">
-              <Label htmlFor="material">סוג מסך</Label>
+              <Label htmlFor="material">סוג מסך *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -1215,7 +1277,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="size">גודל מסך</Label>
+              <Label htmlFor="size">גודל מסך *</Label>
               <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר גודל" />
@@ -1228,7 +1290,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="age">תכונות</Label>
+              <Label htmlFor="age">תכונות מתקדמות</Label>
               <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר תכונה" />
@@ -1236,6 +1298,19 @@ const PostSecondhand = () => {
                 <SelectContent>
                   {tvFeatures.map(feat => (
                     <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">מערכת הפעלה</Label>
+              <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מערכת" />
+                </SelectTrigger>
+                <SelectContent>
+                  {tvOS.map(os => (
+                    <SelectItem key={os} value={os}>{os}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -1251,7 +1326,7 @@ const PostSecondhand = () => {
           <>
             {brandField}
             <div className="space-y-2">
-              <Label htmlFor="material">סוג מדיח</Label>
+              <Label htmlFor="material">סוג מדיח *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -1264,7 +1339,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="size">קיבולת</Label>
+              <Label htmlFor="size">קיבולת *</Label>
               <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר קיבולת" />
@@ -1272,6 +1347,19 @@ const PostSecondhand = () => {
                 <SelectContent>
                   {dishwasherCapacity.map(cap => (
                     <SelectItem key={cap} value={cap}>{cap}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות מתקדמות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {dishwasherFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -1287,7 +1375,7 @@ const PostSecondhand = () => {
           <>
             {brandField}
             <div className="space-y-2">
-              <Label htmlFor="material">סוג שואב</Label>
+              <Label htmlFor="material">סוג שואב *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -1295,6 +1383,19 @@ const PostSecondhand = () => {
                 <SelectContent>
                   {vacuumTypes.map(type => (
                     <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות מתקדמות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {vacuumFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -1322,7 +1423,7 @@ const PostSecondhand = () => {
         return (
           <>
             <div className="space-y-2">
-              <Label htmlFor="brand">מותג</Label>
+              <Label htmlFor="brand">מותג *</Label>
               <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר מותג" />
@@ -1335,7 +1436,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="material">סוג אופניים</Label>
+              <Label htmlFor="material">סוג אופניים *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -1348,7 +1449,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="size">מידה</Label>
+              <Label htmlFor="size">מידה/גודל גלגל *</Label>
               <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר מידה" />
@@ -1361,7 +1462,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="age">תכונות</Label>
+              <Label htmlFor="age">תכונות/חומר שלדה</Label>
               <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר תכונה" />
@@ -1374,7 +1475,33 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="color">צבע</Label>
+              <Label htmlFor="warranty">מספר הילוכים</Label>
+              <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר הילוכים" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bikeGears.map(gear => (
+                    <SelectItem key={gear} value={gear}>{gear}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="weight">רמת שימוש</Label>
+              <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר רמת שימוש" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bikeUsage.map(usage => (
+                    <SelectItem key={usage} value={usage}>{usage}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע *</Label>
               <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר צבע" />
@@ -1447,8 +1574,8 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="dimensions">מהירות מקסימלית</Label>
-              <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+              <Label htmlFor="warranty">מהירות מקסימלית</Label>
+              <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר מהירות" />
                 </SelectTrigger>
@@ -1460,20 +1587,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="year_manufactured">שנת ייצור</Label>
-              <Input
-                id="year_manufactured"
-                name="year_manufactured"
-                type="number"
-                value={formData.year_manufactured}
-                onChange={handleInputChange}
-                placeholder="2022"
-                min="2015"
-                max={new Date().getFullYear()}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="color">צבע</Label>
+              <Label htmlFor="color">צבע *</Label>
               <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר צבע" />
@@ -1494,7 +1608,7 @@ const PostSecondhand = () => {
         return (
           <>
             <div className="space-y-2">
-              <Label htmlFor="material">סוג קורקינט</Label>
+              <Label htmlFor="material">סוג קורקינט *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -1520,7 +1634,33 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="color">צבע</Label>
+              <Label htmlFor="size">טווח נסיעה</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר טווח" />
+                </SelectTrigger>
+                <SelectContent>
+                  {scooterRange.map(range => (
+                    <SelectItem key={range} value={range}>{range}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="warranty">תכונות נוספות</Label>
+              <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {scooterFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע *</Label>
               <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר צבע" />
@@ -1541,7 +1681,7 @@ const PostSecondhand = () => {
         return (
           <>
             <div className="space-y-2">
-              <Label htmlFor="material">סוג ציוד</Label>
+              <Label htmlFor="material">סוג ציוד *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -1567,7 +1707,33 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="weight">משקל</Label>
+              <Label htmlFor="age">תכונות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {gymFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">משקל משתמש מקסימלי</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר משקל מקסימלי" />
+                </SelectTrigger>
+                <SelectContent>
+                  {gymMaxWeight.map(w => (
+                    <SelectItem key={w} value={w}>{w}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="weight">משקל הציוד</Label>
               <Input
                 id="weight"
                 name="weight"
@@ -1595,7 +1761,7 @@ const PostSecondhand = () => {
         return (
           <>
             <div className="space-y-2">
-              <Label htmlFor="material">סוג כלי</Label>
+              <Label htmlFor="material">סוג כלי *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -1608,7 +1774,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="brand">מותג</Label>
+              <Label htmlFor="brand">מותג *</Label>
               <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר מותג" />
@@ -1621,7 +1787,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="age">מצב</Label>
+              <Label htmlFor="age">מצב הכלי</Label>
               <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר מצב" />
@@ -1629,6 +1795,19 @@ const PostSecondhand = () => {
                 <SelectContent>
                   {instrumentConditions.map(cond => (
                     <SelectItem key={cond} value={cond}>{cond}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="warranty">אביזרים נלווים</Label>
+              <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר אביזרים" />
+                </SelectTrigger>
+                <SelectContent>
+                  {instrumentAccessories.map(acc => (
+                    <SelectItem key={acc} value={acc}>{acc}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -1726,7 +1905,7 @@ const PostSecondhand = () => {
             </div>
             {getTypeOptions().length > 0 && (
               <div className="space-y-2">
-                <Label htmlFor="material">סוג</Label>
+                <Label htmlFor="material">סוג פריט</Label>
                 <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                   <SelectTrigger>
                     <SelectValue placeholder="בחר סוג" />
@@ -1748,6 +1927,45 @@ const PostSecondhand = () => {
                 <SelectContent>
                   {fashionSizes.map(size => (
                     <SelectItem key={size} value={size}>{size}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="weight">מגדר</Label>
+              <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מגדר" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fashionGender.map(gen => (
+                    <SelectItem key={gen} value={gen}>{gen}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="warranty">עונה</Label>
+              <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר עונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fashionSeason.map(season => (
+                    <SelectItem key={season} value={season}>{season}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">חומר</Label>
+              <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר חומר" />
+                </SelectTrigger>
+                <SelectContent>
+                  {clothingMaterial.map(mat => (
+                    <SelectItem key={mat} value={mat}>{mat}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -1826,6 +2044,32 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
+              <Label htmlFor="warranty">רוחב</Label>
+              <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר רוחב" />
+                </SelectTrigger>
+                <SelectContent>
+                  {shoeWidth.map(w => (
+                    <SelectItem key={w} value={w}>{w}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="weight">מגדר</Label>
+              <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מגדר" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fashionGender.map(gen => (
+                    <SelectItem key={gen} value={gen}>{gen}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="age">מצב</Label>
               <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
                 <SelectTrigger>
@@ -1873,7 +2117,7 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="material">סוג תיק</Label>
+              <Label htmlFor="material">סוג תיק *</Label>
               <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר סוג" />
@@ -1886,14 +2130,53 @@ const PostSecondhand = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="size">חומר</Label>
-              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+              <Label htmlFor="warranty">חומר *</Label>
+              <Select value={formData.warranty} onValueChange={(value) => setFormData({ ...formData, warranty: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="בחר חומר" />
                 </SelectTrigger>
                 <SelectContent>
                   {bagMaterials.map(mat => (
                     <SelectItem key={mat} value={mat}>{mat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">גודל</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר גודל" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bagSize.map(s => (
+                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="weight">מגדר</Label>
+              <Select value={formData.weight} onValueChange={(value) => setFormData({ ...formData, weight: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מגדר" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fashionGender.map(gen => (
+                    <SelectItem key={gen} value={gen}>{gen}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">מצב</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מצב" />
+                </SelectTrigger>
+                <SelectContent>
+                  {clothingConditions.map(cond => (
+                    <SelectItem key={cond} value={cond}>{cond}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
