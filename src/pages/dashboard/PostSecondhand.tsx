@@ -92,6 +92,35 @@ const closetTypes = ["ארון הזזה", "ארון דלתות", "ארון פי�
 const closetDoors = ["דלת אחת", "2 דלתות", "3 דלתות", "4 דלתות", "5+ דלתות"];
 const closetFeatures = ["עם מראה", "עם תאורה פנימית", "מגירות", "מדפים", "תליה כפולה"];
 const electronicsBrands = ["Samsung", "LG", "Bosch", "Siemens", "Electrolux", "Whirlpool", "Haier", "Beko", "Candy", "Ariston"];
+
+// Electronics subcategory-specific options
+const fridgeTypes = ["מקרר דו-דלתי", "מקרר חד-דלתי", "מקרר צד בצד (Side by Side)", "מקרר פרנצ׳ דור", "מקרר משולב מקפיא עליון", "מקרר משולב מקפיא תחתון", "מקרר מיני"];
+const fridgeSizes = ["עד 300 ליטר", "300-400 ליטר", "400-500 ליטר", "500-600 ליטר", "מעל 600 ליטר"];
+const fridgeFeatures = ["No Frost", "מתקן מים", "מתקן קרח", "אזור טריות", "דלת בתוך דלת", "חיסכוני A+++"];
+
+const washerTypes = ["מכונת כביסה פתח קדמי", "מכונת כביסה פתח עליון", "מכונה משולבת כביסה-ייבוש", "מכונת כביסה תעשייתית"];
+const washerCapacity = ["5 ק״ג", "6 ק״ג", "7 ק״ג", "8 ק״ג", "9 ק״ג", "10 ק״ג", "12 ק״ג", "מעל 12 ק״ג"];
+const washerFeatures = ["אינוורטר", "מנוע ישיר", "הוספת כביסה באמצע", "Wi-Fi", "קיטור", "חיסכוני A+++"];
+const washerSpin = ["800 סל״ד", "1000 סל״ד", "1200 סל״ד", "1400 סל״ד", "1600 סל״ד"];
+
+const dryerTypes = ["מייבש קונדנסור", "מייבש משאבת חום", "מייבש פליטה"];
+const dryerCapacity = ["7 ק״ג", "8 ק״ג", "9 ק״ג", "10 ק״ג"];
+
+const ovenTypes = ["תנור בנוי", "תנור משולב כיריים", "תנור טורבו", "תנור משולב מיקרוגל", "תנור אדים"];
+const ovenFeatures = ["פירוליטי (ניקוי עצמי)", "טורבו", "גריל", "תכניות אפייה", "Wi-Fi"];
+
+const acTypes = ["מזגן עילי", "מזגן מרכזי", "מזגן מיני מרכזי", "מזגן נייד", "מפוצל (ספליט)"];
+const acCapacity = ["9,000 BTU", "12,000 BTU", "18,000 BTU", "24,000 BTU", "מעל 24,000 BTU"];
+const acFeatures = ["אינוורטר", "Wi-Fi", "סינון אוויר", "חימום", "שקט במיוחד"];
+
+const tvTypes = ["LED", "OLED", "QLED", "LCD", "פלזמה"];
+const tvSizes = ["32 אינץ׳", "40 אינץ׳", "43 אינץ׳", "50 אינץ׳", "55 אינץ׳", "65 אינץ׳", "75 אינץ׳", "מעל 75 אינץ׳"];
+const tvFeatures = ["Smart TV", "4K", "8K", "HDR", "120Hz", "Gaming Mode"];
+
+const dishwasherTypes = ["מדיח כלים רחב", "מדיח כלים צר", "מדיח כלים שולחני"];
+const dishwasherCapacity = ["9 מערכות", "12 מערכות", "14 מערכות", "מעל 14 מערכות"];
+
+const vacuumTypes = ["שואב אבק רובוטי", "שואב אבק אלחוטי", "שואב אבק עם שקית", "שואב אבק ללא שקית", "שואב אבק מים"];
 const sportsBrands = ["Nike", "Adidas", "Puma", "Giant", "Trek", "Specialized", "Decathlon", "Reebok", "Under Armour"];
 const fashionBrands = ["Zara", "H&M", "Mango", "Castro", "Fox", "TNT", "Golf", "American Eagle", "Banana Republic"];
 const fashionSizes = ["XS", "S", "M", "L", "XL", "XXL", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"];
@@ -721,24 +750,30 @@ const PostSecondhand = () => {
       );
     }
 
-    // Electronics fields
+    // Electronics fields - with subcategory-specific fields
     if (category === "מוצרי חשמל") {
-      return (
+      const { subcategory } = formData;
+      
+      // Common brand field for all electronics
+      const brandField = (
+        <div className="space-y-2">
+          <Label htmlFor="brand">מותג *</Label>
+          <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+            <SelectTrigger>
+              <SelectValue placeholder="בחר מותג" />
+            </SelectTrigger>
+            <SelectContent>
+              {electronicsBrands.map(brand => (
+                <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+              ))}
+              <SelectItem value="אחר">אחר</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      );
+      
+      const commonFields = (
         <>
-          <div className="space-y-2">
-            <Label htmlFor="brand">מותג *</Label>
-            <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="בחר מותג" />
-              </SelectTrigger>
-              <SelectContent>
-                {electronicsBrands.map(brand => (
-                  <SelectItem key={brand} value={brand}>{brand}</SelectItem>
-                ))}
-                <SelectItem value="אחר">אחר</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
           <div className="space-y-2">
             <Label htmlFor="year_manufactured">שנת ייצור</Label>
             <Input
@@ -753,16 +788,6 @@ const PostSecondhand = () => {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="age">גיל המוצר (שנים)</Label>
-            <Input
-              id="age"
-              name="age"
-              value={formData.age}
-              onChange={handleInputChange}
-              placeholder="2"
-            />
-          </div>
-          <div className="space-y-2">
             <Label htmlFor="warranty">אחריות</Label>
             <Input
               id="warranty"
@@ -772,6 +797,367 @@ const PostSecondhand = () => {
               placeholder="אחריות יבואן רשמי, 6 חודשים..."
             />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="color">צבע</Label>
+            <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="בחר צבע" />
+              </SelectTrigger>
+              <SelectContent>
+                {colors.map(color => (
+                  <SelectItem key={color} value={color}>{color}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </>
+      );
+      
+      // Refrigerators
+      if (subcategory === "מקררים" || subcategory === "מקפיאים") {
+        return (
+          <>
+            {brandField}
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג מקרר</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fridgeTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">נפח</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר נפח" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fridgeSizes.map(size => (
+                    <SelectItem key={size} value={size}>{size}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fridgeFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {commonFields}
+          </>
+        );
+      }
+      
+      // Washing machines
+      if (subcategory === "מכונות כביסה") {
+        return (
+          <>
+            {brandField}
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג מכונה</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {washerTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">קיבולת</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר קיבולת" />
+                </SelectTrigger>
+                <SelectContent>
+                  {washerCapacity.map(cap => (
+                    <SelectItem key={cap} value={cap}>{cap}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">מהירות סחיטה</Label>
+              <Select value={formData.dimensions} onValueChange={(value) => setFormData({ ...formData, dimensions: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מהירות" />
+                </SelectTrigger>
+                <SelectContent>
+                  {washerSpin.map(spin => (
+                    <SelectItem key={spin} value={spin}>{spin}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {washerFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {commonFields}
+          </>
+        );
+      }
+      
+      // Dryers
+      if (subcategory === "מייבשי כביסה") {
+        return (
+          <>
+            {brandField}
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג מייבש</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {dryerTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">קיבולת</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר קיבולת" />
+                </SelectTrigger>
+                <SelectContent>
+                  {dryerCapacity.map(cap => (
+                    <SelectItem key={cap} value={cap}>{cap}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {commonFields}
+          </>
+        );
+      }
+      
+      // Ovens
+      if (subcategory === "תנורים" || subcategory === "כיריים" || subcategory === "מיקרוגל") {
+        return (
+          <>
+            {brandField}
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג תנור</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ovenTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ovenFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {commonFields}
+          </>
+        );
+      }
+      
+      // Air conditioners
+      if (subcategory === "מזגנים" || subcategory === "מאווררים") {
+        return (
+          <>
+            {brandField}
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג מזגן</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {acTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">הספק (BTU)</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר הספק" />
+                </SelectTrigger>
+                <SelectContent>
+                  {acCapacity.map(cap => (
+                    <SelectItem key={cap} value={cap}>{cap}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {acFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {commonFields}
+          </>
+        );
+      }
+      
+      // TVs
+      if (subcategory === "טלוויזיות" || subcategory === "מערכות סטריאו") {
+        return (
+          <>
+            {brandField}
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג מסך</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {tvTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">גודל מסך</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר גודל" />
+                </SelectTrigger>
+                <SelectContent>
+                  {tvSizes.map(size => (
+                    <SelectItem key={size} value={size}>{size}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {tvFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {commonFields}
+          </>
+        );
+      }
+      
+      // Dishwashers
+      if (subcategory === "מדיחי כלים") {
+        return (
+          <>
+            {brandField}
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג מדיח</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {dishwasherTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">קיבולת</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר קיבולת" />
+                </SelectTrigger>
+                <SelectContent>
+                  {dishwasherCapacity.map(cap => (
+                    <SelectItem key={cap} value={cap}>{cap}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {commonFields}
+          </>
+        );
+      }
+      
+      // Vacuum cleaners
+      if (subcategory === "שואבי אבק") {
+        return (
+          <>
+            {brandField}
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג שואב</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {vacuumTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {commonFields}
+          </>
+        );
+      }
+      
+      // Default electronics fields
+      return (
+        <>
+          {brandField}
+          {commonFields}
         </>
       );
     }
