@@ -41,6 +41,207 @@ import SimilarListings from "@/components/SimilarListings";
 import { CardContent } from "@/components/ui/card";
 import { CloudflareImage } from "@/components/CloudflareImage";
 
+// Helper component for displaying detail items
+const DetailItem = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) => (
+  <div className="flex items-center gap-3">
+    <div className="p-2 bg-primary/10 rounded-lg">
+      {icon}
+    </div>
+    <div>
+      <div className="text-sm text-muted-foreground">{label}</div>
+      <div className="font-semibold">{value}</div>
+    </div>
+  </div>
+);
+
+// Parse features array to extract category-specific data
+const parseFeatureData = (features: string[] | null): Record<string, string> => {
+  if (!features) return {};
+  const data: Record<string, string> = {};
+  
+  features.forEach(feature => {
+    // Try to parse key:value format (e.g., "מעבד: Intel i7")
+    if (feature.includes(':')) {
+      const [key, ...valueParts] = feature.split(':');
+      data[key.trim()] = valueParts.join(':').trim();
+    }
+  });
+  
+  return data;
+};
+
+// Render category-specific details based on category/subcategory
+const renderCategorySpecificDetails = (item: any) => {
+  const category = item.category;
+  const subcategory = item.subcategory;
+  const parsedFeatures = parseFeatureData(item.features);
+  
+  // Computer-specific fields
+  if (category === 'מחשבים' || category === 'אלקטרוניקה') {
+    const computerFields = [
+      { key: 'מעבד', label: 'מעבד' },
+      { key: 'processor', label: 'מעבד' },
+      { key: 'RAM', label: 'זיכרון RAM' },
+      { key: 'ram', label: 'זיכרון RAM' },
+      { key: 'זיכרון', label: 'זיכרון RAM' },
+      { key: 'אחסון', label: 'אחסון' },
+      { key: 'storage', label: 'אחסון' },
+      { key: 'כרטיס מסך', label: 'כרטיס מסך' },
+      { key: 'graphics', label: 'כרטיס מסך' },
+      { key: 'מסך', label: 'גודל מסך' },
+      { key: 'screen', label: 'גודל מסך' },
+      { key: 'מערכת הפעלה', label: 'מערכת הפעלה' },
+      { key: 'os', label: 'מערכת הפעלה' },
+      { key: 'סוללה', label: 'סוללה' },
+      { key: 'battery', label: 'סוללה' },
+      { key: 'רזולוציה', label: 'רזולוציה' },
+      { key: 'resolution', label: 'רזולוציה' },
+      { key: 'חיבורים', label: 'חיבורים' },
+      { key: 'ports', label: 'יציאות' },
+    ];
+    
+    const displayFields = computerFields.filter(f => parsedFeatures[f.key]);
+    
+    if (displayFields.length > 0) {
+      return (
+        <>
+          <Separator className="my-6" />
+          <h3 className="text-lg font-semibold mb-4">מפרט טכני</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {displayFields.map((field, idx) => (
+              <div key={idx} className="bg-muted/50 rounded-lg p-3">
+                <div className="text-sm text-muted-foreground">{field.label}</div>
+                <div className="font-semibold">{parsedFeatures[field.key]}</div>
+              </div>
+            ))}
+          </div>
+        </>
+      );
+    }
+  }
+  
+  // Phone-specific fields
+  if (category === 'מכשירים סלולריים' || subcategory?.includes('טלפון') || subcategory?.includes('סמארטפון')) {
+    const phoneFields = [
+      { key: 'נפח אחסון', label: 'נפח אחסון' },
+      { key: 'storage', label: 'נפח אחסון' },
+      { key: 'מסך', label: 'גודל מסך' },
+      { key: 'screen', label: 'גודל מסך' },
+      { key: 'סוללה', label: 'סוללה' },
+      { key: 'battery', label: 'סוללה' },
+      { key: 'מצלמה', label: 'מצלמה' },
+      { key: 'camera', label: 'מצלמה' },
+      { key: 'RAM', label: 'זיכרון RAM' },
+    ];
+    
+    const displayFields = phoneFields.filter(f => parsedFeatures[f.key]);
+    
+    if (displayFields.length > 0) {
+      return (
+        <>
+          <Separator className="my-6" />
+          <h3 className="text-lg font-semibold mb-4">מפרט טכני</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {displayFields.map((field, idx) => (
+              <div key={idx} className="bg-muted/50 rounded-lg p-3">
+                <div className="text-sm text-muted-foreground">{field.label}</div>
+                <div className="font-semibold">{parsedFeatures[field.key]}</div>
+              </div>
+            ))}
+          </div>
+        </>
+      );
+    }
+  }
+  
+  // Furniture-specific fields
+  if (category === 'ריהוט') {
+    const furnitureFields = [
+      { key: 'סוג ריפוד', label: 'סוג ריפוד' },
+      { key: 'מספר מושבים', label: 'מספר מושבים' },
+      { key: 'גודל מיטה', label: 'גודל מיטה' },
+      { key: 'צורת שולחן', label: 'צורת שולחן' },
+      { key: 'סוג כיסא', label: 'סוג כיסא' },
+    ];
+    
+    const displayFields = furnitureFields.filter(f => parsedFeatures[f.key]);
+    
+    if (displayFields.length > 0) {
+      return (
+        <>
+          <Separator className="my-6" />
+          <h3 className="text-lg font-semibold mb-4">פרטי הריהוט</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {displayFields.map((field, idx) => (
+              <div key={idx} className="bg-muted/50 rounded-lg p-3">
+                <div className="text-sm text-muted-foreground">{field.label}</div>
+                <div className="font-semibold">{parsedFeatures[field.key]}</div>
+              </div>
+            ))}
+          </div>
+        </>
+      );
+    }
+  }
+  
+  // Sports equipment fields
+  if (category === 'ספורט ופנאי') {
+    const sportsFields = [
+      { key: 'סוג אופניים', label: 'סוג אופניים' },
+      { key: 'גודל גלגלים', label: 'גודל גלגלים' },
+      { key: 'הספק מנוע', label: 'הספק מנוע' },
+      { key: 'טווח נסיעה', label: 'טווח נסיעה' },
+    ];
+    
+    const displayFields = sportsFields.filter(f => parsedFeatures[f.key]);
+    
+    if (displayFields.length > 0) {
+      return (
+        <>
+          <Separator className="my-6" />
+          <h3 className="text-lg font-semibold mb-4">מפרט טכני</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {displayFields.map((field, idx) => (
+              <div key={idx} className="bg-muted/50 rounded-lg p-3">
+                <div className="text-sm text-muted-foreground">{field.label}</div>
+                <div className="font-semibold">{parsedFeatures[field.key]}</div>
+              </div>
+            ))}
+          </div>
+        </>
+      );
+    }
+  }
+  
+  // If there are any parsed features that weren't displayed, show them generically
+  const remainingFeatures = Object.entries(parsedFeatures).filter(([key]) => 
+    !['מעבד', 'processor', 'RAM', 'ram', 'זיכרון', 'אחסון', 'storage', 'כרטיס מסך', 'graphics', 
+      'מסך', 'screen', 'מערכת הפעלה', 'os', 'סוללה', 'battery', 'רזולוציה', 'resolution', 
+      'חיבורים', 'ports', 'נפח אחסון', 'מצלמה', 'camera', 'סוג ריפוד', 'מספר מושבים',
+      'גודל מיטה', 'צורת שולחן', 'סוג כיסא', 'סוג אופניים', 'גודל גלגלים', 'הספק מנוע', 'טווח נסיעה'
+    ].includes(key)
+  );
+  
+  if (remainingFeatures.length > 0) {
+    return (
+      <>
+        <Separator className="my-6" />
+        <h3 className="text-lg font-semibold mb-4">פרטים נוספים</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {remainingFeatures.map(([key, value], idx) => (
+            <div key={idx} className="bg-muted/50 rounded-lg p-3">
+              <div className="text-sm text-muted-foreground">{key}</div>
+              <div className="font-semibold">{value}</div>
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  }
+  
+  return null;
+};
+
 const SecondhandDetails = () => {
   const { id } = useParams();
   const { user } = useAuth();
@@ -218,186 +419,135 @@ const SecondhandDetails = () => {
 
             {/* Item Details */}
             <Card className="p-6">
-              <h2 className="text-2xl font-bold mb-6">תכונות</h2>
+              <h2 className="text-2xl font-bold mb-6">פרטי המוצר</h2>
+              
+              {/* Basic Info Section */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {/* Category */}
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Package className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">קטגוריה</div>
-                    <div className="font-semibold">{item.category}</div>
-                  </div>
-                </div>
+                <DetailItem 
+                  icon={<Package className="h-5 w-5 text-primary" />}
+                  label="קטגוריה"
+                  value={item.category}
+                />
 
                 {/* Subcategory */}
                 {item.subcategory && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <FileCheck className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">תת-קטגוריה</div>
-                      <div className="font-semibold">{item.subcategory}</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<FileCheck className="h-5 w-5 text-primary" />}
+                    label="תת-קטגוריה"
+                    value={item.subcategory}
+                  />
                 )}
 
                 {/* Condition */}
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Shield className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">מצב</div>
-                    <div className="font-semibold">{item.condition}</div>
-                  </div>
-                </div>
+                <DetailItem 
+                  icon={<Shield className="h-5 w-5 text-primary" />}
+                  label="מצב"
+                  value={item.condition}
+                />
 
                 {/* Brand */}
                 {item.brand && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Users className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">מותג</div>
-                      <div className="font-semibold">{item.brand}</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<Users className="h-5 w-5 text-primary" />}
+                    label="מותג/יצרן"
+                    value={item.brand}
+                  />
                 )}
 
                 {/* Size */}
                 {item.size && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Ruler className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">גודל</div>
-                      <div className="font-semibold">{item.size}</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<Ruler className="h-5 w-5 text-primary" />}
+                    label="גודל/דגם"
+                    value={item.size}
+                  />
                 )}
 
                 {/* Color */}
                 {item.color && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Eye className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">צבע</div>
-                      <div className="font-semibold">{item.color}</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<Eye className="h-5 w-5 text-primary" />}
+                    label="צבע"
+                    value={item.color}
+                  />
                 )}
 
                 {/* Material */}
                 {item.material && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Package className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">חומר</div>
-                      <div className="font-semibold">{item.material}</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<Package className="h-5 w-5 text-primary" />}
+                    label="חומר"
+                    value={item.material}
+                  />
                 )}
 
                 {/* Age */}
                 {item.age && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Calendar className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">גיל</div>
-                      <div className="font-semibold">{item.age}</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<Calendar className="h-5 w-5 text-primary" />}
+                    label="גיל המוצר"
+                    value={item.age}
+                  />
                 )}
 
                 {/* Year Manufactured */}
                 {item.year_manufactured && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Calendar className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">שנת ייצור</div>
-                      <div className="font-semibold">{item.year_manufactured}</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<Calendar className="h-5 w-5 text-primary" />}
+                    label="שנת ייצור"
+                    value={item.year_manufactured.toString()}
+                  />
                 )}
 
                 {/* Dimensions */}
                 {item.dimensions && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Ruler className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">מידות</div>
-                      <div className="font-semibold">{item.dimensions}</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<Ruler className="h-5 w-5 text-primary" />}
+                    label="מידות"
+                    value={item.dimensions}
+                  />
                 )}
 
                 {/* Weight */}
                 {item.weight && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Weight className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">משקל</div>
-                      <div className="font-semibold">{item.weight}</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<Weight className="h-5 w-5 text-primary" />}
+                    label="משקל"
+                    value={item.weight}
+                  />
                 )}
 
                 {/* Warranty */}
                 {item.warranty && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Shield className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">אחריות</div>
-                      <div className="font-semibold">{item.warranty}</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<Shield className="h-5 w-5 text-primary" />}
+                    label="אחריות"
+                    value={item.warranty}
+                  />
                 )}
 
                 {/* Delivery Available */}
                 {item.delivery_available && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Truck className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">משלוח</div>
-                      <div className="font-semibold">זמין</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<Truck className="h-5 w-5 text-primary" />}
+                    label="משלוח"
+                    value="זמין"
+                  />
                 )}
 
                 {/* Negotiable */}
                 {item.negotiable && (
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <HandshakeIcon className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">מחיר</div>
-                      <div className="font-semibold">ניתן למיקוח</div>
-                    </div>
-                  </div>
+                  <DetailItem 
+                    icon={<HandshakeIcon className="h-5 w-5 text-primary" />}
+                    label="מחיר"
+                    value="ניתן למיקוח"
+                  />
                 )}
               </div>
+
+              {/* Category-Specific Details */}
+              {renderCategorySpecificDetails(item)}
 
               {/* Features */}
               {item.features && item.features.length > 0 && (
