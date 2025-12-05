@@ -188,9 +188,7 @@ const Auth = () => {
         <div className="hidden lg:flex flex-col gap-10 text-right">
           <div className="space-y-3">
             <h1 className="text-4xl font-bold text-foreground leading-tight text-justify my-0">לקנות מהר, למכור מהר.</h1>
-            <p className="text-xl text-muted-foreground">
-              ויש לנו אתכלה כלים לזה.
-            </p>
+            <p className="text-xl text-muted-foreground">ויש לנו את כל הכלים לזה.</p>
           </div>
 
           <div className="flex items-center justify-start gap-8 mt-4 mr-0">
