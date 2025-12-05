@@ -52,12 +52,14 @@ const Cars = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const { saveSearch } = useSaveSearch();
+  const currentYear = new Date().getFullYear();
   const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>({
     manufacturers: [],
-    yearFrom: "",
-    yearTo: "",
+    models: [],
+    yearFrom: 2000,
+    yearTo: currentYear + 1,
     priceMin: 0,
-    priceMax: 300000,
+    priceMax: 500000,
     fuelTypes: [],
     transmissions: [],
     hands: [],
@@ -66,8 +68,8 @@ const Cars = () => {
     features: [],
     vehicleTypes: [],
     conditions: [],
-    categories: [],
     colors: [],
+    cities: [],
   });
   const itemsPerPage = 10;
 
@@ -292,16 +294,16 @@ const Cars = () => {
         return false;
       }
       
-      // Category filter
-      if (sidebarFilters.categories.length > 0 && !sidebarFilters.categories.some(c => car.category === c)) {
+      // Model filter
+      if (sidebarFilters.models.length > 0 && !sidebarFilters.models.some(m => car.model === m)) {
         return false;
       }
       
       // Year filters
-      if (sidebarFilters.yearFrom && car.year < parseInt(sidebarFilters.yearFrom)) {
+      if (car.year < sidebarFilters.yearFrom) {
         return false;
       }
-      if (sidebarFilters.yearTo && car.year > parseInt(sidebarFilters.yearTo)) {
+      if (car.year > sidebarFilters.yearTo) {
         return false;
       }
       

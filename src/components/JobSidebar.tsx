@@ -4,21 +4,22 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Briefcase, DollarSign, Clock, MapPin, Building, RotateCcw } from "lucide-react";
+import { Briefcase, DollarSign, Clock, MapPin, Building, RotateCcw, Users } from "lucide-react";
 import { useState } from "react";
 
 interface JobSidebarProps {
   onFilterChange?: (filters: JobFilters) => void;
   counts?: {
-    categories?: Record<string, number>;
+    industries?: Record<string, number>;
     jobTypes?: Record<string, number>;
     scopes?: Record<string, number>;
     locations?: Record<string, number>;
+    companySizes?: Record<string, number>;
   };
 }
 
 export interface JobFilters {
-  categories: string[];
+  industries: string[];
   jobTypes: string[];
   scopes: string[];
   experienceMin: number;
@@ -26,15 +27,17 @@ export interface JobFilters {
   salaryMin: number;
   salaryMax: number;
   locations: string[];
+  companySizes: string[];
 }
 
-const categories = [
+const industries = [
   "טכנולוגיה", "שיווק", "מכירות", "פיננסים", "משאבי אנוש",
   "עיצוב", "ניהול", "הנדסה", "תפעול", "שירות לקוחות"
 ];
 
 const jobTypes = ["משרה מלאה", "משרה חלקית", "פרילנס", "קבלן", "זמני"];
-const scopes = ["היברידית", "מהבית", "במשרד"];
+const scopes = ["היברידי", "עבודה מרחוק", "במשרד"];
+const companySizes = ["1-10 עובדים", "11-50 עובדים", "51-200 עובדים", "201-500 עובדים", "501-1000 עובדים", "1000+ עובדים"];
 const locations = [
   "תל אביב", "ירושלים", "חיפה", "באר שבע", "נתניה",
   "פתח תקווה", "ראשון לציון", "אשדוד", "רחובות", "בני ברק"
@@ -42,7 +45,7 @@ const locations = [
 
 export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
   const [filters, setFilters] = useState<JobFilters>({
-    categories: [],
+    industries: [],
     jobTypes: [],
     scopes: [],
     experienceMin: 0,
@@ -50,10 +53,11 @@ export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
     salaryMin: 0,
     salaryMax: 50000,
     locations: [],
+    companySizes: [],
   });
 
   const handleArrayFilterChange = (
-    key: keyof Pick<JobFilters, 'categories' | 'jobTypes' | 'scopes' | 'locations'>,
+    key: keyof Pick<JobFilters, 'industries' | 'jobTypes' | 'scopes' | 'locations' | 'companySizes'>,
     value: string
   ) => {
     const currentValues = filters[key] as string[];
@@ -80,7 +84,7 @@ export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
 
   const resetFilters = () => {
     const defaultFilters: JobFilters = {
-      categories: [],
+      industries: [],
       jobTypes: [],
       scopes: [],
       experienceMin: 0,
@@ -88,6 +92,7 @@ export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
       salaryMin: 0,
       salaryMax: 50000,
       locations: [],
+      companySizes: [],
     };
     setFilters(defaultFilters);
     onFilterChange?.(defaultFilters);
@@ -152,32 +157,27 @@ export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
 
         <Separator />
 
-        {/* Categories */}
+        {/* Industry */}
         <div className="space-y-3">
           <Label className="font-semibold flex items-center gap-2">
             <Building className="w-4 h-4 text-primary" />
             תחום
           </Label>
           <div className="space-y-2 max-h-48 overflow-y-auto">
-            {categories.map((category) => (
-              <div key={category} className="flex items-center justify-between">
+            {industries.map((industry) => (
+              <div key={industry} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2 space-x-reverse">
                   <Checkbox 
-                    id={`category-${category}`}
-                    checked={filters.categories.includes(category)}
-                    onCheckedChange={() => handleArrayFilterChange('categories', category)}
+                    id={`industry-${industry}`}
+                    checked={filters.industries.includes(industry)}
+                    onCheckedChange={() => handleArrayFilterChange('industries', industry)}
                   />
-                  <Label
-                    htmlFor={`category-${category}`}
-                    className="text-sm font-normal cursor-pointer"
-                  >
-                    {category}
+                  <Label htmlFor={`industry-${industry}`} className="text-sm font-normal cursor-pointer">
+                    {industry}
                   </Label>
                 </div>
-                {counts?.categories?.[category] && (
-                  <span className="text-xs text-muted-foreground">
-                    ({counts.categories[category]})
-                  </span>
+                {counts?.industries?.[industry] && (
+                  <span className="text-xs text-muted-foreground">({counts.industries[industry]})</span>
                 )}
               </div>
             ))}
@@ -192,7 +192,7 @@ export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
             <Briefcase className="w-4 h-4 text-primary" />
             סוג משרה
           </Label>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
+          <div className="space-y-2">
             {jobTypes.map((type) => (
               <div key={type} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2 space-x-reverse">
@@ -201,17 +201,12 @@ export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
                     checked={filters.jobTypes.includes(type)}
                     onCheckedChange={() => handleArrayFilterChange('jobTypes', type)}
                   />
-                  <Label
-                    htmlFor={`type-${type}`}
-                    className="text-sm font-normal cursor-pointer"
-                  >
+                  <Label htmlFor={`type-${type}`} className="text-sm font-normal cursor-pointer">
                     {type}
                   </Label>
                 </div>
                 {counts?.jobTypes?.[type] && (
-                  <span className="text-xs text-muted-foreground">
-                    ({counts.jobTypes[type]})
-                  </span>
+                  <span className="text-xs text-muted-foreground">({counts.jobTypes[type]})</span>
                 )}
               </div>
             ))}
@@ -226,7 +221,7 @@ export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
             <Building className="w-4 h-4 text-primary" />
             אופן עבודה
           </Label>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
+          <div className="space-y-2">
             {scopes.map((scope) => (
               <div key={scope} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2 space-x-reverse">
@@ -235,17 +230,41 @@ export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
                     checked={filters.scopes.includes(scope)}
                     onCheckedChange={() => handleArrayFilterChange('scopes', scope)}
                   />
-                  <Label
-                    htmlFor={`scope-${scope}`}
-                    className="text-sm font-normal cursor-pointer"
-                  >
+                  <Label htmlFor={`scope-${scope}`} className="text-sm font-normal cursor-pointer">
                     {scope}
                   </Label>
                 </div>
                 {counts?.scopes?.[scope] && (
-                  <span className="text-xs text-muted-foreground">
-                    ({counts.scopes[scope]})
-                  </span>
+                  <span className="text-xs text-muted-foreground">({counts.scopes[scope]})</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Company Size */}
+        <div className="space-y-3">
+          <Label className="font-semibold flex items-center gap-2">
+            <Users className="w-4 h-4 text-primary" />
+            גודל חברה
+          </Label>
+          <div className="space-y-2">
+            {companySizes.map((size) => (
+              <div key={size} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox 
+                    id={`size-${size}`}
+                    checked={filters.companySizes.includes(size)}
+                    onCheckedChange={() => handleArrayFilterChange('companySizes', size)}
+                  />
+                  <Label htmlFor={`size-${size}`} className="text-sm font-normal cursor-pointer">
+                    {size}
+                  </Label>
+                </div>
+                {counts?.companySizes?.[size] && (
+                  <span className="text-xs text-muted-foreground">({counts.companySizes[size]})</span>
                 )}
               </div>
             ))}
@@ -269,17 +288,12 @@ export const JobSidebar = ({ onFilterChange, counts }: JobSidebarProps) => {
                     checked={filters.locations.includes(location)}
                     onCheckedChange={() => handleArrayFilterChange('locations', location)}
                   />
-                  <Label
-                    htmlFor={`location-${location}`}
-                    className="text-sm font-normal cursor-pointer"
-                  >
+                  <Label htmlFor={`location-${location}`} className="text-sm font-normal cursor-pointer">
                     {location}
                   </Label>
                 </div>
                 {counts?.locations?.[location] && (
-                  <span className="text-xs text-muted-foreground">
-                    ({counts.locations[location]})
-                  </span>
+                  <span className="text-xs text-muted-foreground">({counts.locations[location]})</span>
                 )}
               </div>
             ))}

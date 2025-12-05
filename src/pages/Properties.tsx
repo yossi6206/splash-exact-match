@@ -24,15 +24,17 @@ const Properties = () => {
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const { saveSearch } = useSaveSearch();
+  const currentYear = new Date().getFullYear();
   const [sidebarFilters, setSidebarFilters] = useState<PropertySidebarFilters>({
+    listingTypes: [],
     propertyTypes: [],
     rooms: [],
     priceMin: 0,
-    priceMax: 5000000,
+    priceMax: 10000000,
     sizeMin: 0,
-    sizeMax: 300,
-    yearFrom: "",
-    yearTo: "",
+    sizeMax: 500,
+    yearFrom: 1950,
+    yearTo: currentYear,
     floors: [],
     conditions: [],
     cities: [],
