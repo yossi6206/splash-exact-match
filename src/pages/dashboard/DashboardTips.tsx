@@ -1,17 +1,16 @@
-import { useState } from "react";
 import TipCard from "@/components/TipCard";
-import tipSelling from "@/assets/tip-selling-new.jpg";
-import tipBuying from "@/assets/tip-buying-new.jpg";
-import tipSafety from "@/assets/tip-safety-new.jpg";
-import tipWriting from "@/assets/tip-writing-new.jpg";
-import tipPricing from "@/assets/tip-pricing-new.jpg";
-import tipInspection from "@/assets/tip-inspection-new.jpg";
-import tipMeeting from "@/assets/tip-meeting-new.jpg";
-import tipPhotography from "@/assets/tip-photography-new.jpg";
-import tipCommunication from "@/assets/tip-communication-new.jpg";
-import tipNegotiation from "@/assets/tip-negotiation-new.jpg";
-import tipFraud from "@/assets/tip-fraud-new.jpg";
-import tipPromotion from "@/assets/tip-promotion-new.jpg";
+import tipSelling from "@/assets/tip-selling.jpg";
+import tipBuying from "@/assets/tip-buying.jpg";
+import tipSafety from "@/assets/tip-safety.jpg";
+import tipWriting from "@/assets/tip-writing.jpg";
+import tipPricing from "@/assets/tip-pricing.jpg";
+import tipInspection from "@/assets/tip-inspection.jpg";
+import tipMeeting from "@/assets/tip-meeting.jpg";
+import tipPhotography from "@/assets/tip-photography.jpg";
+import tipCommunication from "@/assets/tip-communication.jpg";
+import tipNegotiation from "@/assets/tip-negotiation.jpg";
+import tipFraud from "@/assets/tip-fraud.jpg";
+import tipPromotion from "@/assets/tip-promotion.jpg";
 
 const allTips = [
   {
@@ -101,20 +100,14 @@ const allTips = [
 ];
 
 const categories = [
-  { id: "all", label: "הכל", categoryName: null },
-  { id: "selling", label: "מכירה", categoryName: "מכירה" },
-  { id: "buying", label: "קנייה", categoryName: "קנייה" },
-  { id: "security", label: "אבטחה", categoryName: "אבטחה" },
-  { id: "ads", label: "מודעות", categoryName: "מודעות" },
+  { id: "all", label: "הכל" },
+  { id: "selling", label: "מכירה" },
+  { id: "buying", label: "קנייה" },
+  { id: "security", label: "אבטחה" },
+  { id: "ads", label: "מודעות" },
 ];
 
 const DashboardTips = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
-  const filteredTips = selectedCategory
-    ? allTips.filter((tip) => tip.category === selectedCategory)
-    : allTips;
-
   return (
     <div className="max-w-7xl mx-auto">
       <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">טיפים ומדריכים</h1>
@@ -125,12 +118,7 @@ const DashboardTips = () => {
         {categories.map((category) => (
           <button
             key={category.id}
-            onClick={() => setSelectedCategory(category.categoryName)}
-            className={`px-6 py-2 rounded-full border-2 font-medium text-sm whitespace-nowrap transition-all duration-200 hover:shadow-md ${
-              selectedCategory === category.categoryName
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-white dark:bg-card border-border hover:bg-muted/50 text-foreground"
-            }`}
+            className="px-6 py-2 rounded-full bg-white dark:bg-card border-2 border-border hover:bg-muted/50 text-foreground font-medium text-sm whitespace-nowrap transition-all duration-200 hover:shadow-md"
           >
             {category.label}
           </button>
@@ -139,7 +127,7 @@ const DashboardTips = () => {
 
       {/* Tips Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
-        {filteredTips.map((tip, index) => (
+        {allTips.map((tip, index) => (
           <TipCard
             key={index}
             image={tip.image}

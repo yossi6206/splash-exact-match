@@ -65,7 +65,9 @@ const HeroSection = () => {
           {/* Content */}
           <div className="order-2 md:order-1 flex flex-col items-end text-right">
             <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-foreground mb-6 leading-tight">פחות עומס, יותר רווח</h1>
-            <p className="text-2xl md:text-3xl lg:text-4xl text-foreground/80 mb-10 font-medium">פרסום שמביא תוצאות אמיתיות</p>
+            <p className="text-2xl md:text-3xl lg:text-4xl text-foreground/80 mb-10 font-medium">
+              למכור ביד2 ולהרוויח בקלות
+            </p>
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xl px-16 py-8 rounded-full shadow-lg hover:shadow-xl transition-all">
               לפרסם מודעה
             </Button>
@@ -118,10 +120,7 @@ const HeroSection = () => {
             {/* Center apartment image */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 animate-in fade-in scale-in duration-700 delay-700 group cursor-pointer">
               <div className="w-40 h-40 md:w-52 md:h-52 lg:w-64 lg:h-64 rounded-full overflow-hidden shadow-2xl border-8 border-white/30 bg-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-3xl">
-                <CloudflareImage src={heroApartment} alt="דירה למכירה" cfOptions={{
-                width: 300,
-                height: 300
-              }} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+                <CloudflareImage src={heroApartment} alt="דירה למכירה" cfOptions={{ width: 300, height: 300 }} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
               </div>
               <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-bold text-base md:text-xl shadow-xl transition-transform duration-300 group-hover:scale-110">
                 ₪ 1,850,000
