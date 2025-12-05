@@ -4,8 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Package, DollarSign, CheckSquare, MapPin, Tag, Palette, RotateCcw, Settings2 } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
+import { Package, DollarSign, CheckSquare, MapPin, Tag, Palette, RotateCcw, Settings2, Ruler, Zap, Sofa, BedDouble, UtensilsCrossed, Shirt, Baby, Dumbbell, Music, Laptop, Smartphone, Tv, Refrigerator, WashingMachine, Car, Bike, Watch, Gem, ShoppingBag, Armchair } from "lucide-react";
+import { useState, useMemo } from "react";
 import { 
   categories as allCategories, 
   subcategories as allSubcategories, 
@@ -33,7 +33,7 @@ interface SecondhandSidebarFilterProps {
   availableSizes?: string[];
   availableColors?: string[];
   availableMaterials?: string[];
-  categoryType?: string; // URL slug like "furniture", "electronics"
+  categoryType?: string;
   selectedSubcategory?: string;
 }
 
@@ -50,11 +50,135 @@ export interface SecondhandFilters {
   materials: string[];
   deliveryAvailable: boolean;
   negotiable: boolean;
-  // Dynamic filters
-  types: string[];
-  features: string[];
   [key: string]: string[] | number | boolean;
 }
+
+// Map filter keys to Hebrew labels and icons
+const filterLabels: Record<string, { label: string; icon: React.ReactNode }> = {
+  // General
+  types: { label: "סוג", icon: <Settings2 className="w-4 h-4 text-primary" /> },
+  brands: { label: "מותג", icon: <Tag className="w-4 h-4 text-primary" /> },
+  sizes: { label: "מידה", icon: <Ruler className="w-4 h-4 text-primary" /> },
+  materials: { label: "חומר", icon: <Tag className="w-4 h-4 text-primary" /> },
+  features: { label: "תכונות", icon: <CheckSquare className="w-4 h-4 text-primary" /> },
+  styles: { label: "סגנון", icon: <Sofa className="w-4 h-4 text-primary" /> },
+  assembly: { label: "הרכבה", icon: <Settings2 className="w-4 h-4 text-primary" /> },
+  
+  // Furniture - Sofas
+  upholstery: { label: "חומר ריפוד", icon: <Sofa className="w-4 h-4 text-primary" /> },
+  seating: { label: "מספר מושבים", icon: <Armchair className="w-4 h-4 text-primary" /> },
+  filling: { label: "סוג מילוי", icon: <Sofa className="w-4 h-4 text-primary" /> },
+  
+  // Furniture - Beds
+  bedSizes: { label: "מידת מיטה", icon: <BedDouble className="w-4 h-4 text-primary" /> },
+  mattressTypes: { label: "סוג מזרן", icon: <BedDouble className="w-4 h-4 text-primary" /> },
+  hardness: { label: "קשיחות מזרן", icon: <BedDouble className="w-4 h-4 text-primary" /> },
+  frame: { label: "חומר מסגרת", icon: <BedDouble className="w-4 h-4 text-primary" /> },
+  
+  // Furniture - Tables
+  shapes: { label: "צורה", icon: <UtensilsCrossed className="w-4 h-4 text-primary" /> },
+  extension: { label: "הרחבה", icon: <Settings2 className="w-4 h-4 text-primary" /> },
+  tableTop: { label: "חומר משטח", icon: <UtensilsCrossed className="w-4 h-4 text-primary" /> },
+  
+  // Furniture - Chairs
+  base: { label: "סוג בסיס", icon: <Armchair className="w-4 h-4 text-primary" /> },
+  
+  // Furniture - Closets
+  doors: { label: "מספר דלתות", icon: <Settings2 className="w-4 h-4 text-primary" /> },
+  internalOrg: { label: "ארגון פנימי", icon: <Settings2 className="w-4 h-4 text-primary" /> },
+  
+  // Electronics - General
+  energyRating: { label: "דירוג אנרגיה", icon: <Zap className="w-4 h-4 text-primary" /> },
+  
+  // Electronics - Fridges
+  fridgeSizes: { label: "נפח", icon: <Refrigerator className="w-4 h-4 text-primary" /> },
+  
+  // Electronics - Washers
+  capacity: { label: "קיבולת", icon: <WashingMachine className="w-4 h-4 text-primary" /> },
+  spin: { label: "מהירות סחיטה", icon: <WashingMachine className="w-4 h-4 text-primary" /> },
+  
+  // Electronics - Ovens
+  ovenSize: { label: "גודל תנור", icon: <Settings2 className="w-4 h-4 text-primary" /> },
+  
+  // Electronics - Cooktops
+  burners: { label: "מספר להבות", icon: <Settings2 className="w-4 h-4 text-primary" /> },
+  
+  // Electronics - AC
+  installation: { label: "התקנה", icon: <Settings2 className="w-4 h-4 text-primary" /> },
+  
+  // Electronics - TVs
+  tvSizes: { label: "גודל מסך", icon: <Tv className="w-4 h-4 text-primary" /> },
+  os: { label: "מערכת הפעלה", icon: <Tv className="w-4 h-4 text-primary" /> },
+  
+  // Computers
+  processors: { label: "מעבד", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  ramOptions: { label: "זיכרון RAM", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  storageOptions: { label: "נפח אחסון", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  screenSizes: { label: "גודל מסך", icon: <Laptop className="w-4 h-4 text-primary" /> },
+  
+  // Phones
+  phoneConditions: { label: "מצב מכשיר", icon: <Smartphone className="w-4 h-4 text-primary" /> },
+  
+  // Sports - Bikes
+  bikeSizes: { label: "גודל אופניים", icon: <Bike className="w-4 h-4 text-primary" /> },
+  gears: { label: "הילוכים", icon: <Bike className="w-4 h-4 text-primary" /> },
+  
+  // Sports - E-Bikes
+  battery: { label: "סוללה", icon: <Zap className="w-4 h-4 text-primary" /> },
+  range: { label: "טווח נסיעה", icon: <Bike className="w-4 h-4 text-primary" /> },
+  motorLocation: { label: "מיקום מנוע", icon: <Bike className="w-4 h-4 text-primary" /> },
+  speed: { label: "מהירות מקסימלית", icon: <Bike className="w-4 h-4 text-primary" /> },
+  
+  // Sports - Gym
+  maxWeight: { label: "משקל מקסימלי", icon: <Dumbbell className="w-4 h-4 text-primary" /> },
+  
+  // Sports - Instruments
+  instrumentConditions: { label: "מצב כלי", icon: <Music className="w-4 h-4 text-primary" /> },
+  accessories: { label: "אביזרים", icon: <Music className="w-4 h-4 text-primary" /> },
+  
+  // Fashion
+  genders: { label: "מגדר", icon: <Shirt className="w-4 h-4 text-primary" /> },
+  seasons: { label: "עונה", icon: <Shirt className="w-4 h-4 text-primary" /> },
+  
+  // Fashion - Shoes
+  shoeBrands: { label: "מותג נעליים", icon: <Tag className="w-4 h-4 text-primary" /> },
+  shoeSizes: { label: "מידת נעל", icon: <Ruler className="w-4 h-4 text-primary" /> },
+  width: { label: "רוחב נעל", icon: <Ruler className="w-4 h-4 text-primary" /> },
+  
+  // Fashion - Bags
+  bagBrands: { label: "מותג תיק", icon: <ShoppingBag className="w-4 h-4 text-primary" /> },
+  bagMaterials: { label: "חומר תיק", icon: <ShoppingBag className="w-4 h-4 text-primary" /> },
+  bagSizes: { label: "גודל תיק", icon: <ShoppingBag className="w-4 h-4 text-primary" /> },
+  
+  // Fashion - Jewelry
+  jewelryMaterials: { label: "חומר תכשיט", icon: <Gem className="w-4 h-4 text-primary" /> },
+  stones: { label: "אבן", icon: <Gem className="w-4 h-4 text-primary" /> },
+  
+  // Fashion - Watches
+  watchBrands: { label: "מותג שעון", icon: <Watch className="w-4 h-4 text-primary" /> },
+  
+  // Baby & Kids
+  safety: { label: "תקן בטיחות", icon: <Baby className="w-4 h-4 text-primary" /> },
+  weight: { label: "משקל", icon: <Ruler className="w-4 h-4 text-primary" /> },
+  maxAge: { label: "גיל מקסימלי", icon: <Baby className="w-4 h-4 text-primary" /> },
+  
+  // Baby - Cribs
+  cribSizes: { label: "מידת מיטת תינוק", icon: <BedDouble className="w-4 h-4 text-primary" /> },
+  cribMaterial: { label: "חומר מיטת תינוק", icon: <BedDouble className="w-4 h-4 text-primary" /> },
+  
+  // Baby - Car Seats
+  carSeatDirection: { label: "כיוון ישיבה", icon: <Car className="w-4 h-4 text-primary" /> },
+  
+  // Baby - Toys
+  ageGroups: { label: "קבוצת גיל", icon: <Baby className="w-4 h-4 text-primary" /> },
+  toyCondition: { label: "מצב צעצוע", icon: <Baby className="w-4 h-4 text-primary" /> },
+  
+  // Baby - Clothes
+  clothingConditions: { label: "מצב בגד", icon: <Shirt className="w-4 h-4 text-primary" /> },
+};
+
+// Keys to skip (already handled separately or are base filters)
+const skipKeys = ['conditions', 'cities', 'colors'];
 
 export const SecondhandSidebarFilter = ({ 
   onFilterChange, 
@@ -78,8 +202,6 @@ export const SecondhandSidebarFilter = ({
     materials: [],
     deliveryAvailable: false,
     negotiable: false,
-    types: [],
-    features: [],
   });
 
   // Get Hebrew category name from slug
@@ -96,6 +218,15 @@ export const SecondhandSidebarFilter = ({
     if (!hebrewCategory) return [];
     return allSubcategories[hebrewCategory] || [];
   }, [hebrewCategory]);
+
+  // Get all dynamic filter keys that should be rendered
+  const dynamicFilterKeys = useMemo(() => {
+    return Object.keys(dynamicFilters).filter(key => 
+      !skipKeys.includes(key) && 
+      Array.isArray(dynamicFilters[key]) && 
+      dynamicFilters[key].length > 0
+    );
+  }, [dynamicFilters]);
 
   const handleArrayFilterChange = (key: string, value: string) => {
     const currentValues = (filters[key] as string[]) || [];
@@ -134,8 +265,6 @@ export const SecondhandSidebarFilter = ({
       materials: [],
       deliveryAvailable: false,
       negotiable: false,
-      types: [],
-      features: [],
     };
     setFilters(defaultFilters);
     onFilterChange?.(defaultFilters);
@@ -184,6 +313,24 @@ export const SecondhandSidebarFilter = ({
         </div>
         <Separator />
       </>
+    );
+  };
+
+  // Render a dynamic filter section
+  const renderDynamicFilter = (filterKey: string) => {
+    const options = dynamicFilters[filterKey] as string[];
+    if (!options || options.length === 0) return null;
+    
+    const labelConfig = filterLabels[filterKey] || { 
+      label: filterKey, 
+      icon: <Tag className="w-4 h-4 text-primary" /> 
+    };
+    
+    return renderFilterSection(
+      labelConfig.label,
+      labelConfig.icon,
+      options,
+      filterKey
     );
   };
 
@@ -251,50 +398,14 @@ export const SecondhandSidebarFilter = ({
           "conditions"
         )}
 
-        {/* Dynamic Type Filters (based on subcategory) */}
-        {dynamicFilters.types && renderFilterSection(
-          "סוג",
-          <Settings2 className="w-4 h-4 text-primary" />,
-          dynamicFilters.types as string[],
-          "types"
-        )}
+        {/* Dynamic Filters - render ALL filters from getFiltersForCategory */}
+        {dynamicFilterKeys.map(filterKey => (
+          <div key={filterKey}>
+            {renderDynamicFilter(filterKey)}
+          </div>
+        ))}
 
-        {/* Brands */}
-        {(dynamicFilters.brands || availableBrands) && renderFilterSection(
-          "מותג",
-          <Tag className="w-4 h-4 text-primary" />,
-          (dynamicFilters.brands as string[]) || availableBrands || [],
-          "brands",
-          "brands"
-        )}
-
-        {/* Sizes */}
-        {dynamicFilters.sizes && renderFilterSection(
-          "מידה",
-          <Tag className="w-4 h-4 text-primary" />,
-          dynamicFilters.sizes as string[],
-          "sizes",
-          "sizes"
-        )}
-
-        {/* Materials */}
-        {dynamicFilters.materials && renderFilterSection(
-          "חומר",
-          <Tag className="w-4 h-4 text-primary" />,
-          dynamicFilters.materials as string[],
-          "materials",
-          "materials"
-        )}
-
-        {/* Features */}
-        {dynamicFilters.features && renderFilterSection(
-          "תכונות",
-          <CheckSquare className="w-4 h-4 text-primary" />,
-          dynamicFilters.features as string[],
-          "features"
-        )}
-
-        {/* Colors */}
+        {/* Colors - always show */}
         {renderFilterSection(
           "צבע",
           <Palette className="w-4 h-4 text-primary" />,
@@ -303,7 +414,7 @@ export const SecondhandSidebarFilter = ({
           "colors"
         )}
 
-        {/* City */}
+        {/* City - always show */}
         {renderFilterSection(
           "מיקום",
           <MapPin className="w-4 h-4 text-primary" />,
