@@ -69,6 +69,28 @@ const categories = {
 
 const furnitureMaterials = ["עץ מלא", "עץ MDF", "מתכת", "פלסטיק", "זכוכית", "עור", "בד", "ראטן", "שילוב"];
 const furnitureSizes = ["קטן", "בינוני", "גדול", "ענק", "חד-מושבי", "דו-מושבי", "תלת-מושבי", "ארבע-מושבי"];
+
+// Furniture subcategory-specific options
+const sofaTypes = ["ספה ישרה", "ספת פינה", "ספה נפתחת", "ספת פוף", "ספת עור", "ספה מודולרית"];
+const sofaUpholstery = ["בד", "עור אמיתי", "עור סינטטי", "קטיפה", "פשתן", "מיקרופייבר"];
+const sofaSeating = ["דו-מושבית", "תלת-מושבית", "ארבע-מושבית", "פינתית L", "פינתית U"];
+const sofaFeatures = ["נפתחת למיטה", "עם ארגז מצעים", "רגליים מתכת", "רגליים עץ", "ריקליינר"];
+
+const bedTypes = ["מיטה זוגית", "מיטה וחצי", "מיטת יחיד", "מיטת קומותיים", "מיטה מתכווננת"];
+const bedSizes = ["90x190", "120x190", "140x190", "160x200", "180x200", "200x200"];
+const mattressTypes = ["קפיצים", "ספוג", "לטקס", "מזרן כיס", "מזרן זיכרון", "ללא מזרן"];
+const bedFeatures = ["עם ארגז מצעים", "עם מסגרת", "ראש מיטה מרופד", "ראש מיטה עץ", "בסיס עם רגליים"];
+
+const tableTypes = ["שולחן אוכל", "שולחן סלון", "שולחן עבודה", "שולחן כתיבה", "שולחן צד"];
+const tableShapes = ["מלבני", "עגול", "אובלי", "ריבועי", "לא סימטרי"];
+const tableSeating = ["2 סועדים", "4 סועדים", "6 סועדים", "8 סועדים", "10+ סועדים", "נפתח"];
+
+const chairTypes = ["כיסא אוכל", "כיסא משרדי", "כיסא גיימינג", "כיסא בר", "כיסא נדנדה", "שרפרף"];
+const chairFeatures = ["עם ידיות", "מרופד", "מתכוונן גובה", "גלגלים", "ארגונומי"];
+
+const closetTypes = ["ארון הזזה", "ארון דלתות", "ארון פינתי", "קומודה", "ארון נעליים"];
+const closetDoors = ["דלת אחת", "2 דלתות", "3 דלתות", "4 דלתות", "5+ דלתות"];
+const closetFeatures = ["עם מראה", "עם תאורה פנימית", "מגירות", "מדפים", "תליה כפולה"];
 const electronicsBrands = ["Samsung", "LG", "Bosch", "Siemens", "Electrolux", "Whirlpool", "Haier", "Beko", "Candy", "Ariston"];
 const sportsBrands = ["Nike", "Adidas", "Puma", "Giant", "Trek", "Specialized", "Decathlon", "Reebok", "Under Armour"];
 const fashionBrands = ["Zara", "H&M", "Mango", "Castro", "Fox", "TNT", "Golf", "American Eagle", "Banana Republic"];
@@ -245,8 +267,405 @@ const PostSecondhand = () => {
   const renderCategorySpecificFields = () => {
     const { category } = formData;
 
-    // Furniture fields
+    // Furniture fields - with subcategory-specific fields
     if (category === "ריהוט") {
+      const { subcategory } = formData;
+      
+      // Sofas specific fields
+      if (subcategory === "ספות" || subcategory === "כורסאות") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">סוג</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sofaTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">חומר ריפוד *</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר חומר ריפוד" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sofaUpholstery.map(mat => (
+                    <SelectItem key={mat} value={mat}>{mat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">מספר מושבים</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מספר מושבים" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sofaSeating.map(seat => (
+                    <SelectItem key={seat} value={seat}>{seat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות נוספות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sofaFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">מידות (אורך x רוחב x גובה ס"מ)</Label>
+              <Input
+                id="dimensions"
+                name="dimensions"
+                value={formData.dimensions}
+                onChange={handleInputChange}
+                placeholder='לדוגמה: 200x100x80'
+              />
+            </div>
+          </>
+        );
+      }
+      
+      // Beds specific fields
+      if (subcategory === "מיטות זוגיות" || subcategory === "מיטות יחיד") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">סוג מיטה</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג מיטה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bedTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">מידת מיטה</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מידה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bedSizes.map(size => (
+                    <SelectItem key={size} value={size}>{size}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">סוג מזרן</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג מזרן" />
+                </SelectTrigger>
+                <SelectContent>
+                  {mattressTypes.map(mat => (
+                    <SelectItem key={mat} value={mat}>{mat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות נוספות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bedFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      }
+      
+      // Tables specific fields
+      if (subcategory === "שולחנות אוכל" || subcategory === "שולחנות סלון" || subcategory === "שולחנות עבודה") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">סוג שולחן</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג שולחן" />
+                </SelectTrigger>
+                <SelectContent>
+                  {tableTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">צורה</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צורה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {tableShapes.map(shape => (
+                    <SelectItem key={shape} value={shape}>{shape}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {(subcategory === "שולחנות אוכל") && (
+              <div className="space-y-2">
+                <Label htmlFor="size">מספר סועדים</Label>
+                <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר מספר סועדים" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {tableSeating.map(seat => (
+                      <SelectItem key={seat} value={seat}>{seat}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="material">חומר *</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר חומר" />
+                </SelectTrigger>
+                <SelectContent>
+                  {furnitureMaterials.map(mat => (
+                    <SelectItem key={mat} value={mat}>{mat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">מידות (אורך x רוחב x גובה ס"מ)</Label>
+              <Input
+                id="dimensions"
+                name="dimensions"
+                value={formData.dimensions}
+                onChange={handleInputChange}
+                placeholder='לדוגמה: 160x90x75'
+              />
+            </div>
+          </>
+        );
+      }
+      
+      // Chairs specific fields
+      if (subcategory === "כיסאות") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">סוג כיסא</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג כיסא" />
+                </SelectTrigger>
+                <SelectContent>
+                  {chairTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {chairFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">חומר *</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר חומר" />
+                </SelectTrigger>
+                <SelectContent>
+                  {furnitureMaterials.map(mat => (
+                    <SelectItem key={mat} value={mat}>{mat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">כמות</Label>
+              <Input
+                id="size"
+                name="size"
+                value={formData.size}
+                onChange={handleInputChange}
+                placeholder='מספר כיסאות'
+              />
+            </div>
+          </>
+        );
+      }
+      
+      // Closets specific fields
+      if (subcategory === "ארונות בגדים" || subcategory === "ארונות נעליים" || subcategory === "ארונות מטבח") {
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="brand">סוג ארון</Label>
+              <Select value={formData.brand} onValueChange={(value) => setFormData({ ...formData, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר סוג ארון" />
+                </SelectTrigger>
+                <SelectContent>
+                  {closetTypes.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="size">מספר דלתות</Label>
+              <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר מספר דלתות" />
+                </SelectTrigger>
+                <SelectContent>
+                  {closetDoors.map(doors => (
+                    <SelectItem key={doors} value={doors}>{doors}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">תכונות נוספות</Label>
+              <Select value={formData.age} onValueChange={(value) => setFormData({ ...formData, age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר תכונה" />
+                </SelectTrigger>
+                <SelectContent>
+                  {closetFeatures.map(feat => (
+                    <SelectItem key={feat} value={feat}>{feat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="material">חומר *</Label>
+              <Select value={formData.material} onValueChange={(value) => setFormData({ ...formData, material: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר חומר" />
+                </SelectTrigger>
+                <SelectContent>
+                  {furnitureMaterials.map(mat => (
+                    <SelectItem key={mat} value={mat}>{mat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dimensions">מידות (רוחב x עומק x גובה ס"מ)</Label>
+              <Input
+                id="dimensions"
+                name="dimensions"
+                value={formData.dimensions}
+                onChange={handleInputChange}
+                placeholder='לדוגמה: 180x60x220'
+              />
+            </div>
+          </>
+        );
+      }
+      
+      // Default furniture fields (for shelves, mirrors, etc.)
       return (
         <>
           <div className="space-y-2">
@@ -263,7 +682,7 @@ const PostSecondhand = () => {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="size">גודל *</Label>
+            <Label htmlFor="size">גודל</Label>
             <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
               <SelectTrigger>
                 <SelectValue placeholder="בחר גודל" />
