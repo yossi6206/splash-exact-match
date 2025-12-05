@@ -243,7 +243,13 @@ const PostSecondhand = () => {
   };
 
   const renderCategorySpecificFields = () => {
-    const { category } = formData;
+    const { category, subcategory } = formData;
+
+    // Don't show category-specific fields until subcategory is selected (when subcategories exist)
+    const hasSubcategories = availableSubcategories.length > 0;
+    if (hasSubcategories && !subcategory) {
+      return null;
+    }
 
     // Furniture fields
     if (category === "ריהוט") {
