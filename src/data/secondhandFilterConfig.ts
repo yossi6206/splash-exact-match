@@ -147,14 +147,69 @@ export const electronicsFilters = {
 
 // ============== COMPUTERS FILTERS ==============
 export const computersFilters = {
-  brands: ["Apple", "Dell", "HP", "Lenovo", "Asus", "Acer", "MSI", "Microsoft", "Samsung", "LG", "Razer", "אחר"],
-  processors: ["Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "AMD Ryzen 3", "AMD Ryzen 5", "AMD Ryzen 7", "AMD Ryzen 9", "Apple M1", "Apple M2", "Apple M3", "אחר"],
-  ramOptions: ["4GB", "8GB", "16GB", "32GB", "64GB"],
-  storageOptions: ["128GB", "256GB", "512GB", "1TB", "2TB"],
-  storageTypes: ["SSD", "HDD", "SSD + HDD"],
-  screenSizes: ["11.6\"", "13.3\"", "14\"", "15.6\"", "16\"", "17.3\"", "24\"", "27\"", "32\""],
-  graphicsCards: ["Intel UHD", "Intel Iris", "NVIDIA GeForce GTX", "NVIDIA GeForce RTX", "AMD Radeon", "Apple GPU", "ללא כרטיס ייעודי"],
-  operatingSystems: ["Windows 11", "Windows 10", "macOS", "Chrome OS", "Linux", "ללא מערכת הפעלה"],
+  // General computer brands
+  brands: ["Apple", "Dell", "HP", "Lenovo", "Asus", "Acer", "MSI", "Microsoft", "Samsung", "LG", "Razer", "Gigabyte", "אחר"],
+  processors: ["Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "Intel Celeron", "Intel Pentium", "AMD Ryzen 3", "AMD Ryzen 5", "AMD Ryzen 7", "AMD Ryzen 9", "Apple M1", "Apple M2", "Apple M3", "Apple M4", "אחר"],
+  ramOptions: ["4GB", "8GB", "16GB", "32GB", "64GB", "128GB"],
+  storageOptions: ["128GB", "256GB", "512GB", "1TB", "2TB", "4TB"],
+  storageTypes: ["SSD", "HDD", "SSD + HDD", "NVMe SSD"],
+  screenSizes: ["11.6\"", "13.3\"", "14\"", "15.6\"", "16\"", "17.3\""],
+  graphicsCards: ["Intel UHD", "Intel Iris", "NVIDIA GeForce GTX 1650", "NVIDIA GeForce GTX 1660", "NVIDIA GeForce RTX 3050", "NVIDIA GeForce RTX 3060", "NVIDIA GeForce RTX 3070", "NVIDIA GeForce RTX 3080", "NVIDIA GeForce RTX 4060", "NVIDIA GeForce RTX 4070", "NVIDIA GeForce RTX 4080", "NVIDIA GeForce RTX 4090", "AMD Radeon RX 6600", "AMD Radeon RX 6700", "AMD Radeon RX 7600", "AMD Radeon RX 7800", "Apple GPU", "ללא כרטיס ייעודי"],
+  operatingSystems: ["Windows 11", "Windows 10", "macOS Sonoma", "macOS Ventura", "Chrome OS", "Linux Ubuntu", "Linux", "ללא מערכת הפעלה"],
+  
+  // Laptops specific
+  laptopTypes: ["מחשב נייד רגיל", "אולטרה בוק", "מחשב נייד גיימינג", "מחשב נייד לעבודה", "מקבוק", "2-in-1 / טאבלט-מחשב", "נטבוק"],
+  laptopFeatures: ["מסך מגע", "מקלדת עברית", "מקלדת מוארת", "קורא טביעת אצבע", "מצלמת רשת HD", "Thunderbolt", "USB-C", "HDMI", "Wi-Fi 6", "Bluetooth 5.0", "סוללה מורחבת"],
+  laptopWeight: ["עד 1 ק״ג", "1-1.5 ק״ג", "1.5-2 ק״ג", "2-2.5 ק״ג", "מעל 2.5 ק״ג"],
+  
+  // Desktop specific
+  desktopTypes: ["מחשב נייח רגיל", "מחשב גיימינג", "מחשב All-in-One", "מחשב מיני/קומפקטי", "תחנת עבודה", "שרת ביתי"],
+  desktopCases: ["מגדל מלא (Full Tower)", "מגדל בינוני (Mid Tower)", "מגדל קטן (Mini Tower)", "קומפקטי (SFF)", "HTPC"],
+  desktopFeatures: ["RGB תאורה", "מקורר מים", "מקורר אוויר", "שקט במיוחד", "Wi-Fi מובנה", "Bluetooth מובנה"],
+  
+  // Monitors specific
+  monitorBrands: ["Samsung", "LG", "Dell", "Asus", "Acer", "BenQ", "AOC", "ViewSonic", "HP", "Philips", "MSI", "Gigabyte", "אחר"],
+  monitorSizes: ["22\"", "24\"", "27\"", "32\"", "34\" Ultrawide", "38\" Ultrawide", "49\" Super Ultrawide"],
+  monitorResolutions: ["Full HD (1920x1080)", "QHD (2560x1440)", "4K UHD (3840x2160)", "WQHD Ultrawide (3440x1440)", "5K", "8K"],
+  monitorPanelTypes: ["IPS", "VA", "TN", "OLED", "Mini-LED"],
+  monitorRefreshRates: ["60Hz", "75Hz", "100Hz", "144Hz", "165Hz", "240Hz", "360Hz"],
+  monitorFeatures: ["G-Sync", "FreeSync", "HDR", "HDR10", "HDR400", "HDR600", "USB-C / PD", "רמקולים מובנים", "מעמד מתכוונן גובה", "VESA Mount", "Curved", "Anti-Glare"],
+  
+  // Components specific
+  componentTypes: ["כרטיס מסך", "מעבד (CPU)", "זיכרון RAM", "כונן SSD", "כונן HDD", "לוח אם", "ספק כוח", "מארז", "מאוורר/קירור", "כרטיס קול", "כרטיס רשת"],
+  gpuBrands: ["NVIDIA", "AMD", "Intel Arc"],
+  gpuModels: ["RTX 4090", "RTX 4080", "RTX 4070 Ti", "RTX 4070", "RTX 4060 Ti", "RTX 4060", "RTX 3090", "RTX 3080", "RTX 3070", "RTX 3060", "RX 7900 XTX", "RX 7900 XT", "RX 7800 XT", "RX 7700 XT", "RX 7600", "RX 6800 XT", "RX 6700 XT", "אחר"],
+  gpuVram: ["4GB", "6GB", "8GB", "10GB", "12GB", "16GB", "24GB"],
+  cpuBrands: ["Intel", "AMD"],
+  cpuSockets: ["LGA 1700", "LGA 1200", "LGA 1151", "AM5", "AM4", "אחר"],
+  ramTypes: ["DDR5", "DDR4", "DDR3"],
+  ramSpeeds: ["3200MHz", "3600MHz", "4000MHz", "4800MHz", "5200MHz", "5600MHz", "6000MHz", "6400MHz"],
+  storageSizes: ["128GB", "256GB", "500GB", "512GB", "1TB", "2TB", "4TB", "8TB"],
+  storageInterfaces: ["SATA III", "NVMe PCIe 3.0", "NVMe PCIe 4.0", "NVMe PCIe 5.0", "USB 3.0/3.1"],
+  motherboardSizes: ["ATX", "Micro-ATX", "Mini-ITX", "E-ATX"],
+  motherboardChipsets: ["Intel Z790", "Intel B760", "Intel Z690", "Intel B660", "AMD X670", "AMD B650", "AMD X570", "AMD B550", "אחר"],
+  psuWattage: ["450W", "550W", "650W", "750W", "850W", "1000W", "1200W", "מעל 1200W"],
+  psuRating: ["80+ White", "80+ Bronze", "80+ Silver", "80+ Gold", "80+ Platinum", "80+ Titanium"],
+  componentCondition: ["חדש באריזה", "כמו חדש", "משומש - עובד מעולה", "משומש - עובד", "לחלקים"],
+  
+  // Peripherals specific
+  peripheralTypes: ["מקלדת", "עכבר", "אוזניות", "רמקולים", "מצלמת רשת", "מיקרופון", "בקר משחקים", "משטח עכבר", "תחנת עגינה"],
+  peripheralBrands: ["Logitech", "Razer", "SteelSeries", "Corsair", "HyperX", "Microsoft", "Apple", "Sony", "JBL", "Bose", "Creative", "Blue", "Elgato", "אחר"],
+  keyboardTypes: ["מכאנית", "ממברנה", "אופטית-מכאנית", "Low Profile"],
+  keyboardSwitches: ["Cherry MX Red", "Cherry MX Blue", "Cherry MX Brown", "Gateron", "Kailh", "אחר"],
+  keyboardFeatures: ["RGB", "מקלדת עברית", "נומרית", "TKL (ללא נומרית)", "אלחוטי", "מתכווננת", "ארגונומית"],
+  mouseTypes: ["גיימינג", "ארגונומי", "אנכי", "נייד/קומפקטי", "משרדי"],
+  mouseFeatures: ["אלחוטי Bluetooth", "אלחוטי USB", "חוטי", "RGB", "משקולות מתכווננות", "כפתורים ניתנים לתכנות"],
+  headsetTypes: ["Over-ear", "On-ear", "In-ear", "Open-back", "Closed-back"],
+  headsetFeatures: ["7.1 סראונד", "מבטל רעשים ANC", "מיקרופון נשלף", "אלחוטי", "RGB", "חיבור USB", "חיבור 3.5mm"],
+  connectivity: ["אלחוטי Bluetooth", "אלחוטי USB 2.4GHz", "חוטי USB", "חוטי 3.5mm", "USB-C"],
+  
+  // Tablets specific
+  tabletBrands: ["Apple", "Samsung", "Lenovo", "Huawei", "Microsoft", "Amazon", "Xiaomi", "אחר"],
+  tabletSizes: ["7-8\"", "9-10\"", "11-12\"", "12\"+"],
+  tabletStorage: ["32GB", "64GB", "128GB", "256GB", "512GB", "1TB"],
+  tabletConnectivity: ["WiFi בלבד", "WiFi + Cellular (LTE/5G)"],
+  tabletFeatures: ["עט סטיילוס", "מקלדת נלווית", "Face ID", "Touch ID", "USB-C", "שמע סטריאו"],
 };
 
 // ============== PHONES FILTERS ==============
@@ -524,66 +579,155 @@ const getSubcategoryFilters = (category: string, subcategory?: string) => {
     }
   }
 
-  // Computers subcategories
+  // Computers subcategories - with dedicated filters per subcategory
   if (category === "computers") {
-    if (["מחשבים ניידים", "מקבוק", "אולטרה בוק"].includes(subcategory)) {
+    // Laptops
+    if (["מחשבים ניידים", "מקבוק", "אולטרה בוק", "מחשבים לעבודה"].includes(subcategory)) {
       return {
         brands: computersFilters.brands,
+        types: computersFilters.laptopTypes,
         processors: computersFilters.processors,
         ramOptions: computersFilters.ramOptions,
         storageOptions: computersFilters.storageOptions,
         storageTypes: computersFilters.storageTypes,
-        screenSizes: ["11.6\"", "13.3\"", "14\"", "15.6\"", "16\"", "17.3\""],
+        screenSizes: computersFilters.screenSizes,
         graphicsCards: computersFilters.graphicsCards,
         operatingSystems: computersFilters.operatingSystems,
+        features: computersFilters.laptopFeatures,
+        weight: computersFilters.laptopWeight,
       };
     }
-    if (["מחשבים נייחים", "מחשבי גיימינג", "מחשבים לעבודה"].includes(subcategory)) {
+    
+    // Desktops
+    if (["מחשבים נייחים", "מחשבי גיימינג"].includes(subcategory)) {
       return {
         brands: computersFilters.brands,
+        types: computersFilters.desktopTypes,
         processors: computersFilters.processors,
         ramOptions: computersFilters.ramOptions,
         storageOptions: computersFilters.storageOptions,
         storageTypes: computersFilters.storageTypes,
         graphicsCards: computersFilters.graphicsCards,
         operatingSystems: computersFilters.operatingSystems,
+        caseTypes: computersFilters.desktopCases,
+        features: computersFilters.desktopFeatures,
       };
     }
+    
+    // Monitors
     if (subcategory === "מסכים") {
       return {
+        brands: computersFilters.monitorBrands,
+        screenSizes: computersFilters.monitorSizes,
+        resolution: computersFilters.monitorResolutions,
+        panelType: computersFilters.monitorPanelTypes,
+        refreshRate: computersFilters.monitorRefreshRates,
+        features: computersFilters.monitorFeatures,
+      };
+    }
+    
+    // Graphics Cards
+    if (subcategory === "כרטיסי מסך") {
+      return {
+        gpuBrands: computersFilters.gpuBrands,
+        gpuModels: computersFilters.gpuModels,
+        gpuVram: computersFilters.gpuVram,
+        componentCondition: computersFilters.componentCondition,
+      };
+    }
+    
+    // CPUs
+    if (subcategory === "מעבדים") {
+      return {
+        cpuBrands: computersFilters.cpuBrands,
+        processors: computersFilters.processors,
+        cpuSockets: computersFilters.cpuSockets,
+        componentCondition: computersFilters.componentCondition,
+      };
+    }
+    
+    // RAM
+    if (subcategory === "זיכרון RAM") {
+      return {
+        ramTypes: computersFilters.ramTypes,
+        ramOptions: computersFilters.ramOptions,
+        ramSpeeds: computersFilters.ramSpeeds,
+        componentCondition: computersFilters.componentCondition,
+      };
+    }
+    
+    // Storage drives
+    if (subcategory === "כוננים") {
+      return {
+        storageTypes: computersFilters.storageTypes,
+        storageSizes: computersFilters.storageSizes,
+        storageInterfaces: computersFilters.storageInterfaces,
+        componentCondition: computersFilters.componentCondition,
+      };
+    }
+    
+    // Motherboards
+    if (subcategory === "לוחות אם") {
+      return {
         brands: computersFilters.brands,
-        screenSizes: ["24\"", "27\"", "32\"", "34\"", "49\""],
-        resolution: ["Full HD (1080p)", "QHD (1440p)", "4K UHD", "5K", "Ultrawide"],
-        panelType: ["IPS", "VA", "TN", "OLED"],
-        refreshRate: ["60Hz", "75Hz", "144Hz", "165Hz", "240Hz"],
-        features: ["G-Sync", "FreeSync", "HDR", "USB-C", "מובנה רמקולים", "מתכוונן גובה"],
+        motherboardSizes: computersFilters.motherboardSizes,
+        motherboardChipsets: computersFilters.motherboardChipsets,
+        cpuSockets: computersFilters.cpuSockets,
+        componentCondition: computersFilters.componentCondition,
       };
     }
-    if (["כרטיסי מסך", "מעבדים", "זיכרון RAM", "כוננים", "לוחות אם"].includes(subcategory)) {
+    
+    // Keyboards
+    if (subcategory === "מקלדות") {
       return {
-        componentBrands: ["NVIDIA", "AMD", "Intel", "Corsair", "Kingston", "Samsung", "Western Digital", "Seagate", "ASUS", "MSI", "Gigabyte", "אחר"],
-        componentCondition: ["חדש באריזה", "כמו חדש", "משומש - עובד מעולה", "משומש - עובד", "לחלקים"],
+        peripheralBrands: computersFilters.peripheralBrands,
+        types: computersFilters.keyboardTypes,
+        switches: computersFilters.keyboardSwitches,
+        features: computersFilters.keyboardFeatures,
+        connectivity: computersFilters.connectivity,
       };
     }
-    if (["מקלדות", "עכברים", "אוזניות"].includes(subcategory)) {
+    
+    // Mice
+    if (subcategory === "עכברים") {
       return {
-        peripheralBrands: ["Logitech", "Razer", "SteelSeries", "Corsair", "HyperX", "Microsoft", "Apple", "Sony", "JBL", "אחר"],
-        connectivity: ["אלחוטי Bluetooth", "אלחוטי USB", "חוטי USB", "חוטי 3.5mm"],
-        features: subcategory === "מקלדות" 
-          ? ["מכאנית", "ממברנה", "RGB", "עברית", "נומרית", "ארגונומית"]
-          : subcategory === "עכברים"
-          ? ["גיימינג", "ארגונומי", "אנכי", "מעקב אופטי", "מעקב לייזר"]
-          : ["Over-ear", "On-ear", "In-ear", "מבטלות רעש", "מיקרופון מובנה", "גיימינג"],
+        peripheralBrands: computersFilters.peripheralBrands,
+        types: computersFilters.mouseTypes,
+        features: computersFilters.mouseFeatures,
+        connectivity: computersFilters.connectivity,
       };
     }
+    
+    // Headsets
+    if (subcategory === "אוזניות") {
+      return {
+        peripheralBrands: computersFilters.peripheralBrands,
+        types: computersFilters.headsetTypes,
+        features: computersFilters.headsetFeatures,
+        connectivity: computersFilters.connectivity,
+      };
+    }
+    
+    // Tablets
     if (subcategory === "טאבלטים") {
       return {
-        brands: ["Apple", "Samsung", "Lenovo", "Huawei", "Microsoft", "Amazon", "אחר"],
-        screenSizes: ["7-8\"", "9-10\"", "11-12\"", "12\"+"],
-        storageOptions: ["32GB", "64GB", "128GB", "256GB", "512GB", "1TB"],
-        connectivity: ["WiFi בלבד", "WiFi + Cellular"],
+        brands: computersFilters.tabletBrands,
+        screenSizes: computersFilters.tabletSizes,
+        storageOptions: computersFilters.tabletStorage,
+        connectivity: computersFilters.tabletConnectivity,
+        features: computersFilters.tabletFeatures,
       };
     }
+    
+    // General computers category (no subcategory selected) - show laptop-like filters
+    return {
+      brands: computersFilters.brands,
+      processors: computersFilters.processors,
+      ramOptions: computersFilters.ramOptions,
+      storageOptions: computersFilters.storageOptions,
+      graphicsCards: computersFilters.graphicsCards,
+      operatingSystems: computersFilters.operatingSystems,
+    };
   }
 
   // Phones subcategories
