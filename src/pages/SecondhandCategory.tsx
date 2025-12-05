@@ -85,6 +85,8 @@ const SecondhandCategory = () => {
     materials: [],
     deliveryAvailable: false,
     negotiable: false,
+    types: [],
+    features: [],
   });
   const itemsPerPage = 12;
 
