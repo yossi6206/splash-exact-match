@@ -470,7 +470,7 @@ const SecondhandCategory = () => {
                 <SheetTitle>סינון תוצאות</SheetTitle>
               </SheetHeader>
               <div className="mt-6">
-                <SecondhandSidebarFilter 
+              <SecondhandSidebarFilter 
                   counts={filterCounts}
                   onFilterChange={handleFilterChange}
                   priceRange={priceRange}
@@ -478,7 +478,8 @@ const SecondhandCategory = () => {
                   availableSizes={availableSizes}
                   availableColors={availableColors}
                   availableMaterials={availableMaterials}
-                  categoryType={category ? categoryMap[category] : undefined}
+                  categoryType={category || undefined}
+                  selectedSubcategory={filters.subcategories.length > 0 ? filters.subcategories[0] : undefined}
                 />
               </div>
             </SheetContent>
@@ -516,7 +517,8 @@ const SecondhandCategory = () => {
               availableSizes={availableSizes}
               availableColors={availableColors}
               availableMaterials={availableMaterials}
-              categoryType={category ? categoryMap[category] : undefined}
+              categoryType={category || undefined}
+              selectedSubcategory={filters.subcategories.length > 0 ? filters.subcategories[0] : undefined}
             />
           </div>
 
