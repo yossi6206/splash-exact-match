@@ -503,7 +503,6 @@ const SecondhandCategory = () => {
               </SheetHeader>
               <div className="mt-6">
               <SecondhandSidebarFilter 
-                  key={`mobile-${category}-${selectedSubcategory || 'all'}`}
                   counts={filterCounts}
                   onFilterChange={handleFilterChange}
                   priceRange={priceRange}
@@ -543,7 +542,6 @@ const SecondhandCategory = () => {
           {/* Sidebar Filters - Desktop */}
           <div className="hidden lg:block self-start sticky top-20">
             <SecondhandSidebarFilter 
-              key={`desktop-${category}-${selectedSubcategory || 'all'}`}
               counts={filterCounts}
               onFilterChange={handleFilterChange}
               priceRange={priceRange}

@@ -5,7 +5,7 @@ import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Package, DollarSign, CheckSquare, MapPin, Tag, Palette, RotateCcw, Settings2, Ruler, Zap, Sofa, BedDouble, UtensilsCrossed, Shirt, Baby, Dumbbell, Music, Laptop, Smartphone, Tv, Refrigerator, WashingMachine, Car, Bike, Watch, Gem, ShoppingBag, Armchair } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { 
   categories as allCategories, 
   subcategories as allSubcategories, 
@@ -258,7 +258,7 @@ export const SecondhandSidebarFilter = ({
 }: SecondhandSidebarFilterProps) => {
   const [filters, setFilters] = useState<SecondhandFilters>({
     categories: [],
-    subcategories: [],
+    subcategories: selectedSubcategory ? [selectedSubcategory] : [],
     priceMin: priceRange.min,
     priceMax: priceRange.max,
     conditions: [],
@@ -271,14 +271,28 @@ export const SecondhandSidebarFilter = ({
     negotiable: false,
   });
 
+  // Sync internal filter state when selectedSubcategory prop changes
+  useEffect(() => {
+    if (selectedSubcategory && !filters.subcategories.includes(selectedSubcategory)) {
+      setFilters(prev => ({
+        ...prev,
+        subcategories: [selectedSubcategory]
+      }));
+    }
+  }, [selectedSubcategory]);
+
+  // Derive the effective subcategory from either the prop or the first selected subcategory filter
+  const effectiveSubcategory = selectedSubcategory || (filters.subcategories.length === 1 ? filters.subcategories[0] : undefined);
+
   // Get Hebrew category name from slug
   const hebrewCategory = categoryType ? categorySlugToHebrew[categoryType] : undefined;
   
   // Get dynamic filters based on category and subcategory
   const dynamicFilters = useMemo((): Record<string, string[]> => {
     if (!hebrewCategory) return {};
-    return getFiltersForCategory(hebrewCategory, selectedSubcategory) as Record<string, string[]>;
-  }, [hebrewCategory, selectedSubcategory]);
+    const subcatToUse = selectedSubcategory || (filters.subcategories.length === 1 ? filters.subcategories[0] : undefined);
+    return getFiltersForCategory(hebrewCategory, subcatToUse) as Record<string, string[]>;
+  }, [hebrewCategory, selectedSubcategory, filters.subcategories]);
 
   // Get subcategories for current category
   const currentSubcategories = useMemo(() => {
