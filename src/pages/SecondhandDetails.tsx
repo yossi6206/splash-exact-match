@@ -27,7 +27,17 @@ import {
   MessageSquare,
   Users,
   Eye,
-  FileCheck
+  FileCheck,
+  Monitor,
+  Keyboard,
+  Cpu,
+  Camera,
+  Fingerprint,
+  HardDrive,
+  Wifi,
+  Cable,
+  Bluetooth,
+  Check
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -556,6 +566,61 @@ const SecondhandDetails = () => {
               </p>
             </Card>
 
+            {/* Features/Benefits Section - Visual Cards like LaptopDetails */}
+            {item.features && item.features.filter((f: string) => !f.includes(':')).length > 0 && (
+              <Card>
+                <div className="p-6">
+                  <h2 className="text-xl font-bold mb-4">תכונות ויתרונות</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {item.features.filter((feature: string) => !feature.includes(':')).map((feature: string, index: number) => {
+                      const featureLower = feature.toLowerCase();
+                      let Icon = Check;
+                      
+                      // Map features to appropriate icons
+                      if (featureLower.includes('מסך מגע') || featureLower.includes('מגע')) {
+                        Icon = Monitor;
+                      } else if (featureLower.includes('מקלדת') || featureLower.includes('תאור') || featureLower.includes('נומר')) {
+                        Icon = Keyboard;
+                      } else if (featureLower.includes('מעבד') || featureLower.includes('intel') || featureLower.includes('amd') || featureLower.includes('processor')) {
+                        Icon = Cpu;
+                      } else if (featureLower.includes('מצלמ') || featureLower.includes('webcam') || featureLower.includes('camera')) {
+                        Icon = Camera;
+                      } else if (featureLower.includes('טביע') || featureLower.includes('fingerprint')) {
+                        Icon = Fingerprint;
+                      } else if (featureLower.includes('hdd') || featureLower.includes('כונן')) {
+                        Icon = HardDrive;
+                      } else if (featureLower.includes('גרפיק') || featureLower.includes('graphics') || featureLower.includes('nvidia')) {
+                        Icon = Monitor;
+                      } else if (featureLower.includes('hdmi')) {
+                        Icon = Monitor;
+                      } else if (featureLower.includes('bluetooth')) {
+                        Icon = Bluetooth;
+                      } else if (featureLower.includes('wifi') || featureLower.includes('wi-fi')) {
+                        Icon = Wifi;
+                      } else if (featureLower.includes('usb')) {
+                        Icon = Cable;
+                      }
+                      
+                      return (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
+                        >
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <Icon className="h-4 w-4 text-primary" />
+                          </div>
+                          <span className="text-sm font-medium text-right">{feature}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            {/* Category-Specific Technical Specifications */}
+            {renderCategorySpecificDetails(item)}
+
             {/* Item Details */}
             <Card className="p-6">
               <h2 className="text-2xl font-bold mb-6">פרטי המוצר</h2>
@@ -684,27 +749,7 @@ const SecondhandDetails = () => {
                   />
                 )}
               </div>
-
-              {/* Features - only show non-parsed features */}
-              {item.features && item.features.length > 0 && (
-                <>
-                  <Separator className="my-6" />
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3">תכונות נוספות</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {item.features.filter((feature: string) => !feature.includes(':')).map((feature: string, index: number) => (
-                        <Badge key={index} variant="secondary" className="px-3 py-1">
-                          ✓ {feature}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              )}
             </Card>
-
-            {/* Category-Specific Technical Specifications - Separate Card */}
-            {renderCategorySpecificDetails(item)}
 
             {/* Similar Listings - Desktop */}
             <div className="hidden lg:block mt-8">
