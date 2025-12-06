@@ -2771,6 +2771,10 @@ const PostSecondhand = () => {
           "אחר"
         ];
         
+        const storageCapacityOptions = [
+          "128", "256", "512", "1000", "2000", "4000", "אחר"
+        ];
+        
         const laptopFeatures = [
           "מסך מגע", "תאורת מקלדת", "מצלמת אינטרנט", "Bluetooth", "Wi-Fi 6",
           "USB-C", "HDMI", "חיישן טביעת אצבע", "גרפיקה ייעודית", "מעבד Intel",
@@ -2877,13 +2881,21 @@ const PostSecondhand = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="weight">נפח אחסון (GB)</Label>
-                <Input
-                  id="weight"
-                  name="weight"
+                <Select
                   value={formData.weight}
-                  onChange={handleInputChange}
-                  placeholder="512"
-                />
+                  onValueChange={(value) => setFormData({ ...formData, weight: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר נפח" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {storageCapacityOptions.map(capacity => (
+                      <SelectItem key={capacity} value={capacity}>
+                        {capacity === "אחר" ? capacity : capacity === "1000" ? "1 TB" : capacity === "2000" ? "2 TB" : capacity === "4000" ? "4 TB" : `${capacity} GB`}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="warranty">סוג אחסון</Label>
