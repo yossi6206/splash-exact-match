@@ -92,6 +92,9 @@ const SecondhandCategory = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Track selected subcategory separately for dynamic filter updates
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | undefined>(undefined);
+  
   const [filters, setFilters] = useState<SecondhandFilters>({
     categories: [],
     subcategories: [],
@@ -432,21 +435,22 @@ const SecondhandCategory = () => {
               )}
             </div>
 
-            {/* Quick Subcategories */}
+            {/* Quick Subcategories - Single selection for dynamic filter updates */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
               {config.subcategories.map((subcategory) => (
                 <button
                   key={subcategory}
                   onClick={() => {
+                    const isSelected = selectedSubcategory === subcategory;
+                    const newSubcategory = isSelected ? undefined : subcategory;
+                    setSelectedSubcategory(newSubcategory);
                     setFilters(prev => ({
                       ...prev,
-                      subcategories: prev.subcategories.includes(subcategory)
-                        ? prev.subcategories.filter(s => s !== subcategory)
-                        : [...prev.subcategories, subcategory]
+                      subcategories: newSubcategory ? [newSubcategory] : []
                     }));
                   }}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    filters.subcategories.includes(subcategory)
+                    selectedSubcategory === subcategory
                       ? "bg-white text-primary shadow-lg"
                       : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm"
                   }`}
@@ -501,7 +505,7 @@ const SecondhandCategory = () => {
                   availableColors={availableColors}
                   availableMaterials={availableMaterials}
                   categoryType={category || undefined}
-                  selectedSubcategory={filters.subcategories.length > 0 ? filters.subcategories[0] : undefined}
+                  selectedSubcategory={selectedSubcategory}
                 />
               </div>
             </SheetContent>
@@ -530,7 +534,7 @@ const SecondhandCategory = () => {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
           {/* Sidebar Filters - Desktop */}
-          <div className="hidden lg:block">
+          <div className="hidden lg:block self-start sticky top-20">
             <SecondhandSidebarFilter 
               counts={filterCounts}
               onFilterChange={handleFilterChange}
@@ -540,7 +544,7 @@ const SecondhandCategory = () => {
               availableColors={availableColors}
               availableMaterials={availableMaterials}
               categoryType={category || undefined}
-              selectedSubcategory={filters.subcategories.length > 0 ? filters.subcategories[0] : undefined}
+              selectedSubcategory={selectedSubcategory}
             />
           </div>
 
