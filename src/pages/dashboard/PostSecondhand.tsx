@@ -2764,6 +2764,13 @@ const PostSecondhand = () => {
           "אחר"
         ];
         
+        const osOptions = [
+          "Windows 10 Home", "Windows 10 Pro", "Windows 11 Home", "Windows 11 Pro",
+          "macOS Monterey", "macOS Ventura", "macOS Sonoma", "macOS Sequoia",
+          "Ubuntu", "Fedora", "Linux Mint", "Chrome OS", "FreeDOS", "ללא מערכת הפעלה",
+          "אחר"
+        ];
+        
         const laptopFeatures = [
           "מסך מגע", "תאורת מקלדת", "מצלמת אינטרנט", "Bluetooth", "Wi-Fi 6",
           "USB-C", "HDMI", "חיישן טביעת אצבע", "גרפיקה ייעודית", "מעבד Intel",
@@ -2940,10 +2947,13 @@ const PostSecondhand = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>מערכת הפעלה</Label>
-                <Input
+                <SearchableSelect
                   value={formData.laptop_os || ""}
-                  onChange={(e) => setFormData({ ...formData, laptop_os: e.target.value })}
-                  placeholder="Windows 11 Pro"
+                  onValueChange={(value) => setFormData({ ...formData, laptop_os: value })}
+                  options={osOptions}
+                  placeholder="בחר מערכת הפעלה"
+                  searchPlaceholder="חפש מערכת הפעלה..."
+                  emptyText="לא נמצאו מערכות הפעלה"
                 />
               </div>
               <div className="space-y-2">
