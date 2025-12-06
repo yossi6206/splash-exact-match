@@ -307,6 +307,12 @@ const SecondhandCategory = () => {
 
   const handleFilterChange = (newFilters: SecondhandFilters) => {
     setFilters(newFilters);
+    // Sync selectedSubcategory with filter subcategories for dynamic filter updates
+    if (newFilters.subcategories.length === 1) {
+      setSelectedSubcategory(newFilters.subcategories[0]);
+    } else if (newFilters.subcategories.length === 0) {
+      setSelectedSubcategory(undefined);
+    }
   };
 
   // Calculate dynamic data for filters
