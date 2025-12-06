@@ -73,6 +73,7 @@ const parseFeatureData = (features: string[] | null): Record<string, string> => 
 // Render technical specifications for computers (like LaptopDetails page)
 const renderComputerTechnicalSpecs = (item: any) => {
   const parsedFeatures = parseFeatureData(item.features);
+  const subcategory = item.subcategory || '';
   
   // Extract all computer-related specs from features
   const specs: { label: string; value: string }[] = [];
@@ -82,7 +83,7 @@ const renderComputerTechnicalSpecs = (item: any) => {
     specs.push({ label: 'יצרן', value: item.brand });
   }
   
-  // Add model from size field (used for laptops in secondhand)
+  // Add model from size field (used for laptops/desktops in secondhand)
   if (item.size && !item.size.includes('"') && !item.size.includes('אינץ')) {
     specs.push({ label: 'דגם', value: item.size });
   }
@@ -97,9 +98,9 @@ const renderComputerTechnicalSpecs = (item: any) => {
     { keys: ['רזולוציה', 'resolution'], label: 'רזולוציה' },
     { keys: ['כרטיס מסך', 'כרטיס גרפי', 'graphics', 'graphics_card', 'GPU'], label: 'כרטיס מסך' },
     { keys: ['מערכת הפעלה', 'os', 'operating_system'], label: 'מערכת הפעלה' },
-    { keys: ['סוללה', 'battery'], label: 'סוללה' },
-    { keys: ['משקל', 'weight'], label: 'משקל' },
-    { keys: ['תקשורת', 'connectivity'], label: 'תקשורת' },
+    { keys: ['סוללה', 'battery', 'ספק כוח'], label: subcategory === 'מחשבים נייחים' ? 'ספק כוח' : 'סוללה' },
+    { keys: ['משקל', 'weight', 'סוג מארז'], label: subcategory === 'מחשבים נייחים' ? 'סוג מארז' : 'משקל' },
+    { keys: ['תקשורת', 'connectivity', 'סוג קירור'], label: subcategory === 'מחשבים נייחים' ? 'סוג קירור' : 'תקשורת' },
     { keys: ['יציאות', 'ports', 'חיבורים'], label: 'יציאות' },
     { keys: ['סוג מחשב', 'computer_type'], label: 'סוג מחשב' },
     { keys: ['צבע', 'color'], label: 'צבע' },
@@ -107,6 +108,7 @@ const renderComputerTechnicalSpecs = (item: any) => {
     { keys: ['סוג פאנל', 'panel_type'], label: 'סוג פאנל' },
     { keys: ['קצב רענון', 'refresh_rate'], label: 'קצב רענון' },
     { keys: ['זמן תגובה', 'response_time'], label: 'זמן תגובה' },
+    { keys: ['ייעוד', 'usage'], label: 'ייעוד' },
     // Components-specific
     { keys: ['שקע', 'socket'], label: 'שקע' },
     { keys: ['צ\'יפסט', 'chipset'], label: 'צ\'יפסט' },
@@ -133,39 +135,88 @@ const renderComputerTechnicalSpecs = (item: any) => {
     }
   });
   
-  // Also check direct item fields that might store laptop-specific data
-  if (item.material && !specs.find(s => s.label === 'מעבד')) {
-    specs.push({ label: 'מעבד', value: item.material });
+  // Also check direct item fields that might store computer-specific data
+  // Processor from material field
+  if (item.material && !specs.find(s => s.label === 'מעבד') && !specs.find(s => s.label === 'סוג פאנל')) {
+    // For monitors, material stores panel type
+    if (subcategory === 'מסכים') {
+      specs.push({ label: 'סוג פאנל', value: item.material });
+    } else {
+      specs.push({ label: 'מעבד', value: item.material });
+    }
   }
   
-  if (item.dimensions && !specs.find(s => s.label === 'זיכרון RAM')) {
-    specs.push({ label: 'זיכרון RAM', value: item.dimensions + ' GB' });
+  // RAM from dimensions field
+  if (item.dimensions && !specs.find(s => s.label === 'זיכרון RAM') && !specs.find(s => s.label === 'קצב רענון')) {
+    // For monitors, dimensions stores refresh rate
+    if (subcategory === 'מסכים') {
+      specs.push({ label: 'קצב רענון', value: item.dimensions });
+    } else {
+      const ramValue = item.dimensions.includes('GB') ? item.dimensions : item.dimensions + ' GB';
+      specs.push({ label: 'זיכרון RAM', value: ramValue });
+    }
   }
   
-  if (item.weight && !specs.find(s => s.label === 'נפח אחסון')) {
-    // Check if weight is numeric (used for storage in laptop form)
-    if (/^\d+$/.test(item.weight)) {
+  // Storage from weight field (for laptops/desktops) or response time (for monitors)
+  if (item.weight && !specs.find(s => s.label === 'נפח אחסון') && !specs.find(s => s.label === 'זמן תגובה')) {
+    if (subcategory === 'מסכים') {
+      specs.push({ label: 'זמן תגובה', value: item.weight });
+    } else if (/^\d+$/.test(item.weight)) {
       const storageValue = parseInt(item.weight);
       const displayValue = storageValue >= 1000 ? `${storageValue / 1000} TB` : `${storageValue} GB`;
       specs.push({ label: 'נפח אחסון', value: displayValue });
     }
   }
   
-  if (item.warranty && !specs.find(s => s.label === 'סוג אחסון')) {
-    if (['SSD', 'HDD', 'SSD + HDD'].includes(item.warranty)) {
+  // Storage type or usage from warranty field
+  if (item.warranty && !specs.find(s => s.label === 'סוג אחסון') && !specs.find(s => s.label === 'ייעוד')) {
+    if (subcategory === 'מסכים') {
+      specs.push({ label: 'ייעוד', value: item.warranty });
+    } else if (['SSD', 'HDD', 'SSD + HDD', 'SSD NVMe', 'SSD SATA'].includes(item.warranty)) {
       specs.push({ label: 'סוג אחסון', value: item.warranty });
     }
   }
   
+  // Screen size from age field
   if (item.age && !specs.find(s => s.label === 'גודל מסך')) {
-    // Check if age looks like a screen size
     if (/^\d+\.?\d*$/.test(item.age)) {
       specs.push({ label: 'גודל מסך', value: item.age + '"' });
     }
   }
   
+  // Color
   if (item.color && !specs.find(s => s.label === 'צבע')) {
     specs.push({ label: 'צבע', value: item.color });
+  }
+  
+  // Desktop-specific: Power supply from laptop_battery field
+  if (parsedFeatures['ספק כוח'] && !specs.find(s => s.label === 'ספק כוח')) {
+    specs.push({ label: 'ספק כוח', value: parsedFeatures['ספק כוח'] });
+  }
+  
+  // Desktop-specific: Case type from laptop_weight field
+  if (parsedFeatures['סוג מארז'] && !specs.find(s => s.label === 'סוג מארז')) {
+    specs.push({ label: 'סוג מארז', value: parsedFeatures['סוג מארז'] });
+  }
+  
+  // Desktop-specific: Cooling type from laptop_connectivity field
+  if (parsedFeatures['סוג קירור'] && !specs.find(s => s.label === 'סוג קירור')) {
+    specs.push({ label: 'סוג קירור', value: parsedFeatures['סוג קירור'] });
+  }
+  
+  // Graphics card from laptop_graphics
+  if (parsedFeatures['כרטיס גרפי'] && !specs.find(s => s.label === 'כרטיס מסך')) {
+    specs.push({ label: 'כרטיס מסך', value: parsedFeatures['כרטיס גרפי'] });
+  }
+  
+  // Resolution from laptop_resolution
+  if (parsedFeatures['רזולוציה'] && !specs.find(s => s.label === 'רזולוציה')) {
+    specs.push({ label: 'רזולוציה', value: parsedFeatures['רזולוציה'] });
+  }
+  
+  // OS from laptop_os
+  if (parsedFeatures['מערכת הפעלה'] && !specs.find(s => s.label === 'מערכת הפעלה')) {
+    specs.push({ label: 'מערכת הפעלה', value: parsedFeatures['מערכת הפעלה'] });
   }
   
   return specs;
