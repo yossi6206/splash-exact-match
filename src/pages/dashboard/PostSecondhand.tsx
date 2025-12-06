@@ -276,6 +276,14 @@ const PostSecondhand = () => {
     weight: "",
     seller_name: "",
     seller_phone: "",
+    // Laptop specific fields
+    laptop_graphics: "",
+    laptop_resolution: "",
+    laptop_os: "",
+    laptop_weight: "",
+    laptop_battery: "",
+    laptop_connectivity: "",
+    laptop_ports: "",
   });
 
   const [availableSubcategories, setAvailableSubcategories] = useState<string[]>([]);
@@ -284,6 +292,15 @@ const PostSecondhand = () => {
   const [showCustomPhoneModel, setShowCustomPhoneModel] = useState(false);
   const [availableComputerModels, setAvailableComputerModels] = useState<string[]>([]);
   const [showCustomComputerModel, setShowCustomComputerModel] = useState(false);
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+
+  const handleFeatureToggle = (feature: string) => {
+    setSelectedFeatures(prev =>
+      prev.includes(feature)
+        ? prev.filter(f => f !== feature)
+        : [...prev, feature]
+    );
+  };
 
   const handleCategoryChange = (value: string) => {
     setFormData({ ...formData, category: value, subcategory: "", brand: "", size: "" });
@@ -367,6 +384,23 @@ const PostSecondhand = () => {
     setLoading(true);
 
     try {
+      // Build features array with laptop-specific fields if applicable
+      let features: string[] = [...selectedFeatures];
+      
+      // Add laptop-specific data as features for storage
+      if (formData.category === "מחשבים" && 
+          (formData.subcategory === "מחשבים ניידים" || formData.subcategory === "מקבוק" || 
+           formData.subcategory === "אולטרה בוק" || formData.subcategory === "מחשבי גיימינג" || 
+           formData.subcategory === "מחשבים לעבודה")) {
+        if (formData.laptop_graphics) features.push(`כרטיס גרפי: ${formData.laptop_graphics}`);
+        if (formData.laptop_resolution) features.push(`רזולוציה: ${formData.laptop_resolution}`);
+        if (formData.laptop_os) features.push(`מערכת הפעלה: ${formData.laptop_os}`);
+        if (formData.laptop_weight) features.push(`משקל: ${formData.laptop_weight}`);
+        if (formData.laptop_battery) features.push(`סוללה: ${formData.laptop_battery}`);
+        if (formData.laptop_connectivity) features.push(`תקשורת: ${formData.laptop_connectivity}`);
+        if (formData.laptop_ports) features.push(`יציאות: ${formData.laptop_ports}`);
+      }
+
       const { error } = await supabase.from("secondhand_items").insert({
         user_id: user.id,
         title: formData.title,
@@ -382,6 +416,7 @@ const PostSecondhand = () => {
         age: formData.age || null,
         description: formData.description,
         images: imageUrls,
+        features: features.length > 0 ? features : null,
         warranty: formData.warranty || null,
         delivery_available: formData.delivery_available,
         negotiable: formData.negotiable,
@@ -2685,7 +2720,233 @@ const PostSecondhand = () => {
     // Computer fields
     if (category === "מחשבים") {
       const computerManufacturers = getComputerManufacturers();
+      const { subcategory } = formData;
       
+      // Laptop-specific fields (like PostLaptop)
+      if (subcategory === "מחשבים ניידים" || subcategory === "מקבוק" || subcategory === "אולטרה בוק" || subcategory === "מחשבי גיימינג" || subcategory === "מחשבים לעבודה") {
+        const laptopBrands = ["Dell", "HP", "Lenovo", "Apple", "Asus", "Acer", "MSI", "Microsoft", "Samsung", "LG", "Razer", "אחר"];
+        const ramOptionsLaptop = ["4 GB", "8 GB", "16 GB", "32 GB", "64 GB"];
+        const storageOptionsLaptop = ["128", "256", "512", "1000", "2000"];
+        const storageTypes = ["SSD", "HDD", "SSD + HDD"];
+        const screenSizesLaptop = ["13.3", "14", "15.6", "17.3"];
+        const laptopConditions = ["חדש באריזה", "כמו חדש", "משומש במצב מצוין", "משומש במצב טוב", "משומש"];
+        
+        const laptopFeatures = [
+          "מסך מגע", "תאורת מקלדת", "מצלמת אינטרנט", "Bluetooth", "Wi-Fi 6",
+          "USB-C", "HDMI", "חיישן טביעת אצבע", "גרפיקה ייעודית", "מעבד Intel",
+          "מעבד AMD", "כונן SSD", "כונן HDD", "מקלדת נומרית", "רמקולים איכותיים"
+        ];
+        
+        return (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="brand">יצרן *</Label>
+                <Select
+                  value={formData.brand}
+                  onValueChange={(value) => setFormData({ ...formData, brand: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר יצרן" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {laptopBrands.map(brand => (
+                      <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="size">דגם *</Label>
+                <Input
+                  id="size"
+                  name="size"
+                  value={formData.size}
+                  onChange={handleInputChange}
+                  placeholder="ThinkPad X1 Carbon"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="material">מעבד</Label>
+                <Input
+                  id="material"
+                  name="material"
+                  value={formData.material}
+                  onChange={handleInputChange}
+                  placeholder="Intel Core i7-12700H"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dimensions">זיכרון RAM (GB)</Label>
+                <Select
+                  value={formData.dimensions}
+                  onValueChange={(value) => setFormData({ ...formData, dimensions: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר זיכרון" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ramOptionsLaptop.map(ram => (
+                      <SelectItem key={ram} value={ram}>{ram}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="weight">נפח אחסון (GB)</Label>
+                <Input
+                  id="weight"
+                  name="weight"
+                  value={formData.weight}
+                  onChange={handleInputChange}
+                  placeholder="512"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="warranty">סוג אחסון</Label>
+                <Select
+                  value={formData.warranty}
+                  onValueChange={(value) => setFormData({ ...formData, warranty: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר סוג" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {storageTypes.map(type => (
+                      <SelectItem key={type} value={type}>{type}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="age">גודל מסך (אינץ')</Label>
+                <Select
+                  value={formData.age}
+                  onValueChange={(value) => setFormData({ ...formData, age: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="בחר גודל" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {screenSizesLaptop.map(size => (
+                      <SelectItem key={size} value={size}>{size}"</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>כרטיס גרפי</Label>
+                <Input
+                  value={formData.laptop_graphics || ""}
+                  onChange={(e) => setFormData({ ...formData, laptop_graphics: e.target.value })}
+                  placeholder="NVIDIA RTX 3060"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>רזולוציה</Label>
+                <Input
+                  value={formData.laptop_resolution || ""}
+                  onChange={(e) => setFormData({ ...formData, laptop_resolution: e.target.value })}
+                  placeholder="1920 x 1080"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>מערכת הפעלה</Label>
+                <Input
+                  value={formData.laptop_os || ""}
+                  onChange={(e) => setFormData({ ...formData, laptop_os: e.target.value })}
+                  placeholder="Windows 11 Pro"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>משקל</Label>
+                <Input
+                  value={formData.laptop_weight || ""}
+                  onChange={(e) => setFormData({ ...formData, laptop_weight: e.target.value })}
+                  placeholder='1.5 ק"ג'
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>סוללה</Label>
+                <Input
+                  value={formData.laptop_battery || ""}
+                  onChange={(e) => setFormData({ ...formData, laptop_battery: e.target.value })}
+                  placeholder="עד 10 שעות"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>תקשורת</Label>
+                <Input
+                  value={formData.laptop_connectivity || ""}
+                  onChange={(e) => setFormData({ ...formData, laptop_connectivity: e.target.value })}
+                  placeholder="Wi-Fi 6, Bluetooth 5.0"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>יציאות</Label>
+              <Input
+                value={formData.laptop_ports || ""}
+                onChange={(e) => setFormData({ ...formData, laptop_ports: e.target.value })}
+                placeholder="2x USB-C, 2x USB 3.0, HDMI"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="color">צבע</Label>
+              <Select value={formData.color} onValueChange={(value) => setFormData({ ...formData, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="בחר צבע" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colors.map(color => (
+                    <SelectItem key={color} value={color}>{color}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-3">
+              <Label>תכונות נוספות</Label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {laptopFeatures.map((feature) => (
+                  <div key={feature} className="flex items-center space-x-2 space-x-reverse">
+                    <Checkbox
+                      id={`feature-${feature}`}
+                      checked={selectedFeatures.includes(feature)}
+                      onCheckedChange={() => handleFeatureToggle(feature)}
+                    />
+                    <Label
+                      htmlFor={`feature-${feature}`}
+                      className="text-sm cursor-pointer"
+                    >
+                      {feature}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        );
+      }
+      
+      // Default computer fields for other subcategories
       return (
         <>
           <div className="space-y-2">
