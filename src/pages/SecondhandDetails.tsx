@@ -70,52 +70,96 @@ const parseFeatureData = (features: string[] | null): Record<string, string> => 
   return data;
 };
 
+// Render technical specifications for computers (like LaptopDetails page)
+const renderComputerTechnicalSpecs = (item: any) => {
+  const parsedFeatures = parseFeatureData(item.features);
+  
+  // Extract all computer-related specs from features
+  const specs: { label: string; value: string }[] = [];
+  
+  // Common computer fields to look for
+  const computerMappings: { keys: string[]; label: string }[] = [
+    { keys: ['מעבד', 'processor', 'Processor'], label: 'מעבד' },
+    { keys: ['זיכרון RAM', 'RAM', 'ram', 'זיכרון'], label: 'זיכרון RAM' },
+    { keys: ['אחסון', 'storage', 'Storage', 'נפח אחסון'], label: 'אחסון' },
+    { keys: ['סוג אחסון', 'storage_type'], label: 'סוג אחסון' },
+    { keys: ['גודל מסך', 'מסך', 'screen', 'screen_size'], label: 'גודל מסך' },
+    { keys: ['רזולוציה', 'resolution'], label: 'רזולוציה' },
+    { keys: ['כרטיס מסך', 'graphics', 'graphics_card', 'GPU'], label: 'כרטיס מסך' },
+    { keys: ['מערכת הפעלה', 'os', 'operating_system'], label: 'מערכת הפעלה' },
+    { keys: ['סוללה', 'battery'], label: 'סוללה' },
+    { keys: ['משקל', 'weight'], label: 'משקל' },
+    { keys: ['תקשורת', 'connectivity'], label: 'תקשורת' },
+    { keys: ['יציאות', 'ports', 'חיבורים'], label: 'יציאות' },
+    { keys: ['סוג מחשב', 'computer_type'], label: 'סוג מחשב' },
+    { keys: ['יצרן', 'manufacturer', 'brand'], label: 'יצרן' },
+    { keys: ['דגם', 'model'], label: 'דגם' },
+    // Monitor-specific
+    { keys: ['סוג פאנל', 'panel_type'], label: 'סוג פאנל' },
+    { keys: ['קצב רענון', 'refresh_rate'], label: 'קצב רענון' },
+    { keys: ['זמן תגובה', 'response_time'], label: 'זמן תגובה' },
+    // Components-specific
+    { keys: ['שקע', 'socket'], label: 'שקע' },
+    { keys: ['צ\'יפסט', 'chipset'], label: 'צ\'יפסט' },
+    { keys: ['מהירות', 'speed'], label: 'מהירות' },
+    { keys: ['הספק', 'wattage'], label: 'הספק' },
+    { keys: ['סוג זיכרון', 'memory_type'], label: 'סוג זיכרון' },
+    { keys: ['נפח', 'capacity'], label: 'נפח' },
+  ];
+  
+  // First add brand from item if exists
+  if (item.brand && !specs.find(s => s.label === 'מותג/יצרן')) {
+    specs.push({ label: 'מותג/יצרן', value: item.brand });
+  }
+  
+  // Check each mapping
+  computerMappings.forEach(mapping => {
+    for (const key of mapping.keys) {
+      if (parsedFeatures[key]) {
+        if (!specs.find(s => s.label === mapping.label)) {
+          specs.push({ label: mapping.label, value: parsedFeatures[key] });
+        }
+        break;
+      }
+    }
+  });
+  
+  // Add size if it looks like a screen size
+  if (item.size && (item.size.includes('"') || item.size.includes('אינץ'))) {
+    if (!specs.find(s => s.label === 'גודל מסך')) {
+      specs.push({ label: 'גודל מסך', value: item.size });
+    }
+  }
+  
+  return specs;
+};
+
 // Render category-specific details based on category/subcategory
 const renderCategorySpecificDetails = (item: any) => {
   const category = item.category;
   const subcategory = item.subcategory;
   const parsedFeatures = parseFeatureData(item.features);
   
-  // Computer-specific fields
-  if (category === 'מחשבים' || category === 'אלקטרוניקה') {
-    const computerFields = [
-      { key: 'מעבד', label: 'מעבד' },
-      { key: 'processor', label: 'מעבד' },
-      { key: 'RAM', label: 'זיכרון RAM' },
-      { key: 'ram', label: 'זיכרון RAM' },
-      { key: 'זיכרון', label: 'זיכרון RAM' },
-      { key: 'אחסון', label: 'אחסון' },
-      { key: 'storage', label: 'אחסון' },
-      { key: 'כרטיס מסך', label: 'כרטיס מסך' },
-      { key: 'graphics', label: 'כרטיס מסך' },
-      { key: 'מסך', label: 'גודל מסך' },
-      { key: 'screen', label: 'גודל מסך' },
-      { key: 'מערכת הפעלה', label: 'מערכת הפעלה' },
-      { key: 'os', label: 'מערכת הפעלה' },
-      { key: 'סוללה', label: 'סוללה' },
-      { key: 'battery', label: 'סוללה' },
-      { key: 'רזולוציה', label: 'רזולוציה' },
-      { key: 'resolution', label: 'רזולוציה' },
-      { key: 'חיבורים', label: 'חיבורים' },
-      { key: 'ports', label: 'יציאות' },
-    ];
+  // Computer category - render like LaptopDetails page
+  if (category === 'מחשבים' || subcategory?.includes('מחשב') || subcategory?.includes('נייד') || 
+      subcategory?.includes('נייח') || subcategory?.includes('מסך') || subcategory?.includes('רכיב')) {
+    const specs = renderComputerTechnicalSpecs(item);
     
-    const displayFields = computerFields.filter(f => parsedFeatures[f.key]);
-    
-    if (displayFields.length > 0) {
+    if (specs.length > 0) {
       return (
-        <>
-          <Separator className="my-6" />
-          <h3 className="text-lg font-semibold mb-4">מפרט טכני</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {displayFields.map((field, idx) => (
-              <div key={idx} className="bg-muted/50 rounded-lg p-3">
-                <div className="text-sm text-muted-foreground">{field.label}</div>
-                <div className="font-semibold">{parsedFeatures[field.key]}</div>
-              </div>
-            ))}
+        <Card className="mt-6">
+          <div className="p-6">
+            <h3 className="text-xl font-bold mb-4">מפרט טכני</h3>
+            <div className="space-y-0 divide-y">
+              {specs.map((spec, idx) => (
+                <div key={idx} className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                  <div className="text-muted-foreground font-medium">{spec.label}</div>
+                  <div className="text-foreground font-semibold">{spec.value}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        </>
+        </Card>
       );
     }
   }
@@ -138,18 +182,19 @@ const renderCategorySpecificDetails = (item: any) => {
     
     if (displayFields.length > 0) {
       return (
-        <>
-          <Separator className="my-6" />
-          <h3 className="text-lg font-semibold mb-4">מפרט טכני</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {displayFields.map((field, idx) => (
-              <div key={idx} className="bg-muted/50 rounded-lg p-3">
-                <div className="text-sm text-muted-foreground">{field.label}</div>
-                <div className="font-semibold">{parsedFeatures[field.key]}</div>
-              </div>
-            ))}
+        <Card className="mt-6">
+          <div className="p-6">
+            <h3 className="text-xl font-bold mb-4">מפרט טכני</h3>
+            <div className="space-y-0 divide-y">
+              {displayFields.map((field, idx) => (
+                <div key={idx} className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                  <div className="text-muted-foreground font-medium">{field.label}</div>
+                  <div className="text-foreground font-semibold">{parsedFeatures[field.key]}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        </>
+        </Card>
       );
     }
   }
@@ -168,18 +213,19 @@ const renderCategorySpecificDetails = (item: any) => {
     
     if (displayFields.length > 0) {
       return (
-        <>
-          <Separator className="my-6" />
-          <h3 className="text-lg font-semibold mb-4">פרטי הריהוט</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {displayFields.map((field, idx) => (
-              <div key={idx} className="bg-muted/50 rounded-lg p-3">
-                <div className="text-sm text-muted-foreground">{field.label}</div>
-                <div className="font-semibold">{parsedFeatures[field.key]}</div>
-              </div>
-            ))}
+        <Card className="mt-6">
+          <div className="p-6">
+            <h3 className="text-xl font-bold mb-4">פרטי הריהוט</h3>
+            <div className="space-y-0 divide-y">
+              {displayFields.map((field, idx) => (
+                <div key={idx} className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                  <div className="text-muted-foreground font-medium">{field.label}</div>
+                  <div className="text-foreground font-semibold">{parsedFeatures[field.key]}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        </>
+        </Card>
       );
     }
   }
@@ -197,45 +243,50 @@ const renderCategorySpecificDetails = (item: any) => {
     
     if (displayFields.length > 0) {
       return (
-        <>
-          <Separator className="my-6" />
-          <h3 className="text-lg font-semibold mb-4">מפרט טכני</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {displayFields.map((field, idx) => (
-              <div key={idx} className="bg-muted/50 rounded-lg p-3">
-                <div className="text-sm text-muted-foreground">{field.label}</div>
-                <div className="font-semibold">{parsedFeatures[field.key]}</div>
-              </div>
-            ))}
+        <Card className="mt-6">
+          <div className="p-6">
+            <h3 className="text-xl font-bold mb-4">מפרט טכני</h3>
+            <div className="space-y-0 divide-y">
+              {displayFields.map((field, idx) => (
+                <div key={idx} className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                  <div className="text-muted-foreground font-medium">{field.label}</div>
+                  <div className="text-foreground font-semibold">{parsedFeatures[field.key]}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        </>
+        </Card>
       );
     }
   }
   
   // If there are any parsed features that weren't displayed, show them generically
+  const handledKeys = [
+    'מעבד', 'processor', 'RAM', 'ram', 'זיכרון', 'אחסון', 'storage', 'כרטיס מסך', 'graphics', 
+    'מסך', 'screen', 'מערכת הפעלה', 'os', 'סוללה', 'battery', 'רזולוציה', 'resolution', 
+    'חיבורים', 'ports', 'נפח אחסון', 'מצלמה', 'camera', 'סוג ריפוד', 'מספר מושבים',
+    'גודל מיטה', 'צורת שולחן', 'סוג כיסא', 'סוג אופניים', 'גודל גלגלים', 'הספק מנוע', 'טווח נסיעה'
+  ];
+  
   const remainingFeatures = Object.entries(parsedFeatures).filter(([key]) => 
-    !['מעבד', 'processor', 'RAM', 'ram', 'זיכרון', 'אחסון', 'storage', 'כרטיס מסך', 'graphics', 
-      'מסך', 'screen', 'מערכת הפעלה', 'os', 'סוללה', 'battery', 'רזולוציה', 'resolution', 
-      'חיבורים', 'ports', 'נפח אחסון', 'מצלמה', 'camera', 'סוג ריפוד', 'מספר מושבים',
-      'גודל מיטה', 'צורת שולחן', 'סוג כיסא', 'סוג אופניים', 'גודל גלגלים', 'הספק מנוע', 'טווח נסיעה'
-    ].includes(key)
+    !handledKeys.includes(key)
   );
   
   if (remainingFeatures.length > 0) {
     return (
-      <>
-        <Separator className="my-6" />
-        <h3 className="text-lg font-semibold mb-4">פרטים נוספים</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {remainingFeatures.map(([key, value], idx) => (
-            <div key={idx} className="bg-muted/50 rounded-lg p-3">
-              <div className="text-sm text-muted-foreground">{key}</div>
-              <div className="font-semibold">{value}</div>
-            </div>
-          ))}
+      <Card className="mt-6">
+        <div className="p-6">
+          <h3 className="text-xl font-bold mb-4">פרטים נוספים</h3>
+          <div className="space-y-0 divide-y">
+            {remainingFeatures.map(([key, value], idx) => (
+              <div key={idx} className="grid grid-cols-2 py-3 hover:bg-muted/50 transition-colors px-3 -mx-3 rounded">
+                <div className="text-muted-foreground font-medium">{key}</div>
+                <div className="text-foreground font-semibold">{value}</div>
+              </div>
+            ))}
+          </div>
         </div>
-      </>
+      </Card>
     );
   }
   
@@ -546,17 +597,14 @@ const SecondhandDetails = () => {
                 )}
               </div>
 
-              {/* Category-Specific Details */}
-              {renderCategorySpecificDetails(item)}
-
-              {/* Features */}
+              {/* Features - only show non-parsed features */}
               {item.features && item.features.length > 0 && (
                 <>
                   <Separator className="my-6" />
                   <div>
                     <h3 className="text-lg font-semibold mb-3">תכונות נוספות</h3>
                     <div className="flex flex-wrap gap-2">
-                      {item.features.map((feature: string, index: number) => (
+                      {item.features.filter((feature: string) => !feature.includes(':')).map((feature: string, index: number) => (
                         <Badge key={index} variant="secondary" className="px-3 py-1">
                           ✓ {feature}
                         </Badge>
@@ -566,6 +614,9 @@ const SecondhandDetails = () => {
                 </>
               )}
             </Card>
+
+            {/* Category-Specific Technical Specifications - Separate Card */}
+            {renderCategorySpecificDetails(item)}
 
             {/* Similar Listings - Desktop */}
             <div className="hidden lg:block mt-8">
