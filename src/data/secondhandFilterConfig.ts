@@ -381,6 +381,15 @@ export const getFiltersForCategory = (category: string, subcategory?: string) =>
         ...getSubcategoryFilters("electronics", subcategory),
       };
     case "מחשבים":
+      // If subcategory is selected, only return subcategory-specific filters
+      const computerSubcategoryFilters = getSubcategoryFilters("computers", subcategory);
+      if (subcategory && Object.keys(computerSubcategoryFilters).length > 0) {
+        return {
+          ...baseFilters,
+          ...computerSubcategoryFilters,
+        };
+      }
+      // No subcategory selected - show general computer filters
       return {
         ...baseFilters,
         brands: computersFilters.brands,
@@ -391,7 +400,6 @@ export const getFiltersForCategory = (category: string, subcategory?: string) =>
         screenSizes: computersFilters.screenSizes,
         graphicsCards: computersFilters.graphicsCards,
         operatingSystems: computersFilters.operatingSystems,
-        ...getSubcategoryFilters("computers", subcategory),
       };
     case "מכשירים סלולריים":
       return {
