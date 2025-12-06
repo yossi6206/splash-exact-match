@@ -632,10 +632,11 @@ const getSubcategoryFilters = (category: string, subcategory?: string) => {
 
   // Computers subcategories
   if (category === "computers") {
-    // Laptops - includes all form fields
+  // Laptops - includes all form fields
     if (["מחשבים ניידים", "מקבוק", "אולטרה בוק", "מחשבי גיימינג", "מחשבים לעבודה"].includes(subcategory)) {
       return {
         brands: computersFilters.brands,
+        laptopTypes: computersFilters.laptopTypes,
         processors: computersFilters.processors,
         ramOptions: computersFilters.ramOptions,
         storageOptions: computersFilters.storageOptions,
