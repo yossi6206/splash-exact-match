@@ -2728,6 +2728,20 @@ const PostSecondhand = () => {
         const storageTypes = ["SSD", "HDD", "SSD + HDD"];
         const screenSizesLaptop = ["13.3", "14", "15.6", "17.3"];
         
+        const processorOptions = [
+          "Intel Core i3-10100", "Intel Core i3-11100", "Intel Core i3-12100", "Intel Core i3-13100",
+          "Intel Core i5-10400", "Intel Core i5-11400", "Intel Core i5-12400", "Intel Core i5-12500", "Intel Core i5-13400", "Intel Core i5-13500", "Intel Core i5-14400", "Intel Core i5-14500",
+          "Intel Core i7-10700", "Intel Core i7-11700", "Intel Core i7-12700", "Intel Core i7-12700H", "Intel Core i7-13700", "Intel Core i7-13700H", "Intel Core i7-14700", "Intel Core i7-14700H",
+          "Intel Core i9-10900", "Intel Core i9-11900", "Intel Core i9-12900", "Intel Core i9-12900H", "Intel Core i9-13900", "Intel Core i9-13900H", "Intel Core i9-14900", "Intel Core i9-14900H",
+          "Intel Core Ultra 5 125H", "Intel Core Ultra 7 155H", "Intel Core Ultra 9 185H",
+          "AMD Ryzen 3 3200U", "AMD Ryzen 3 4300U", "AMD Ryzen 3 5300U", "AMD Ryzen 3 7320U",
+          "AMD Ryzen 5 3500U", "AMD Ryzen 5 4500U", "AMD Ryzen 5 5500U", "AMD Ryzen 5 5600H", "AMD Ryzen 5 6600H", "AMD Ryzen 5 7535U", "AMD Ryzen 5 7600",
+          "AMD Ryzen 7 3700U", "AMD Ryzen 7 4800U", "AMD Ryzen 7 5800H", "AMD Ryzen 7 6800H", "AMD Ryzen 7 7735U", "AMD Ryzen 7 7840H", "AMD Ryzen 7 8845H",
+          "AMD Ryzen 9 5900HX", "AMD Ryzen 9 6900HX", "AMD Ryzen 9 7845HX", "AMD Ryzen 9 7945HX",
+          "Apple M1", "Apple M1 Pro", "Apple M1 Max", "Apple M2", "Apple M2 Pro", "Apple M2 Max", "Apple M3", "Apple M3 Pro", "Apple M3 Max", "Apple M4", "Apple M4 Pro", "Apple M4 Max",
+          "אחר"
+        ];
+        
         const laptopFeatures = [
           "מסך מגע", "תאורת מקלדת", "מצלמת אינטרנט", "Bluetooth", "Wi-Fi 6",
           "USB-C", "HDMI", "חיישן טביעת אצבע", "גרפיקה ייעודית", "מעבד Intel",
@@ -2804,12 +2818,13 @@ const PostSecondhand = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="material">מעבד</Label>
-                <Input
-                  id="material"
-                  name="material"
+                <SearchableSelect
                   value={formData.material}
-                  onChange={handleInputChange}
-                  placeholder="Intel Core i7-12700H"
+                  onValueChange={(value) => setFormData({ ...formData, material: value })}
+                  options={processorOptions}
+                  placeholder="בחר מעבד"
+                  searchPlaceholder="חפש מעבד..."
+                  emptyText="לא נמצאו מעבדים"
                 />
               </div>
               <div className="space-y-2">
