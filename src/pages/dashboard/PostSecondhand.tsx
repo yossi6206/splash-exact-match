@@ -2742,6 +2742,28 @@ const PostSecondhand = () => {
           "אחר"
         ];
         
+        const resolutionOptions = [
+          "1366x768 (HD)", "1920x1080 (Full HD)", "2560x1440 (QHD)", "2560x1600 (WQXGA)",
+          "3840x2160 (4K UHD)", "3840x2400 (4K+)", "2880x1800 (Retina)", "3024x1964 (Liquid Retina)",
+          "אחר"
+        ];
+        
+        const graphicsCardOptions = [
+          // NVIDIA GeForce
+          "NVIDIA GeForce GTX 1650", "NVIDIA GeForce GTX 1660 Ti", 
+          "NVIDIA GeForce RTX 2060", "NVIDIA GeForce RTX 2070", "NVIDIA GeForce RTX 2080",
+          "NVIDIA GeForce RTX 3050", "NVIDIA GeForce RTX 3060", "NVIDIA GeForce RTX 3070", "NVIDIA GeForce RTX 3080",
+          "NVIDIA GeForce RTX 4050", "NVIDIA GeForce RTX 4060", "NVIDIA GeForce RTX 4070", "NVIDIA GeForce RTX 4080", "NVIDIA GeForce RTX 4090",
+          // AMD Radeon
+          "AMD Radeon RX 5500M", "AMD Radeon RX 5600M", "AMD Radeon RX 5700M",
+          "AMD Radeon RX 6500M", "AMD Radeon RX 6600M", "AMD Radeon RX 6700M", "AMD Radeon RX 6800M",
+          "AMD Radeon RX 7600M", "AMD Radeon RX 7700M", "AMD Radeon RX 7800M", "AMD Radeon RX 7900M",
+          // Integrated
+          "Intel UHD Graphics", "Intel Iris Xe", "Intel Arc A350M", "Intel Arc A370M", "Intel Arc A550M", "Intel Arc A770M",
+          "AMD Radeon Graphics (Integrated)", "Apple M1 GPU", "Apple M2 GPU", "Apple M3 GPU", "Apple M4 GPU",
+          "אחר"
+        ];
+        
         const laptopFeatures = [
           "מסך מגע", "תאורת מקלדת", "מצלמת אינטרנט", "Bluetooth", "Wi-Fi 6",
           "USB-C", "HDMI", "חיישן טביעת אצבע", "גרפיקה ייעודית", "מעבד Intel",
@@ -2893,18 +2915,24 @@ const PostSecondhand = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>כרטיס גרפי</Label>
-                <Input
+                <SearchableSelect
                   value={formData.laptop_graphics || ""}
-                  onChange={(e) => setFormData({ ...formData, laptop_graphics: e.target.value })}
-                  placeholder="NVIDIA RTX 3060"
+                  onValueChange={(value) => setFormData({ ...formData, laptop_graphics: value })}
+                  options={graphicsCardOptions}
+                  placeholder="בחר כרטיס גרפי"
+                  searchPlaceholder="חפש כרטיס גרפי..."
+                  emptyText="לא נמצאו כרטיסי גרפיקה"
                 />
               </div>
               <div className="space-y-2">
                 <Label>רזולוציה</Label>
-                <Input
+                <SearchableSelect
                   value={formData.laptop_resolution || ""}
-                  onChange={(e) => setFormData({ ...formData, laptop_resolution: e.target.value })}
-                  placeholder="1920 x 1080"
+                  onValueChange={(value) => setFormData({ ...formData, laptop_resolution: value })}
+                  options={resolutionOptions}
+                  placeholder="בחר רזולוציה"
+                  searchPlaceholder="חפש רזולוציה..."
+                  emptyText="לא נמצאו רזולוציות"
                 />
               </div>
             </div>
