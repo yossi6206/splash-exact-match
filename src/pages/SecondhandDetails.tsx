@@ -77,23 +77,32 @@ const renderComputerTechnicalSpecs = (item: any) => {
   // Extract all computer-related specs from features
   const specs: { label: string; value: string }[] = [];
   
-  // Common computer fields to look for
-  const computerMappings: { keys: string[]; label: string }[] = [
+  // Add brand and model from item fields first
+  if (item.brand) {
+    specs.push({ label: 'יצרן', value: item.brand });
+  }
+  
+  // Add model from size field (used for laptops in secondhand)
+  if (item.size && !item.size.includes('"') && !item.size.includes('אינץ')) {
+    specs.push({ label: 'דגם', value: item.size });
+  }
+  
+  // Common computer field mappings with clear Hebrew labels
+  const computerMappings: { keys: string[]; label: string; suffix?: string }[] = [
     { keys: ['מעבד', 'processor', 'Processor'], label: 'מעבד' },
-    { keys: ['זיכרון RAM', 'RAM', 'ram', 'זיכרון'], label: 'זיכרון RAM' },
-    { keys: ['אחסון', 'storage', 'Storage', 'נפח אחסון'], label: 'אחסון' },
+    { keys: ['זיכרון RAM', 'RAM', 'ram', 'זיכרון'], label: 'זיכרון RAM', suffix: ' GB' },
+    { keys: ['אחסון', 'storage', 'Storage', 'נפח אחסון'], label: 'נפח אחסון' },
     { keys: ['סוג אחסון', 'storage_type'], label: 'סוג אחסון' },
-    { keys: ['גודל מסך', 'מסך', 'screen', 'screen_size'], label: 'גודל מסך' },
+    { keys: ['גודל מסך', 'מסך', 'screen', 'screen_size'], label: 'גודל מסך', suffix: '"' },
     { keys: ['רזולוציה', 'resolution'], label: 'רזולוציה' },
-    { keys: ['כרטיס מסך', 'graphics', 'graphics_card', 'GPU'], label: 'כרטיס מסך' },
+    { keys: ['כרטיס מסך', 'כרטיס גרפי', 'graphics', 'graphics_card', 'GPU'], label: 'כרטיס מסך' },
     { keys: ['מערכת הפעלה', 'os', 'operating_system'], label: 'מערכת הפעלה' },
     { keys: ['סוללה', 'battery'], label: 'סוללה' },
     { keys: ['משקל', 'weight'], label: 'משקל' },
     { keys: ['תקשורת', 'connectivity'], label: 'תקשורת' },
     { keys: ['יציאות', 'ports', 'חיבורים'], label: 'יציאות' },
     { keys: ['סוג מחשב', 'computer_type'], label: 'סוג מחשב' },
-    { keys: ['יצרן', 'manufacturer', 'brand'], label: 'יצרן' },
-    { keys: ['דגם', 'model'], label: 'דגם' },
+    { keys: ['צבע', 'color'], label: 'צבע' },
     // Monitor-specific
     { keys: ['סוג פאנל', 'panel_type'], label: 'סוג פאנל' },
     { keys: ['קצב רענון', 'refresh_rate'], label: 'קצב רענון' },
@@ -107,28 +116,56 @@ const renderComputerTechnicalSpecs = (item: any) => {
     { keys: ['נפח', 'capacity'], label: 'נפח' },
   ];
   
-  // First add brand from item if exists
-  if (item.brand && !specs.find(s => s.label === 'מותג/יצרן')) {
-    specs.push({ label: 'מותג/יצרן', value: item.brand });
-  }
-  
-  // Check each mapping
+  // Check each mapping in parsed features
   computerMappings.forEach(mapping => {
     for (const key of mapping.keys) {
       if (parsedFeatures[key]) {
         if (!specs.find(s => s.label === mapping.label)) {
-          specs.push({ label: mapping.label, value: parsedFeatures[key] });
+          let value = parsedFeatures[key];
+          // Add suffix if needed and not already present
+          if (mapping.suffix && !value.includes(mapping.suffix.trim())) {
+            value = value + mapping.suffix;
+          }
+          specs.push({ label: mapping.label, value });
         }
         break;
       }
     }
   });
   
-  // Add size if it looks like a screen size
-  if (item.size && (item.size.includes('"') || item.size.includes('אינץ'))) {
-    if (!specs.find(s => s.label === 'גודל מסך')) {
-      specs.push({ label: 'גודל מסך', value: item.size });
+  // Also check direct item fields that might store laptop-specific data
+  if (item.material && !specs.find(s => s.label === 'מעבד')) {
+    specs.push({ label: 'מעבד', value: item.material });
+  }
+  
+  if (item.dimensions && !specs.find(s => s.label === 'זיכרון RAM')) {
+    specs.push({ label: 'זיכרון RAM', value: item.dimensions + ' GB' });
+  }
+  
+  if (item.weight && !specs.find(s => s.label === 'נפח אחסון')) {
+    // Check if weight is numeric (used for storage in laptop form)
+    if (/^\d+$/.test(item.weight)) {
+      const storageValue = parseInt(item.weight);
+      const displayValue = storageValue >= 1000 ? `${storageValue / 1000} TB` : `${storageValue} GB`;
+      specs.push({ label: 'נפח אחסון', value: displayValue });
     }
+  }
+  
+  if (item.warranty && !specs.find(s => s.label === 'סוג אחסון')) {
+    if (['SSD', 'HDD', 'SSD + HDD'].includes(item.warranty)) {
+      specs.push({ label: 'סוג אחסון', value: item.warranty });
+    }
+  }
+  
+  if (item.age && !specs.find(s => s.label === 'גודל מסך')) {
+    // Check if age looks like a screen size
+    if (/^\d+\.?\d*$/.test(item.age)) {
+      specs.push({ label: 'גודל מסך', value: item.age + '"' });
+    }
+  }
+  
+  if (item.color && !specs.find(s => s.label === 'צבע')) {
+    specs.push({ label: 'צבע', value: item.color });
   }
   
   return specs;
