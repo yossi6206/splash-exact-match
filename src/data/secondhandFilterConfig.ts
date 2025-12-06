@@ -148,18 +148,47 @@ export const electronicsFilters = {
 // ============== COMPUTERS FILTERS ==============
 export const computersFilters = {
   // General
-  brands: ["Apple", "Dell", "HP", "Lenovo", "Asus", "Acer", "MSI", "Microsoft", "Samsung", "LG", "Razer", "Gigabyte", "אחר"],
-  processors: ["Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "Intel Core Ultra 5", "Intel Core Ultra 7", "Intel Core Ultra 9", "AMD Ryzen 3", "AMD Ryzen 5", "AMD Ryzen 7", "AMD Ryzen 9", "Apple M1", "Apple M2", "Apple M3", "Apple M4", "אחר"],
+  brands: ["Apple", "Dell", "HP", "Lenovo", "Asus", "Acer", "MSI", "Microsoft", "Samsung", "LG", "Razer", "Gigabyte", "Huawei", "VAIO", "Toshiba", "Fujitsu", "אחר"],
+  processors: [
+    "Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", 
+    "Intel Core Ultra 5", "Intel Core Ultra 7", "Intel Core Ultra 9",
+    "AMD Ryzen 3", "AMD Ryzen 5", "AMD Ryzen 7", "AMD Ryzen 9",
+    "Apple M1", "Apple M1 Pro", "Apple M1 Max", 
+    "Apple M2", "Apple M2 Pro", "Apple M2 Max",
+    "Apple M3", "Apple M3 Pro", "Apple M3 Max",
+    "Apple M4", "Apple M4 Pro", "Apple M4 Max",
+    "אחר"
+  ],
   ramOptions: ["4GB", "8GB", "16GB", "32GB", "64GB", "128GB"],
   storageOptions: ["128GB", "256GB", "512GB", "1TB", "2TB", "4TB"],
   storageTypes: ["SSD", "HDD", "SSD + HDD", "NVMe SSD"],
   screenSizes: ["11.6\"", "13.3\"", "14\"", "15.6\"", "16\"", "17.3\""],
-  graphicsCards: ["Intel UHD", "Intel Iris", "NVIDIA GeForce GTX", "NVIDIA GeForce RTX 30", "NVIDIA GeForce RTX 40", "AMD Radeon", "Apple GPU", "ללא כרטיס ייעודי"],
-  operatingSystems: ["Windows 11", "Windows 10", "macOS", "Chrome OS", "Linux", "ללא מערכת הפעלה"],
+  graphicsCards: [
+    "Intel UHD Graphics", "Intel Iris Xe", "Intel Arc",
+    "NVIDIA GeForce GTX 1650", "NVIDIA GeForce GTX 1660 Ti",
+    "NVIDIA GeForce RTX 3050", "NVIDIA GeForce RTX 3060", "NVIDIA GeForce RTX 3070", "NVIDIA GeForce RTX 3080",
+    "NVIDIA GeForce RTX 4050", "NVIDIA GeForce RTX 4060", "NVIDIA GeForce RTX 4070", "NVIDIA GeForce RTX 4080", "NVIDIA GeForce RTX 4090",
+    "AMD Radeon RX 6600M", "AMD Radeon RX 6700M", "AMD Radeon RX 6800M",
+    "AMD Radeon RX 7600M", "AMD Radeon RX 7700M", "AMD Radeon RX 7800M",
+    "AMD Radeon Graphics (Integrated)", 
+    "Apple M1 GPU", "Apple M2 GPU", "Apple M3 GPU", "Apple M4 GPU",
+    "ללא כרטיס ייעודי", "אחר"
+  ],
+  operatingSystems: [
+    "Windows 10 Home", "Windows 10 Pro", "Windows 11 Home", "Windows 11 Pro",
+    "macOS Monterey", "macOS Ventura", "macOS Sonoma", "macOS Sequoia",
+    "Ubuntu", "Fedora", "Linux Mint", "Chrome OS", "FreeDOS", 
+    "ללא מערכת הפעלה", "אחר"
+  ],
   
   // Laptop specific
   laptopTypes: ["עסקי", "גיימינג", "יצירתי/עיצוב", "סטודנטים", "כללי", "אולטרא-בוק", "2-in-1"],
-  laptopFeatures: ["מסך מגע", "מקלדת מוארת", "קורא טביעת אצבע", "מצלמת IR", "Thunderbolt", "Wi-Fi 6E", "סוללה ארוכה", "משקל קל"],
+  laptopFeatures: [
+    "מסך מגע", "תאורת מקלדת", "מצלמת אינטרנט", "Bluetooth", "Wi-Fi 6",
+    "USB-C", "HDMI", "חיישן טביעת אצבע", "גרפיקה ייעודית", "מעבד Intel",
+    "מעבד AMD", "כונן SSD", "כונן HDD", "מקלדת נומרית", "רמקולים איכותיים",
+    "Thunderbolt", "Wi-Fi 6E", "סוללה ארוכה", "משקל קל"
+  ],
   
   // Desktop specific
   desktopTypes: ["מחשב שולחני", "All-in-One", "מיני PC", "מחשב גיימינג", "תחנת עבודה"],
@@ -603,10 +632,9 @@ const getSubcategoryFilters = (category: string, subcategory?: string) => {
 
   // Computers subcategories
   if (category === "computers") {
-    // Laptops
-    if (["מחשבים ניידים", "מקבוק", "אולטרה בוק"].includes(subcategory)) {
+    // Laptops - includes all form fields
+    if (["מחשבים ניידים", "מקבוק", "אולטרה בוק", "מחשבי גיימינג", "מחשבים לעבודה"].includes(subcategory)) {
       return {
-        laptopTypes: computersFilters.laptopTypes,
         brands: computersFilters.brands,
         processors: computersFilters.processors,
         ramOptions: computersFilters.ramOptions,
@@ -614,12 +642,13 @@ const getSubcategoryFilters = (category: string, subcategory?: string) => {
         storageTypes: computersFilters.storageTypes,
         screenSizes: computersFilters.screenSizes,
         graphicsCards: computersFilters.graphicsCards,
+        monitorResolution: computersFilters.monitorResolution,
         operatingSystems: computersFilters.operatingSystems,
         laptopFeatures: computersFilters.laptopFeatures,
       };
     }
     // Desktop PCs
-    if (["מחשבים נייחים", "מחשבי גיימינג", "מחשבים לעבודה"].includes(subcategory)) {
+    if (subcategory === "מחשבים נייחים") {
       return {
         desktopTypes: computersFilters.desktopTypes,
         desktopFormFactor: computersFilters.desktopFormFactor,
