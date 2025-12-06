@@ -2722,14 +2722,11 @@ const PostSecondhand = () => {
       const computerManufacturers = getComputerManufacturers();
       const { subcategory } = formData;
       
-      // Laptop-specific fields (like PostLaptop)
+      // Laptop-specific fields (like PostLaptop) with SearchableSelect for manufacturer/model
       if (subcategory === "מחשבים ניידים" || subcategory === "מקבוק" || subcategory === "אולטרה בוק" || subcategory === "מחשבי גיימינג" || subcategory === "מחשבים לעבודה") {
-        const laptopBrands = ["Dell", "HP", "Lenovo", "Apple", "Asus", "Acer", "MSI", "Microsoft", "Samsung", "LG", "Razer", "אחר"];
-        const ramOptionsLaptop = ["4 GB", "8 GB", "16 GB", "32 GB", "64 GB"];
-        const storageOptionsLaptop = ["128", "256", "512", "1000", "2000"];
+        const ramOptionsLaptop = ["4", "8", "16", "32", "64"];
         const storageTypes = ["SSD", "HDD", "SSD + HDD"];
         const screenSizesLaptop = ["13.3", "14", "15.6", "17.3"];
-        const laptopConditions = ["חדש באריזה", "כמו חדש", "משומש במצב מצוין", "משומש במצב טוב", "משומש"];
         
         const laptopFeatures = [
           "מסך מגע", "תאורת מקלדת", "מצלמת אינטרנט", "Bluetooth", "Wi-Fi 6",
@@ -2742,29 +2739,65 @@ const PostSecondhand = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="brand">יצרן *</Label>
-                <Select
+                <SearchableSelect
                   value={formData.brand}
-                  onValueChange={(value) => setFormData({ ...formData, brand: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="בחר יצרן" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {laptopBrands.map(brand => (
-                      <SelectItem key={brand} value={brand}>{brand}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  onValueChange={handleComputerBrandChange}
+                  options={[...computerManufacturers, "אחר"]}
+                  placeholder="בחר יצרן"
+                  searchPlaceholder="חפש יצרן..."
+                  emptyText="לא נמצאו יצרנים"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="size">דגם *</Label>
-                <Input
-                  id="size"
-                  name="size"
-                  value={formData.size}
-                  onChange={handleInputChange}
-                  placeholder="ThinkPad X1 Carbon"
-                />
+                {!showCustomComputerModel ? (
+                  formData.brand && formData.brand !== "אחר" ? (
+                    <SearchableSelect
+                      value={formData.size}
+                      onValueChange={handleComputerModelChange}
+                      options={[...availableComputerModels, "אחר - הזנה ידנית"]}
+                      placeholder="בחר דגם"
+                      searchPlaceholder="חפש דגם..."
+                      emptyText="לא נמצאו דגמים"
+                    />
+                  ) : formData.brand === "אחר" ? (
+                    <Input
+                      id="size"
+                      name="size"
+                      value={formData.size}
+                      onChange={handleInputChange}
+                      placeholder="הזן שם דגם"
+                    />
+                  ) : (
+                    <Select disabled>
+                      <SelectTrigger>
+                        <SelectValue placeholder="בחר יצרן תחילה" />
+                      </SelectTrigger>
+                      <SelectContent />
+                    </Select>
+                  )
+                ) : (
+                  <div className="space-y-2">
+                    <Input
+                      id="size"
+                      name="size"
+                      value={formData.size}
+                      onChange={handleInputChange}
+                      placeholder="הזן שם דגם"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setShowCustomComputerModel(false);
+                        setFormData({ ...formData, size: "" });
+                      }}
+                    >
+                      חזור לבחירה מהרשימה
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -2790,7 +2823,7 @@ const PostSecondhand = () => {
                   </SelectTrigger>
                   <SelectContent>
                     {ramOptionsLaptop.map(ram => (
-                      <SelectItem key={ram} value={ram}>{ram}</SelectItem>
+                      <SelectItem key={ram} value={ram}>{ram} GB</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
